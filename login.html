@@ -138,10 +138,31 @@
         updateLiveClock();
         setInterval(updateLiveClock, 1000);
 
-        // ===== بيانات الدخول التجريبية (يمكن تعديلها لاحقاً أو ربطها بخادم حقيقي) =====
-        const VALID_USERS = [
-            { username: "admin", password: "admin123" }
-        ];
+        // ===== بيانات الدخول تُجلب الآن من ملف خارجي access.txt بدل كتابتها داخل الكود =====
+        let VALID_USERS = [];
+        let accessListLoaded = false;
+
+        async function loadAccessList() {
+            try {
+                const res = await fetch('access.txt', { cache: 'no-store' });
+                if (!res.ok) throw new Error('تعذر العثور على access.txt');
+                const text = await res.text();
+                VALID_USERS = text.split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line && !line.startsWith('#'))
+                    .map(line => {
+                        const [username, password] = line.split(',').map(s => s.trim());
+                        return { username, password };
+                    });
+                accessListLoaded = true;
+            } catch (err) {
+                console.error('تعذر تحميل ملف الصلاحيات access.txt:', err);
+                accessListLoaded = false;
+            }
+        }
+
+        // تحميل مبكر عند فتح الصفحة (يُعاد المحاولة عند الإرسال إن لم يكتمل التحميل بعد)
+        loadAccessList();
 
         function togglePassword() {
             const input = document.getElementById('password');
@@ -166,12 +187,21 @@
             setTimeout(() => card.classList.remove('shake'), 400);
         }
 
-        function handleLogin(event) {
+        async function handleLogin(event) {
             event.preventDefault();
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             const btn = document.getElementById('login-btn');
             document.getElementById('error-box').classList.add('hidden');
+
+            if (!accessListLoaded) {
+                await loadAccessList();
+            }
+
+            if (!accessListLoaded) {
+                showError('تعذر الاتصال بملف الصلاحيات (access.txt). تأكد أن الموقع يعمل عبر خادم وليس كملف محلي.');
+                return false;
+            }
 
             const match = VALID_USERS.find(u => u.username === username && u.password === password);
 
