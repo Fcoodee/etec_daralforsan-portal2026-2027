@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الرؤية الشاملة للتقويم الذاتي - مدارس دار الفرسان</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        etecteal: { 50: '#f0f7f7', 100: '#d9ebeb', 500: '#006666', 600: '#005252', 700: '#003d3d', 900: '#002424' },
+                        accentgold: '#c29b38'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; }
+        @media print {
+            .no-print { display: none !important; }
+            .page-break { page-break-before: always; }
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen">
+
+    <!-- HEADER -->
+    <div class="bg-slate-900 text-white text-xs font-bold px-4 py-2 flex justify-between items-center no-print">
+        <span><i class="fa-solid fa-file-lines text-accentgold"></i> الرؤية الشاملة للتقويم الذاتي</span>
+        <div class="flex items-center gap-3">
+            <button onclick="window.print()" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full text-[11px] font-bold transition-all">
+                <i class="fa-solid fa-print"></i> طباعة / حفظ PDF
+            </button>
+            <button onclick="window.close()" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full text-[11px] font-bold transition-all">
+                <i class="fa-solid fa-xmark"></i> إغلاق
+            </button>
+        </div>
+    </div>
+
+    <header class="bg-white border-b border-gray-100 shadow-sm py-8 px-4 text-center">
+        <h1 class="text-2xl font-extrabold text-etecteal-900">الرؤية الشاملة للتقويم الذاتي</h1>
+        <p class="text-sm text-gray-500 mt-2">مدارس دار الفرسان الأهلية — حوكمة وتتبع نسب الإنجاز 2026م</p>
+        <div class="mt-4 flex items-center justify-center gap-4 text-xs font-bold text-slate-600">
+            <span id="report-date"></span>
+            <span class="w-px h-3 bg-slate-300"></span>
+            <span>إجمالي المؤشرات: <span id="report-total">--</span></span>
+            <span class="w-px h-3 bg-slate-300"></span>
+            <span>النسبة العامة: <span id="report-overall" class="text-etecteal-700 font-black">--%</span></span>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8" id="report-root"></main>
+
+    <footer class="bg-slate-900 text-white py-6 text-center text-xs mt-12 no-print">
+        تم توليد هذا التقرير آلياً من بوابة الاعتماد المدرسي والتميز — مدارس دار الفرسان
+    </footer>
+
+    <script>
+        // ====================================================
+        // نفس بيانات لوحة التحكم الرئيسية (مصدر واحد للحقيقة)
+        // ====================================================
+        const comprehensiveDashboardData = [
+            {
+                id: "domain-1",
+                title: "المجال الأول: القيادة والإدارة المدرسية",
+                manager: "الأستاذ عبدالشافي إسماعيل",
+                email: "abdelshafi@daralforsan.edu.sa",
+                team: "أ/ ياسر توفيق ، أ/ سعيد الجهني",
+                standards: [
+                    {
+                        title: "المعيار 1-1: التخطيط",
+                        focusAreas: [
+                            {
+                                name: "التخطيط",
+                                indicators: [
+                                    { code: "1-1-1-1", text: "تضع المدرسة خطة تشغيلية مكتملة العناصر، وفق أهداف تطويرية محددة .", status: "green", pctReal: 90, gap: "عدم اشراك المعلمين في اعداد الخطة بالشكل الكافي", evidence: "-الخطة التشغيلية | - محاضر اجتماعات للمعلمين تهدف الى صياغة مبادرات", initiative: "اعادة صياغة عدد من مبادرات الخطة التشغيلية | بمل يتوافق مع معايير الهيئة.", driveFolderId: "1XMGjfZH3jh-WceZ8OCLEElyGHjpGY7yr" },
+                                    { code: "1-1-1-2", text: "تتابع المدرسة تنفيذ خطتها وتطورها بما يضمن تحقيق أهدافها .", status: "green", pctReal: 90, gap: "خطة تشغيلية غير متوافقة مع معايير الهيئة بشكل كامل.", evidence: "الخطة الحالية", initiative: "خطة تشغيليىة تتوافق مع معايير هيئة تقويم التعليم والتدريب.", driveFolderId: "16BfucKpeZ9k1G9fDCvsBa2SuXGTN48Py" },
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: "المعيار 1-2: قيادة العملية التعليمية",
+                        focusAreas: [
+                            {
+                                name: "قيادة العملية التعليمية",
+                                indicators: [
+                                    { code: "1-2-1-1", text: "تعزز المدرسة القيم الإسلامية والهوية الوطنية.", status: "green", pctReal: 90, gap: "اكمال خطة الانشطة الدينية و الثقافية", evidence: "الاحتفال باليوم الوطنى و يوم التأسيس و يوم العلم | رحلات مكة - متحف بينالى - رحلات البلد | مسابقات دينية و ثقافية و تقديم جوائز | الانشطة الرمضانية", initiative: "عمل خطة منفصلة للانشطة الدينية و الثقافية مزمنة | ندوات و مبادرات الارشاد الطلابى", driveFolderId: "1TzzWUJqfWnC_20ooQR_46HLAdAxI1cZF" },
+                                    { code: "1-2-1-2", text: "تلتزم المدرسة بقيم مهنة التعليم وأخلاقياتها.", status: "green", pctReal: 90, gap: "تتابع المدرسة التزام منسزبيها بقيم مهنة التعليم و اخلاقياتها", evidence: "صور من تكريمات الادارة للمعلمين++ | صور من الاحتفال بيوم المعلم++ | نماذج من استبيانات سابقة من قبل الادارة للمعلمين", initiative: "صور من اللقاء التعريفى بالمعلمين الجدد", driveFolderId: "1v2EpafmUkFa1c_C4ocvKd6tCj4hSblgX" },
+                                    { code: "1-2-1-3", text: "توفر المدرسة مناخًا آمنًا للتعلم والنمو نفسيًّا واجتماعيًّا.", status: "cyan", pctReal: 60, gap: "توثيق للانشطة", evidence: "صور ندوة من ندوات التوعية بالتنمر++ | لوحات التوعية بالتنمر | صور الاحتفال باعياد ميلاد الطلاب", initiative: "نموذج حل مشكلة طالب يعانى من التنمر | اجتماعات اتحاد الطلاب | مسرحية عن التنمر | عمل خطة من قسم الارشاد الطلابى لعلاج التنمر | صور اجتماعات ال MUN", driveFolderId: "1CJONyhDeQxbmq5snr2utNHIAuWFhp_op" },
+                                    { code: "1-2-1-4", text: "تنشر المدرسة قواعد السلوك والمواظبة، وتتابع تطبيقها.", status: "yellow", pctReal: 40, gap: "تتابع المدرسة تطبيق قواعد السلوك و المواظبة", evidence: "صورة من لائحة السلوك و المواظبة داخل الفصول | تقرير السلوك من البوابة الالكترونية | تقرير حضور و غياب الطلاب", initiative: "توثيق فيديو للمرشد لشرح قواعد السلوك و المواظبة | محاضر سلوكية للطلاب و تحليلها من المرشد الطلابى | استبانة من الطالب و المعلم و ولى الامر | عمل نموذج للائحة السلوك و المواظبة يوقع عليها الطالب و ولى الامر", driveFolderId: "10ghBE5Qhq8BCNtyr94TDeH14vWbpN26z" },
+                                    { code: "1-2-1-5", text: "توفر المدرسة برامج وأنشطة تربوية داعمة للسلوك الإيجابي.", status: "cyan", pctReal: 70, gap: "توفر المدرسة برامج علاجية للمشكلات السلوكية", evidence: "صور للماراثون و تحليله | الشراكة مع مشاة جدة و البلدية و امانة محافظة جدة و الهلال الاحمر | نموذج حل مشكلة طالب | نظافة الفصول بقيادة طلاب النظام | مسابقة افضل فصل", initiative: "تقارير للجنة طلاب النظام | توثيق للفسحة و تعامل المشرفين مع المشكلات | توثيق من الاصطفاف الصباحى++ | توثيق من حصص التربية البدنية للدفاع عن النفس من خلال ممارسة الكاراتيه", driveFolderId: "1sXfzLYHbK99JmEJ4Ze4-MJ8zxM9O_qLs" },
+                                    { code: "1-2-1-6", text: "توفر المدرسة برامج وأنشطة إثرائية غير صفية؛ لتطوير مواهب المتعلمين، وتهيئتهم للمستقبل .", status: "green", pctReal: 90, gap: "توثيق للانشطة", evidence: "صور لليوم الرياضى و ال English Club | صور من مسابقات بيبراس و ال ELO و STEM | مسابقة تحدى القراءة | حصص موهبة و STEM | صور لتكريمات الطلاب و الجوائز | تقارير المسابقات", initiative: "تدريبات مهنية خارج المدرسة (مصانع و شركات) | عمل خطة بالمواد الاثرائية | عمل استبانة للطالب و المعلم و ولى الامر", driveFolderId: "1vdvL9fGHk7km2_msYI9ITl-180C9m52_" },
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: "المعيار 1-3: المجتمع المدرسي",
+                        focusAreas: [
+                            {
+                                name: "المجتمع المدرسي",
+                                indicators: [
+                                    { code: "1-3-1-1", text: "تعزز المدرسة بناء العلاقات الإيجابية والتعاون في المجتمع المدرسي.", status: "blue", pctReal: 80, gap: "خطة تعزيز العمل التعاونى بين المنسوبين", evidence: "محاضر الاجتماعات | صور تكريم المعلمين | صور لليوم الترفيهى للمعلمين | صور رحلات المعلمين و الطلاب | صور المناسبات الاجتماعية و زيارة المرضى", initiative: "خطة للعمل التعاونى بين المنسوبين (اجتماعات الشعب) | صور من زيارات صفية++", driveFolderId: "1Ct5I6lvxH8p2fy4zUMrvSV1XoWh49_61" },
+                                    { code: "1-3-1-2", text: "تعزز المدرسة مشاركة الأسرة في تعلم أبنائهم، والتحضير لمستقبلهم .", status: "green", pctReal: 90, gap: "توفر المدرسة فرصا للتواصل الفعال مع الاسرة", evidence: "مجموعات (جروبات) التواصل واتس اب | المنصة الالكترونية | المرشد الطلابى | اجتماعات اولياء الامور | يوم المشروعات | اليوم الاجتماعى فى رمضان | نموذج من اخطار اولياء الامور بالانشطة و الرحلات", initiative: "ندوة للتوعية بدور الاسرة لتعلم ابناءها (اونلاين) | نموذج من توقيع ولى الامر على تعزيز درجات الطلاب | صورة من مراسلات المرشد الطلابى مع اولياء الامور", driveFolderId: "1MsB8mKQneMy_8Kx8nL826EjQpxJ__zwI" },
+                                    { code: "1-3-1-3", text: "تعزز المدرسة الشراكة المجتمعية؛ لدعم التعلم والتأثير الإيجابي في المجتمع المحلي.", status: "green", pctReal: 95, gap: "توثيق للانشطة", evidence: "صور للماراثون | صور لاصلاح الملعب بالشراكة مع البلدية | التعاون مع الؤسسات الصحية (عيادات) | صور هيئة الفضاء | صور العرض الادائى لطلاب الدمج | صور من زيارة مكتبة الحرم", initiative: "", driveFolderId: "1a-e_SeS5VduEd241EJxi3rLyr9hfllfS" },
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: "المعيار 1-4: التطوير المؤسسي",
+                        focusAreas: [
+                            {
+                                name: "التطوير المؤسسي",
+                                indicators: [
+                                    { code: "1-1-4-1", text: "توفر المدرسة كادرًا تعليميًّا مكتملاً ومؤهلاً.", status: "yellow", pctReal: 40, gap: "تطبق المدرسة اجراءات محددة فى استقطاب الكادر التعليمى المؤهل", evidence: "نماذج من ملف انجاز المعلم | تقرير بالمعلمين الحاصلين بالرخصة المهنية", initiative: "ملف تعريفى بكادر الدبلوما من الموارد البشرية | نماذج تقارير قبول و رفض المعلمين المتقدمين للعمل بالمدرسة | نموذج من اعلانات توظيف | عمل خطة مكتوبة لاستقطاب كوادر بناءا على التخصصات المطلوبة", driveFolderId: "1m_6jxLhmifXCwvPRKUOez7USyazEFfeH" },
+                                    { code: "1-4-1-2", text: "توفر المدرسة كادرًا إداريًّا مكتملاً ومؤهلاً.", status: "yellow", pctReal: 40, gap: "تطبق المدرسة اجراءات محددة فى استقطاب الكادر الادارى المؤهل", evidence: "نموذج للتسلسل الادارى بالمدرسة | السلم الوظيفى | نموذج بادارات المدرسة", initiative: "ملف تعريفى بكادر الدبلوما الادارى من الموارد البشرية | نماذج تقارير قبول و رفض الاداريين المتقدمين للعمل بالمدرسة | نموذج من اعلانات توظيف | عمل خطة مكتوبة لاستقطاب كوادر بناءا على التخصصات المطلوبة", driveFolderId: "1UxEOPsQC9Dpe_3WsF_X4it7mJoxHGdOf" },
+                                    { code: "1-4-1-3", text: "تظهر المدرسة ثباتًا واستدامة مالية.", status: "gray", pctReal: 0, gap: "لا توجد فجوة موثقة", evidence: "لا توجد أدلة مسجلة بعد", initiative: "", driveFolderId: "1ls09k13SRq2PnQQ78MPq5sVWOzPHb2d0" },
+                                    { code: "1-4-1-4", text: "تشجع المدرسة منسوبيها ل لحصول على الرخصة المهنية.", status: "green", pctReal: 90, gap: "توفر المدرسة انشطة و برامج توعوية للحصول على الرخصة المهنية", evidence: "نموذج الايميل المرسل الخاص بالرخصة المهنية | صور من منصة اعناب للتدريب على الرخصة المهنية", initiative: "نموذج بحصر المعلمين الحاصلين على الرخصة المهنية", driveFolderId: "16VPPWfZ8X2Yx6OCzpLcQngXvklerxto1" },
+                                    { code: "1-4-1-5", text: "تدعم المدرسة التطوير المهني لمنسوبيها وف ًق ا لنتائج تقويم الأداء الوظيفي واحتياجاتهم.", status: "green", pctReal: 90, gap: "تبنى المدرسة خطة التطوير المهنى وفق تقييم الاداء الوظيفى و احتياجات منسوبيها", evidence: "تقييم المعلمين | صرف مكافأت | دورات اعناب التدريبية | ايميل سياسة صرف المكافأت ل الحاصلين على شهادات الماجستير و الدكتوراة و السيلتا و الرخصة المهنية", initiative: "خطة التطوير المهنى (مكتب التطوير)", driveFolderId: "1bQbGb-TN_kMPSpEcu2a6hVu8LXHQtPhJ" },
+                                    { code: "1-4-1-6", text: "تطبق المدرسة التقويم الذاتي المبنيّ على المعايير المعتمدة من الهيئة.", status: "green", pctReal: 90, gap: "تطبق المدرسة التقويم الذاتى", evidence: "نماذج من استمارة التقويم الذاتى للمعلمين | نماذج من استبانات المدرسة للمعلمين | صور من اجتماعات مكتب التطوير بالمعلمين للتعريف بمعايير الهيئة | محاضر اجتماعات القسم", initiative: "تقرير خطة تحسين الاداء وفقا للمعايير المعتمدة من الهيئة", driveFolderId: "1urrYndjc_1eQIf4m643aiNeTwmTS4Tbw" },
+                                    { code: "1-4-1-7", text: "تنفذ المدرسة خطة للتحسين بناء على نتائج التقويم المدرس 1- ي، وتتابعها.", status: "cyan", pctReal: 70, gap: "تبنى المدرسة خطة تحسين فى ضوء نتائج التقويم المدرسى", evidence: "ميثاق العمل | صور من اجتماعات القسم", initiative: "تقرير خطة تحسين المدرسة", driveFolderId: "1GPs7Y1sy0u8wyQ-BaejqTsNziBGyMft6" },
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: "domain-2",
+                title: "المجال الثاني: التعليم والتعلم",
+                manager: "الأستاذ إسلام صابر",
+                email: "eslam.saber@daralforsan.edu.sa",
+                team: "أ/ أسامة المعداوي ، أ/ يوسف مجدي",
+                standards: [
+                    {
+                        title: "المعيار 2-1: بناء وإدارة خبرات التعلم",
+                        focusAreas: [
+                            {
+                                name: "خبرات التعلم",
+                                indicators: [
+                                    { code: "2-1-1-1", text: "تعزز المدرسة دافعية المتعلمين للتعلم والاستمتاع به.", status: "green", pctReal: 90, gap: "توثيق الانشطة", evidence: "الدراما | مسابقة The Best Author | التكريمات و التحفيز داخل الفصل | تجارب علمية | نادى اللغة الانجليزية | رحلات علمية و ثقافية | العاب تعليمية | مسابقات برمجة | تدريس باستراتيجيات التعلم التعاونى", initiative: "", driveFolderId: "1TJ7MrSQhZKmulkFlUDcrmze_LdsGaoCn" },
+                                    { code: "2-1-1-1", text: "توفر المدرسة فرصًا متكافئة للتعلم تلبي احتياجات المتعلمين بمن فيهم ذوو الإعاقة والموهوبون.", status: "blue", pctReal: 80, gap: "يتوفر في بيئة التعلم المصادر و الأنشطة", evidence: "حصص اضافية | اوراق عمل | حصص موهبة | انشطو و مسابقات | غرفة المصادر - STEM - Science Lab - Theatre - Sports classess", initiative: "لوحات و جداريات داخل الفصل | تصوير حصة | تصوير حصة موهبة | تصوير حصة لطلاب الدمج", driveFolderId: "161UDysSwkiWO-lO6lp0e2itpzxklhNup" },
+                                    { code: "2-1-1-2", text: "تدعم المدرسة تنفيذ المناهج؛ لتحقيق نواتج التعلم المستهدفة وفق الخطة الدراسية.", status: "green", pctReal: 90, gap: "تدعم المدرسة تنفيذ المناهج لتحقيق نواتج التعلم", evidence: "حلقة القران | Talented Speaker Competition | The Best Author Competition | الزيارات – خطط انشطة - الاختبارات - الخطة الاسبوعية - توزيع المنهج", initiative: "مطالب تم الموافقة عليها | الدورات | المنصة الالكترونية | الكتب الالكترونية | الاشتراكات فى المواقع المدفوعة", driveFolderId: "1ZhyM6SM0RXoLLfwaRV2wBt7NJPA-mQxu" },
+                                    { code: "2-1-1-3", text: "تنوع المدرسة في إستراتيجيات التدريس لتلبية احتياجات المتعلمين، ودعم تعلمهم.", status: "green", pctReal: 90, gap: "توثيق الانشطة", evidence: "استراتيجيات الشرح | الاستراتيجيات الامستخدمة فى الحصص | استراتيجيات تراعى الفروق الفردية بين الطلاب | تلبية متطلبات المعلمين | ورش عمل", initiative: "تصوير حصص تستخدم استراتيجيات متعددة", driveFolderId: "1-Mb78eC6fDv9sHoYUcWOtteX3xhCT8uk" },
+                                    { code: "2-1-1-4", text: "تفعل المدرسة التعلم الإلكتروني؛ لتلبية احتياجات المتعلمين، ودعم تعلمهم.", status: "yellow", pctReal: 40, gap: "تضع المدرسة خطة لدمج التعلم الإلكتروني في عمليات التعليم والتعلم وتتابعها", evidence: "المنصات الالكترونية | مواقع مستخدمة على البروجكتور | الواجبات", initiative: "السبورة التفاعلية | تصوير حصص | عمل خطة من مدير المدرسة لدمج التعليم الالكترونى | صور للدورات التدريبية و استخدام السبورة الذكية", driveFolderId: "1xloUbyImzub7y0KYbVUmbi4b5cnMjNW9" },
+                                    { code: "2-1-1-5", text: "توفر المدرسة أنشطة تعلم تطبيقية ترتبط بحياة المتعلمين.", status: "cyan", pctReal: 60, gap: "ترتبط أنشطة التعلم في المدرسة بأنشطتي الحياتية خارج المدرسة", evidence: "البازار | زيارة مصنع | مشروع حذاء ال ELO | مشروع الملعب ال ELO | صور لتجارب الساينس | صور ندوات التوعية | مشروع الطريق الذكي ELO 2026", initiative: "مسرحية عن الوظائف | زراعة نباتات | حصص ال IT | تصوير حصة من مادة ال Business", driveFolderId: "1NCJz7KSfZGHdWFH0HliI5inM1ywsXwwi" },
+                                    { code: "2-1-1-6", text: "تنمي المدرسة المهارات القرائية والعددية الأساسية لدى المتعلمين.", status: "green", pctReal: 90, gap: "تنمي المدرسة مهارات القراءة والكتابة والتعامل مع الأعداد (الحساب) لدى ابني\\ابنتي", evidence: "منصة اقرأ | الاذاعة | مسابقة Spelling Bee | مسابقة بيبراس و كانجارو | مسابقة قراءة سريعة | خطط الدعم | مسابقة Hand Writhing, The Best Author", initiative: "لوحات تعليمية داخل الفصول | مسابقة Math Fit | English and French comptitions", driveFolderId: "1Of4_5NwBBId8AAUQPkzqFNB9Bvh-u-T6" },
+                                    { code: "2-1-1-7", text: "تنمي المدرسة مهارات التفكير العليا لدى المتعلمين.", status: "blue", pctReal: 80, gap: "توفير المدرسة أنشطة تنمي مهارات التفكير العليا (الناقد الأبداعي وحل المشكلات) و التوثيق", evidence: "بروجكت من مسابقة ال ELO | حصة من STEM | أسئلة تفكير ناقد | مسابقة ال Recycling , The Best Author", initiative: "مسابقة ال MUN | فيديو لمسابقة تعرض قضية تطرح للنقاش بين فريق مؤيد و فريق معارض", driveFolderId: "1H5H5yDTFrOdDJQeicfGuJRG49eP6mywt" },
+                                    { code: "2-1-1-8", text: "تنمي المدرسة المهارات العاطفية والاجتماعية لدى المتعلمين.", status: "yellow", pctReal: 40, gap: "تشجيع المدرسة على ضبط الانفعال \\ تشجيع المدرسة على التعاون مع الزملاء \\ التعاطف", evidence: "طلاب النظام | زيارة مريض | لافتات عن التنمر", initiative: "تصوير موقف عن التنمر | حصة مصورة للطلاب يتناقشون بشكل محترم و بتعاون | اجتماع اتحاد الطلاب | اجتماع ال MUN", driveFolderId: "1hK8ziH9QsgxSfPNXH_oclrM946-jDeIZ" },
+                                    { code: "2-1-1-9", text: "تنمي المدرسة المهارات الرقمية لدى المتعلمين.", status: "green", pctReal: 90, gap: "التوثيق", evidence: "المنصات الالكترونية | معمل الحاسب | حصة الروبوت | صور من مسابقة بيبراس | صور تدريب من حصة الروبوت | مقطع مصور لطلاب الدمج فى حصة STEM", initiative: "سبورة تفاعلية | بحث الكترونى | استخدام المعجم الالكترونى | تصوير حصص ال IT , Robot", driveFolderId: "1S0bJDrtMU7JXtT-gE10LWNhBERMO4Kl5" },
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: "المعيار 2-2: تقويم التعلم",
+                        focusAreas: [
+                            {
+                                name: "تقويم التعليم",
+                                indicators: [
+                                    { code: "2-2-1", text: "تقوّم المدرسة أداء المتعلمين باستخدام أساليب وأدوات تقويم متنوعة وفاعلة.", status: "green", pctReal: 90, gap: "توثيق الانشطة", evidence: "الاختبارات بانواعها المختلفة | المشروعات | الواجبات | الابحاث | اختبارات اسبوعية | اسئلة قياس مدى فهم الطلاب فى الحصة", initiative: "", driveFolderId: "1H6X-gclAr10SgfJNWAUHVlOoV443apz4" },
+                                    { code: "2-2-2", text: "تحلل المدرسة نتائج التقويم وتوظفها في تحسين نواتج التعلم بانتظام.", status: "green", pctReal: 90, gap: "تحلل المدرسة نتائج تقويم اداء المتعلمين و توظفها فى تحسين نواتج التعلم لديهم", evidence: "اختبارات ال Baseline و تحليلها | الخطط العلاجية | حصص الدعم", initiative: "وضع استراتيجيات جديدة | دورات تدريبية للمعلمين", driveFolderId: "1_h2xMuqizt4Cs7MnzpIdcVs_32QF2TvE" },
+                                    { code: "2-2-3", text: "تقدم المدرسة التغذية الراجعة للمتعلمين بانتظام.", status: "green", pctReal: 90, gap: "توثيق النماذج", evidence: "درجات الاختبارات | تصحيح الكتب و الواجبات | التعزيز | صور التكريمات | واجبات المنصة | المشروعات | تقارير الاختبارات و السلوك | اجتماعات اولياء الامور", initiative: "", driveFolderId: "1tBsiHImZqvDYhMvkf0L2HpUqs52PkSb7" },
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: "domain-3",
+                title: "المجال الثالث: نواتج التعلم",
+                manager: "الأستاذ أحمد ماهر",
+                email: "ahmed.maher@daralforsan.edu.sa",
+                team: "أ/ خالد الزهراني ، أ/ ضياء الدين حسين",
+                standards: [
+                    {
+                        title: "المعيار 3-1: التحصيل الدراسي والتقدم الأكاديمي",
+                        focusAreas: [
+                            {
+                                name: "التحصيل التعليمي",
+                                indicators: [
+                                    { code: "3-1-1-1", text: "يحقق المتعلمون نتائج متقدمة في مجال القراءة و فقًا للاختبارات الوطنية .", status: "green", pctReal: 90, gap: "يحقق المتعلمون تقدم فى مجال القراءة و الرياضيات قياسا على اداء المدرسة السابق فى الاختبارات الوطنية", evidence: "1- نماذج اختبارات نافس | 2- توعية اولياء الامور باختبار نافس و موعده | 3- عمل حصص لتدريب الطلاب المشاركين فى اختبار نافس", initiative: "1- رسائل لاولياء الامور بخصوص نافس | 2- تدريبات و توعية بمواعيد اختبار نافس | 3- عمل نماذج اختبارات محاكاة جديدة | 4- تقارير اختبار نافس الرسمىي grade 3 | 5- نتائج اختبار Star | 6- مقارنة نتائج اخر عامين لاختبارات نافس مع التحليل", driveFolderId: "11K3c21-u9dtsibrcoimquSL65Kha_Nx8" },
+                                    { code: "3-1-1-2", text: "يحقق المتعلمون نتائج متقدمة في مجال الرياضيات و قفًا للاختبارات الوطنية .", status: "green", pctReal: 90, gap: "يحقق المتعلمون تقدم فى مجال القراءة و الرياضيات قياسا على اداء المدرسة السابق فى الاختبارات الوطنية", evidence: "1- نماذج اختبارات نافس | 2- توعية اولياء الامور باختبار نافس و موعده | 3- عمل حصص لتدريب الطلاب المشاركين فى اختبار نافس", initiative: "1- رسائل لاولياء الامور بخصوص نافس | 2- تدريبات و توعية بمواعيد اختبار نافس | 3- عمل نماذج اختبارات محاكاة جديدة | 4- تقارير اختبار نافس الرسمىل grade 3 | 5- نتائج اختبار Star | 6- مقارنة نتائج اخر عامين لاختبارات نافس مع التحليل", driveFolderId: "1lAGUEFAmey4VD97_kpnsgc7vxmnTzJIK" },
+                                    { code: "3-1-1-3", text: "يحقق المتعلمون نتائج متقدمة في مجال العلوم و فقًا للاختبارات الوطنية .", status: "green", pctReal: 90, gap: "يحقق المتعلمون تقدم فى مجال القراءة و الرياضيات قياسا على اداء المدرسة السابق فى الاختبارات الوطنية", evidence: "1- نماذج اختبارات نافس | 2- توعية اولياء الامور باختبار نافس و موعده | 3- عمل حصص لتدريب الطلاب المشاركين فى اختبار نافس", initiative: "1 - رسائل لاولياء الامور بخصوص نافس | 2- تدريبات و توعية بمواعيد اختبار نافس | 3- عمل نماذج اختبارات محاكاة جديدة | 4- تقارير اختبار نافس الرسمىل grade 3 | 5- نتائج اختبار Star | 6- مقارنة نتائج اخر عامين لاختبارات نافس مع التحليل", driveFolderId: "112fyFsW7DEJIFLWLLRHjCc1tFEhYinyk" },
+                                    { code: "3-1-1-4", text: "يحقق المتعلمون تقدمًا في مجال القراءة قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية.", status: "blue", pctReal: 80, gap: "يحقق المتعلمون تقدم فى مجال القراءة و الرياضيات قياسا على اداء المدرسة السابق فى الاختبارات الوطنية", evidence: "1- نماذج اختبارات نافس | 2- توعية اولياء الامور باختبار نافس و موعده | 3- عمل حصص لتدريب الطلاب المشاركين فى اختبار نافس", initiative: "1- رسائل لاولياء الامور بخصوص نافس | 2- تدريبات و توعية بمواعيد اختبار نافس | 3- عمل نماذج اختبارات محاكاة جديدة | 4- تقارير اختبار نافس الرسمىل grade 3 | 5- نتائج اختبار Star | 6- مقارنة نتائج اخر عامين لاختبارات نافس مع التحليل", driveFolderId: "199OQdGIda9b_d5_0eITCam5-Vu5ngFmP" },
+                                    { code: "3-1-1-5", text: "يحقق المتعلمون تقدمًا في مجال الرياضيات قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية.", status: "blue", pctReal: 80, gap: "يحقق المتعلمون تقدم فى مجال القراءة و الرياضيات قياسا على اداء المدرسة السابق فى الاختبارات الوطنية", evidence: "1- نماذج اختبارات نافس | 2- توعية اولياء الامور باختبار نافس و موعده | 3- عمل حصص لتدريب الطلاب المشاركين فى اختبار نافس", initiative: "1- رسائل لاولياء الامور بخصوص نافس | 2- تدريبات و توعية بمواعيد اختبار نافس | 3- عمل نماذج اختبارات محاكاة جديدة | 4- تقارير اختبار نافس الرسمىل grade 3 | 5- نتائج اختبار Star | 6- مقارنة نتائج اخر عامين لاختبارات نافس مع التحليل", driveFolderId: "1rmQLmp9H4FhBkLHYyic6CdCLMo5vtGTk" },
+                                    { code: "3-1-1-6", text: "يحقق المتعلمون تقدمًا في مجال العلوم قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية", status: "blue", pctReal: 80, gap: "يحقق المتعلمون تقدم فى مجال القراءة و الرياضيات قياسا على اداء المدرسة السابق فى الاختبارات الوطنية", evidence: "1- نماذج اختبارات نافس | 2- توعية اولياء الامور باختبار نافس و موعده | 3- عمل حصص لتدريب الطلاب المشاركين فى اختبار نافس", initiative: "1- رسائل لاولياء الامور بخصوص نافس | 2- تدريبات و توعية بمواعيد اختبار نافس | 3- عمل نماذج اختبارات محاكاة جديدة | 4- تقارير اختبار نافس الرسمىل grade 3 | 5- نتائج اختبار Star | 6- مقارنة نتائج اخر عامين لاختبارات نافس مع التحليل", driveFolderId: "1ky0wE3KXYtYzJYVligOQd_YCxbn5L-zs" },
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: "المعيار 3-2: التطور الشخصي والصحي والاجتماعي",
+                        focusAreas: [
+                            {
+                                name: "التطور الشخصي والصحي والاجتماعي",
+                                indicators: [
+                                    { code: "3-2-1", text: "يظهر المتعلمون الاعتزاز بالقيم والهوية الوطنية .", status: "blue", pctReal: 80, gap: "يظهر المتعلمون الاعتزاز بالقيم و الهوية الوطنية", evidence: "زيارة مكة | زيارة متحف بينالى | زيارة البلد | الاحتفال باليوم الوطنى و يوم التأسيس و يوم العلم | مسرحية المملكة | نماذج من الاذعة | الانشاد و الالقاء باللغة العربية", initiative: "1عمل اذاعة لترسيخ القيم و الهوية الوطنية (خطة الاذاعة +قيمة) | 2-صور المشاركةفى تنظيف الحرم المكى | 3- صور لاعادة ترميم ملعب", driveFolderId: "1HM6CVwb0n6vjwjkTfpsXZXZWFSKniYnU" },
+                                    { code: "3-2-2", text: "يظهر المتعلمون اتجاهات إيجابية نحو ذواتهم .", status: "green", pctReal: 90, gap: "توثيق الانشطة", evidence: "استبانة الطلاب | طلاب النظام | صور من البلد | صور من الاذاعة و المشروعات و المسابقات | اللقاء التعريفى ل grade 3 | فيديوهات الماراثون عن حوار الطلاب مع اولياء الامور | تقارير الواجبات", initiative: "عمل جولة تعريفية للطلاب الجدد", driveFolderId: "1DpPXjuSnOws7LcinkoK_ep1nEApT0cye" },
+                                    { code: "3-2-3", text: "يظهر المتعلمون التزامًا بالممارسات الصحية السليمة .", status: "yellow", pctReal: 40, gap: "يظهرالمتعلمون الالتزام بالمماراسات الصحية السليمة", evidence: "صور للماراثون و الطابور الصبااحى", initiative: "صور الزيارات الصحية | ندوة للارشاد الطلابى | بوستات عن اهمية الغذاء الصحى", driveFolderId: "1rxZH-fzgMz8d7Yp6CT6qw_jcDmT1xTiq" },
+                                    { code: "3-2-4", text: "يشارك المتعلمون في الأنشطة المجتمعية والأعمال التطوعية .", status: "green", pctReal: 95, gap: "توثيق الانشطة", evidence: "1-صور للماراثون | 2- صور لاصلاح الملعب بالشراكة مع البلدية | 3- التعاون مع الؤسسات الصحية (عيادات) | 4- صور هيئة الفضاء | 5- صور العرض الادائى لطلاب الدمج | 6- صور من زيارة مكتبة الحرم | 7- التبرع لاهل غزة ((grade 5 | 8- تبرع رمضان بالمواد الغذائية | 9- المشاركة فى حفر بئر", initiative: "", driveFolderId: "19sX_YIrpHGiTwdi6GXac9NEyM5VzTKmF" },
+                                    { code: "3-2-5", text: "يلتزم المتعلمون بقواعد السلوك والانضباط المدرسي .", status: "yellow", pctReal: 50, gap: "يظهر المتعلمون التزاما بقواعد السلوك", evidence: "صورة من لائحة السلوك و المواظبة داخل الفصول | تقرير السلوك من البوابة الالكترونية | تقرير حضور و غياب الطلاب | خروج الطلاب من الطابور و الالتزام فى الصلاة و الالتزام بالزى المدرسى", initiative: "توثيق فيديو للمرشد لشرح قواعد السلوك و المواظبة | محاضر سلوكية للطلاب و تحليلها من المرشد الطلابى | استبانة من الطالب و المعلم و ولى الامر | عمل نموذج للائحة السلوك و المواظبة يوقع عليها الطالب و ولى الامر", driveFolderId: "1faWG_6pDNHd5LgH5mbexrjoJGqEd7t3V" },
+                                    { code: "3-2-6", text: "يظهر المتعلمون القدرة على البحث والتعلم الذاتي.", status: "green", pctReal: 90, gap: "يظهر المتعلمون القدرة على البحث والتعلم الذاتي.", evidence: "1 - أبحاث الطلبة | 2 - المشروعات | 3 - مسابقة أفضل مؤلف", initiative: "1- تخصيص جزء من الحصة للذهاب إلى المعامل للبحث", driveFolderId: "1hZtczf-565pUfhRJH9ay8Z-f_ug4EUq6" },
+                                    { code: "3-2-7", text: "يظهر المتعلمون اعتزازا بثقافتهم واحتراما للتنوع الثقافي في المجتمع.", status: "green", pctReal: 90, gap: "توثيق الأنشطة", evidence: "1 - صور البلد ويوم التأسيس | 2 - صور الزي المختلف ليوم التأسيس | 3 - احتفال أفضل طبق | 4 - مسابقة الأكلات من دول مختلفة | 5 - متحف بينالي | إلقاء شعر باللغة العربية", initiative: "", driveFolderId: "1WH5As-GWwWu01wfSTPe9pzaJHEL4fpmM" },
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: "domain-4",
+                title: "المجال الرابع: البيئة المدرسية (المرافق، الأمن والسلامة)",
+                manager: "الأستاذ مصطفى عبدالجليل",
+                email: "mostafa.galeel@daralforsan.edu.sa",
+                team: "أ/ محمد جمال ، أ/ مصطفى أشرف",
+                standards: [
+                    {
+                        title: "المعيار 4-1: المبنى المدرسي",
+                        focusAreas: [
+                            {
+                                name: "المبنى المدرسى",
+                                indicators: [
+                                    { code: "4-1-1-1", text: "تنظيم مبنى المدرسة ملائم لعدد المتعلمين و المرحلة العمرية", status: "green", pctReal: 95, gap: "توثيق مخخط خريطة المدرسة", evidence: "صور ملاعب و فصول و معامل | صور مطلع ذوو الاحتياجات 3- صور لموقف ذوو الاحتياجات 4- صور لفصول ذوو الاحتياجات", initiative: "مخطط (خريطة) للمدرسة", driveFolderId: "1EN-8GvXuK9fhhS5A6b3HoXYNc1o834bs" },
+                                    { code: "4-1-1-2", text: "تتوافر فصول و معامل ملائمة للعملية التعليمية تلبى احتياجات المتعلمين بمن فيهم ذوو الاعاقة", status: "green", pctReal: 90, gap: "اجواء الفصل من حيث التهوية و الاضاءة", evidence: "صور لتجهيزات الفصول و تجهيزات المعامل و تجهيزات المعامل", initiative: "مطلع الحقائب على السلم | نموذج حصر مساحات الفصول", driveFolderId: "1NVc9lvgkLFNWfyinozS1a6VDNFMgNgCw" },
+                                    { code: "4-1-1-3", text: "تلبى المرافق و الخدمات المساندة احتياجات المتعلمين بمن فيهم ذوو الاعاقة", status: "cyan", pctReal: 70, gap: "المساحة المخصصة للمقصف و اماكن تناول الطعام تلبى احتياجات المتعلمين بمن فيهم ذوو الاعاقة", evidence: "صور المقصف | صور الملاعب | صور الممرات | صور لدورات المياه لذوو الاعاقة | صور من قسم التربية الخاصة (صالة النفس حركى - التخاطب - الاخصائى النفسى)", initiative: "طاولات الطعام | ملصق ارشادات ذوو الاعاقة (دورات مياه) | التنسيق مع المقصف بشأن الطعام الصحى", driveFolderId: "16ucuzXeiZpQtcA_Zw7Qssn1VnW7uiFH2" },
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        title: "المعيار 4-2: الأمن والسلامة",
+                        focusAreas: [
+                            {
+                                name: "الامن و السلامة",
+                                indicators: [
+                                    { code: "4-2-1-1", text: "تتوافر فى فصول المدرسة و معاملها و جميع مرافقها متطلبات الامن و السلامة", status: "blue", pctReal: 80, gap: "توثيق خطة الصيانة", evidence: "نموذج شهادة الامن و السلامة | صور (مخارج الطوارئ - المصاعد - الاسعافات الاولية - الشهادات الصحية للعاملين - طفايات الحريق - المطالع - مواقف ذوو الاعاقة) | صور لاعمال الصيانة | لوحات نقاط التجمع اثناء اخلاء المبنى | نموذج خطط الاخلاء | توثيق تجربة اخلاء", initiative: "خطة الصيانة | صندوق اسعافات (للدبلوما) | تحديث تاريخ صلاحية الطفايات", driveFolderId: "1WQXBIFbm_iIyW03NCxTfEsqVTWNucsh1" },
+                                    { code: "4-2-1-2", text: "تعمل المدرسة على صيانة جميع مرافق المبنى و تجهيزاته بانتظام", status: "cyan", pctReal: 65, gap: "تتوافر خطط لاعمال الصيانة الوقائية و العلاجية بانتظام", evidence: "صور لاعمال الصيانة", initiative: "خطة الصيانة", driveFolderId: "19Ve20WbkCvW1ljAzRuecm0ePhdTP0OIu" },
+                                    { code: "4-2-1-3", text: "تعمل المدرسة على نظافة المبنى المدرسى و جميع مرافقه بانتظام", status: "green", pctReal: 90, gap: "توثيق", evidence: "صور لبعض المرافق تظهر نظافة المبنى | صور اماكن تخزين ادوات النظافة", initiative: "جدول مناوبة عمال النظافة و شهادتهم الصحية | صور اثناء تنفيذ اعمال النظافة فى المبنى", driveFolderId: "18DNVMqbSsJUWl0SahzG9f3ouzUWuJdkr" },
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+        function calculateProgress(indicators) {
+            if (!indicators || indicators.length === 0) return 0;
+            let totalWeight = 0;
+            indicators.forEach(ind => {
+                if (ind.status === 'green' || ind.status === 'blue') totalWeight += 100;
+                else if (ind.status === 'cyan') totalWeight += 85;
+                else if (ind.status === 'yellow') totalWeight += 60;
+                else if (ind.status === 'gray') totalWeight += 35;
+                else if (ind.status === 'red') totalWeight += 10;
+            });
+            return Math.round(totalWeight / indicators.length);
+        }
+
+        function getColorStyles(status) {
+            const styles = {
+                green:  { bg: 'bg-emerald-100 text-emerald-800 border-emerald-500', label: 'مكتمل ومعتمد' },
+                blue:   { bg: 'bg-blue-100 text-blue-800 border-blue-500', label: 'جاهز هندسياً/وقائياً' },
+                cyan:   { bg: 'bg-cyan-100 text-cyan-800 border-cyan-500', label: 'مرحلة المراجعة النهائية' },
+                yellow: { bg: 'bg-amber-100 text-amber-800 border-amber-500', label: 'مرحلة المسودة' },
+                gray:   { bg: 'bg-slate-200 text-slate-800 border-slate-400', label: 'نقص أدلة' },
+                red:    { bg: 'bg-rose-100 text-rose-800 border-rose-500', label: 'فجوة حرجة' }
+            };
+            return styles[status] || { bg: 'bg-gray-100 text-gray-800 border-gray-400', label: 'غير محدد' };
+        }
+
+        function buildFullReport() {
+            const root = document.getElementById('report-root');
+            let allIndicators = [];
+            comprehensiveDashboardData.forEach(d => d.standards.forEach(s => s.focusAreas.forEach(f => allIndicators.push(...f.indicators))));
+
+            document.getElementById('report-total').innerText = allIndicators.length;
+            document.getElementById('report-overall').innerText = calculateProgress(allIndicators) + '%';
+            document.getElementById('report-date').innerText = new Date().toLocaleDateString('ar-SA-u-ca-gregory', { year: 'numeric', month: 'long', day: 'numeric' });
+
+            let html = '';
+            comprehensiveDashboardData.forEach((domain, dIdx) => {
+                let domainIndicators = [];
+                domain.standards.forEach(s => s.focusAreas.forEach(f => domainIndicators.push(...f.indicators)));
+                const domainPct = calculateProgress(domainIndicators);
+
+                html += `
+                <section class="mb-10 ${dIdx > 0 ? 'page-break' : ''}">
+                    <div class="bg-gradient-to-l from-slate-900 via-slate-800 to-etecteal-900 text-white rounded-t-xl p-5">
+                        <div class="flex flex-wrap justify-between items-center gap-3">
+                            <h2 class="text-xl font-extrabold">${domain.title}</h2>
+                            <span class="px-3 py-1 bg-accentgold text-slate-950 font-black text-sm rounded-full">نسبة إنجاز المجال: ${domainPct}%</span>
+                        </div>
+                        <div class="text-xs text-slate-300 mt-3 flex flex-wrap gap-6">
+                            <span><i class="fa-solid fa-user-tie text-accentgold ml-1"></i> المسؤول الأول: ${domain.manager}</span>
+                            <span><i class="fa-solid fa-users text-cyan-400 ml-1"></i> فريق العمل: ${domain.team}</span>
+                        </div>
+                    </div>
+                    <div class="bg-white border border-t-0 border-gray-100 rounded-b-xl p-5 space-y-6">
+                `;
+
+                domain.standards.forEach(standard => {
+                    let stdIndicators = [];
+                    standard.focusAreas.forEach(f => stdIndicators.push(...f.indicators));
+                    const stdPct = calculateProgress(stdIndicators);
+
+                    html += `
+                        <div class="border border-slate-200 rounded-lg overflow-hidden">
+                            <div class="bg-etecteal-50 px-4 py-2.5 flex justify-between items-center border-b border-etecteal-100">
+                                <h3 class="font-extrabold text-sm text-etecteal-900">${standard.title}</h3>
+                                <span class="text-xs font-black text-etecteal-700">تقدم المعيار: ${stdPct}%</span>
+                            </div>
+                            <div class="p-4 space-y-4">
+                    `;
+
+                    standard.focusAreas.forEach(focus => {
+                        const focusPct = calculateProgress(focus.indicators);
+                        html += `
+                            <div>
+                                <div class="flex justify-between items-center mb-3 pb-1.5 border-b border-dashed">
+                                    <h4 class="text-xs font-black text-slate-700">${focus.name}</h4>
+                                    <span class="text-[11px] font-black text-accentgold">تقدم التركيز: ${focusPct}%</span>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        `;
+
+                        focus.indicators.forEach(ind => {
+                            const colors = getColorStyles(ind.status);
+                            html += `
+                                <div class="border-r-2 ${colors.border} bg-slate-50/60 p-3 rounded-l text-[11px] space-y-1.5">
+                                    <div class="flex justify-between items-center font-bold mb-1">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="bg-slate-200 px-1 rounded text-[10px]">${ind.code}</span>
+                                            ${ind.driveFolderId ? `
+                                            <a href="https://drive.google.com/drive/folders/${ind.driveFolderId}" target="_blank" rel="noopener"
+                                                class="flex items-center gap-1 px-1.5 py-0.5 bg-etecteal-50 border border-etecteal-200 hover:bg-etecteal-100 text-etecteal-700 rounded text-[9px] font-bold">
+                                                <i class="fa-brands fa-google-drive"></i> الشواهد
+                                            </a>` : ''}
+                                        </div>
+                                        <span class="px-2 py-0.5 rounded text-[9px] font-black tracking-wide ${colors.bg}">${colors.label}</span>
+                                    </div>
+                                    <p class="font-bold text-slate-800 leading-relaxed">${ind.text}</p>
+                                    <div class="text-[10px] text-gray-600 space-y-1 pt-2 border-t border-dashed mt-2">
+                                        <div><strong class="text-rose-700">⚠️ الفجوة المرصودة:</strong> ${ind.gap}</div>
+                                        <div><strong class="text-slate-700">📂 الأدلة والشواهد:</strong> ${ind.evidence}</div>
+                                        <div><strong class="text-emerald-700">💡 المبادرة التصحيحية:</strong> ${ind.initiative}</div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+
+                        html += `</div></div>`;
+                    });
+
+                    html += `</div></div>`;
+                });
+
+                html += `</div></section>`;
+            });
+
+            root.innerHTML = html;
+        }
+
+        buildFullReport();
+    </script>
+</body>
+</html>

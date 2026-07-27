@@ -112,6 +112,17 @@
                     <span class="mt-3 inline-flex items-center gap-1.5 bg-accentgold text-slate-950 text-[11px] font-black px-3 py-1.5 rounded-full shadow">
                         <i class="fa-solid fa-rocket"></i> مستوى الانطلاق والتقدم
                     </span>
+
+                    <!-- تقرير الرؤية الشاملة -->
+                    <div class="mt-5 w-full bg-white/5 border border-white/10 rounded-xl p-3 text-center">
+                        <p class="text-[10px] text-slate-300 leading-5 mb-2.5">
+                            تقرير مُجمَّع يضم تفاصيل كل مجال ومعيار ومؤشر مع الفجوات والأدلة والمبادرات، لأغراض المتابعة الداخلية والمراجعة.
+                        </p>
+                        <button onclick="requireAdmin(event, downloadFullReport)"
+                            class="w-full inline-flex items-center justify-center gap-1.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-[11px] font-bold px-3 py-2 rounded-lg transition-all">
+                            <i class="fa-solid fa-lock text-accentgold"></i> إطلاع / تحميل تقرير الرؤية الشاملة للتقويم الذاتي للعام الدراسي 2025-2026
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -381,6 +392,36 @@
 
         function closeAdminModal() {
             document.getElementById('admin-auth-modal').classList.add('hidden');
+        }
+
+        // ====================================================
+        // تحميل الرؤية الشاملة للتقويم الذاتي (report-all.html)
+        // ====================================================
+        function downloadFullReport() {
+            const modal = document.getElementById('report-loading-modal');
+            const bar = document.getElementById('report-loading-bar');
+            const pctText = document.getElementById('report-loading-pct');
+            modal.classList.remove('hidden');
+
+            let progress = 0;
+            bar.style.width = '0%';
+            pctText.innerText = '0';
+
+            const interval = setInterval(() => {
+                // زيادة غير خطية: سريعة في البداية، تتباطأ قرب الاكتمال (تأثير بصري لواقعية التحميل)
+                const step = progress < 60 ? (Math.random() * 12 + 6) : (Math.random() * 4 + 1);
+                progress = Math.min(progress + step, 100);
+                bar.style.width = progress.toFixed(0) + '%';
+                pctText.innerText = progress.toFixed(0);
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        window.open('report-all.html', '_blank');
+                    }, 300);
+                }
+            }, 140);
         }
 
         function showAdminPanel() {
@@ -1068,6 +1109,21 @@
                     </button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- نافذة تحميل الرؤية الشاملة -->
+    <div id="report-loading-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 p-7 text-center">
+            <div class="w-14 h-14 mx-auto rounded-xl bg-gradient-to-br from-etecteal-600 to-slate-900 flex items-center justify-center mb-4">
+                <i class="fa-solid fa-file-arrow-down text-accentgold text-xl"></i>
+            </div>
+            <h3 class="font-extrabold text-slate-900 text-sm mb-1">جاري تحميل المعاينة...</h3>
+            <p class="text-[11px] text-gray-400 mb-4">يتم الآن تجهيز الرؤية الشاملة لجميع المجالات والمعايير</p>
+            <div class="w-full bg-gray-200 h-2.5 rounded-full overflow-hidden">
+                <div id="report-loading-bar" class="bg-gradient-to-l from-etecteal-500 to-accentgold h-full rounded-full transition-all duration-150" style="width: 0%"></div>
+            </div>
+            <p class="text-[10px] text-gray-400 mt-2"><span id="report-loading-pct">0</span>%</p>
         </div>
     </div>
 
