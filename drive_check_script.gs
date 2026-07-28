@@ -1,4 +1,6 @@
 function doGet(e) {
+  var ROOT_FOLDER_ID = "19eBfs6wK7rZvje81ANWFTl_ORLAqK3v6"; // المجلد الرئيسي للشواهد (مرجع تشخيصي فقط)
+
   var folderIds = [
     "1XMGjfZH3jh-WceZ8OCLEElyGHjpGY7yr",
     "16BfucKpeZ9k1G9fDCvsBa2SuXGTN48Py",
@@ -52,6 +54,17 @@ function doGet(e) {
     "18DNVMqbSsJUWl0SahzG9f3ouzUWuJdkr"
   ];
 
+  var diagnostics = {};
+
+  // 1) اختبار الوصول للمجلد الرئيسي أولاً (تشخيص عام لصلاحية الحساب)
+  try {
+    var root = DriveApp.getFolderById(ROOT_FOLDER_ID);
+    diagnostics.rootAccess = { ok: true, name: root.getName() };
+  } catch (err) {
+    diagnostics.rootAccess = { ok: false, error: err.message };
+  }
+
+  // 2) فحص كل مجلد مؤشر على حدة، مع تسجيل سبب أي فشل بدقة
   var results = {};
   folderIds.forEach(function(id) {
     try {
@@ -59,13 +72,13 @@ function doGet(e) {
       var files = folder.getFiles();
       var count = 0;
       while (files.hasNext()) { files.next(); count++; }
-      results[id] = count;
+      results[id] = { ok: true, count: count };
     } catch (err) {
-      results[id] = -1; // تعذر الوصول للمجلد (صلاحيات أو معرف غير صحيح)
+      results[id] = { ok: false, error: err.message };
     }
   });
 
-  var output = ContentService.createTextOutput(JSON.stringify(results));
+  var output = ContentService.createTextOutput(JSON.stringify({ diagnostics: diagnostics, results: results }));
   output.setMimeType(ContentService.MimeType.JSON);
   return output;
 }
