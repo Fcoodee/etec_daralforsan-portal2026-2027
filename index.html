@@ -99,6 +99,10 @@
 
                 <!-- المؤشر الدائري -->
                 <div class="flex flex-col items-center justify-self-center">
+                    <button onclick="requireAdmin(event, syncWithDriveDatabase)" id="drive-sync-btn"
+                        class="mb-3 w-full inline-flex items-center justify-center gap-1.5 bg-gradient-to-l from-etecteal-600 to-etecteal-800 hover:from-etecteal-500 hover:to-etecteal-700 border border-etecteal-400/40 text-white text-[11px] font-black px-3 py-2.5 rounded-xl shadow-lg transition-all">
+                        <i class="fa-brands fa-google-drive text-accentgold"></i> اتصال قاعدة بيانات الدليل لتحديث النسب
+                    </button>
                     <div class="relative w-32 h-32">
                         <svg viewBox="0 0 120 120" class="w-32 h-32 -rotate-90">
                             <circle cx="60" cy="60" r="52" fill="none" stroke="#ffffff1a" stroke-width="10"></circle>
@@ -387,6 +391,84 @@
                 const cb = adminSession.pendingCallback;
                 adminSession.pendingCallback = null;
                 cb();
+            }
+        }
+
+        // ====================================================
+        // اتصال حي بقاعدة بيانات الدليل (Google Apps Script Web App)
+        // يفحص عدد الملفات الفعلية في مجلد كل مؤشر، ويرفعه لأخضر إن وُجدت أدلة حقيقية.
+        // ⚠️ التحديث مؤقت لهذه الجلسة/التبويب فقط (لا يوجد حفظ دائم بدون قاعدة بيانات خلفية).
+        // ====================================================
+        const DRIVE_CHECK_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzwKyh1UKTos1U_UT3qQmZhHrx8hd6MWWqW7hx5OcAQV9Ta_hzRSCxxinrI5OBAeL3g/exec";
+
+        async function syncWithDriveDatabase() {
+            const btn = document.getElementById('drive-sync-btn');
+            if (!DRIVE_CHECK_SCRIPT_URL) {
+                showToast('لم يُضبط رابط سكريبت التحقق بعد. راجع فريق التطوير.');
+                return;
+            }
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري فحص الدرايف...';
+
+            // إظهار نافذة الاتصال بشريط تقدم متحرك (محاكاة بصرية أثناء انتظار الاستجابة الفعلية)
+            const modal = document.getElementById('drive-sync-modal');
+            const bar = document.getElementById('drive-sync-bar');
+            const pctText = document.getElementById('drive-sync-pct');
+            modal.classList.remove('hidden');
+            bar.style.width = '0%';
+            pctText.innerText = '0';
+
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                // يتقدم تدريجياً لكن لا يتجاوز 90% حتى تصل الاستجابة الفعلية (لتفادي إيهام مستخدم بانتهاء غير حقيقي)
+                if (progress < 90) {
+                    progress += Math.random() * 8 + 2;
+                    progress = Math.min(progress, 90);
+                    bar.style.width = progress.toFixed(0) + '%';
+                    pctText.innerText = progress.toFixed(0);
+                }
+            }, 220);
+
+            const finishModal = () => {
+                clearInterval(progressInterval);
+                bar.style.width = '100%';
+                pctText.innerText = '100';
+                setTimeout(() => modal.classList.add('hidden'), 350);
+            };
+
+            try {
+                const res = await fetch(DRIVE_CHECK_SCRIPT_URL, { cache: 'no-store' });
+                if (!res.ok) throw new Error('فشل الاتصال');
+                const fileCounts = await res.json(); // { driveFolderId: عدد الملفات }
+                finishModal();
+
+                let upgraded = 0, checked = 0;
+                comprehensiveDashboardData.forEach(domain => {
+                    domain.standards.forEach(std => std.focusAreas.forEach(focus => {
+                        focus.indicators.forEach(ind => {
+                            if (!ind.driveFolderId) return;
+                            const count = fileCounts[ind.driveFolderId];
+                            if (typeof count !== 'number') return;
+                            checked++;
+                            if (count > 0 && ind.status !== 'green') {
+                                ind.status = 'green';
+                                upgraded++;
+                            }
+                        });
+                    }));
+                });
+
+                buildDashboardSystem();
+                renderWelcomeOverview();
+                showToast(`تم فحص ${checked} مؤشراً — ${upgraded} منها أصبح أخضر بعد العثور على أدلة حقيقية في Drive.`);
+            } catch (err) {
+                console.error(err);
+                finishModal();
+                showToast('تعذر الاتصال بقاعدة بيانات الدليل. تحقق من الاتصال أو رابط السكريبت.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
             }
         }
 
@@ -1124,6 +1206,19 @@
                 <div id="report-loading-bar" class="bg-gradient-to-l from-etecteal-500 to-accentgold h-full rounded-full transition-all duration-150" style="width: 0%"></div>
             </div>
             <p class="text-[10px] text-gray-400 mt-2"><span id="report-loading-pct">0</span>%</p>
+        </div>
+    <!-- نافذة الاتصال بقاعدة بيانات الدليل -->
+    <div id="drive-sync-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 p-7 text-center">
+            <div class="w-14 h-14 mx-auto rounded-xl bg-gradient-to-br from-etecteal-600 to-slate-900 flex items-center justify-center mb-4">
+                <i class="fa-solid fa-database text-accentgold text-xl animate-pulse"></i>
+            </div>
+            <h3 class="font-extrabold text-slate-900 text-sm mb-1">جاري الاتصال بقاعدة بيانات درايف...</h3>
+            <p class="text-[11px] text-gray-400 mb-4">يتم الآن فحص الأدلة الفعلية لكل مؤشر وتحديث النسب تلقائياً</p>
+            <div class="w-full bg-gray-200 h-2.5 rounded-full overflow-hidden">
+                <div id="drive-sync-bar" class="bg-gradient-to-l from-etecteal-500 to-accentgold h-full rounded-full transition-all duration-150" style="width: 0%"></div>
+            </div>
+            <p class="text-[10px] text-gray-400 mt-2"><span id="drive-sync-pct">0</span>%</p>
         </div>
     </div>
 
