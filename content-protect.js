@@ -24,7 +24,7 @@
         body.df-locked img { -webkit-user-drag: none; pointer-events: auto; }
 
         #df-lock-btn {
-            position: fixed; top: 14px; left: 14px; z-index: 9999;
+            position: fixed; top: 64px; left: 14px; z-index: 9999;
             width: 42px; height: 42px; border-radius: 9999px;
             background: linear-gradient(135deg, #003d3d, #002424);
             border: 1px solid rgba(194,155,56,0.5);
@@ -36,7 +36,7 @@
         #df-lock-btn:hover { transform: scale(1.08); }
 
         #df-logout-btn {
-            position: fixed; top: 14px; left: 14px; z-index: 9999;
+            position: fixed; top: 64px; left: 14px; z-index: 9999;
             display: none; align-items: center; gap: 6px;
             background: linear-gradient(135deg, #7f1d1d, #450a0a);
             border: 1px solid rgba(255,255,255,0.15);
