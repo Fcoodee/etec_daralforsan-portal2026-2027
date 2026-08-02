@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التقويم الذاتي 2026-2027 - مدارس دار الفرسان</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        etecteal: {
+                            50: '#f0f7f7',
+                            100: '#d9ebeb',
+                            500: '#006666',
+                            600: '#005252',
+                            700: '#003d3d',
+                            900: '#002424',
+                        },
+                        accentgold: '#c29b38'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #006666; border-radius: 4px; }
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen flex flex-col">
+
+    <!-- FIXED DATE/TIME BAR -->
+    <div id="dash-clock-bar" class="bg-slate-900 text-white text-xs font-bold px-4 py-2 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <span class="flex items-center gap-1.5"><i class="fa-regular fa-calendar text-accentgold"></i> <span id="dash-live-date">--</span></span>
+            <span class="w-px h-3 bg-white/20"></span>
+            <span class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-accentgold"></i> <span id="dash-live-time">--</span></span>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="index.html" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full text-[11px] font-bold transition-all flex items-center gap-1.5">
+                <i class="fa-solid fa-house text-accentgold"></i> البوابة الرئيسية
+            </a>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="bg-white border-b border-gray-100 shadow-sm py-6 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col items-center justify-center">
+            <div class="flex flex-wrap justify-center items-center gap-8 mb-6 w-full max-w-4xl">
+                <div class="h-20 flex items-center justify-center">
+                    <img src="logo0.png" alt="Logo_Diploma2026" class="max-h-20 object-contain">
+                </div>
+                <div class="h-20 flex items-center justify-center">
+                    <img src="logo1.png" alt="Dar Al-Forsan Logo" class="max-h-20 object-contain">
+                </div>
+                <div class="h-20 flex items-center justify-center">
+                    <img src="logo2.png" alt="ETEC Logo" class="max-h-20 object-contain">
+                </div>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-black text-etecteal-900 text-center">النظام الموحد لإدارة وتدقيق متطلبات الاعتماد والتميز المدرسي</h1>
+            <p class="text-sm text-gray-500 mt-1">لوحة حوكمة ومتابعة تقدم العمل على التقويم الذاتي لمدارس دار الفرسان</p>
+            <span class="mt-3 inline-flex items-center gap-1.5 bg-accentgold/15 text-amber-800 border border-accentgold/30 text-[11px] font-black px-3 py-1.5 rounded-full">
+                <i class="fa-solid fa-calendar-days"></i> العام الدراسي 2026 - 2027 م &nbsp;|&nbsp; 1448 - 1449 هـ
+            </span>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl mx-auto w-full px-4 py-10">
+
+        <!-- Intro / Status -->
+        <div class="relative bg-gradient-to-br from-emerald-950 via-etecteal-900 to-slate-900 rounded-2xl shadow-lg p-6 mb-8 overflow-hidden">
+            <div class="absolute -left-10 -bottom-10 w-48 h-48 bg-white/5 rounded-full"></div>
+            <span class="relative inline-flex items-center gap-1.5 bg-amber-400/15 text-amber-300 border border-amber-400/30 text-[11px] font-bold px-3 py-1 rounded-full mb-4">
+                <i class="fa-solid fa-hourglass-half"></i> مرحلة تجميع الشواهد — قيد الإعداد
+            </span>
+            <h3 class="relative text-lg font-extrabold text-white mb-3">تجميع شواهد التميز للعام الدراسي القادم</h3>
+            <p class="relative text-xs leading-7 text-slate-300 max-w-4xl">
+                استجابةً لتوجيه المشرف التربوي العام، تُخصَّص هذه اللوحة لتجميع ومتابعة شواهد وأدلة التقويم الذاتي والتميز المدرسي
+                للعام الدراسي 2026-2027م، مقسّمة على المسارات الثلاثة الآتية، لكل من بنين وبنات، وجميع المراحل الدراسية.
+                <strong class="text-amber-300">أولوية قصوى للشواهد الصفية الحية</strong> (التوثيق المباشر من داخل الفصول) قبل انتهاء العام الدراسي الحالي.
+            </p>
+        </div>
+
+        <!-- Target explanation based on official guide (name withheld per instruction) -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+            <div class="flex items-center gap-3 mb-4 pb-3 border-b border-gray-100">
+                <div class="p-2 bg-gradient-to-br from-accentgold to-etecteal-700 text-white rounded-lg shadow-sm">
+                    <i class="fa-solid fa-bullseye text-lg"></i>
+                </div>
+                <h3 class="text-base font-extrabold text-slate-900">المستهدف وفق دليل معايير التقويم والاعتماد المدرسي 2026</h3>
+            </div>
+            <div class="text-xs leading-7 text-gray-600 space-y-3">
+                <p>
+                    يعتمد جمع الشواهد لهذا العام على الدليل الرسمي الصادر عن وزارة التعليم بعنوان
+                    <strong class="text-etecteal-700">"معايير التقويم والاعتماد المدرسي لمدارس التعليم العام 2026"</strong>،
+                    والذي يغطي أربعة مجالات رئيسة و<strong>11 معياراً</strong> بمؤشراتها التفصيلية:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 my-4">
+                    <div class="bg-etecteal-50 border border-etecteal-100 rounded-lg p-3">
+                        <span class="block font-bold text-etecteal-800 mb-1"><i class="fa-solid fa-user-tie ml-1"></i> الإدارة المدرسية</span>
+                        <span class="text-[11px] text-gray-500">التخطيط، قيادة العملية التعليمية، المجتمع المدرسي، التطوير المؤسسي، حقوق المتعلم وحمايته</span>
+                    </div>
+                    <div class="bg-etecteal-50 border border-etecteal-100 rounded-lg p-3">
+                        <span class="block font-bold text-etecteal-800 mb-1"><i class="fa-solid fa-chalkboard-user ml-1"></i> التعليم والتعلم</span>
+                        <span class="text-[11px] text-gray-500">بناء خبرات التعلم، تقويم التعلم</span>
+                    </div>
+                    <div class="bg-etecteal-50 border border-etecteal-100 rounded-lg p-3">
+                        <span class="block font-bold text-etecteal-800 mb-1"><i class="fa-solid fa-chart-line ml-1"></i> نواتج التعلم</span>
+                        <span class="text-[11px] text-gray-500">التحصيل التعليمي، التطور الشخصي والصحي والاجتماعي</span>
+                    </div>
+                    <div class="bg-etecteal-50 border border-etecteal-100 rounded-lg p-3">
+                        <span class="block font-bold text-etecteal-800 mb-1"><i class="fa-solid fa-building-shield ml-1"></i> البيئة المدرسية</span>
+                        <span class="text-[11px] text-gray-500">المبنى المدرسي، الأمن والسلامة</span>
+                    </div>
+                </div>
+                <p>
+                    وتشمل أدوات التقويم المعتمدة: الاستبانات (المعلم، المتعلم، الأسرة)، المقابلات، الملاحظة الصفية، الاختبارات الوطنية (نافس)،
+                    الربط التقني بالرخص المهنية، وتحليل الوثائق لكل مجال. الهدف من جمع الشواهد هذا العام هو توثيق <strong>جاهزية التوثيق</strong>
+                    لكل مؤشر تمهيداً لعملية التقويم الذاتي الرسمية، مع التأكيد على جودة المخرجات وارتباطها المباشر بالمؤشرات المطلوبة.
+                </p>
+            </div>
+        </div>
+
+        <!-- Supervisor's Drive link -->
+        <div class="bg-white rounded-xl shadow-sm border-2 border-accentgold/40 p-6 mb-10">
+            <div class="flex items-center gap-3 mb-4 pb-3 border-b border-gray-100">
+                <div class="p-2 bg-gradient-to-br from-accentgold to-amber-700 text-white rounded-lg shadow-sm">
+                    <i class="fa-brands fa-google-drive text-lg"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-extrabold text-slate-900">رابط تجميع الشواهد المعتمد من المشرف العام</h3>
+                    <p class="text-xs text-gray-500">أرسله المشرف العام لجميع المعلمين لرفع الشواهد كلٌ حسب مساره</p>
+                </div>
+            </div>
+
+            <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4 text-xs leading-7 text-amber-900/90">
+                "نأمل منكم البدء في تجميع الشواهد والأدلة ورفعها على الرابط المرسل، كلٌ حسب المسار التابع له. وقد تم تكليف
+                <strong>الأستاذ/ كمال محمد</strong> و<strong>الأستاذ/ وائل عبدالمجيد</strong> بمتابعة مساري
+                <strong>التربية الخاصة والدبلوما الأمريكية</strong>، و<strong>الأستاذ/ محمد عبدالسميع</strong> بمتابعة
+                <strong>المسار الأهلي</strong> بمراحله الثلاث (الابتدائي – المتوسط – الثانوي). مع أولوية قصوى للشواهد الصفية الحية
+                قبل انتهاء أيام الدراسة."
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                    <span class="block text-gray-400 font-bold mb-1">اسم المجلد</span>
+                    <span class="text-slate-800 font-bold">شواهد التميز مدارس دار الفرسان بنين 2026/2027</span>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                    <span class="block text-gray-400 font-bold mb-1">المالك</span>
+                    <span class="text-slate-800 font-bold" dir="ltr">schooldaralforsan@gmail.com</span>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                    <span class="block text-gray-400 font-bold mb-1">تاريخ الإنشاء</span>
+                    <span class="text-slate-800 font-bold">2026-05-03</span>
+                </div>
+            </div>
+
+            <a href="https://drive.google.com/drive/folders/1tk3kKglwXs_RatjneY_fIX_d-amGaIG4?usp=drive_link" target="_blank" rel="noopener"
+               class="mt-5 w-full inline-flex items-center justify-center gap-2 bg-gradient-to-l from-etecteal-600 to-etecteal-800 hover:from-etecteal-500 hover:to-etecteal-700 text-white text-sm font-black px-4 py-3 rounded-xl shadow-lg transition-all">
+                <i class="fa-brands fa-google-drive text-accentgold"></i> فتح مجلد شواهد التميز (بنين) 2026/2027
+            </a>
+            <p class="text-[11px] text-gray-400 mt-2 text-center">
+                <i class="fa-solid fa-circle-info"></i> هذا الرابط مخصص لمسار البنين. رابط مجلد شواهد البنات لم يصل بعد وسيُضاف فور توفره.
+            </p>
+        </div>
+
+        <!-- Tracks -->
+        <h2 class="text-lg font-extrabold text-slate-900 mb-5 flex items-center gap-2">
+            <i class="fa-solid fa-layer-group text-etecteal-700"></i> المسارات الدراسية الثلاثة
+        </h2>
+
+        <div class="space-y-6">
+
+            <!-- Track 1: الأهلي -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-gradient-to-l from-etecteal-700 to-etecteal-900 px-6 py-4 flex items-center justify-between flex-wrap gap-2">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-white/10 text-white rounded-lg"><i class="fa-solid fa-school text-lg"></i></div>
+                        <div>
+                            <h3 class="text-white font-extrabold text-sm">مسار التعليم الأهلي</h3>
+                            <p class="text-slate-300 text-[11px]">المتابع: الأستاذ محمد عبدالسميع</p>
+                        </div>
+                    </div>
+                    <span class="text-[11px] bg-white/10 text-white font-bold px-3 py-1 rounded-full">بنين - بنات · جميع المراحل</span>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="border border-gray-100 rounded-lg p-4">
+                        <span class="flex items-center gap-2 font-bold text-etecteal-800 text-sm mb-3"><i class="fa-solid fa-mars"></i> بنين</span>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-[11px] bg-etecteal-50 text-etecteal-700 px-2.5 py-1 rounded-full font-bold">ابتدائي</span>
+                            <span class="text-[11px] bg-etecteal-50 text-etecteal-700 px-2.5 py-1 rounded-full font-bold">متوسط</span>
+                            <span class="text-[11px] bg-etecteal-50 text-etecteal-700 px-2.5 py-1 rounded-full font-bold">ثانوي</span>
+                        </div>
+                        <a href="https://drive.google.com/drive/folders/1tk3kKglwXs_RatjneY_fIX_d-amGaIG4?usp=drive_link" target="_blank" rel="noopener"
+                           class="w-full inline-flex items-center justify-center gap-1.5 bg-etecteal-700 hover:bg-etecteal-800 text-white text-[11px] font-bold px-3 py-2 rounded-lg transition-all">
+                            <i class="fa-brands fa-google-drive"></i> مجلد شواهد المسار الأهلي (بنين)
+                        </a>
+                    </div>
+                    <div class="border border-gray-100 rounded-lg p-4 opacity-70">
+                        <span class="flex items-center gap-2 font-bold text-etecteal-800 text-sm mb-3"><i class="fa-solid fa-venus"></i> بنات</span>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-[11px] bg-etecteal-50 text-etecteal-700 px-2.5 py-1 rounded-full font-bold">ابتدائي</span>
+                            <span class="text-[11px] bg-etecteal-50 text-etecteal-700 px-2.5 py-1 rounded-full font-bold">متوسط</span>
+                            <span class="text-[11px] bg-etecteal-50 text-etecteal-700 px-2.5 py-1 rounded-full font-bold">ثانوي</span>
+                        </div>
+                        <span class="w-full inline-flex items-center justify-center gap-1.5 bg-gray-100 text-gray-400 text-[11px] font-bold px-3 py-2 rounded-lg">
+                            <i class="fa-solid fa-clock"></i> الرابط لم يُرسل بعد
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Track 2: الدولي / الدبلوما الأمريكية -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-gradient-to-l from-accentgold to-amber-800 px-6 py-4 flex items-center justify-between flex-wrap gap-2">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-white/10 text-white rounded-lg"><i class="fa-solid fa-earth-americas text-lg"></i></div>
+                        <div>
+                            <h3 class="text-white font-extrabold text-sm">مسار التعليم الدولي (الدبلوما الأمريكية)</h3>
+                            <p class="text-amber-100 text-[11px]">المتابعان: الأستاذ كمال محمد / الأستاذ وائل عبدالمجيد</p>
+                        </div>
+                    </div>
+                    <span class="text-[11px] bg-white/10 text-white font-bold px-3 py-1 rounded-full">بنين - بنات · جميع المراحل</span>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="border border-gray-100 rounded-lg p-4">
+                        <span class="flex items-center gap-2 font-bold text-amber-800 text-sm mb-3"><i class="fa-solid fa-mars"></i> بنين</span>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-[11px] bg-amber-50 text-amber-800 px-2.5 py-1 rounded-full font-bold">ابتدائي</span>
+                            <span class="text-[11px] bg-amber-50 text-amber-800 px-2.5 py-1 rounded-full font-bold">متوسط</span>
+                            <span class="text-[11px] bg-amber-50 text-amber-800 px-2.5 py-1 rounded-full font-bold">ثانوي</span>
+                        </div>
+                        <a href="https://drive.google.com/drive/folders/1tk3kKglwXs_RatjneY_fIX_d-amGaIG4?usp=drive_link" target="_blank" rel="noopener"
+                           class="w-full inline-flex items-center justify-center gap-1.5 bg-accentgold hover:bg-amber-600 text-slate-950 text-[11px] font-bold px-3 py-2 rounded-lg transition-all">
+                            <i class="fa-brands fa-google-drive"></i> مجلد شواهد المسار الدولي (بنين)
+                        </a>
+                    </div>
+                    <div class="border border-gray-100 rounded-lg p-4 opacity-70">
+                        <span class="flex items-center gap-2 font-bold text-amber-800 text-sm mb-3"><i class="fa-solid fa-venus"></i> بنات</span>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-[11px] bg-amber-50 text-amber-800 px-2.5 py-1 rounded-full font-bold">ابتدائي</span>
+                            <span class="text-[11px] bg-amber-50 text-amber-800 px-2.5 py-1 rounded-full font-bold">متوسط</span>
+                            <span class="text-[11px] bg-amber-50 text-amber-800 px-2.5 py-1 rounded-full font-bold">ثانوي</span>
+                        </div>
+                        <span class="w-full inline-flex items-center justify-center gap-1.5 bg-gray-100 text-gray-400 text-[11px] font-bold px-3 py-2 rounded-lg">
+                            <i class="fa-solid fa-clock"></i> الرابط لم يُرسل بعد
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Track 3: التربية الخاصة -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-gradient-to-l from-slate-700 to-slate-900 px-6 py-4 flex items-center justify-between flex-wrap gap-2">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-white/10 text-white rounded-lg"><i class="fa-solid fa-hand-holding-heart text-lg"></i></div>
+                        <div>
+                            <h3 class="text-white font-extrabold text-sm">مسار التربية الخاصة</h3>
+                            <p class="text-slate-300 text-[11px]">المتابعان: الأستاذ كمال محمد / الأستاذ وائل عبدالمجيد</p>
+                        </div>
+                    </div>
+                    <span class="text-[11px] bg-white/10 text-white font-bold px-3 py-1 rounded-full">بنين - بنات · جميع المراحل</span>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="border border-gray-100 rounded-lg p-4">
+                        <span class="flex items-center gap-2 font-bold text-slate-800 text-sm mb-3"><i class="fa-solid fa-mars"></i> بنين</span>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-[11px] bg-slate-100 text-slate-700 px-2.5 py-1 rounded-full font-bold">ابتدائي</span>
+                            <span class="text-[11px] bg-slate-100 text-slate-700 px-2.5 py-1 rounded-full font-bold">متوسط</span>
+                            <span class="text-[11px] bg-slate-100 text-slate-700 px-2.5 py-1 rounded-full font-bold">ثانوي</span>
+                        </div>
+                        <a href="https://drive.google.com/drive/folders/1tk3kKglwXs_RatjneY_fIX_d-amGaIG4?usp=drive_link" target="_blank" rel="noopener"
+                           class="w-full inline-flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-900 text-white text-[11px] font-bold px-3 py-2 rounded-lg transition-all">
+                            <i class="fa-brands fa-google-drive"></i> مجلد شواهد مسار التربية الخاصة (بنين)
+                        </a>
+                    </div>
+                    <div class="border border-gray-100 rounded-lg p-4 opacity-70">
+                        <span class="flex items-center gap-2 font-bold text-slate-800 text-sm mb-3"><i class="fa-solid fa-venus"></i> بنات</span>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="text-[11px] bg-slate-100 text-slate-700 px-2.5 py-1 rounded-full font-bold">ابتدائي</span>
+                            <span class="text-[11px] bg-slate-100 text-slate-700 px-2.5 py-1 rounded-full font-bold">متوسط</span>
+                            <span class="text-[11px] bg-slate-100 text-slate-700 px-2.5 py-1 rounded-full font-bold">ثانوي</span>
+                        </div>
+                        <span class="w-full inline-flex items-center justify-center gap-1.5 bg-gray-100 text-gray-400 text-[11px] font-bold px-3 py-2 rounded-lg">
+                            <i class="fa-solid fa-clock"></i> الرابط لم يُرسل بعد
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-white py-6 text-center text-xs mt-12">
+        <p>© 2026 مدارس دار الفرسان الأهلية - لوحة تجميع شواهد التميز للعام الدراسي 2026-2027م.</p>
+    </footer>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('ar-SA-u-nu-latn', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const timeStr = now.toLocaleTimeString('ar-SA-u-nu-latn', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const d = document.getElementById('dash-live-date');
+            const t = document.getElementById('dash-live-time');
+            if (d) d.textContent = dateStr;
+            if (t) t.textContent = timeStr;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+    </script>
+    <script src="content-protect.js"></script>
+</body>
+</html>
