@@ -92,17 +92,32 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             <!-- 2025-2026 -->
-            <a href="index-2025-2026.html" class="gate-card group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-xl hover:border-etecteal-300">
-                <div class="flex items-center gap-3 mb-4">
-                    <div class="p-3 bg-gradient-to-br from-etecteal-500 to-slate-900 text-white rounded-xl shadow-sm">
-                        <i class="fa-solid fa-chart-pie text-xl"></i>
+            <div class="gate-card group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-xl hover:border-etecteal-300">
+                <div class="flex items-center justify-between gap-3 mb-2">
+                    <div class="flex items-center gap-3">
+                        <div class="p-3 bg-gradient-to-br from-etecteal-500 to-slate-900 text-white rounded-xl shadow-sm">
+                            <i class="fa-solid fa-chart-pie text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="inline-flex items-center gap-1 bg-etecteal-50 text-etecteal-700 border border-etecteal-100 text-[10px] font-bold px-2.5 py-1 rounded-full">
+                                <i class="fa-solid fa-check-double"></i> قيد العمل — خط الأساس المعتمد
+                            </span>
+                        </div>
                     </div>
-                    <div>
-                        <span class="inline-flex items-center gap-1 bg-etecteal-50 text-etecteal-700 border border-etecteal-100 text-[10px] font-bold px-2.5 py-1 rounded-full">
-                            <i class="fa-solid fa-check-double"></i> قيد العمل — خط الأساس المعتمد
-                        </span>
+                    <div class="relative w-16 h-16 shrink-0">
+                        <svg viewBox="0 0 120 120" class="w-16 h-16 -rotate-90">
+                            <circle cx="60" cy="60" r="52" fill="none" stroke="#e5e7eb" stroke-width="10"></circle>
+                            <circle id="gateway-ring" cx="60" cy="60" r="52" fill="none" stroke="#10b981" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span id="gateway-ring-text" class="text-[12px] font-black text-etecteal-800">0%</span>
+                        </div>
                     </div>
                 </div>
+                <p class="text-[10px] text-gray-400 font-bold mb-1">مؤشر التقدم الكلي لنتائج التقويم الذاتي حتى آخر تحديث</p>
+                <a href="report-all.html" class="inline-flex items-center gap-1 text-[10px] text-etecteal-700 font-bold hover:underline mb-3 w-fit">
+                    <i class="fa-solid fa-file-lines"></i> عرض التقرير الشامل
+                </a>
                 <h3 class="text-base font-extrabold text-slate-900 mb-2 leading-8">
                     إطلع على لوحة حوكمة ومتابعة تقدم العمل على التقويم الذاتي
                     <span class="block text-etecteal-700">للعام الدراسي 2025 - 2026 م / 1447 - 1448 هـ</span>
@@ -111,10 +126,10 @@
                     تم العمل على هذه اللوحة خلال العام الدراسي 2025 - 2026 م (1447 - 1448 هـ) لتحقيق أهداف التقويم الذاتي للمدارس،
                     وتشمل تتبع 50 مؤشراً موزعة على المجالات الأربعة، مرتبطة بشواهد فعلية على Google Drive.
                 </p>
-                <span class="mt-5 inline-flex items-center justify-center gap-1.5 bg-etecteal-700 group-hover:bg-etecteal-800 text-white text-xs font-bold px-4 py-2.5 rounded-lg transition-all">
+                <a href="index-2025-2026.html" class="mt-5 inline-flex items-center justify-center gap-1.5 bg-etecteal-700 group-hover:bg-etecteal-800 text-white text-xs font-bold px-4 py-2.5 rounded-lg transition-all">
                     الدخول إلى لوحة 2025-2026 <i class="fa-solid fa-arrow-left"></i>
-                </span>
-            </a>
+                </a>
+            </div>
 
             <!-- 2026-2027 -->
             <a href="2026-2027.html" class="gate-card group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-xl hover:border-accentgold/60">
@@ -133,8 +148,8 @@
                     <span class="block text-accentgold">للعام الدراسي 2026 - 2027 م / 1448 - 1449 هـ</span>
                 </h3>
                 <p class="text-xs leading-6 text-gray-500 flex-1">
-                    لوحة جديدة مخصصة لجمع ومتابعة شواهد التميز للعام الدراسي القادم، منظمة حسب المسارات الثلاثة
-                    (الأهلي، الدولي - الدبلوما الأمريكية، التربية الخاصة) لكل من بنين وبنات وجميع المراحل.
+                    لوحة جديدة مخصصة لجمع ومتابعة شواهد التميز للعام الدراسي القادم لقسم البنين، منظمة حسب المسارات الثلاثة
+                    (الأهلي، الدولي - الدبلوما الأمريكية، التربية الخاصة) وجميع المراحل.
                 </p>
                 <span class="mt-5 inline-flex items-center justify-center gap-1.5 bg-accentgold group-hover:bg-amber-600 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-lg transition-all">
                     الدخول إلى لوحة 2026-2027 <i class="fa-solid fa-arrow-left"></i>
@@ -161,6 +176,55 @@
         }
         updateClock();
         setInterval(updateClock, 1000);
+
+        // نفس آلية تحريك الدائرة المستخدمة في لوحة 2025-2026 (تذبذب صعوداً قبل الاستقرار على القيمة الحقيقية)
+        let gatewayRingToken = 0;
+        function animateGatewayRing(finalPercentage) {
+            const ring = document.getElementById('gateway-ring');
+            const text = document.getElementById('gateway-ring-text');
+            if (!ring || !text) return;
+
+            const circumference = 2 * Math.PI * 52; // r=52
+            ring.setAttribute('stroke-dasharray', circumference.toFixed(1));
+            ring.style.transition = 'none';
+
+            const myToken = ++gatewayRingToken;
+            const waypoints = [0, 42, 81, 99, 87, 95, 90, finalPercentage];
+            const segmentDuration = 320;
+            let seg = 0;
+            let segStart = null;
+
+            function setRing(pct) {
+                const offset = circumference - (pct / 100) * circumference;
+                ring.setAttribute('stroke-dashoffset', offset.toFixed(1));
+                text.innerText = `${Math.round(pct)}%`;
+            }
+
+            function step(timestamp) {
+                if (myToken !== gatewayRingToken) return;
+                if (!segStart) segStart = timestamp;
+                const t = Math.min((timestamp - segStart) / segmentDuration, 1);
+                const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+                const from = waypoints[seg];
+                const to = waypoints[seg + 1];
+                setRing(from + (to - from) * eased);
+
+                if (t < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    seg++;
+                    segStart = null;
+                    if (seg < waypoints.length - 1) {
+                        requestAnimationFrame(step);
+                    } else {
+                        setRing(finalPercentage);
+                    }
+                }
+            }
+            requestAnimationFrame(step);
+        }
+        // القيمة أدناه ثابتة وتعكس آخر نسبة معتمدة في لوحة 2025-2026 — حدّثها يدوياً عند كل تحديث للحزمة
+        animateGatewayRing(91);
     </script>
     <script src="content-protect.js"></script>
 </body>
