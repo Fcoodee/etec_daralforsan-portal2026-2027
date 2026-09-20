@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>تقرير تحليل الفجوة الشامل — قسم الدبلوما الأمريكية (بنين)</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap">
+<style>
+:root{
+  --teal-900:#002424; --teal-800:#003d3d; --teal-700:#005252; --teal-600:#006666; --teal-100:#d9ebeb; --teal-50:#f0f7f7;
+  --gold:#c29b38;
+  --bg:#f8fafc; --card:#ffffff; --border:#e5e7eb; --ink:#1e293b; --muted:#64748b;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b1416; --card:#111c1e; --border:#1f2e31; --ink:#e6edee; --muted:#9db0b4; --teal-50:#122224; --teal-100:#173234;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b1416; --card:#111c1e; --border:#1f2e31; --ink:#e6edee; --muted:#9db0b4; --teal-50:#122224; --teal-100:#173234;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-serif;line-height:1.7;}
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-thumb{background:var(--teal-600);border-radius:4px;}
+
+.top-bar{background:var(--teal-900);color:#fff;font-size:11px;font-weight:700;padding:8px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
+.top-bar span{opacity:.85;}
+
+header.page-header{background:var(--card);border-bottom:1px solid var(--border);padding:28px 16px;text-align:center;}
+header.page-header h1{margin:8px 0 4px;font-size:clamp(20px,3.2vw,30px);font-weight:800;color:var(--teal-800);}
+:root[data-theme="dark"] header.page-header h1, body:has(:root:not([data-theme="light"])) header.page-header h1{color:#7fd1c9;}
+header.page-header p.sub{margin:0;color:var(--muted);font-size:13px;}
+header.page-header .badges{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px;}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;padding:6px 12px;border-radius:999px;border:1px solid;}
+.badge-gold{background:rgba(194,155,56,.12);color:#a9781f;border-color:rgba(194,155,56,.4);}
+:root[data-theme="dark"] .badge-gold{color:#e0bd63;}
+.badge-teal{background:var(--teal-50);color:var(--teal-700);border-color:var(--teal-100);}
+
+main{max-width:1180px;margin:0 auto;padding:28px 16px 60px;}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:26px;box-shadow:0 1px 2px rgba(0,0,0,.04);}
+.card h2{margin:0 0 14px;font-size:17px;font-weight:800;color:var(--teal-800);display:flex;align-items:center;gap:8px;}
+:root[data-theme="dark"] .card h2{color:#7fd1c9;}
+.card h3{font-size:14px;font-weight:800;margin:18px 0 8px;}
+
+/* timeline */
+.timeline{list-style:none;margin:0;padding:0;border-right:3px solid var(--teal-100);}
+.timeline li{position:relative;padding:0 22px 20px 0;margin-right:2px;}
+.timeline li::before{content:"";position:absolute;right:-8px;top:4px;width:13px;height:13px;border-radius:50%;background:var(--teal-600);border:3px solid var(--card);}
+.timeline li.milestone::before{background:var(--gold);}
+.timeline .t-label{font-size:10px;font-weight:800;color:var(--gold);text-transform:none;margin-bottom:3px;}
+.timeline .t-text{font-size:13px;color:var(--ink);}
+
+/* gap comparison table */
+table.compare{width:100%;border-collapse:collapse;font-size:12px;}
+table.compare th, table.compare td{padding:9px 10px;border-bottom:1px solid var(--border);text-align:right;}
+table.compare th{background:var(--teal-50);color:var(--teal-700);font-weight:800;}
+.diff-up{color:#b45309;font-weight:800;}
+
+/* domain sections */
+.domain-section{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:22px;overflow:hidden;}
+.domain-header{background:linear-gradient(90deg,var(--teal-800),var(--teal-900));color:#fff;padding:18px 20px;}
+.domain-header-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.domain-header-top h2{margin:0;font-size:16px;font-weight:800;color:#fff;}
+.domain-pct{font-size:22px;font-weight:900;color:var(--gold);}
+.domain-meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:#cfe3e1;}
+.domain-meta strong{color:#fff;}
+
+.table-wrap{overflow-x:auto;}
+table.indicators-table{width:100%;border-collapse:collapse;font-size:11.5px;min-width:960px;}
+table.indicators-table th{background:var(--teal-50);color:var(--teal-700);font-weight:800;padding:8px 8px;text-align:right;white-space:nowrap;position:sticky;top:0;}
+table.indicators-table td{padding:8px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+.code-cell{white-space:nowrap;font-weight:800;color:var(--teal-700);}
+.std-cell{white-space:nowrap;color:var(--muted);}
+.focus-cell{white-space:nowrap;}
+.text-cell{min-width:200px;}
+.gap-cell, .evidence-cell, .initiative-cell{min-width:170px;color:var(--muted);}
+.status-badge{display:inline-block;font-size:10px;font-weight:800;padding:3px 9px;border-radius:999px;border:1px solid;white-space:nowrap;}
+.pct-cell{font-weight:800;white-space:nowrap;}
+.indicators-table tbody tr:nth-child(even){background:rgba(0,102,102,.025);}
+
+/* methodology */
+.weights-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0;}
+.weight-chip{border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:11px;}
+.weight-chip b{display:block;font-size:16px;}
+
+.note{background:rgba(194,155,56,.08);border:1px solid rgba(194,155,56,.3);border-radius:10px;padding:12px 14px;font-size:11.5px;color:#8a6410;line-height:1.9;}
+:root[data-theme="dark"] .note{color:#e0bd63;}
+
+footer.page-footer{background:var(--teal-900);color:#cfe3e1;text-align:center;padding:20px;font-size:11px;}
+
+@media print{
+  .top-bar{display:none;}
+  .domain-section{break-inside:avoid;page-break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="index.html" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full text-[11px] font-bold transition-all" style="color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">
+    <i class="fa-solid fa-house" style="color:var(--gold)"></i> البوابة الرئيسية
+  </a>
+  <span><i class="fa-regular fa-calendar"></i> تاريخ الإصدار: الأحد 20-09-2026 م</span>
+  <span>قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان الأهلية</span>
+</div>
+
+<header class="page-header">
+  <h1>تقرير تحليل الفجوة الشامل — المجالات والمعايير والمؤشرات</h1>
+  <p class="sub">من بداية المشروع (خط الأساس 2025-2026) وحتى استئناف العمل للعام الدراسي الحالي 2026-2027</p>
+  <div class="badges">
+    <span class="badge badge-teal"><i class="fa-solid fa-layer-group"></i> 4 مجالات</span>
+    <span class="badge badge-teal"><i class="fa-solid fa-list-check"></i> 50 مؤشراً (خط الأساس) ← 52 مؤشراً (الدليل الرسمي)</span>
+    <span class="badge badge-gold"><i class="fa-solid fa-gauge-high"></i> نسبة الإنجاز الإجمالية لخط الأساس: 91%</span>
+  </div>
+</header>
+
+<main>
+
+  <section class="card">
+    <h2><i class="fa-solid fa-timeline"></i> الخط الزمني للمشروع</h2>
+    <ul class="timeline">
+      <li><div class="t-label">المرحلة 1</div><div class="t-text">بناء الخط الأساسي <code>etec-v91</code> — لوحة 2025-2026 مبنية على <strong>10 معايير / 50 مؤشراً</strong>، مع بيانات المسؤولين وفرق العمل الأربعة مضمَّنة في الكود</div></li>
+      <li><div class="t-label">المرحلة 2</div><div class="t-text">فحص حي فعلي عبر <code>drive_check_script.gs</code> على مجلد الشواهد → نتيجة موثّقة: <strong>31 من 50 مجلداً تحتوي ملفات فعلية (62%)</strong></div></li>
+      <li class="milestone"><div class="t-label">المرحلة 3 — اكتشاف الفجوة</div><div class="t-text">مقارنة ثلاثة مصادر مرجعية وتحديد الفجوة الجوهرية: نقص <strong>معيار كامل</strong> ("حقوق المتعلم وحمايته") مقارنةً بالدليل الرسمي فبراير 2026</div></li>
+      <li><div class="t-label">المرحلة 4</div><div class="t-text">بناء بوابة الدخول الرئيسية وربط لوحتي العامين، مع حلقة تقدم متحركة تعكس النسبة الإجمالية (91%)</div></li>
+      <li><div class="t-label">المرحلة 5</div><div class="t-text">بناء لوحة العام الحالي، ثم قصرها لاحقاً على <strong>قسم الدبلوما الأمريكية (بنين)</strong> حصراً بناءً على توجيه مباشر</div></li>
+      <li><div class="t-label">المرحلة 6</div><div class="t-text">بناء التقرير الشامل مع بطاقة تفسير النسب (جاهزية توثيق لا حكم أداء) وبطاقة مستهدف العام القادم</div></li>
+      <li><div class="t-label">المرحلة 7</div><div class="t-text">إنشاء مجلد Drive الجديد لجمع شواهد العام الحالي — تاريخ الإنشاء 2026-05-03</div></li>
+      <li class="milestone"><div class="t-label">استئناف العمل</div><div class="t-text"><strong>الأحد 20-09-2026 م</strong> — إعادة تأطير المشروع من "تحضير للعام القادم" إلى استئناف مباشر للعمل على العام الحالي، وقصر الحزمة على مسار الدبلوما الأمريكية</div></li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2><i class="fa-solid fa-code-compare"></i> تحليل الفجوة — خط الأساس مقابل الدليل الرسمي</h2>
+    <div style="overflow-x:auto">
+    <table class="compare">
+      <thead><tr><th>البند</th><th>خط الأساس (etec-v91 / 2025-2026)</th><th>الدليل الرسمي — فبراير 2026</th><th>الفجوة</th></tr></thead>
+      <tbody>
+        <tr><td>عدد المجالات</td><td>4</td><td>4</td><td>بلا تغيير</td></tr>
+        <tr><td>عدد المعايير</td><td>10</td><td>11</td><td class="diff-up">+1 معيار</td></tr>
+        <tr><td>عدد المؤشرات</td><td>50</td><td>52</td><td class="diff-up">+2 مؤشر</td></tr>
+        <tr><td>المعيار المضاف</td><td>غير موجود</td><td>حقوق المتعلم وحمايته (ضمن الإدارة المدرسية)</td><td class="diff-up">مؤشران جديدان</td></tr>
+        <tr><td>الجهة المسؤولة عن المعيار الجديد</td><td>—</td><td>—</td><td class="diff-up">غير مُسندة حتى تاريخه</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note"><i class="fa-solid fa-triangle-exclamation"></i>&nbsp; معيار "حقوق المتعلم وحمايته" لم يُسند إلى أي فريق حتى الآن — يحتاج قراراً قبل بدء تجميع شواهده.</p>
+  </section>
+
+  <section class="card">
+    <h2><i class="fa-solid fa-calculator"></i> منهجية حساب النسب (خط الأساس)</h2>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 6px">النسبة = متوسط وزن حالة كل مؤشر ضمن المجال، وفق الجدول التالي:</p>
+    <div class="weights-grid">
+      <div class="weight-chip"><b style="color:#10b981">100</b>مكتمل ومعتمد / جاهز هندسياً</div>
+      <div class="weight-chip"><b style="color:#06b6d4">85</b>مرحلة المراجعة النهائية</div>
+      <div class="weight-chip"><b style="color:#f59e0b">60</b>مرحلة المسودة</div>
+      <div class="weight-chip"><b style="color:#94a3b8">35</b>نقص أدلة</div>
+      <div class="weight-chip"><b style="color:#f43f5e">10</b>فجوة حرجة</div>
+    </div>
+    <p style="font-size:12px;color:var(--muted)">النسب أدناه محسوبة فعلياً من حالة الـ50 مؤشراً المسجّلة في خط الأساس — وتعكس <strong>جاهزية التوثيق</strong> لا حكماً نهائياً على الأداء التربوي.</p>
+  </section>
+
+
+  <section class="card" style="padding:0;background:none;border:none;box-shadow:none;">
+    <h2 style="padding:0 4px 10px"><i class="fa-solid fa-diagram-project"></i> التفصيل الكامل — المجالات والمعايير والمؤشرات</h2>
+    
+    <section class="domain-section" id="domain-1">
+        <div class="domain-header">
+            <div class="domain-header-top">
+                <h2>المجال الأول: القيادة والإدارة المدرسية</h2>
+                <span class="domain-pct">87%</span>
+            </div>
+            <div class="domain-meta">
+                <span><i class="fa-solid fa-user-tie"></i> المسؤول الأول: <strong>الأستاذ عبدالشافي إسماعيل</strong></span>
+                <span><i class="fa-solid fa-users"></i> فريق العمل: <strong>أ/ ياسر توفيق ، أ/ سعيد الجهني</strong></span>
+                <span><i class="fa-solid fa-list-check"></i> عدد المؤشرات: <strong>18</strong></span>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="indicators-table">
+                <thead>
+                    <tr>
+                        <th>الكود</th><th>المعيار</th><th>مجال التركيز</th><th>نص المؤشر</th>
+                        <th>الحالة</th><th>النسبة</th><th>الفجوة</th><th>الشواهد</th><th>المبادرة المقترحة</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">1-1-1-1</td>
+                    <td class="std-cell">المعيار 1-1: التخطيط</td>
+                    <td class="focus-cell">التخطيط</td>
+                    <td class="text-cell">تضع المدرسة خطة تشغيلية مكتملة العناصر، وفق أهداف تطويرية محددة .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">عدم اشراك المعلمين في اعداد الخطة بالشكل الكافي</td>
+                    <td class="evidence-cell">-الخطة التشغيلية | - محاضر اجتماعات للمعلمين تهدف الى صياغة مبادرات</td>
+                    <td class="initiative-cell">اعادة صياغة عدد من مبادرات الخطة التشغيلية | بمل يتوافق مع معايير الهيئة.</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">1-1-1-2</td>
+                    <td class="std-cell">المعيار 1-1: التخطيط</td>
+                    <td class="focus-cell">التخطيط</td>
+                    <td class="text-cell">تتابع المدرسة تنفيذ خطتها وتطورها بما يضمن تحقيق أهدافها .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">خطة تشغيلية غير متوافقة مع معايير الهيئة بشكل كامل.</td>
+                    <td class="evidence-cell">الخطة الحالية</td>
+                    <td class="initiative-cell">خطة تشغيليىة تتوافق مع معايير هيئة تقويم التعليم والتدريب.</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">1-2-1-1</td>
+                    <td class="std-cell">المعيار 1-2: قيادة العملية التعليمية</td>
+                    <td class="focus-cell">قيادة العملية التعليمية</td>
+                    <td class="text-cell">تعزز المدرسة القيم الإسلامية والهوية الوطنية.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">اكمال خطة الانشطة الدينية و الثقافية</td>
+                    <td class="evidence-cell">الاحتفال باليوم الوطنى و يوم التأسيس و يوم العلم | رحلات مكة - متحف بينالى - رحلات البلد | مسابقات دينية و ثقافية و تقديم جوائز | الانشطة الرمضانية</td>
+                    <td class="initiative-cell">عمل خطة منفصلة للانشطة الدينية و الثقافية مزمنة | ندوات و مبادرات الارشاد الطلابى</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">1-2-1-2</td>
+                    <td class="std-cell">المعيار 1-2: قيادة العملية التعليمية</td>
+                    <td class="focus-cell">قيادة العملية التعليمية</td>
+                    <td class="text-cell">تلتزم المدرسة بقيم مهنة التعليم وأخلاقياتها.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">تتابع المدرسة التزام منسزبيها بقيم مهنة التعليم و اخلاقياتها</td>
+                    <td class="evidence-cell">صور من تكريمات الادارة للمعلمين++ | صور من الاحتفال بيوم المعلم++ | نماذج من استبيانات سابقة من قبل الادارة للمعلمين</td>
+                    <td class="initiative-cell">صور من اللقاء التعريفى بالمعلمين الجدد</td>
+                </tr>
+                <tr class="indicator-row" data-status="cyan">
+                    <td class="code-cell">1-2-1-3</td>
+                    <td class="std-cell">المعيار 1-2: قيادة العملية التعليمية</td>
+                    <td class="focus-cell">قيادة العملية التعليمية</td>
+                    <td class="text-cell">توفر المدرسة مناخًا آمنًا للتعلم والنمو نفسيًّا واجتماعيًّا.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#06b6d41a;color:#06b6d4;border-color:#06b6d455">مرحلة المراجعة النهائية</span></td>
+                    <td class="pct-cell">60%</td>
+                    <td class="gap-cell">توثيق للانشطة</td>
+                    <td class="evidence-cell">صور ندوة من ندوات التوعية بالتنمر++ | لوحات التوعية بالتنمر | صور الاحتفال باعياد ميلاد الطلاب</td>
+                    <td class="initiative-cell">نموذج حل مشكلة طالب يعانى من التنمر | اجتماعات اتحاد الطلاب | مسرحية عن التنمر | عمل خطة من قسم الارشاد الطلابى لعلاج التنمر | صور اجتماعات ال MUN</td>
+                </tr>
+                <tr class="indicator-row" data-status="yellow">
+                    <td class="code-cell">1-2-1-4</td>
+                    <td class="std-cell">المعيار 1-2: قيادة العملية التعليمية</td>
+                    <td class="focus-cell">قيادة العملية التعليمية</td>
+                    <td class="text-cell">تنشر المدرسة قواعد السلوك والمواظبة، وتتابع تطبيقها.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border-color:#f59e0b55">مرحلة المسودة</span></td>
+                    <td class="pct-cell">40%</td>
+                    <td class="gap-cell">تتابع المدرسة تطبيق قواعد السلوك و المواظبة</td>
+                    <td class="evidence-cell">صورة من لائحة السلوك و المواظبة داخل الفصول | تقرير السلوك من البوابة الالكترونية | تقرير حضور و غياب الطلاب</td>
+                    <td class="initiative-cell">توثيق فيديو للمرشد لشرح قواعد السلوك و المواظبة | محاضر سلوكية للطلاب و تحليلها من المرشد الطلابى | استبانة من الطالب و المعلم و ولى الامر | عمل نموذج للائحة السلوك و المواظبة يوقع عليها الطالب و ولى الامر</td>
+                </tr>
+                <tr class="indicator-row" data-status="cyan">
+                    <td class="code-cell">1-2-1-5</td>
+                    <td class="std-cell">المعيار 1-2: قيادة العملية التعليمية</td>
+                    <td class="focus-cell">قيادة العملية التعليمية</td>
+                    <td class="text-cell">توفر المدرسة برامج وأنشطة تربوية داعمة للسلوك الإيجابي.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#06b6d41a;color:#06b6d4;border-color:#06b6d455">مرحلة المراجعة النهائية</span></td>
+                    <td class="pct-cell">70%</td>
+                    <td class="gap-cell">توفر المدرسة برامج علاجية للمشكلات السلوكية</td>
+                    <td class="evidence-cell">صور للماراثون و تحليله | الشراكة مع مشاة جدة و البلدية و امانة محافظة جدة و الهلال الاحمر | نموذج حل مشكلة طالب | نظافة الفصول بقيادة طلاب النظام | مسابقة افضل فصل</td>
+                    <td class="initiative-cell">تقارير للجنة طلاب النظام | توثيق للفسحة و تعامل المشرفين مع المشكلات | توثيق من الاصطفاف الصباحى++ | توثيق من حصص التربية البدنية للدفاع عن النفس من خلال ممارسة الكاراتيه</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">1-2-1-6</td>
+                    <td class="std-cell">المعيار 1-2: قيادة العملية التعليمية</td>
+                    <td class="focus-cell">قيادة العملية التعليمية</td>
+                    <td class="text-cell">توفر المدرسة برامج وأنشطة إثرائية غير صفية؛ لتطوير مواهب المتعلمين، وتهيئتهم للمستقبل .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">توثيق للانشطة</td>
+                    <td class="evidence-cell">صور لليوم الرياضى و ال English Club | صور من مسابقات بيبراس و ال ELO و STEM | مسابقة تحدى القراءة | حصص موهبة و STEM | صور لتكريمات الطلاب و الجوائز | تقارير المسابقات</td>
+                    <td class="initiative-cell">تدريبات مهنية خارج المدرسة (مصانع و شركات) | عمل خطة بالمواد الاثرائية | عمل استبانة للطالب و المعلم و ولى الامر</td>
+                </tr>
+                <tr class="indicator-row" data-status="blue">
+                    <td class="code-cell">1-3-1-1</td>
+                    <td class="std-cell">المعيار 1-3: المجتمع المدرسي</td>
+                    <td class="focus-cell">المجتمع المدرسي</td>
+                    <td class="text-cell">تعزز المدرسة بناء العلاقات الإيجابية والتعاون في المجتمع المدرسي.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#3b82f61a;color:#3b82f6;border-color:#3b82f655">جاهز هندسياً/وقائياً</span></td>
+                    <td class="pct-cell">80%</td>
+                    <td class="gap-cell">خطة تعزيز العمل التعاونى بين المنسوبين</td>
+                    <td class="evidence-cell">محاضر الاجتماعات | صور تكريم المعلمين | صور لليوم الترفيهى للمعلمين | صور رحلات المعلمين و الطلاب | صور المناسبات الاجتماعية و زيارة المرضى</td>
+                    <td class="initiative-cell">خطة للعمل التعاونى بين المنسوبين (اجتماعات الشعب) | صور من زيارات صفية++</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">1-3-1-2</td>
+                    <td class="std-cell">المعيار 1-3: المجتمع المدرسي</td>
+                    <td class="focus-cell">المجتمع المدرسي</td>
+                    <td class="text-cell">تعزز المدرسة مشاركة الأسرة في تعلم أبنائهم، والتحضير لمستقبلهم .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">توفر المدرسة فرصا للتواصل الفعال مع الاسرة</td>
+                    <td class="evidence-cell">مجموعات (جروبات) التواصل واتس اب | المنصة الالكترونية | المرشد الطلابى | اجتماعات اولياء الامور | يوم المشروعات | اليوم الاجتماعى فى رمضان | نموذج من اخطار اولياء الامور بالانشطة و الرحلات</td>
+                    <td class="initiative-cell">ندوة للتوعية بدور الاسرة لتعلم ابناءها (اونلاين) | نموذج من توقيع ولى الامر على تعزيز درجات الطلاب | صورة من مراسلات المرشد الطلابى مع اولياء الامور</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">1-3-1-3</td>
+                    <td class="std-cell">المعيار 1-3: المجتمع المدرسي</td>
+                    <td class="focus-cell">المجتمع المدرسي</td>
+                    <td class="text-cell">تعزز المدرسة الشراكة المجتمعية؛ لدعم التعلم والتأثير الإيجابي في المجتمع المحلي.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">95%</td>
+                    <td class="gap-cell">توثيق للانشطة</td>
+                    <td class="evidence-cell">صور للماراثون | صور لاصلاح الملعب بالشراكة مع البلدية | التعاون مع الؤسسات الصحية (عيادات) | صور هيئة الفضاء | صور العرض الادائى لطلاب الدمج | صور من زيارة مكتبة الحرم</td>
+                    <td class="initiative-cell">—</td>
+                </tr>
+                <tr class="indicator-row" data-status="yellow">
+                    <td class="code-cell">1-1-4-1</td>
+                    <td class="std-cell">المعيار 1-4: التطوير المؤسسي</td>
+                    <td class="focus-cell">التطوير المؤسسي</td>
+                    <td class="text-cell">توفر المدرسة كادرًا تعليميًّا مكتملاً ومؤهلاً.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border-color:#f59e0b55">مرحلة المسودة</span></td>
+                    <td class="pct-cell">40%</td>
+                    <td class="gap-cell">تطبق المدرسة اجراءات محددة فى استقطاب الكادر التعليمى المؤهل</td>
+                    <td class="evidence-cell">نماذج من ملف انجاز المعلم | تقرير بالمعلمين الحاصلين بالرخصة المهنية</td>
+                    <td class="initiative-cell">ملف تعريفى بكادر الدبلوما من الموارد البشرية | نماذج تقارير قبول و رفض المعلمين المتقدمين للعمل بالمدرسة | نموذج من اعلانات توظيف | عمل خطة مكتوبة لاستقطاب كوادر بناءا على التخصصات المطلوبة</td>
+                </tr>
+                <tr class="indicator-row" data-status="yellow">
+                    <td class="code-cell">1-4-1-2</td>
+                    <td class="std-cell">المعيار 1-4: التطوير المؤسسي</td>
+                    <td class="focus-cell">التطوير المؤسسي</td>
+                    <td class="text-cell">توفر المدرسة كادرًا إداريًّا مكتملاً ومؤهلاً.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border-color:#f59e0b55">مرحلة المسودة</span></td>
+                    <td class="pct-cell">40%</td>
+                    <td class="gap-cell">تطبق المدرسة اجراءات محددة فى استقطاب الكادر الادارى المؤهل</td>
+                    <td class="evidence-cell">نموذج للتسلسل الادارى بالمدرسة | السلم الوظيفى | نموذج بادارات المدرسة</td>
+                    <td class="initiative-cell">ملف تعريفى بكادر الدبلوما الادارى من الموارد البشرية | نماذج تقارير قبول و رفض الاداريين المتقدمين للعمل بالمدرسة | نموذج من اعلانات توظيف | عمل خطة مكتوبة لاستقطاب كوادر بناءا على التخصصات المطلوبة</td>
+                </tr>
+                <tr class="indicator-row" data-status="gray">
+                    <td class="code-cell">1-4-1-3</td>
+                    <td class="std-cell">المعيار 1-4: التطوير المؤسسي</td>
+                    <td class="focus-cell">التطوير المؤسسي</td>
+                    <td class="text-cell">تظهر المدرسة ثباتًا واستدامة مالية.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#94a3b81a;color:#94a3b8;border-color:#94a3b855">نقص أدلة</span></td>
+                    <td class="pct-cell">0%</td>
+                    <td class="gap-cell">لا توجد فجوة موثقة</td>
+                    <td class="evidence-cell">لا توجد أدلة مسجلة بعد</td>
+                    <td class="initiative-cell">—</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">1-4-1-4</td>
+                    <td class="std-cell">المعيار 1-4: التطوير المؤسسي</td>
+                    <td class="focus-cell">التطوير المؤسسي</td>
+                    <td class="text-cell">تشجع المدرسة منسوبيها ل لحصول على الرخصة المهنية.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">توفر المدرسة انشطة و برامج توعوية للحصول على الرخصة المهنية</td>
+                    <td class="evidence-cell">نموذج الايميل المرسل الخاص بالرخصة المهنية | صور من منصة اعناب للتدريب على الرخصة المهنية</td>
+                    <td class="initiative-cell">نموذج بحصر المعلمين الحاصلين على الرخصة المهنية</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">1-4-1-5</td>
+                    <td class="std-cell">المعيار 1-4: التطوير المؤسسي</td>
+                    <td class="focus-cell">التطوير المؤسسي</td>
+                    <td class="text-cell">تدعم المدرسة التطوير المهني لمنسوبيها وف ًق ا لنتائج تقويم الأداء الوظيفي واحتياجاتهم.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">تبنى المدرسة خطة التطوير المهنى وفق تقييم الاداء الوظيفى و احتياجات منسوبيها</td>
+                    <td class="evidence-cell">تقييم المعلمين | صرف مكافأت | دورات اعناب التدريبية | ايميل سياسة صرف المكافأت ل الحاصلين على شهادات الماجستير و الدكتوراة و السيلتا و الرخصة المهنية</td>
+                    <td class="initiative-cell">خطة التطوير المهنى (مكتب التطوير)</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">1-4-1-6</td>
+                    <td class="std-cell">المعيار 1-4: التطوير المؤسسي</td>
+                    <td class="focus-cell">التطوير المؤسسي</td>
+                    <td class="text-cell">تطبق المدرسة التقويم الذاتي المبنيّ على المعايير المعتمدة من الهيئة.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">تطبق المدرسة التقويم الذاتى</td>
+                    <td class="evidence-cell">نماذج من استمارة التقويم الذاتى للمعلمين | نماذج من استبانات المدرسة للمعلمين | صور من اجتماعات مكتب التطوير بالمعلمين للتعريف بمعايير الهيئة | محاضر اجتماعات القسم</td>
+                    <td class="initiative-cell">تقرير خطة تحسين الاداء وفقا للمعايير المعتمدة من الهيئة</td>
+                </tr>
+                <tr class="indicator-row" data-status="cyan">
+                    <td class="code-cell">1-4-1-7</td>
+                    <td class="std-cell">المعيار 1-4: التطوير المؤسسي</td>
+                    <td class="focus-cell">التطوير المؤسسي</td>
+                    <td class="text-cell">تنفذ المدرسة خطة للتحسين بناء على نتائج التقويم المدرس 1- ي، وتتابعها.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#06b6d41a;color:#06b6d4;border-color:#06b6d455">مرحلة المراجعة النهائية</span></td>
+                    <td class="pct-cell">70%</td>
+                    <td class="gap-cell">تبنى المدرسة خطة تحسين فى ضوء نتائج التقويم المدرسى</td>
+                    <td class="evidence-cell">ميثاق العمل | صور من اجتماعات القسم</td>
+                    <td class="initiative-cell">تقرير خطة تحسين المدرسة</td>
+                </tr></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="domain-section" id="domain-2">
+        <div class="domain-header">
+            <div class="domain-header-top">
+                <h2>المجال الثاني: التعليم والتعلم</h2>
+                <span class="domain-pct">93%</span>
+            </div>
+            <div class="domain-meta">
+                <span><i class="fa-solid fa-user-tie"></i> المسؤول الأول: <strong>الأستاذ إسلام صابر</strong></span>
+                <span><i class="fa-solid fa-users"></i> فريق العمل: <strong>أ/ أسامة المعداوي ، أ/ يوسف مجدي</strong></span>
+                <span><i class="fa-solid fa-list-check"></i> عدد المؤشرات: <strong>13</strong></span>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="indicators-table">
+                <thead>
+                    <tr>
+                        <th>الكود</th><th>المعيار</th><th>مجال التركيز</th><th>نص المؤشر</th>
+                        <th>الحالة</th><th>النسبة</th><th>الفجوة</th><th>الشواهد</th><th>المبادرة المقترحة</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">2-1-1-1</td>
+                    <td class="std-cell">المعيار 2-1: بناء وإدارة خبرات التعلم</td>
+                    <td class="focus-cell">خبرات التعلم</td>
+                    <td class="text-cell">تعزز المدرسة دافعية المتعلمين للتعلم والاستمتاع به.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">توثيق الانشطة</td>
+                    <td class="evidence-cell">الدراما | مسابقة The Best Author | التكريمات و التحفيز داخل الفصل | تجارب علمية | نادى اللغة الانجليزية | رحلات علمية و ثقافية | العاب تعليمية | مسابقات برمجة | تدريس باستراتيجيات التعلم التعاونى</td>
+                    <td class="initiative-cell">—</td>
+                </tr>
+                <tr class="indicator-row" data-status="blue">
+                    <td class="code-cell">2-1-1-1</td>
+                    <td class="std-cell">المعيار 2-1: بناء وإدارة خبرات التعلم</td>
+                    <td class="focus-cell">خبرات التعلم</td>
+                    <td class="text-cell">توفر المدرسة فرصًا متكافئة للتعلم تلبي احتياجات المتعلمين بمن فيهم ذوو الإعاقة والموهوبون.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#3b82f61a;color:#3b82f6;border-color:#3b82f655">جاهز هندسياً/وقائياً</span></td>
+                    <td class="pct-cell">80%</td>
+                    <td class="gap-cell">يتوفر في بيئة التعلم المصادر و الأنشطة</td>
+                    <td class="evidence-cell">حصص اضافية | اوراق عمل | حصص موهبة | انشطو و مسابقات | غرفة المصادر - STEM - Science Lab - Theatre - Sports classess</td>
+                    <td class="initiative-cell">لوحات و جداريات داخل الفصل | تصوير حصة | تصوير حصة موهبة | تصوير حصة لطلاب الدمج</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">2-1-1-2</td>
+                    <td class="std-cell">المعيار 2-1: بناء وإدارة خبرات التعلم</td>
+                    <td class="focus-cell">خبرات التعلم</td>
+                    <td class="text-cell">تدعم المدرسة تنفيذ المناهج؛ لتحقيق نواتج التعلم المستهدفة وفق الخطة الدراسية.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">تدعم المدرسة تنفيذ المناهج لتحقيق نواتج التعلم</td>
+                    <td class="evidence-cell">حلقة القران | Talented Speaker Competition | The Best Author Competition | الزيارات – خطط انشطة - الاختبارات - الخطة الاسبوعية - توزيع المنهج</td>
+                    <td class="initiative-cell">مطالب تم الموافقة عليها | الدورات | المنصة الالكترونية | الكتب الالكترونية | الاشتراكات فى المواقع المدفوعة</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">2-1-1-3</td>
+                    <td class="std-cell">المعيار 2-1: بناء وإدارة خبرات التعلم</td>
+                    <td class="focus-cell">خبرات التعلم</td>
+                    <td class="text-cell">تنوع المدرسة في إستراتيجيات التدريس لتلبية احتياجات المتعلمين، ودعم تعلمهم.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">توثيق الانشطة</td>
+                    <td class="evidence-cell">استراتيجيات الشرح | الاستراتيجيات الامستخدمة فى الحصص | استراتيجيات تراعى الفروق الفردية بين الطلاب | تلبية متطلبات المعلمين | ورش عمل</td>
+                    <td class="initiative-cell">تصوير حصص تستخدم استراتيجيات متعددة</td>
+                </tr>
+                <tr class="indicator-row" data-status="yellow">
+                    <td class="code-cell">2-1-1-4</td>
+                    <td class="std-cell">المعيار 2-1: بناء وإدارة خبرات التعلم</td>
+                    <td class="focus-cell">خبرات التعلم</td>
+                    <td class="text-cell">تفعل المدرسة التعلم الإلكتروني؛ لتلبية احتياجات المتعلمين، ودعم تعلمهم.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border-color:#f59e0b55">مرحلة المسودة</span></td>
+                    <td class="pct-cell">40%</td>
+                    <td class="gap-cell">تضع المدرسة خطة لدمج التعلم الإلكتروني في عمليات التعليم والتعلم وتتابعها</td>
+                    <td class="evidence-cell">المنصات الالكترونية | مواقع مستخدمة على البروجكتور | الواجبات</td>
+                    <td class="initiative-cell">السبورة التفاعلية | تصوير حصص | عمل خطة من مدير المدرسة لدمج التعليم الالكترونى | صور للدورات التدريبية و استخدام السبورة الذكية</td>
+                </tr>
+                <tr class="indicator-row" data-status="cyan">
+                    <td class="code-cell">2-1-1-5</td>
+                    <td class="std-cell">المعيار 2-1: بناء وإدارة خبرات التعلم</td>
+                    <td class="focus-cell">خبرات التعلم</td>
+                    <td class="text-cell">توفر المدرسة أنشطة تعلم تطبيقية ترتبط بحياة المتعلمين.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#06b6d41a;color:#06b6d4;border-color:#06b6d455">مرحلة المراجعة النهائية</span></td>
+                    <td class="pct-cell">60%</td>
+                    <td class="gap-cell">ترتبط أنشطة التعلم في المدرسة بأنشطتي الحياتية خارج المدرسة</td>
+                    <td class="evidence-cell">البازار | زيارة مصنع | مشروع حذاء ال ELO | مشروع الملعب ال ELO | صور لتجارب الساينس | صور ندوات التوعية | مشروع الطريق الذكي ELO 2026</td>
+                    <td class="initiative-cell">مسرحية عن الوظائف | زراعة نباتات | حصص ال IT | تصوير حصة من مادة ال Business</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">2-1-1-6</td>
+                    <td class="std-cell">المعيار 2-1: بناء وإدارة خبرات التعلم</td>
+                    <td class="focus-cell">خبرات التعلم</td>
+                    <td class="text-cell">تنمي المدرسة المهارات القرائية والعددية الأساسية لدى المتعلمين.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">تنمي المدرسة مهارات القراءة والكتابة والتعامل مع الأعداد (الحساب) لدى ابني\\ابنتي</td>
+                    <td class="evidence-cell">منصة اقرأ | الاذاعة | مسابقة Spelling Bee | مسابقة بيبراس و كانجارو | مسابقة قراءة سريعة | خطط الدعم | مسابقة Hand Writhing, The Best Author</td>
+                    <td class="initiative-cell">لوحات تعليمية داخل الفصول | مسابقة Math Fit | English and French comptitions</td>
+                </tr>
+                <tr class="indicator-row" data-status="blue">
+                    <td class="code-cell">2-1-1-7</td>
+                    <td class="std-cell">المعيار 2-1: بناء وإدارة خبرات التعلم</td>
+                    <td class="focus-cell">خبرات التعلم</td>
+                    <td class="text-cell">تنمي المدرسة مهارات التفكير العليا لدى المتعلمين.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#3b82f61a;color:#3b82f6;border-color:#3b82f655">جاهز هندسياً/وقائياً</span></td>
+                    <td class="pct-cell">80%</td>
+                    <td class="gap-cell">توفير المدرسة أنشطة تنمي مهارات التفكير العليا (الناقد الأبداعي وحل المشكلات) و التوثيق</td>
+                    <td class="evidence-cell">بروجكت من مسابقة ال ELO | حصة من STEM | أسئلة تفكير ناقد | مسابقة ال Recycling , The Best Author</td>
+                    <td class="initiative-cell">مسابقة ال MUN | فيديو لمسابقة تعرض قضية تطرح للنقاش بين فريق مؤيد و فريق معارض</td>
+                </tr>
+                <tr class="indicator-row" data-status="yellow">
+                    <td class="code-cell">2-1-1-8</td>
+                    <td class="std-cell">المعيار 2-1: بناء وإدارة خبرات التعلم</td>
+                    <td class="focus-cell">خبرات التعلم</td>
+                    <td class="text-cell">تنمي المدرسة المهارات العاطفية والاجتماعية لدى المتعلمين.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border-color:#f59e0b55">مرحلة المسودة</span></td>
+                    <td class="pct-cell">40%</td>
+                    <td class="gap-cell">تشجيع المدرسة على ضبط الانفعال \\ تشجيع المدرسة على التعاون مع الزملاء \\ التعاطف</td>
+                    <td class="evidence-cell">طلاب النظام | زيارة مريض | لافتات عن التنمر</td>
+                    <td class="initiative-cell">تصوير موقف عن التنمر | حصة مصورة للطلاب يتناقشون بشكل محترم و بتعاون | اجتماع اتحاد الطلاب | اجتماع ال MUN</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">2-1-1-9</td>
+                    <td class="std-cell">المعيار 2-1: بناء وإدارة خبرات التعلم</td>
+                    <td class="focus-cell">خبرات التعلم</td>
+                    <td class="text-cell">تنمي المدرسة المهارات الرقمية لدى المتعلمين.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">التوثيق</td>
+                    <td class="evidence-cell">المنصات الالكترونية | معمل الحاسب | حصة الروبوت | صور من مسابقة بيبراس | صور تدريب من حصة الروبوت | مقطع مصور لطلاب الدمج فى حصة STEM</td>
+                    <td class="initiative-cell">سبورة تفاعلية | بحث الكترونى | استخدام المعجم الالكترونى | تصوير حصص ال IT , Robot</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">2-2-1</td>
+                    <td class="std-cell">المعيار 2-2: تقويم التعلم</td>
+                    <td class="focus-cell">تقويم التعليم</td>
+                    <td class="text-cell">تقوّم المدرسة أداء المتعلمين باستخدام أساليب وأدوات تقويم متنوعة وفاعلة.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">توثيق الانشطة</td>
+                    <td class="evidence-cell">الاختبارات بانواعها المختلفة | المشروعات | الواجبات | الابحاث | اختبارات اسبوعية | اسئلة قياس مدى فهم الطلاب فى الحصة</td>
+                    <td class="initiative-cell">—</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">2-2-2</td>
+                    <td class="std-cell">المعيار 2-2: تقويم التعلم</td>
+                    <td class="focus-cell">تقويم التعليم</td>
+                    <td class="text-cell">تحلل المدرسة نتائج التقويم وتوظفها في تحسين نواتج التعلم بانتظام.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">تحلل المدرسة نتائج تقويم اداء المتعلمين و توظفها فى تحسين نواتج التعلم لديهم</td>
+                    <td class="evidence-cell">اختبارات ال Baseline و تحليلها | الخطط العلاجية | حصص الدعم</td>
+                    <td class="initiative-cell">وضع استراتيجيات جديدة | دورات تدريبية للمعلمين</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">2-2-3</td>
+                    <td class="std-cell">المعيار 2-2: تقويم التعلم</td>
+                    <td class="focus-cell">تقويم التعليم</td>
+                    <td class="text-cell">تقدم المدرسة التغذية الراجعة للمتعلمين بانتظام.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">توثيق النماذج</td>
+                    <td class="evidence-cell">درجات الاختبارات | تصحيح الكتب و الواجبات | التعزيز | صور التكريمات | واجبات المنصة | المشروعات | تقارير الاختبارات و السلوك | اجتماعات اولياء الامور</td>
+                    <td class="initiative-cell">—</td>
+                </tr></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="domain-section" id="domain-3">
+        <div class="domain-header">
+            <div class="domain-header-top">
+                <h2>المجال الثالث: نواتج التعلم</h2>
+                <span class="domain-pct">94%</span>
+            </div>
+            <div class="domain-meta">
+                <span><i class="fa-solid fa-user-tie"></i> المسؤول الأول: <strong>الأستاذ أحمد ماهر</strong></span>
+                <span><i class="fa-solid fa-users"></i> فريق العمل: <strong>أ/ خالد الزهراني ، أ/ ضياء الدين حسين</strong></span>
+                <span><i class="fa-solid fa-list-check"></i> عدد المؤشرات: <strong>13</strong></span>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="indicators-table">
+                <thead>
+                    <tr>
+                        <th>الكود</th><th>المعيار</th><th>مجال التركيز</th><th>نص المؤشر</th>
+                        <th>الحالة</th><th>النسبة</th><th>الفجوة</th><th>الشواهد</th><th>المبادرة المقترحة</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">3-1-1-1</td>
+                    <td class="std-cell">المعيار 3-1: التحصيل الدراسي والتقدم الأكاديمي</td>
+                    <td class="focus-cell">التحصيل التعليمي</td>
+                    <td class="text-cell">يحقق المتعلمون نتائج متقدمة في مجال القراءة و فقًا للاختبارات الوطنية .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">يحقق المتعلمون تقدم فى مجال القراءة و الرياضيات قياسا على اداء المدرسة السابق فى الاختبارات الوطنية</td>
+                    <td class="evidence-cell">1- نماذج اختبارات نافس | 2- توعية اولياء الامور باختبار نافس و موعده | 3- عمل حصص لتدريب الطلاب المشاركين فى اختبار نافس</td>
+                    <td class="initiative-cell">1- رسائل لاولياء الامور بخصوص نافس | 2- تدريبات و توعية بمواعيد اختبار نافس | 3- عمل نماذج اختبارات محاكاة جديدة | 4- تقارير اختبار نافس الرسمىي grade 3 | 5- نتائج اختبار Star | 6- مقارنة نتائج اخر عامين لاختبارات نافس مع التحليل</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">3-1-1-2</td>
+                    <td class="std-cell">المعيار 3-1: التحصيل الدراسي والتقدم الأكاديمي</td>
+                    <td class="focus-cell">التحصيل التعليمي</td>
+                    <td class="text-cell">يحقق المتعلمون نتائج متقدمة في مجال الرياضيات و قفًا للاختبارات الوطنية .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">يحقق المتعلمون تقدم فى مجال القراءة و الرياضيات قياسا على اداء المدرسة السابق فى الاختبارات الوطنية</td>
+                    <td class="evidence-cell">1- نماذج اختبارات نافس | 2- توعية اولياء الامور باختبار نافس و موعده | 3- عمل حصص لتدريب الطلاب المشاركين فى اختبار نافس</td>
+                    <td class="initiative-cell">1- رسائل لاولياء الامور بخصوص نافس | 2- تدريبات و توعية بمواعيد اختبار نافس | 3- عمل نماذج اختبارات محاكاة جديدة | 4- تقارير اختبار نافس الرسمىل grade 3 | 5- نتائج اختبار Star | 6- مقارنة نتائج اخر عامين لاختبارات نافس مع التحليل</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">3-1-1-3</td>
+                    <td class="std-cell">المعيار 3-1: التحصيل الدراسي والتقدم الأكاديمي</td>
+                    <td class="focus-cell">التحصيل التعليمي</td>
+                    <td class="text-cell">يحقق المتعلمون نتائج متقدمة في مجال العلوم و فقًا للاختبارات الوطنية .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">يحقق المتعلمون تقدم فى مجال القراءة و الرياضيات قياسا على اداء المدرسة السابق فى الاختبارات الوطنية</td>
+                    <td class="evidence-cell">1- نماذج اختبارات نافس | 2- توعية اولياء الامور باختبار نافس و موعده | 3- عمل حصص لتدريب الطلاب المشاركين فى اختبار نافس</td>
+                    <td class="initiative-cell">1 - رسائل لاولياء الامور بخصوص نافس | 2- تدريبات و توعية بمواعيد اختبار نافس | 3- عمل نماذج اختبارات محاكاة جديدة | 4- تقارير اختبار نافس الرسمىل grade 3 | 5- نتائج اختبار Star | 6- مقارنة نتائج اخر عامين لاختبارات نافس مع التحليل</td>
+                </tr>
+                <tr class="indicator-row" data-status="blue">
+                    <td class="code-cell">3-1-1-4</td>
+                    <td class="std-cell">المعيار 3-1: التحصيل الدراسي والتقدم الأكاديمي</td>
+                    <td class="focus-cell">التحصيل التعليمي</td>
+                    <td class="text-cell">يحقق المتعلمون تقدمًا في مجال القراءة قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#3b82f61a;color:#3b82f6;border-color:#3b82f655">جاهز هندسياً/وقائياً</span></td>
+                    <td class="pct-cell">80%</td>
+                    <td class="gap-cell">يحقق المتعلمون تقدم فى مجال القراءة و الرياضيات قياسا على اداء المدرسة السابق فى الاختبارات الوطنية</td>
+                    <td class="evidence-cell">1- نماذج اختبارات نافس | 2- توعية اولياء الامور باختبار نافس و موعده | 3- عمل حصص لتدريب الطلاب المشاركين فى اختبار نافس</td>
+                    <td class="initiative-cell">1- رسائل لاولياء الامور بخصوص نافس | 2- تدريبات و توعية بمواعيد اختبار نافس | 3- عمل نماذج اختبارات محاكاة جديدة | 4- تقارير اختبار نافس الرسمىل grade 3 | 5- نتائج اختبار Star | 6- مقارنة نتائج اخر عامين لاختبارات نافس مع التحليل</td>
+                </tr>
+                <tr class="indicator-row" data-status="blue">
+                    <td class="code-cell">3-1-1-5</td>
+                    <td class="std-cell">المعيار 3-1: التحصيل الدراسي والتقدم الأكاديمي</td>
+                    <td class="focus-cell">التحصيل التعليمي</td>
+                    <td class="text-cell">يحقق المتعلمون تقدمًا في مجال الرياضيات قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#3b82f61a;color:#3b82f6;border-color:#3b82f655">جاهز هندسياً/وقائياً</span></td>
+                    <td class="pct-cell">80%</td>
+                    <td class="gap-cell">يحقق المتعلمون تقدم فى مجال القراءة و الرياضيات قياسا على اداء المدرسة السابق فى الاختبارات الوطنية</td>
+                    <td class="evidence-cell">1- نماذج اختبارات نافس | 2- توعية اولياء الامور باختبار نافس و موعده | 3- عمل حصص لتدريب الطلاب المشاركين فى اختبار نافس</td>
+                    <td class="initiative-cell">1- رسائل لاولياء الامور بخصوص نافس | 2- تدريبات و توعية بمواعيد اختبار نافس | 3- عمل نماذج اختبارات محاكاة جديدة | 4- تقارير اختبار نافس الرسمىل grade 3 | 5- نتائج اختبار Star | 6- مقارنة نتائج اخر عامين لاختبارات نافس مع التحليل</td>
+                </tr>
+                <tr class="indicator-row" data-status="blue">
+                    <td class="code-cell">3-1-1-6</td>
+                    <td class="std-cell">المعيار 3-1: التحصيل الدراسي والتقدم الأكاديمي</td>
+                    <td class="focus-cell">التحصيل التعليمي</td>
+                    <td class="text-cell">يحقق المتعلمون تقدمًا في مجال العلوم قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#3b82f61a;color:#3b82f6;border-color:#3b82f655">جاهز هندسياً/وقائياً</span></td>
+                    <td class="pct-cell">80%</td>
+                    <td class="gap-cell">يحقق المتعلمون تقدم فى مجال القراءة و الرياضيات قياسا على اداء المدرسة السابق فى الاختبارات الوطنية</td>
+                    <td class="evidence-cell">1- نماذج اختبارات نافس | 2- توعية اولياء الامور باختبار نافس و موعده | 3- عمل حصص لتدريب الطلاب المشاركين فى اختبار نافس</td>
+                    <td class="initiative-cell">1- رسائل لاولياء الامور بخصوص نافس | 2- تدريبات و توعية بمواعيد اختبار نافس | 3- عمل نماذج اختبارات محاكاة جديدة | 4- تقارير اختبار نافس الرسمىل grade 3 | 5- نتائج اختبار Star | 6- مقارنة نتائج اخر عامين لاختبارات نافس مع التحليل</td>
+                </tr>
+                <tr class="indicator-row" data-status="blue">
+                    <td class="code-cell">3-2-1</td>
+                    <td class="std-cell">المعيار 3-2: التطور الشخصي والصحي والاجتماعي</td>
+                    <td class="focus-cell">التطور الشخصي والصحي والاجتماعي</td>
+                    <td class="text-cell">يظهر المتعلمون الاعتزاز بالقيم والهوية الوطنية .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#3b82f61a;color:#3b82f6;border-color:#3b82f655">جاهز هندسياً/وقائياً</span></td>
+                    <td class="pct-cell">80%</td>
+                    <td class="gap-cell">يظهر المتعلمون الاعتزاز بالقيم و الهوية الوطنية</td>
+                    <td class="evidence-cell">زيارة مكة | زيارة متحف بينالى | زيارة البلد | الاحتفال باليوم الوطنى و يوم التأسيس و يوم العلم | مسرحية المملكة | نماذج من الاذعة | الانشاد و الالقاء باللغة العربية</td>
+                    <td class="initiative-cell">1عمل اذاعة لترسيخ القيم و الهوية الوطنية (خطة الاذاعة +قيمة) | 2-صور المشاركةفى تنظيف الحرم المكى | 3- صور لاعادة ترميم ملعب</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">3-2-2</td>
+                    <td class="std-cell">المعيار 3-2: التطور الشخصي والصحي والاجتماعي</td>
+                    <td class="focus-cell">التطور الشخصي والصحي والاجتماعي</td>
+                    <td class="text-cell">يظهر المتعلمون اتجاهات إيجابية نحو ذواتهم .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">توثيق الانشطة</td>
+                    <td class="evidence-cell">استبانة الطلاب | طلاب النظام | صور من البلد | صور من الاذاعة و المشروعات و المسابقات | اللقاء التعريفى ل grade 3 | فيديوهات الماراثون عن حوار الطلاب مع اولياء الامور | تقارير الواجبات</td>
+                    <td class="initiative-cell">عمل جولة تعريفية للطلاب الجدد</td>
+                </tr>
+                <tr class="indicator-row" data-status="yellow">
+                    <td class="code-cell">3-2-3</td>
+                    <td class="std-cell">المعيار 3-2: التطور الشخصي والصحي والاجتماعي</td>
+                    <td class="focus-cell">التطور الشخصي والصحي والاجتماعي</td>
+                    <td class="text-cell">يظهر المتعلمون التزامًا بالممارسات الصحية السليمة .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border-color:#f59e0b55">مرحلة المسودة</span></td>
+                    <td class="pct-cell">40%</td>
+                    <td class="gap-cell">يظهرالمتعلمون الالتزام بالمماراسات الصحية السليمة</td>
+                    <td class="evidence-cell">صور للماراثون و الطابور الصبااحى</td>
+                    <td class="initiative-cell">صور الزيارات الصحية | ندوة للارشاد الطلابى | بوستات عن اهمية الغذاء الصحى</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">3-2-4</td>
+                    <td class="std-cell">المعيار 3-2: التطور الشخصي والصحي والاجتماعي</td>
+                    <td class="focus-cell">التطور الشخصي والصحي والاجتماعي</td>
+                    <td class="text-cell">يشارك المتعلمون في الأنشطة المجتمعية والأعمال التطوعية .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">95%</td>
+                    <td class="gap-cell">توثيق الانشطة</td>
+                    <td class="evidence-cell">1-صور للماراثون | 2- صور لاصلاح الملعب بالشراكة مع البلدية | 3- التعاون مع الؤسسات الصحية (عيادات) | 4- صور هيئة الفضاء | 5- صور العرض الادائى لطلاب الدمج | 6- صور من زيارة مكتبة الحرم | 7- التبرع لاهل غزة ((grade 5 | 8- تبرع رمضان بالمواد الغذائية | 9- المشاركة فى حفر بئر</td>
+                    <td class="initiative-cell">—</td>
+                </tr>
+                <tr class="indicator-row" data-status="yellow">
+                    <td class="code-cell">3-2-5</td>
+                    <td class="std-cell">المعيار 3-2: التطور الشخصي والصحي والاجتماعي</td>
+                    <td class="focus-cell">التطور الشخصي والصحي والاجتماعي</td>
+                    <td class="text-cell">يلتزم المتعلمون بقواعد السلوك والانضباط المدرسي .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#f59e0b1a;color:#f59e0b;border-color:#f59e0b55">مرحلة المسودة</span></td>
+                    <td class="pct-cell">50%</td>
+                    <td class="gap-cell">يظهر المتعلمون التزاما بقواعد السلوك</td>
+                    <td class="evidence-cell">صورة من لائحة السلوك و المواظبة داخل الفصول | تقرير السلوك من البوابة الالكترونية | تقرير حضور و غياب الطلاب | خروج الطلاب من الطابور و الالتزام فى الصلاة و الالتزام بالزى المدرسى</td>
+                    <td class="initiative-cell">توثيق فيديو للمرشد لشرح قواعد السلوك و المواظبة | محاضر سلوكية للطلاب و تحليلها من المرشد الطلابى | استبانة من الطالب و المعلم و ولى الامر | عمل نموذج للائحة السلوك و المواظبة يوقع عليها الطالب و ولى الامر</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">3-2-6</td>
+                    <td class="std-cell">المعيار 3-2: التطور الشخصي والصحي والاجتماعي</td>
+                    <td class="focus-cell">التطور الشخصي والصحي والاجتماعي</td>
+                    <td class="text-cell">يظهر المتعلمون القدرة على البحث والتعلم الذاتي.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">يظهر المتعلمون القدرة على البحث والتعلم الذاتي.</td>
+                    <td class="evidence-cell">1 - أبحاث الطلبة | 2 - المشروعات | 3 - مسابقة أفضل مؤلف</td>
+                    <td class="initiative-cell">1- تخصيص جزء من الحصة للذهاب إلى المعامل للبحث</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">3-2-7</td>
+                    <td class="std-cell">المعيار 3-2: التطور الشخصي والصحي والاجتماعي</td>
+                    <td class="focus-cell">التطور الشخصي والصحي والاجتماعي</td>
+                    <td class="text-cell">يظهر المتعلمون اعتزازا بثقافتهم واحتراما للتنوع الثقافي في المجتمع.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">توثيق الأنشطة</td>
+                    <td class="evidence-cell">1 - صور البلد ويوم التأسيس | 2 - صور الزي المختلف ليوم التأسيس | 3 - احتفال أفضل طبق | 4 - مسابقة الأكلات من دول مختلفة | 5 - متحف بينالي | إلقاء شعر باللغة العربية</td>
+                    <td class="initiative-cell">—</td>
+                </tr></tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="domain-section" id="domain-4">
+        <div class="domain-header">
+            <div class="domain-header-top">
+                <h2>المجال الرابع: البيئة المدرسية (المرافق، الأمن والسلامة)</h2>
+                <span class="domain-pct">95%</span>
+            </div>
+            <div class="domain-meta">
+                <span><i class="fa-solid fa-user-tie"></i> المسؤول الأول: <strong>الأستاذ مصطفى عبدالجليل</strong></span>
+                <span><i class="fa-solid fa-users"></i> فريق العمل: <strong>أ/ محمد جمال ، أ/ مصطفى أشرف</strong></span>
+                <span><i class="fa-solid fa-list-check"></i> عدد المؤشرات: <strong>6</strong></span>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="indicators-table">
+                <thead>
+                    <tr>
+                        <th>الكود</th><th>المعيار</th><th>مجال التركيز</th><th>نص المؤشر</th>
+                        <th>الحالة</th><th>النسبة</th><th>الفجوة</th><th>الشواهد</th><th>المبادرة المقترحة</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">4-1-1-1</td>
+                    <td class="std-cell">المعيار 4-1: المبنى المدرسي</td>
+                    <td class="focus-cell">المبنى المدرسى</td>
+                    <td class="text-cell">تنظيم مبنى المدرسة ملائم لعدد المتعلمين و المرحلة العمرية</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">95%</td>
+                    <td class="gap-cell">توثيق مخخط خريطة المدرسة</td>
+                    <td class="evidence-cell">صور ملاعب و فصول و معامل | صور مطلع ذوو الاحتياجات 3- صور لموقف ذوو الاحتياجات 4- صور لفصول ذوو الاحتياجات</td>
+                    <td class="initiative-cell">مخطط (خريطة) للمدرسة</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">4-1-1-2</td>
+                    <td class="std-cell">المعيار 4-1: المبنى المدرسي</td>
+                    <td class="focus-cell">المبنى المدرسى</td>
+                    <td class="text-cell">تتوافر فصول و معامل ملائمة للعملية التعليمية تلبى احتياجات المتعلمين بمن فيهم ذوو الاعاقة</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">اجواء الفصل من حيث التهوية و الاضاءة</td>
+                    <td class="evidence-cell">صور لتجهيزات الفصول و تجهيزات المعامل و تجهيزات المعامل</td>
+                    <td class="initiative-cell">مطلع الحقائب على السلم | نموذج حصر مساحات الفصول</td>
+                </tr>
+                <tr class="indicator-row" data-status="cyan">
+                    <td class="code-cell">4-1-1-3</td>
+                    <td class="std-cell">المعيار 4-1: المبنى المدرسي</td>
+                    <td class="focus-cell">المبنى المدرسى</td>
+                    <td class="text-cell">تلبى المرافق و الخدمات المساندة احتياجات المتعلمين بمن فيهم ذوو الاعاقة</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#06b6d41a;color:#06b6d4;border-color:#06b6d455">مرحلة المراجعة النهائية</span></td>
+                    <td class="pct-cell">70%</td>
+                    <td class="gap-cell">المساحة المخصصة للمقصف و اماكن تناول الطعام تلبى احتياجات المتعلمين بمن فيهم ذوو الاعاقة</td>
+                    <td class="evidence-cell">صور المقصف | صور الملاعب | صور الممرات | صور لدورات المياه لذوو الاعاقة | صور من قسم التربية الخاصة (صالة النفس حركى - التخاطب - الاخصائى النفسى)</td>
+                    <td class="initiative-cell">طاولات الطعام | ملصق ارشادات ذوو الاعاقة (دورات مياه) | التنسيق مع المقصف بشأن الطعام الصحى</td>
+                </tr>
+                <tr class="indicator-row" data-status="blue">
+                    <td class="code-cell">4-2-1-1</td>
+                    <td class="std-cell">المعيار 4-2: الأمن والسلامة</td>
+                    <td class="focus-cell">الامن و السلامة</td>
+                    <td class="text-cell">تتوافر فى فصول المدرسة و معاملها و جميع مرافقها متطلبات الامن و السلامة</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#3b82f61a;color:#3b82f6;border-color:#3b82f655">جاهز هندسياً/وقائياً</span></td>
+                    <td class="pct-cell">80%</td>
+                    <td class="gap-cell">توثيق خطة الصيانة</td>
+                    <td class="evidence-cell">نموذج شهادة الامن و السلامة | صور (مخارج الطوارئ - المصاعد - الاسعافات الاولية - الشهادات الصحية للعاملين - طفايات الحريق - المطالع - مواقف ذوو الاعاقة) | صور لاعمال الصيانة | لوحات نقاط التجمع اثناء اخلاء المبنى | نموذج خطط الاخلاء | توثيق تجربة اخلاء</td>
+                    <td class="initiative-cell">خطة الصيانة | صندوق اسعافات (للدبلوما) | تحديث تاريخ صلاحية الطفايات</td>
+                </tr>
+                <tr class="indicator-row" data-status="cyan">
+                    <td class="code-cell">4-2-1-2</td>
+                    <td class="std-cell">المعيار 4-2: الأمن والسلامة</td>
+                    <td class="focus-cell">الامن و السلامة</td>
+                    <td class="text-cell">تعمل المدرسة على صيانة جميع مرافق المبنى و تجهيزاته بانتظام</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#06b6d41a;color:#06b6d4;border-color:#06b6d455">مرحلة المراجعة النهائية</span></td>
+                    <td class="pct-cell">65%</td>
+                    <td class="gap-cell">تتوافر خطط لاعمال الصيانة الوقائية و العلاجية بانتظام</td>
+                    <td class="evidence-cell">صور لاعمال الصيانة</td>
+                    <td class="initiative-cell">خطة الصيانة</td>
+                </tr>
+                <tr class="indicator-row" data-status="green">
+                    <td class="code-cell">4-2-1-3</td>
+                    <td class="std-cell">المعيار 4-2: الأمن والسلامة</td>
+                    <td class="focus-cell">الامن و السلامة</td>
+                    <td class="text-cell">تعمل المدرسة على نظافة المبنى المدرسى و جميع مرافقه بانتظام</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="pct-cell">90%</td>
+                    <td class="gap-cell">توثيق</td>
+                    <td class="evidence-cell">صور لبعض المرافق تظهر نظافة المبنى | صور اماكن تخزين ادوات النظافة</td>
+                    <td class="initiative-cell">جدول مناوبة عمال النظافة و شهادتهم الصحية | صور اثناء تنفيذ اعمال النظافة فى المبنى</td>
+                </tr></tbody>
+            </table>
+        </div>
+    </section>
+  </section>
+
+  <div style="text-align:center;margin-top:8px;">
+    <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--teal-700);color:#fff;text-decoration:none;font-size:13px;font-weight:800;padding:12px 24px;border-radius:12px;">
+      <i class="fa-solid fa-house"></i> العودة إلى الصفحة الرئيسية
+    </a>
+  </div>
+
+</main>
+
+<footer class="page-footer">
+  تقرير تحليل الفجوة الشامل — مولَّد آلياً من بيانات بوابة الاعتماد المدرسي والتميز — قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان الأهلية
+</footer>
+</body>
+</html>
