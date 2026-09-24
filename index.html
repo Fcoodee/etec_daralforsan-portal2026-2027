@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة الاعتماد المدرسي والتميز - قسم الدبلوما الأمريكية (بنين) - مدارس دار الفرسان</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        etecteal: {
+                            50: '#f0f7f7',
+                            100: '#d9ebeb',
+                            500: '#006666',
+                            600: '#005252',
+                            700: '#003d3d',
+                            900: '#002424',
+                        },
+                        accentgold: '#c29b38'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap');
+        body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #006666; border-radius: 4px; }
+        .gate-card { transition: all .25s ease; }
+        .gate-card:hover { transform: translateY(-4px); }
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen flex flex-col">
+
+    <!-- FIXED DATE/TIME BAR -->
+    <div id="dash-clock-bar" class="bg-slate-900 text-white text-xs font-bold px-4 py-2 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <span class="flex items-center gap-1.5"><i class="fa-regular fa-calendar text-accentgold"></i> <span id="dash-live-date">--</span></span>
+            <span class="w-px h-3 bg-white/20"></span>
+            <span class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-accentgold"></i> <span id="dash-live-time">--</span></span>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="text-[11px] text-slate-300">بوابة الاعتماد المدرسي والتميز</span>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="bg-white border-b border-gray-100 shadow-sm py-6 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col items-center justify-center">
+            <div class="flex flex-wrap justify-center items-center gap-8 mb-6 w-full max-w-4xl">
+                <div class="h-20 flex items-center justify-center">
+                    <img src="logo0.png" alt="Logo_Diploma2026" class="max-h-20 object-contain">
+                </div>
+                <div class="h-20 flex items-center justify-center">
+                    <img src="logo1.png" alt="Dar Al-Forsan Logo" class="max-h-20 object-contain">
+                </div>
+                <div class="h-20 flex items-center justify-center">
+                    <img src="logo2.png" alt="ETEC Logo" class="max-h-20 object-contain">
+                </div>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-black text-etecteal-900 text-center">النظام الموحد لإدارة وتدقيق متطلبات الاعتماد والتميز المدرسي</h1>
+            <p class="text-sm text-gray-500 mt-2 text-center">لوحة حوكمة وإرسال التقارير الفورية — قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان — بوابة الدخول الرئيسية</p>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="flex-1 max-w-6xl mx-auto w-full px-4 py-12">
+
+        <!-- Intro -->
+        <div class="relative bg-gradient-to-br from-emerald-950 via-etecteal-900 to-slate-900 rounded-2xl shadow-lg p-8 mb-10 overflow-hidden text-center">
+            <div class="absolute -left-10 -bottom-10 w-48 h-48 bg-white/5 rounded-full"></div>
+            <div class="absolute left-24 top-6 w-24 h-24 bg-white/5 rounded-full"></div>
+            <div class="relative">
+                <span class="inline-flex items-center gap-1.5 bg-emerald-400/15 text-emerald-300 border border-emerald-400/30 text-[11px] font-bold px-3 py-1 rounded-full mb-4">
+                    <i class="fa-solid fa-sitemap"></i> اختر لوحة العام الدراسي المطلوبة
+                </span>
+                <h2 class="text-lg md:text-xl font-extrabold text-white mb-3">مرحباً بكم في بوابة التقويم الذاتي — قسم الدبلوما الأمريكية (بنين)</h2>
+                <p class="text-xs md:text-sm leading-7 text-slate-300 max-w-3xl mx-auto">
+                    تُتيح هذه البوابة الوصول إلى لوحات الحوكمة الخاصة بمعايير ومؤشرات قسم الدبلوما الأمريكية (بنين)، لكل عام دراسي على حدة، لمتابعة تقدم العمل وفق منظومة
+                    <span class="text-cyan-400 font-bold">هيئة تقويم التعليم والتدريب</span>.
+                    يُرجى اختيار اللوحة المناسبة للعام الدراسي المطلوب من الخيارين أدناه.
+                </p>
+            </div>
+        </div>
+
+        <!-- Two gateway cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- 2025-2026 -->
+            <div class="gate-card group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-xl hover:border-etecteal-300">
+                <div class="flex items-center justify-between gap-3 mb-2">
+                    <div class="flex items-center gap-3">
+                        <div class="p-3 bg-gradient-to-br from-etecteal-500 to-slate-900 text-white rounded-xl shadow-sm">
+                            <i class="fa-solid fa-chart-pie text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="inline-flex items-center gap-1 bg-etecteal-50 text-etecteal-700 border border-etecteal-100 text-[10px] font-bold px-2.5 py-1 rounded-full">
+                                <i class="fa-solid fa-check-double"></i> قيد العمل — خط الأساس المعتمد
+                            </span>
+                        </div>
+                    </div>
+                    <div class="relative w-16 h-16 shrink-0">
+                        <svg viewBox="0 0 120 120" class="w-16 h-16 -rotate-90">
+                            <circle cx="60" cy="60" r="52" fill="none" stroke="#e5e7eb" stroke-width="10"></circle>
+                            <circle id="gateway-ring" cx="60" cy="60" r="52" fill="none" stroke="#10b981" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="78.4"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span id="gateway-ring-text" class="text-[12px] font-black text-etecteal-800">76%</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-[10px] text-gray-400 font-bold mb-1">مؤشر التقدم الكلي لنتائج التقويم الذاتي حتى آخر تحديث</p>
+                <a href="report-all.html" class="inline-flex items-center gap-1 text-[10px] text-etecteal-700 font-bold hover:underline mb-3 w-fit">
+                    <i class="fa-solid fa-file-lines"></i> عرض التقرير الشامل
+                </a>
+                <h3 class="text-base font-extrabold text-slate-900 mb-2 leading-8">
+                    إطلع على لوحة حوكمة ومتابعة تقدم العمل على التقويم الذاتي
+                    <span class="block text-etecteal-700">للعام الدراسي 2025 - 2026 م / 1447 - 1448 هـ</span>
+                </h3>
+                <p class="text-xs leading-6 text-gray-500 flex-1">
+                    تم العمل على هذه اللوحة خلال العام الدراسي 2025 - 2026 م (1447 - 1448 هـ) لتحقيق أهداف التقويم الذاتي لقسم الدبلوما الأمريكية (بنين)،
+                    وتشمل تتبع 50 مؤشراً موزعة على المجالات الأربعة (خط الأساس الأصلي)، مرتبطة بشواهد فعلية على Google Drive. النسبة الظاهرة (76%) رقم موثّق ثابت عند إقفال العام.
+                </p>
+                <a href="index-2025-2026.html" class="mt-5 inline-flex items-center justify-center gap-1.5 bg-etecteal-700 group-hover:bg-etecteal-800 text-white text-xs font-bold px-4 py-2.5 rounded-lg transition-all">
+                    الدخول إلى لوحة 2025-2026 <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </div>
+
+            <!-- 2026-2027 -->
+            <a href="2026-2027.html" class="gate-card group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-xl hover:border-accentgold/60">
+                <div class="flex items-center justify-between gap-3 mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-3 bg-gradient-to-br from-accentgold to-etecteal-700 text-white rounded-xl shadow-sm">
+                            <i class="fa-solid fa-seedling text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="inline-flex items-center gap-1 bg-amber-50 text-amber-700 border border-amber-100 text-[10px] font-bold px-2.5 py-1 rounded-full">
+                                <i class="fa-solid fa-rotate"></i> استئناف العمل — تجميع الشواهد
+                            </span>
+                        </div>
+                    </div>
+                    <div class="relative w-16 h-16 shrink-0">
+                        <svg viewBox="0 0 120 120" class="w-16 h-16 -rotate-90">
+                            <circle cx="60" cy="60" r="52" fill="none" stroke="#e5e7eb" stroke-width="10"></circle>
+                            <circle id="gateway-ring-current" cx="60" cy="60" r="52" fill="none" stroke="#c29b38" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="3.27"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span id="gateway-ring-current-text" class="text-[12px] font-black text-amber-700">99%</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-[10px] text-gray-400 font-bold mb-1">جاهزية توثيق الشواهد الحالية — 52 مؤشراً (شاملة معيار حقوق المتعلم وحمايته)</p>
+                <h3 class="text-base font-extrabold text-slate-900 mb-2 leading-8">
+                    إطلع على لوحة حوكمة ومتابعة تقدم العمل على التقويم الذاتي
+                    <span class="block text-accentgold">للعام الدراسي 2026 - 2027 م / 1448 - 1449 هـ</span>
+                </h3>
+                <p class="text-xs leading-6 text-gray-500 flex-1">
+                    استئناف العمل واستكمال جمع ومتابعة شواهد التميز لقسم الدبلوما الأمريكية (بنين) للعام الدراسي الحالي، امتداداً مباشراً لما تحقق في العام الماضي (76%) — مع رفع الجاهزية إلى 99% بعد حملة تجميع الشواهد وإضافة المعيار الجديد.
+                </p>
+                <span class="mt-5 inline-flex items-center justify-center gap-1.5 bg-accentgold group-hover:bg-amber-600 text-slate-950 text-xs font-bold px-4 py-2.5 rounded-lg transition-all">
+                    الدخول إلى لوحة 2026-2027 <i class="fa-solid fa-arrow-left"></i>
+                </span>
+            </a>
+
+        </div>
+
+        <!-- Comprehensive Gap Analysis Report card -->
+        <a href="all_summary.html" class="gate-card group mt-6 block bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-xl hover:border-slate-300">
+            <div class="flex items-center gap-4 flex-wrap">
+                <div class="p-3 bg-gradient-to-br from-slate-700 to-slate-900 text-white rounded-xl shadow-sm shrink-0">
+                    <i class="fa-solid fa-diagram-project text-xl"></i>
+                </div>
+                <div class="flex-1 min-w-[240px]">
+                    <h3 class="text-base font-extrabold text-slate-900 mb-1">تقرير تحليل الفجوة الشامل — المجالات والمعايير والمؤشرات</h3>
+                    <p class="text-xs leading-6 text-gray-500">من بداية المشروع (خط الأساس 2025-2026) وحتى استئناف العمل للعام الدراسي الحالي 2026-2027</p>
+                </div>
+                <span class="inline-flex items-center justify-center gap-1.5 bg-slate-800 group-hover:bg-slate-900 text-white text-xs font-bold px-4 py-2.5 rounded-lg transition-all shrink-0">
+                    عرض التقرير <i class="fa-solid fa-arrow-left"></i>
+                </span>
+            </div>
+        </a>
+
+        <!-- Administrative Governance card -->
+        <a href="governance.html" class="gate-card group mt-4 block bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-xl hover:border-etecteal-300">
+            <div class="flex items-center gap-4 flex-wrap">
+                <div class="p-3 bg-gradient-to-br from-etecteal-600 to-slate-900 text-white rounded-xl shadow-sm shrink-0">
+                    <i class="fa-solid fa-folder-tree text-xl"></i>
+                </div>
+                <div class="flex-1 min-w-[240px]">
+                    <h3 class="text-base font-extrabold text-slate-900 mb-1">الحوكمة الإدارية لمجالات ومعايير هيئة تقويم التعليم والتدريب</h3>
+                    <p class="text-xs leading-6 text-gray-500">عمل إداري مستقل بإشراف الأستاذ عبدالرحمن المالكي — 30 سجلاً إدارياً يتقاطع مع مجال القيادة والإدارة</p>
+                </div>
+                <span class="inline-flex items-center justify-center gap-1.5 bg-etecteal-700 group-hover:bg-etecteal-800 text-white text-xs font-bold px-4 py-2.5 rounded-lg transition-all shrink-0">
+                    عرض العمل الإداري <i class="fa-solid fa-arrow-left"></i>
+                </span>
+            </div>
+        </a>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-white py-6 text-center text-xs mt-12">
+        <p>© 2026 مدارس دار الفرسان الأهلية - قسم الدبلوما الأمريكية (بنين) - النظام الموحد لإدارة وتدقيق متطلبات الاعتماد والتميز المدرسي.</p>
+    </footer>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('ar-SA-u-nu-latn', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const timeStr = now.toLocaleTimeString('ar-SA-u-nu-latn', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const d = document.getElementById('dash-live-date');
+            const t = document.getElementById('dash-live-time');
+            if (d) d.textContent = dateStr;
+            if (t) t.textContent = timeStr;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // نفس آلية تحريك الدائرة المستخدمة في لوحة 2025-2026 (تذبذب صعوداً قبل الاستقرار على القيمة الحقيقية)
+        let gatewayRingToken = 0;
+        function animateGatewayRing(finalPercentage, ringId = 'gateway-ring', textId = 'gateway-ring-text') {
+            const ring = document.getElementById(ringId);
+            const text = document.getElementById(textId);
+            if (!ring || !text) return;
+
+            const circumference = 2 * Math.PI * 52; // r=52
+            ring.setAttribute('stroke-dasharray', circumference.toFixed(1));
+            ring.style.transition = 'none';
+
+            const myToken = ++gatewayRingToken;
+            const waypoints = [0, 42, 81, 99, 87, 95, 90, finalPercentage];
+            const segmentDuration = 320;
+            let seg = 0;
+            let segStart = null;
+
+            function setRing(pct) {
+                const offset = circumference - (pct / 100) * circumference;
+                ring.setAttribute('stroke-dashoffset', offset.toFixed(1));
+                text.innerText = `${Math.round(pct)}%`;
+            }
+
+            function step(timestamp) {
+                if (myToken !== gatewayRingToken) return;
+                if (!segStart) segStart = timestamp;
+                const t = Math.min((timestamp - segStart) / segmentDuration, 1);
+                const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+                const from = waypoints[seg];
+                const to = waypoints[seg + 1];
+                setRing(from + (to - from) * eased);
+
+                if (t < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    seg++;
+                    segStart = null;
+                    if (seg < waypoints.length - 1) {
+                        requestAnimationFrame(step);
+                    } else {
+                        setRing(finalPercentage);
+                    }
+                }
+            }
+            requestAnimationFrame(step);
+        }
+        // القيمة أدناه ثابتة وتعكس آخر نسبة معتمدة في لوحة 2025-2026 — حدّثها يدوياً عند كل تحديث للحزمة
+        animateGatewayRing(76);
+        animateGatewayRing(99, 'gateway-ring-current', 'gateway-ring-current-text');
+    </script>
+    <script src="content-protect.js"></script>
+</body>
+</html>
