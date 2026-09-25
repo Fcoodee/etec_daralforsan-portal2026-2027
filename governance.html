@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الحوكمة الإدارية — قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script>
+tailwind.config = { theme: { extend: { colors: {
+    etecteal: {50:'#f0f7f7',100:'#d9ebeb',500:'#006666',600:'#005252',700:'#003d3d',900:'#002424'},
+    accentgold: '#c29b38'
+}}}}
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap');
+body{font-family:'Cairo',sans-serif;background:#f8fafc;}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:#006666;border-radius:4px}
+table{border-collapse:collapse}
+.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+</style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen flex flex-col">
+
+<!-- ===== GATE (يتحقق من access.txt) ===== -->
+<div id="gov-gate" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 p-7">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-etecteal-600 to-slate-900 flex items-center justify-center">
+                <i class="fa-solid fa-user-lock text-accentgold"></i>
+            </div>
+            <div>
+                <h3 class="font-extrabold text-slate-900 text-sm">صفحة مقفلة — الحوكمة الإدارية</h3>
+                <p class="text-[11px] text-gray-400">هذه الصفحة خاصة بالأستاذ عبدالرحمن المالكي — يلزم تسجيل الدخول</p>
+            </div>
+        </div>
+        <form onsubmit="return govHandleLogin(event)" class="space-y-3">
+            <div class="relative">
+                <i class="fa-solid fa-user absolute top-1/2 -translate-y-1/2 right-3 text-gray-400 text-xs"></i>
+                <input type="text" id="gov-username" placeholder="اسم المستخدم" autocomplete="username"
+                    class="w-full pr-8 pl-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-etecteal-500">
+            </div>
+            <div class="relative">
+                <i class="fa-solid fa-lock absolute top-1/2 -translate-y-1/2 right-3 text-gray-400 text-xs"></i>
+                <input type="password" id="gov-password" placeholder="كلمة المرور" autocomplete="current-password"
+                    class="w-full pr-8 pl-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-etecteal-500">
+            </div>
+            <div id="gov-error" class="hidden text-[11px] text-rose-600 font-bold bg-rose-50 border border-rose-200 rounded-lg px-3 py-2 flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span id="gov-error-text">بيانات الدخول غير صحيحة</span>
+            </div>
+            <button type="submit" id="gov-login-btn" class="w-full bg-gradient-to-l from-etecteal-600 to-slate-900 text-white font-bold py-2.5 rounded-lg text-sm flex items-center justify-center gap-2">
+                <i class="fa-solid fa-right-to-bracket"></i> دخول
+            </button>
+            <a href="index.html" class="block text-center text-[11px] text-gray-400 hover:text-gray-600 font-bold pt-1">
+                <i class="fa-solid fa-arrow-right"></i> العودة إلى البوابة الرئيسية
+            </a>
+        </form>
+    </div>
+</div>
+
+<div id="gov-content" class="hidden flex-1 flex flex-col">
+
+<div class="bg-slate-900 text-white text-xs font-bold px-4 py-2 flex justify-between items-center">
+    <a href="index.html" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full text-[11px] font-bold transition-all flex items-center gap-1.5">
+        <i class="fa-solid fa-house text-accentgold"></i> البوابة الرئيسية
+    </a>
+    <span>قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان</span>
+</div>
+
+<header class="bg-white shadow-sm border-b border-gray-100">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-center">
+        <h1 class="text-xl md:text-2xl font-black text-etecteal-900">الحوكمة الإدارية لمجالات ومعايير هيئة تقويم التعليم والتدريب</h1>
+        <p class="text-sm text-gray-500 mt-2">عمل إداري متوازٍ ومستقل — منظَّم وفق تصنيف مؤشرات الهيئة الرسمية</p>
+        <p class="text-[11px] text-gray-400 mt-1">آخر تحديث: 25/9/2026 — بعد اكتمال مزامنة الشواهد إلى 99%</p>
+    </div>
+</header>
+
+<main class="flex-1 max-w-6xl mx-auto w-full px-4 py-10">
+
+    <!-- Ownership & scope -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+        <div class="flex items-start gap-4 flex-wrap">
+            <div class="p-3 bg-gradient-to-br from-etecteal-600 to-slate-900 text-white rounded-xl shadow-sm shrink-0">
+                <i class="fa-solid fa-folder-tree text-xl"></i>
+            </div>
+            <div class="flex-1 min-w-[260px]">
+                <h2 class="text-sm font-extrabold text-slate-900 mb-1.5">طبيعة هذا العمل</h2>
+                <p class="text-xs leading-6 text-gray-500">
+                    عمل إداري <strong>مستقل عن حزمة الدبلوما الأمريكية (بنين)</strong>، يتولاه <strong>الأستاذ عبدالرحمن المالكي</strong>،
+                    ويهدف لتنظيم 30 سجلاً إدارياً مدرسياً (سجلات ورد رسمية) ضمن بنية مجلد <code class="bg-slate-100 px-1.5 py-0.5 rounded text-[11px]">etec-governence</code>
+                    داخل شجرة "شواهد الدليل التنفيذي" المرجعية، بحيث يطابق كل سجل تصنيف مؤشرات الهيئة الرسمية.
+                </p>
+                <p class="text-xs leading-6 text-gray-500 mt-2">
+                    هذا العمل <strong>يتقاطع مباشرة مع مجال القيادة والإدارة المدرسية (المجال الأول)</strong> في حزمة الدبلوما — بعض سجلاته تصلح كشواهد مباشرة
+                    لمؤشرات لا تزال بلا شواهد هناك (موضّح أدناه)، لكنه يبقى عملاً إدارياً عاماً للمجمع لا خاصاً بمسار الدبلوما فقط.
+                </p>
+                <a href="https://drive.google.com/drive/folders/1aWwqDsXAtNewnjqO4wkKxZNh7mPVTIW2?usp=sharing" target="_blank" rel="noopener"
+                   class="mt-3 inline-flex items-center gap-1.5 bg-etecteal-700 hover:bg-etecteal-800 text-white text-[11px] font-bold px-3 py-2 rounded-lg transition-all">
+                    <i class="fa-brands fa-google-drive"></i> مجلد etec-governence على Drive
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats summary -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
+            <div class="text-2xl font-black text-etecteal-700">19</div>
+            <div class="text-[10px] text-gray-500 font-bold mt-1">✅ مؤكد بمؤشر محدد + شواهد</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
+            <div class="text-2xl font-black text-amber-500">4</div>
+            <div class="text-[10px] text-gray-500 font-bold mt-1">🟡🟠 محتمل / عام + شواهد</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
+            <div class="text-2xl font-black text-slate-700">23</div>
+            <div class="text-[10px] text-gray-500 font-bold mt-1">إجمالي المرتبط من 30</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
+            <div class="text-2xl font-black text-rose-500">7</div>
+            <div class="text-[10px] text-gray-500 font-bold mt-1">⚠ بلا مرجع رسمي إطلاقاً</div>
+        </div>
+    </div>
+
+    <!-- Sync status -->
+    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-5 mb-8">
+        <h2 class="text-sm font-extrabold text-emerald-800 mb-2"><i class="fa-solid fa-check-double"></i> حالة المزامنة (تحديث 25/9/2026)</h2>
+        <p class="text-xs leading-6 text-emerald-900/90">
+            بعد رفع جاهزية توثيق حزمة الدبلوما إلى 99%، تمت مراجعة شاملة لكل سجلات الحوكمة الإدارية الـ30 وربطها فعلياً بمجلدات الشواهد المطابقة داخل
+            <code class="bg-white/60 px-1.5 py-0.5 rounded text-[11px]">etec-governence</code>، مع تصحيح تصنيفات كانت قديمة أو غير دقيقة، ونسخ شواهد حقيقية (صور، عقود، تقييمات أداء، قرارات إدارية)
+            لكل سجل تحقق له تقاطع — أكثر من 35 عملية ربط/نسخ فعلية.
+        </p>
+    </div>
+
+    <!-- Remaining gap -->
+    <div class="bg-rose-50 border border-rose-200 rounded-xl p-5 mb-8">
+        <h2 class="text-sm font-extrabold text-rose-800 mb-2"><i class="fa-solid fa-triangle-exclamation"></i> الفجوة المتبقية — بنيوية في دليل الهيئة نفسه</h2>
+        <p class="text-xs leading-6 text-rose-900/90 mb-2">
+            7 سجلات لا تقابلها أي مؤشر من مؤشرات الهيئة الـ52 إطلاقاً (حتى بعد اكتمال هيكل المجالات الأربعة كاملة) — هذه ليست فجوة توثيق بل فجوة في تغطية الدليل الرسمي لموضوعات التشغيل اليومي:
+        </p>
+        <p class="text-xs leading-6 text-rose-900 font-bold">
+            سجل الصندوق المدرسي · سجل استئذان الموظفين · سجل التبليغات · متابعة حصص الانتظار · سجل الوعي الفكري · سجل الحالات اليومية الطارئة · سجل الموجه الصحي
+        </p>
+        <p class="text-[11px] leading-6 text-rose-900/70 mt-2">
+            (بالإضافة إلى نسختي سجل رائد النشاط، غير المؤكدتين ضمن الفهرس الرسمي لأصل الـ30)
+        </p>
+    </div>
+
+    <!-- Full mapping table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h2 class="text-sm font-extrabold text-slate-900 mb-1"><i class="fa-solid fa-table-list text-etecteal-600"></i> فهرس التقاطعات بين شواهد مؤشرات ETEC والحوكمة الإدارية لمعايير الهيئة</h2>
+        <p class="text-[11px] text-gray-400 mb-4">30 سجلاً إدارياً ↔ مؤشرات ومعايير الهيئة الرسمية (المجالات 1، 3، 4) — محقّق مباشرة، وليس تقديراً</p>
+        <div class="overflow-x-auto">
+        <table class="w-full text-[11px]">
+            <thead><tr class="bg-etecteal-50 text-etecteal-700 font-bold">
+                <td class="p-2">#</td><td class="p-2">السجل الإداري (من الـ30)</td><td class="p-2">المؤشر/المعيار المطابق</td><td class="p-2">الحالة</td>
+            </tr></thead>
+            <tbody id="tbody"></tbody>
+        </table>
+        </div>
+    </div>
+
+</main>
+
+<footer class="bg-slate-900 text-slate-300 text-center py-5 text-[11px] mt-10">
+    الحوكمة الإدارية — عمل مستقل بإشراف الأستاذ عبدالرحمن المالكي — جزء من شجرة شواهد الدليل التنفيذي لمدارس دار الفرسان
+</footer>
+</div>
+
+<script>
+const rows = [
+  ["1","الخطة التشغيلية لمرحلة المدرسة","1-1-1-1","ok"],
+  ["2","سجل تنفيذ برامج الخطة التشغيلية","1-1-1-2","ok"],
+  ["3","سجل تنفيذ برامج الخطة (منصة تمكين)","1-1-1-2","ok"],
+  ["4","سجل التكليفات الإدارية","1.2 قيادة العملية التعليمية (عام)","general"],
+  ["5","سجل اللجنة الإدارية","1.2 قيادة العملية التعليمية (عام)","general"],
+  ["6","برنامج تعزيز السلوك الإيجابي","1-2-1-5","ok"],
+  ["7","الوصف الوظيفي","1-4-1-2 (كادر إداري)","ok"],
+  ["8","سجل أحوال المعلمين","1-4-1-5 (تطوير مهني)","ok"],
+  ["9","الرخص المهنية","1-4-1-4","ok"],
+  ["10","سجل الاجتماعات المدرسية","1-4-1-7 (خطة تحسين)","ok"],
+  ["11","التواصل مع أولياء الأمور","1-3-1-2 (مشاركة الأسرة)","ok"],
+  ["12","سجل الشراكة المجتمعية","1-3-1-3","ok"],
+  ["13","سجل حقوق المتعلمين وحمايتهم","1-5-1-1 / 1-5-1-2","ok"],
+  ["14","إجراءات تعزيز الانضباط المدرسي","3-2-5","ok"],
+  ["15","سجل المخالفات السلوكية","3-2-5","ok"],
+  ["16","سجل التكريم والتحفيز","3-2-2","maybe"],
+  ["17","سجل مجلس الحوار الطلابي","3-2-2","maybe"],
+  ["18","سجل العمل التطوعي","3-2-4","ok"],
+  ["19","سجل الصيانة","4-2-1-2 / 4-2-1-3","ok"],
+  ["20","سجل الصندوق المدرسي","—","none"],
+  ["21","سجل استئذان الموظفين","—","none"],
+  ["22","سجل التبليغات","—","none"],
+  ["23","نسخة سجل متابعة حصص الانتظار","—","none"],
+  ["24","سجل الوعي الفكري","—","none"],
+  ["25","سجل الحالات اليومية الطارئة","—","none"],
+  ["26","سجل الموجه الصحي","—","none"],
+  ["27","سجل رائد النشاط ١٤٤٧هـ","—","none"],
+  ["28","سجل رائد النشاط (نسخة ثانية)","—","none"],
+  ["29","اللجان والفرق المدرسية","1.1 التخطيط (عام)","general"],
+  ["30","سجل مجلس أولياء الأمور","1-3-1-2 (غير مؤكد)","maybe"],
+];
+const badge = {
+  ok:    '<span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full">✅ مؤكد</span>',
+  general:'<span class="inline-flex items-center gap-1 bg-orange-50 text-orange-600 font-bold px-2 py-0.5 rounded-full">🟠 عام</span>',
+  maybe: '<span class="inline-flex items-center gap-1 bg-amber-50 text-amber-600 font-bold px-2 py-0.5 rounded-full">🟡 محتمل</span>',
+  none:  '<span class="inline-flex items-center gap-1 bg-rose-50 text-rose-600 font-bold px-2 py-0.5 rounded-full">⚠ لا مرجع</span>',
+};
+document.getElementById('tbody').innerHTML = rows.map(r =>
+  `<tr class="border-b border-gray-100 hover:bg-slate-50">
+     <td class="p-2 text-gray-400 font-bold">${r[0]}</td>
+     <td class="p-2 font-bold text-slate-800">${r[1]}</td>
+     <td class="p-2 text-etecteal-700">${r[2]}</td>
+     <td class="p-2">${badge[r[3]]}</td>
+   </tr>`).join('');
+
+// ===== بوابة الدخول — تتحقق من access.txt (المستخدم: abd) =====
+const GOV_SESSION_KEY = 'gov_admin_unlocked';
+
+async function loadGovAccessList() {
+    const res = await fetch('access.txt', { cache: 'no-store' });
+    if (!res.ok) throw new Error('تعذر العثور على access.txt');
+    const text = await res.text();
+    return text.split('\n')
+        .map(l => l.trim())
+        .filter(l => l && !l.startsWith('#'))
+        .map(l => { const [username, password] = l.split(',').map(s => s.trim()); return { username, password }; });
+}
+
+function govUnlock() {
+    document.getElementById('gov-gate').classList.add('hidden');
+    document.getElementById('gov-content').classList.remove('hidden');
+}
+
+async function govHandleLogin(event) {
+    event.preventDefault();
+    const username = document.getElementById('gov-username').value.trim();
+    const password = document.getElementById('gov-password').value;
+    const errBox = document.getElementById('gov-error');
+    const btn = document.getElementById('gov-login-btn');
+    errBox.classList.add('hidden');
+
+    let users = [];
+    try {
+        users = await loadGovAccessList();
+    } catch (err) {
+        document.getElementById('gov-error-text').innerText = 'تعذر الاتصال بملف الصلاحيات (access.txt).';
+        errBox.classList.remove('hidden');
+        return false;
+    }
+
+    const match = users.find(u => u.username === username && u.password === password);
+    if (!match) {
+        document.getElementById('gov-error-text').innerText = 'اسم المستخدم أو كلمة المرور غير صحيحة.';
+        errBox.classList.remove('hidden');
+        const card = document.querySelector('#gov-gate .bg-white');
+        card.classList.add('shake');
+        setTimeout(() => card.classList.remove('shake'), 400);
+        return false;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+    sessionStorage.setItem(GOV_SESSION_KEY, 'true');
+    setTimeout(govUnlock, 250);
+    return false;
+}
+
+// فتح تلقائي إن كانت الجلسة مفتوحة مسبقاً في نفس الجلسة
+if (sessionStorage.getItem(GOV_SESSION_KEY) === 'true') {
+    govUnlock();
+}
+</script>
+</body>
+</html>
