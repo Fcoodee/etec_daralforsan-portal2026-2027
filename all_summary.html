@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>تقرير تحليل الفجوة الشامل — قسم الدبلوما الأمريكية (بنين)</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap">
+<style>
+:root{
+  --teal-900:#002424; --teal-800:#003d3d; --teal-700:#005252; --teal-600:#006666; --teal-100:#d9ebeb; --teal-50:#f0f7f7;
+  --gold:#c29b38;
+  --bg:#f8fafc; --card:#ffffff; --border:#e5e7eb; --ink:#1e293b; --muted:#64748b;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b1416; --card:#111c1e; --border:#1f2e31; --ink:#e6edee; --muted:#9db0b4; --teal-50:#122224; --teal-100:#173234;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b1416; --card:#111c1e; --border:#1f2e31; --ink:#e6edee; --muted:#9db0b4; --teal-50:#122224; --teal-100:#173234;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Cairo',sans-serif;line-height:1.7;}
+::-webkit-scrollbar{width:8px;height:8px;}
+::-webkit-scrollbar-thumb{background:var(--teal-600);border-radius:4px;}
+
+.top-bar{background:var(--teal-900);color:#fff;font-size:11px;font-weight:700;padding:8px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;}
+.top-bar a{color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);padding:4px 12px;border-radius:999px;}
+.top-bar a:hover{background:rgba(255,255,255,.2);}
+
+header.page-header{background:var(--card);border-bottom:1px solid var(--border);padding:28px 16px;text-align:center;}
+header.page-header h1{margin:8px 0 4px;font-size:clamp(20px,3.2vw,30px);font-weight:800;color:var(--teal-800);}
+:root[data-theme="dark"] header.page-header h1{color:#7fd1c9;}
+header.page-header p.sub{margin:0;color:var(--muted);font-size:13px;}
+header.page-header .badges{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px;}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;padding:6px 12px;border-radius:999px;border:1px solid;}
+.badge-gold{background:rgba(194,155,56,.12);color:#a9781f;border-color:rgba(194,155,56,.4);}
+:root[data-theme="dark"] .badge-gold{color:#e0bd63;}
+.badge-teal{background:var(--teal-50);color:var(--teal-700);border-color:var(--teal-100);}
+.badge-red{background:rgba(244,63,94,.1);color:#e11d48;border-color:rgba(244,63,94,.35);}
+
+main{max-width:1180px;margin:0 auto;padding:28px 16px 60px;}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:26px;box-shadow:0 1px 2px rgba(0,0,0,.04);}
+.card h2{margin:0 0 14px;font-size:17px;font-weight:800;color:var(--teal-800);display:flex;align-items:center;gap:8px;}
+:root[data-theme="dark"] .card h2{color:#7fd1c9;}
+
+/* disclosure card */
+.disclosure{background:rgba(244,63,94,.06);border:1.5px solid rgba(244,63,94,.35);}
+.disclosure h2{color:#e11d48;}
+.gap-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;background:var(--card);border:1px solid rgba(244,63,94,.25);border-radius:10px;margin-bottom:8px;flex-wrap:wrap;}
+.gap-row .code{font-weight:800;color:#e11d48;font-size:13px;white-space:nowrap;}
+.gap-row .txt{font-size:12.5px;color:var(--ink);flex:1;min-width:200px;}
+.gap-row .need{font-size:11px;color:var(--muted);}
+
+table.compare{width:100%;border-collapse:collapse;font-size:12px;}
+table.compare th, table.compare td{padding:9px 10px;border-bottom:1px solid var(--border);text-align:right;}
+table.compare th{background:var(--teal-50);color:var(--teal-700);font-weight:800;}
+
+.domain-section{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:22px;overflow:hidden;}
+.domain-header{background:linear-gradient(90deg,var(--teal-800),var(--teal-900));color:#fff;padding:18px 20px;}
+.domain-header-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.domain-header-top h2{margin:0;font-size:16px;font-weight:800;color:#fff;}
+.domain-pct{font-size:22px;font-weight:900;color:var(--gold);}
+.domain-meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:#cfe3e1;}
+.domain-meta strong{color:#fff;}
+.domain-body{padding:14px 16px;}
+
+.std-block{margin-bottom:16px;}
+.std-head{display:flex;justify-content:space-between;align-items:center;padding:8px 4px;}
+.std-head h4{margin:0;font-size:13.5px;font-weight:800;color:var(--ink);}
+.std-pct{font-weight:900;font-size:14px;}
+
+.table-wrap{overflow-x:auto;}
+table.indicators-table{width:100%;border-collapse:collapse;font-size:11.5px;min-width:820px;}
+table.indicators-table th{background:var(--teal-50);color:var(--teal-700);font-weight:800;padding:8px;text-align:right;white-space:nowrap;}
+table.indicators-table td{padding:8px;border-bottom:1px solid var(--border);vertical-align:top;}
+.code-cell{white-space:nowrap;font-weight:800;color:var(--teal-700);}
+.text-cell{min-width:200px;}
+.gap-cell, .evidence-cell{min-width:150px;color:var(--muted);}
+.status-badge{display:inline-block;font-size:10px;font-weight:800;padding:3px 9px;border-radius:999px;border:1px solid;white-space:nowrap;}
+.indicators-table tbody tr:nth-child(even){background:rgba(0,102,102,.025);}
+
+.weights-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0;}
+.weight-chip{border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:11px;}
+.weight-chip b{display:block;font-size:16px;}
+
+.note{background:rgba(194,155,56,.08);border:1px solid rgba(194,155,56,.3);border-radius:10px;padding:12px 14px;font-size:11.5px;color:#8a6410;line-height:1.9;}
+:root[data-theme="dark"] .note{color:#e0bd63;}
+
+footer.page-footer{background:var(--teal-900);color:#cfe3e1;text-align:center;padding:20px;font-size:11px;}
+
+@media print{ .top-bar{display:none;} .domain-section{break-inside:avoid;} }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="index.html"><i class="fa-solid fa-house" style="color:var(--gold)"></i> البوابة الرئيسية</a>
+  <span><i class="fa-regular fa-calendar"></i> آخر تحديث: الخميس 24-09-2026 م</span>
+  <span>قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان الأهلية</span>
+</div>
+
+<header class="page-header">
+  <h1>تقرير تحليل الفجوة الشامل — المجالات والمعايير والمؤشرات</h1>
+  <p class="sub">من بداية المشروع (خط الأساس 2025-2026) وحتى استئناف العمل واكتمال جمع الشواهد — العام الدراسي الحالي 2026-2027</p>
+  <div class="badges">
+    <span class="badge badge-teal"><i class="fa-solid fa-layer-group"></i> 4 مجالات · 11 معياراً · 52 مؤشراً</span>
+    <span class="badge badge-gold"><i class="fa-solid fa-gauge-high"></i> نسبة الإنجاز الإجمالية: 99%</span>
+    <span class="badge badge-red"><i class="fa-solid fa-triangle-exclamation"></i> مؤشران بلا شواهد حتى تاريخه</span>
+  </div>
+</header>
+
+<main>
+
+  <section class="card" style="background:rgba(194,155,56,.06);border-color:rgba(194,155,56,.35)">
+    <h2><i class="fa-solid fa-code-branch"></i> توضيح مهم — رقمان مختلفان لعامين مختلفين</h2>
+    <p style="font-size:12.5px;color:var(--muted);line-height:1.9">
+        <strong style="color:var(--ink)">لوحة العام الماضي (2025-2026)</strong> تعرض <strong>76%</strong> — رقم موثّق وثابت عند إقفال ذلك العام الدراسي، ولا يتغيّر لاحقاً.<br>
+        <strong style="color:var(--ink)">لوحة العام الحالي (2026-2027 — استئناف العمل)</strong> وهذا التقرير يعرضان <strong>99%</strong> — الجاهزية الفعلية بعد حملة تجميع الشواهد هذا الشهر، شاملةً معيار "حقوق المتعلم وحمايته" الجديد (52 مؤشراً).<br>
+        الفارق (76% ← 99%) هو بالضبط ما تحقق خلال استئناف العمل — وليس تعديلاً رجعياً لنتيجة العام الماضي.
+    </p>
+    <p style="font-size:12px;color:var(--muted);margin-top:8px">
+        يتقاطع مجال القيادة والإدارة (المجال الأول) أيضاً مع عمل إداري مستقل بعنوان
+        <a href="governance.html" style="color:var(--teal-700);font-weight:800;text-decoration:underline">الحوكمة الإدارية</a>
+        (30 سجلاً بإشراف الأستاذ عبدالرحمن المالكي) — يحتوي على شواهد مرشّحة للمؤشرين المتبقيين فارغين أعلاه.
+    </p>
+  </section>
+
+  <section class="card disclosure">
+    <h2><i class="fa-solid fa-circle-exclamation"></i> إفصاح صريح — المؤشران المتبقيان بلا شواهد</h2>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 12px">
+        نسبة 99% تعكس 50 من أصل 52 مؤشراً بشواهد فعلية موثّقة على الدرايف. المؤشران التاليان — كلاهما ضمن معيار 1-4 (التطوير المؤسسي) — لا يزالان بلا أي شاهد، ويحتاجان مستندات إدارية/مالية رسمية لا يمكن تعويضها بشواهد صفية أو فعاليات مدرسية:
+    </p>
+    <div class="gap-row">
+        <span class="code">1-4-1-1</span>
+        <span class="txt">توفر المدرسة كادرًا تعليميًّا مكتملاً ومؤهلاً</span>
+        <span class="need">يحتاج: سجلات توظيف/مؤهلات من الموارد البشرية</span>
+    </div>
+    <div class="gap-row">
+        <span class="code">1-4-1-3</span>
+        <span class="txt">تظهر المدرسة ثباتًا واستدامة مالية</span>
+        <span class="need">يحتاج: مستند مالي (ميزانية/تقرير استدامة)</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><i class="fa-solid fa-code-compare"></i> تحليل الفجوة — خط الأساس مقابل الدليل الرسمي</h2>
+    <div style="overflow-x:auto">
+    <table class="compare">
+      <thead><tr><th>البند</th><th>خط الأساس الأصلي (2025-2026)</th><th>الوضع الحالي بعد الدمج</th></tr></thead>
+      <tbody>
+        <tr><td>عدد المعايير</td><td>10</td><td><strong>11</strong> (أُضيف معيار حقوق المتعلم وحمايته)</td></tr>
+        <tr><td>عدد المؤشرات</td><td>50</td><td><strong>52</strong></td></tr>
+        <tr><td>مؤشرات بلا شواهد عند الفحص الأول</td><td>19</td><td><strong>2</strong> فقط</td></tr>
+        <tr><td>النسبة الإجمالية</td><td>62% (فحص فعلي أول)</td><td><strong>99%</strong></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2><i class="fa-solid fa-calculator"></i> منهجية الحساب المعتمدة (هرمية)</h2>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 6px">نسبة المعيار = متوسط أوزان حالات مؤشراته. نسبة المجال = متوسط نسب معاييره (وزن متساوٍ لكل معيار). النسبة الإجمالية = متوسط نسب المجالات الأربعة.</p>
+    <div class="weights-grid">
+      <div class="weight-chip"><b style="color:#10b981">100</b>مكتمل / متوفر</div>
+      <div class="weight-chip"><b style="color:#f43f5e">0</b>فجوة — لا شواهد</div>
+    </div>
+    <p style="font-size:12px;color:var(--muted)">اعتباراً من هذا التحديث، أصبحت المنهجية <strong>ثنائية فقط</strong> (متوفر/غير متوفر) بدل التدرج الخماسي السابق، بما يعكس بدقة نتيجة الفحص الفعلي لمجلدات الدرايف لا تقديراً افتراضياً.</p>
+  </section>
+
+
+  <section style="padding:0;background:none;border:none;box-shadow:none;">
+    <h2 style="padding:0 4px 10px;font-size:17px;font-weight:800;color:var(--teal-800)"><i class="fa-solid fa-diagram-project"></i> التفصيل الكامل — المجالات والمعايير والمؤشرات (52)</h2>
+    
+    <section class="domain-section" id="domain-1">
+        <div class="domain-header">
+            <div class="domain-header-top">
+                <h2>المجال الأول: القيادة والإدارة المدرسية</h2>
+                <span class="domain-pct">94%</span>
+            </div>
+            <div class="domain-meta">
+                <span><i class="fa-solid fa-user-tie"></i> المسؤول الأول: <strong>الأستاذ عبدالشافي إسماعيل</strong></span>
+                <span><i class="fa-solid fa-users"></i> فريق العمل: <strong>أ/ ياسر توفيق ، أ/ سعيد الجهني</strong></span>
+                <span><i class="fa-solid fa-layer-group"></i> عدد المعايير: <strong>5</strong></span>
+            </div>
+        </div>
+        <div class="domain-body">
+        <div class="std-block">
+            <div class="std-head">
+                <h4>المعيار 1-1: التخطيط</h4>
+                <span class="std-pct" style="color:#10b981">100%</span>
+            </div>
+            <div class="table-wrap">
+                <table class="indicators-table">
+                    <thead><tr><th>الكود</th><th>نص المؤشر</th><th>الحالة</th><th>الفجوة</th><th>الشواهد</th></tr></thead>
+                    <tbody>
+                <tr>
+                    <td class="code-cell">1-1-1-1</td>
+                    <td class="text-cell">تضع المدرسة خطة تشغيلية مكتملة العناصر، وفق أهداف تطويرية محددة .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">1-1-1-2</td>
+                    <td class="text-cell">تتابع المدرسة تنفيذ خطتها وتطورها بما يضمن تحقيق أهدافها .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="std-block">
+            <div class="std-head">
+                <h4>المعيار 1-2: قيادة العملية التعليمية</h4>
+                <span class="std-pct" style="color:#10b981">100%</span>
+            </div>
+            <div class="table-wrap">
+                <table class="indicators-table">
+                    <thead><tr><th>الكود</th><th>نص المؤشر</th><th>الحالة</th><th>الفجوة</th><th>الشواهد</th></tr></thead>
+                    <tbody>
+                <tr>
+                    <td class="code-cell">1-2-1-1</td>
+                    <td class="text-cell">تعزز المدرسة القيم الإسلامية والهوية الوطنية.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">1-2-1-2</td>
+                    <td class="text-cell">تلتزم المدرسة بقيم مهنة التعليم وأخلاقياتها.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">1-2-1-3</td>
+                    <td class="text-cell">توفر المدرسة مناخًا آمنًا للتعلم والنمو نفسيًّا واجتماعيًّا.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">1-2-1-4</td>
+                    <td class="text-cell">تنشر المدرسة قواعد السلوك والمواظبة، وتتابع تطبيقها.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">1-2-1-5</td>
+                    <td class="text-cell">توفر المدرسة برامج وأنشطة تربوية داعمة للسلوك الإيجابي.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">1-2-1-6</td>
+                    <td class="text-cell">توفر المدرسة برامج وأنشطة إثرائية غير صفية؛ لتطوير مواهب المتعلمين، وتهيئتهم للمستقبل .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="std-block">
+            <div class="std-head">
+                <h4>المعيار 1-3: المجتمع المدرسي</h4>
+                <span class="std-pct" style="color:#10b981">100%</span>
+            </div>
+            <div class="table-wrap">
+                <table class="indicators-table">
+                    <thead><tr><th>الكود</th><th>نص المؤشر</th><th>الحالة</th><th>الفجوة</th><th>الشواهد</th></tr></thead>
+                    <tbody>
+                <tr>
+                    <td class="code-cell">1-3-1-1</td>
+                    <td class="text-cell">تعزز المدرسة بناء العلاقات الإيجابية والتعاون في المجتمع المدرسي.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">1-3-1-2</td>
+                    <td class="text-cell">تعزز المدرسة مشاركة الأسرة في تعلم أبنائهم، والتحضير لمستقبلهم .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">1-3-1-3</td>
+                    <td class="text-cell">تعزز المدرسة الشراكة المجتمعية؛ لدعم التعلم والتأثير الإيجابي في المجتمع المحلي.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="std-block">
+            <div class="std-head">
+                <h4>المعيار 1-4: التطوير المؤسسي</h4>
+                <span class="std-pct" style="color:#f43f5e">71%</span>
+            </div>
+            <div class="table-wrap">
+                <table class="indicators-table">
+                    <thead><tr><th>الكود</th><th>نص المؤشر</th><th>الحالة</th><th>الفجوة</th><th>الشواهد</th></tr></thead>
+                    <tbody>
+                <tr>
+                    <td class="code-cell">1-4-1-1</td>
+                    <td class="text-cell">توفر المدرسة كادرًا تعليميًّا مكتملاً ومؤهلاً.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#f43f5e1a;color:#f43f5e;border-color:#f43f5e55">فجوة حرجة — لا شواهد</span></td>
+                    <td class="gap-cell">لا توجد شواهد مرفوعة على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                    <td class="evidence-cell">لا يوجد</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">1-4-1-2</td>
+                    <td class="text-cell">توفر المدرسة كادرًا إداريًّا مكتملاً ومؤهلاً.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">1-4-1-3</td>
+                    <td class="text-cell">تظهر المدرسة ثباتًا واستدامة مالية.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#f43f5e1a;color:#f43f5e;border-color:#f43f5e55">فجوة حرجة — لا شواهد</span></td>
+                    <td class="gap-cell">لا توجد شواهد مرفوعة على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                    <td class="evidence-cell">لا يوجد</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">1-4-1-4</td>
+                    <td class="text-cell">تشجع المدرسة منسوبيها ل لحصول على الرخصة المهنية.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">1-4-1-5</td>
+                    <td class="text-cell">تدعم المدرسة التطوير المهني لمنسوبيها وف ًق ا لنتائج تقويم الأداء الوظيفي واحتياجاتهم.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">1-4-1-6</td>
+                    <td class="text-cell">تطبق المدرسة التقويم الذاتي المبنيّ على المعايير المعتمدة من الهيئة.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">1-4-1-7</td>
+                    <td class="text-cell">تنفذ المدرسة خطة للتحسين بناء على نتائج التقويم المدرس 1- ي، وتتابعها.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="std-block">
+            <div class="std-head">
+                <h4>المعيار 1-5: حقوق المتعلم وحمايته</h4>
+                <span class="std-pct" style="color:#10b981">100%</span>
+            </div>
+            <div class="table-wrap">
+                <table class="indicators-table">
+                    <thead><tr><th>الكود</th><th>نص المؤشر</th><th>الحالة</th><th>الفجوة</th><th>الشواهد</th></tr></thead>
+                    <tbody>
+                <tr>
+                    <td class="code-cell">1-5-1-1</td>
+                    <td class="text-cell">تلتزم المدرسة بالمحافظة على حقوق المتعلمين، وحمايتهم.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (معيار جديد، تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">1-5-1-2</td>
+                    <td class="text-cell">توفر المدرسة مناخًا آمنًا للتعلم والنمو نفسيًّا واجتماعيًّا.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (معيار جديد، تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr></tbody>
+                </table>
+            </div>
+        </div></div>
+    </section>
+
+    <section class="domain-section" id="domain-2">
+        <div class="domain-header">
+            <div class="domain-header-top">
+                <h2>المجال الثاني: التعليم والتعلم</h2>
+                <span class="domain-pct">100%</span>
+            </div>
+            <div class="domain-meta">
+                <span><i class="fa-solid fa-user-tie"></i> المسؤول الأول: <strong>الأستاذ إسلام صابر</strong></span>
+                <span><i class="fa-solid fa-users"></i> فريق العمل: <strong>أ/ أسامة المعداوي ، أ/ يوسف مجدي</strong></span>
+                <span><i class="fa-solid fa-layer-group"></i> عدد المعايير: <strong>2</strong></span>
+            </div>
+        </div>
+        <div class="domain-body">
+        <div class="std-block">
+            <div class="std-head">
+                <h4>المعيار 2-1: بناء وإدارة خبرات التعلم</h4>
+                <span class="std-pct" style="color:#10b981">100%</span>
+            </div>
+            <div class="table-wrap">
+                <table class="indicators-table">
+                    <thead><tr><th>الكود</th><th>نص المؤشر</th><th>الحالة</th><th>الفجوة</th><th>الشواهد</th></tr></thead>
+                    <tbody>
+                <tr>
+                    <td class="code-cell">2-1-1-10</td>
+                    <td class="text-cell">تعزز المدرسة دافعية المتعلمين للتعلم والاستمتاع به.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">2-1-1-1</td>
+                    <td class="text-cell">توفر المدرسة فرصًا متكافئة للتعلم تلبي احتياجات المتعلمين بمن فيهم ذوو الإعاقة والموهوبون.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">2-1-1-2</td>
+                    <td class="text-cell">تدعم المدرسة تنفيذ المناهج؛ لتحقيق نواتج التعلم المستهدفة وفق الخطة الدراسية.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">2-1-1-3</td>
+                    <td class="text-cell">تنوع المدرسة في إستراتيجيات التدريس لتلبية احتياجات المتعلمين، ودعم تعلمهم.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">2-1-1-4</td>
+                    <td class="text-cell">تفعل المدرسة التعلم الإلكتروني؛ لتلبية احتياجات المتعلمين، ودعم تعلمهم.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">2-1-1-5</td>
+                    <td class="text-cell">توفر المدرسة أنشطة تعلم تطبيقية ترتبط بحياة المتعلمين.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">2-1-1-6</td>
+                    <td class="text-cell">تنمي المدرسة المهارات القرائية والعددية الأساسية لدى المتعلمين.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">2-1-1-7</td>
+                    <td class="text-cell">تنمي المدرسة مهارات التفكير العليا لدى المتعلمين.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">2-1-1-8</td>
+                    <td class="text-cell">تنمي المدرسة المهارات العاطفية والاجتماعية لدى المتعلمين.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">2-1-1-9</td>
+                    <td class="text-cell">تنمي المدرسة المهارات الرقمية لدى المتعلمين.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="std-block">
+            <div class="std-head">
+                <h4>المعيار 2-2: تقويم التعلم</h4>
+                <span class="std-pct" style="color:#10b981">100%</span>
+            </div>
+            <div class="table-wrap">
+                <table class="indicators-table">
+                    <thead><tr><th>الكود</th><th>نص المؤشر</th><th>الحالة</th><th>الفجوة</th><th>الشواهد</th></tr></thead>
+                    <tbody>
+                <tr>
+                    <td class="code-cell">2-2-1</td>
+                    <td class="text-cell">تقوّم المدرسة أداء المتعلمين باستخدام أساليب وأدوات تقويم متنوعة وفاعلة.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">2-2-2</td>
+                    <td class="text-cell">تحلل المدرسة نتائج التقويم وتوظفها في تحسين نواتج التعلم بانتظام.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">2-2-3</td>
+                    <td class="text-cell">تقدم المدرسة التغذية الراجعة للمتعلمين بانتظام.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr></tbody>
+                </table>
+            </div>
+        </div></div>
+    </section>
+
+    <section class="domain-section" id="domain-3">
+        <div class="domain-header">
+            <div class="domain-header-top">
+                <h2>المجال الثالث: نواتج التعلم</h2>
+                <span class="domain-pct">100%</span>
+            </div>
+            <div class="domain-meta">
+                <span><i class="fa-solid fa-user-tie"></i> المسؤول الأول: <strong>الأستاذ أحمد ماهر</strong></span>
+                <span><i class="fa-solid fa-users"></i> فريق العمل: <strong>أ/ خالد الزهراني ، أ/ ضياء الدين حسين</strong></span>
+                <span><i class="fa-solid fa-layer-group"></i> عدد المعايير: <strong>2</strong></span>
+            </div>
+        </div>
+        <div class="domain-body">
+        <div class="std-block">
+            <div class="std-head">
+                <h4>المعيار 3-1: التحصيل الدراسي والتقدم الأكاديمي</h4>
+                <span class="std-pct" style="color:#10b981">100%</span>
+            </div>
+            <div class="table-wrap">
+                <table class="indicators-table">
+                    <thead><tr><th>الكود</th><th>نص المؤشر</th><th>الحالة</th><th>الفجوة</th><th>الشواهد</th></tr></thead>
+                    <tbody>
+                <tr>
+                    <td class="code-cell">3-1-1-1</td>
+                    <td class="text-cell">يحقق المتعلمون نتائج متقدمة في مجال القراءة و فقًا للاختبارات الوطنية .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">3-1-1-2</td>
+                    <td class="text-cell">يحقق المتعلمون نتائج متقدمة في مجال الرياضيات و قفًا للاختبارات الوطنية .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">3-1-1-3</td>
+                    <td class="text-cell">يحقق المتعلمون نتائج متقدمة في مجال العلوم و فقًا للاختبارات الوطنية .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">3-1-1-4</td>
+                    <td class="text-cell">يحقق المتعلمون تقدمًا في مجال القراءة قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">3-1-1-5</td>
+                    <td class="text-cell">يحقق المتعلمون تقدمًا في مجال الرياضيات قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">3-1-1-6</td>
+                    <td class="text-cell">يحقق المتعلمون تقدمًا في مجال العلوم قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="std-block">
+            <div class="std-head">
+                <h4>المعيار 3-2: التطور الشخصي والصحي والاجتماعي</h4>
+                <span class="std-pct" style="color:#10b981">100%</span>
+            </div>
+            <div class="table-wrap">
+                <table class="indicators-table">
+                    <thead><tr><th>الكود</th><th>نص المؤشر</th><th>الحالة</th><th>الفجوة</th><th>الشواهد</th></tr></thead>
+                    <tbody>
+                <tr>
+                    <td class="code-cell">3-2-1</td>
+                    <td class="text-cell">يظهر المتعلمون الاعتزاز بالقيم والهوية الوطنية .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">3-2-2</td>
+                    <td class="text-cell">يظهر المتعلمون اتجاهات إيجابية نحو ذواتهم .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">3-2-3</td>
+                    <td class="text-cell">يظهر المتعلمون التزامًا بالممارسات الصحية السليمة .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">3-2-4</td>
+                    <td class="text-cell">يشارك المتعلمون في الأنشطة المجتمعية والأعمال التطوعية .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">3-2-5</td>
+                    <td class="text-cell">يلتزم المتعلمون بقواعد السلوك والانضباط المدرسي .</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">3-2-6</td>
+                    <td class="text-cell">يظهر المتعلمون القدرة على البحث والتعلم الذاتي.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">3-2-7</td>
+                    <td class="text-cell">يظهر المتعلمون اعتزازا بثقافتهم واحتراما للتنوع الثقافي في المجتمع.</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق نهائي بتاريخ 24-09-2026)</td>
+                </tr></tbody>
+                </table>
+            </div>
+        </div></div>
+    </section>
+
+    <section class="domain-section" id="domain-4">
+        <div class="domain-header">
+            <div class="domain-header-top">
+                <h2>المجال الرابع: البيئة المدرسية (المرافق، الأمن والسلامة)</h2>
+                <span class="domain-pct">100%</span>
+            </div>
+            <div class="domain-meta">
+                <span><i class="fa-solid fa-user-tie"></i> المسؤول الأول: <strong>الأستاذ مصطفى عبدالجليل</strong></span>
+                <span><i class="fa-solid fa-users"></i> فريق العمل: <strong>أ/ محمد جمال ، أ/ مصطفى أشرف</strong></span>
+                <span><i class="fa-solid fa-layer-group"></i> عدد المعايير: <strong>2</strong></span>
+            </div>
+        </div>
+        <div class="domain-body">
+        <div class="std-block">
+            <div class="std-head">
+                <h4>المعيار 4-1: المبنى المدرسي</h4>
+                <span class="std-pct" style="color:#10b981">100%</span>
+            </div>
+            <div class="table-wrap">
+                <table class="indicators-table">
+                    <thead><tr><th>الكود</th><th>نص المؤشر</th><th>الحالة</th><th>الفجوة</th><th>الشواهد</th></tr></thead>
+                    <tbody>
+                <tr>
+                    <td class="code-cell">4-1-1-1</td>
+                    <td class="text-cell">تنظيم مبنى المدرسة ملائم لعدد المتعلمين و المرحلة العمرية</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">4-1-1-2</td>
+                    <td class="text-cell">تتوافر فصول و معامل ملائمة للعملية التعليمية تلبى احتياجات المتعلمين بمن فيهم ذوو الاعاقة</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">4-1-1-3</td>
+                    <td class="text-cell">تلبى المرافق و الخدمات المساندة احتياجات المتعلمين بمن فيهم ذوو الاعاقة</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="std-block">
+            <div class="std-head">
+                <h4>المعيار 4-2: الأمن والسلامة</h4>
+                <span class="std-pct" style="color:#10b981">100%</span>
+            </div>
+            <div class="table-wrap">
+                <table class="indicators-table">
+                    <thead><tr><th>الكود</th><th>نص المؤشر</th><th>الحالة</th><th>الفجوة</th><th>الشواهد</th></tr></thead>
+                    <tbody>
+                <tr>
+                    <td class="code-cell">4-2-1-1</td>
+                    <td class="text-cell">تتوافر فى فصول المدرسة و معاملها و جميع مرافقها متطلبات الامن و السلامة</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">4-2-1-2</td>
+                    <td class="text-cell">تعمل المدرسة على صيانة جميع مرافق المبنى و تجهيزاته بانتظام</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">4-2-1-3</td>
+                    <td class="text-cell">تعمل المدرسة على نظافة المبنى المدرسى و جميع مرافقه بانتظام</td>
+                    <td class="status-cell"><span class="status-badge" style="background:#10b9811a;color:#10b981;border-color:#10b98155">مكتمل ومعتمد</span></td>
+                    <td class="gap-cell">—</td>
+                    <td class="evidence-cell">تتوفر شواهد فعلية على مجلد الدرايف المخصص لهذا المؤشر (تحقق فعلي بتاريخ 23-09-2026)</td>
+                </tr></tbody>
+                </table>
+            </div>
+        </div></div>
+    </section>
+  </section>
+
+
+  <div style="text-align:center;margin-top:8px;">
+    <a href="index.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--teal-700);color:#fff;text-decoration:none;font-size:13px;font-weight:800;padding:12px 24px;border-radius:12px;">
+      <i class="fa-solid fa-house"></i> العودة إلى الصفحة الرئيسية
+    </a>
+  </div>
+
+</main>
+
+<footer class="page-footer">
+  تقرير تحليل الفجوة الشامل — مولَّد آلياً من بيانات بوابة الاعتماد المدرسي والتميز — قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان الأهلية
+</footer></body>
+</html>
