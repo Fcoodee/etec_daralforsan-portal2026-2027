@@ -860,7 +860,7 @@
                          `${googleDriveLink}\n\n` +
                          `شاكرين لكم تميزكم الدائم.\n\nمستشار الجودة والاعتماد المدرسي`;
             
-            window.location.href = `mailto:${managerEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            (window.DFLegal?DFLegal.go(`mailto:${managerEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`):(window.location.href=`mailto:${managerEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`));
         }
 
         // تحديث نظام إرسال تقدم العمل الذكي ليدمج نسب الإنجاز التراكمية أمام كل مجال وتأكيدها رقمياً
@@ -924,7 +924,7 @@
             setTimeout(() => {
                 const subject = `[تقرير نسب تقدم العمل الحالي - ${domainPercentage}%]: ${domain.title}`;
                 const emailIntro = `تحية طيبة، تم تلقائياً نسخ التقرير التحليلي الشامل للمجال متضمناً نسب تقدم المعايير والتراكيز بالأرقام للحافظة. يرجى فقط عمل (لصق أو Ctrl+V) هنا لإرسال التحديث لفريق العمل وفحصه فوراً.`;
-                window.location.href = `mailto:${domain.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailIntro)}`;
+                (window.DFLegal?DFLegal.go(`mailto:${domain.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailIntro)}`):(window.location.href=`mailto:${domain.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailIntro)}`));
             }, 2500);
         }
 
@@ -1268,6 +1268,7 @@
         </div>
     </div>
 
-    <script src="content-protect.js"></script>
+    <script src="legal-notice.js"></script>
+<script src="content-protect.js"></script>
 </body>
 </html>

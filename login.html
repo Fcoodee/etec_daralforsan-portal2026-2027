@@ -221,7 +221,7 @@
             }
 
             setTimeout(() => {
-                window.location.href = 'dashboard.html';
+                (window.DFLegal?DFLegal.go('dashboard.html'):(window.location.href='dashboard.html'));
             }, 700);
 
             return false;
@@ -236,5 +236,6 @@
             }
         };
     </script>
+<script src="legal-notice.js"></script>
 </body>
 </html>

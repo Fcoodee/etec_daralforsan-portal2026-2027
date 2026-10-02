@@ -11,12 +11,15 @@
  *   setupStructure()  ← تُشغَّل يدوياً مرة واحدة (وتُعاد عند انتهاء المهلة؛ آمنة التكرار)
  *   refreshStatus()   ← تحدّث الحالة وتكتبها في Google Sheet (يدوياً أو بمشغّل زمني)
  *   installTrigger()  ← اختياري: تحديث تلقائي كل ساعة
+ *   applyRenames()    ← تطبّق أسماء الملفات المقترحة التي وُضعت عليها علامة «طبّق الاسم» في ورقة «التحقق»
  *   doGet(e)          ← واجهة JSON لصفحة evidence-link.html
  *                       ?refresh=1 لإجبار التحديث، ?callback=fn لصيغة JSONP
  *
  * وثائق مقترحة: لثلاثة مؤشرات لا ترد في تقرير المصادر (1-5-1-1، 2-2-1-2، 4-1-1-1) — «إضاءات من دليل فبراير 2026»، ولا تدخل في الـ147.
  * الشواهد المصوّرة: لكل مؤشر مجلد «التقرير البصري» وداخله «صور»؛ يعدّ السكربت الصور (المطلوب ٦ على الأقل، تشمل لقطات الوثائق) وملفات التقرير.
- * قاعدة العلامة ✅: مجلد السجل داخل «وثائق السجلات» يحوي ملفاً واحداً على الأقل.
+ * مراحل السجل الثلاث: (1) رُفع ملف، (2) سُمّي وفق القاعدة «رمز المؤشر_ف رقم الفقرة_اسم السجل_وصف_سنة-شهر»، (3) تحقق منه المنسّق (وللمشرف عيّنة 20%).
+ * الصور: تُحتسب فقط ملفات «التقرير البصري ← صور» المطابقة للتسمية، ولا تُحتسب الصور الخام خارجها. التقرير البصري: ملف PDF مطابق للتسمية.
+ * المؤشرات الـ24 الخارجة عن تقرير السجلات: لكل مؤشر 2 إلى 3 شواهد مطلوبة، لكل منها مجلد داخل «شواهد داعمة»، وتمر بالمراحل الثلاث نفسها.
  * قاعدة الفقرة: جميع السجلات مطلوبة (AND).
  */
 
@@ -27,7 +30,7 @@ var TOOLS_FOLDER   = "شواهد داعمة";
 var GUIDE_FOLDER   = "وثائق مقترحة - إضاءات من دليل فبراير 2026";
 var REPORT_FOLDER  = "التقرير البصري";   // داخل كل مؤشر: يحوي ملف/ملفات التقرير البصري
 var PHOTOS_FOLDER  = "صور";             // داخل «التقرير البصري»: الصور ولقطات الوثائق (ست على الأقل لكل مؤشر)
-var CACHE_KEY      = "evidence_status_v3";
+var CACHE_KEY      = "evidence_status_v4";
 var CACHE_SECONDS  = 21600; // 6 ساعات (أقصى حد في Apps Script)؛ يجدّدها المشغّل الزمني كل ساعة ويجبرها زر «تحديث الحالة الآن»
 var TIME_LIMIT_MS  = 5 * 60 * 1000; // هامش أمان قبل حد Apps Script (6 دقائق)
 
@@ -40,6 +43,7 @@ var DATA = [
   "cn": "التخطيط",
   "code": "1-1-1-1",
   "text": "تضع المدرسة خطة تشغيلية شاملة وفق أهداف تطويرية محددة.",
+  "st": "الخطة التشغيلية",
   "ref": "1-1-1-1",
   "p": [
    {
@@ -85,6 +89,7 @@ var DATA = [
   "cn": "التخطيط",
   "code": "1-1-1-2",
   "text": "تتابع المدرسة تنفيذ خطتها التشغيلية وتطورها بما يضمن تحقيق أهدافها.",
+  "st": "متابعة تنفيذ الخطة",
   "ref": "1-1-1-2",
   "p": [
    {
@@ -125,6 +130,7 @@ var DATA = [
   "cn": "قيادة العملية التعليمية",
   "code": "1-2-1-1",
   "text": "تعزز المدرسة القيم الإسلامية والهوية الوطنية.",
+  "st": "القيم الإسلامية والهوية الوطنية",
   "ref": "1-2-1-1",
   "p": [
    {
@@ -146,6 +152,7 @@ var DATA = [
   "cn": "قيادة العملية التعليمية",
   "code": "1-2-1-2",
   "text": "تطبق المدرسة قيم مهنة التعليم وأخلاقياتها، وتتابع الالتزام بها.",
+  "st": "أخلاقيات مهنة التعليم",
   "ref": "1-2-1-2",
   "p": [
    {
@@ -182,6 +189,7 @@ var DATA = [
   "cn": "قيادة العملية التعليمية",
   "code": "1-2-1-3",
   "text": "تطبق المدرسة إجراءات محددة لدعم الانضباط المدرسي، وتتابع الالتزام بها.",
+  "st": "الانضباط المدرسي",
   "ref": "1-2-1-4",
   "p": [
    {
@@ -207,6 +215,7 @@ var DATA = [
   "cn": "قيادة العملية التعليمية",
   "code": "1-2-1-4",
   "text": "تنفذ المدرسة برامج وأنشطة تربوية داعمة للسلوك الإيجابي لدى المتعلمين، ومنهم ذوو الإعاقة والموهوبون، وتتابعها.",
+  "st": "برامج السلوك الإيجابي",
   "ref": "1-2-1-5",
   "p": [
    {
@@ -238,6 +247,7 @@ var DATA = [
   "cn": "قيادة العملية التعليمية",
   "code": "1-2-1-5",
   "text": "تنفذ المدرسة برامج وأنشطة إثرائية لتطوير مواهب المتعلمين، وتهيئهم للمستقبل، وتتابعها.",
+  "st": "البرامج الإثرائية والمواهب",
   "ref": "1-2-1-6",
   "p": [
    {
@@ -288,6 +298,7 @@ var DATA = [
   "cn": "المجتمع المدرسي",
   "code": "1-3-1-1",
   "text": "تعزز المدرسة بناء العلاقات الإيجابية والتعاون في المجتمع المدرسي.",
+  "st": "العلاقات والتعاون في المدرسة",
   "ref": "1-3-1-1",
   "p": [
    {
@@ -309,6 +320,7 @@ var DATA = [
   "cn": "المجتمع المدرسي",
   "code": "1-3-1-2",
   "text": "تعزز المدرسة مشاركة الأسرة في تعلم أبنائهم، والتحضير لمستقبلهم.",
+  "st": "مشاركة الأسرة",
   "ref": "1-3-1-2",
   "p": [
    {
@@ -345,6 +357,7 @@ var DATA = [
   "cn": "المجتمع المدرسي",
   "code": "1-3-1-3",
   "text": "تعزز المدرسة الشراكة المجتمعية لدعم التعلم والتأثير الإيجابي في المجتمع.",
+  "st": "الشراكة المجتمعية",
   "ref": "1-3-1-3",
   "p": [
    {
@@ -388,6 +401,7 @@ var DATA = [
   "cn": "التطوير المؤسسي",
   "code": "1-4-1-1",
   "text": "توفر المدرسة كادرًا تعليميًّا مكتملًا ومؤهلًا بما يتسق مع المهام الموكلة له.",
+  "st": "اكتمال الكادر التعليمي",
   "ref": "1-4-1-1",
   "p": [
    {
@@ -421,6 +435,7 @@ var DATA = [
   "cn": "التطوير المؤسسي",
   "code": "1-4-1-2",
   "text": "توفر المدرسة كادرًا إداريًّا مكتملًا ومؤهلًا بما ينسق مع المهام الموكلة له.",
+  "st": "اكتمال الكادر الإداري",
   "ref": "1-4-1-2",
   "p": [
    {
@@ -452,6 +467,7 @@ var DATA = [
   "cn": "التطوير المؤسسي",
   "code": "1-4-1-3",
   "text": "تظهر المدرسة الملاءة والاستدامة المالية.",
+  "st": "الملاءة والاستدامة المالية",
   "ref": "1-4-1-3",
   "p": [
    {
@@ -499,6 +515,7 @@ var DATA = [
   "cn": "التطوير المؤسسي",
   "code": "1-4-1-4",
   "text": "تدعم المدرسة منسوبيها للحصول على الرخصة المهنية، وتتابعها.",
+  "st": "الرخصة المهنية",
   "ref": "1-4-1-4",
   "p": [
    {
@@ -519,6 +536,7 @@ var DATA = [
   "cn": "التطوير المؤسسي",
   "code": "1-4-1-5",
   "text": "تدعم المدرسة التطوير المهني لمنسوبيها وفقًا لنتائج التقويم وتحليل احتياجاتهم.",
+  "st": "التطوير المهني للمنسوبين",
   "ref": "1-4-1-5",
   "p": [
    {
@@ -546,6 +564,7 @@ var DATA = [
   "cn": "التطوير المؤسسي",
   "code": "1-4-1-6",
   "text": "تطبق المدرسة التقويم الذاتي المبني على المعايير المعتمدة من الهيئة بشكل مستمر.",
+  "st": "التقويم الذاتي",
   "ref": "1-4-1-6",
   "p": [
    {
@@ -575,6 +594,7 @@ var DATA = [
   "cn": "التطوير المؤسسي",
   "code": "1-4-1-7",
   "text": "تنفذ المدرسة خطة التحسين بناءً على نتائج التقويم المدرسي، وتتابعها.",
+  "st": "خطة التحسين",
   "ref": "1-4-1-7",
   "p": [
    {
@@ -604,8 +624,14 @@ var DATA = [
   "cn": "حقوق المتعلم وحمايته",
   "code": "1-5-1-1",
   "text": "تلتزم المدرسة بالمحافظة على حقوق المتعلمين، وحمايتهم.",
+  "st": "حماية حقوق المتعلمين",
   "tool": "تحليل الوثائق",
   "proposed": false,
+  "rq": [
+   "إجراءات حماية الحقوق المعتمدة",
+   "نماذج الرصد المبكر والتبليغ (فارغة)",
+   "تقرير المراجعة الدورية (مجمّع بلا أسماء)"
+  ],
   "g": [
    {
     "n": 1,
@@ -642,6 +668,7 @@ var DATA = [
   "cn": "حقوق المتعلم وحمايته",
   "code": "1-5-1-2",
   "text": "توفر المدرسة مناخًا آمنًا للتعلم والنمو نفسيًّا واجتماعيًّا.",
+  "st": "مناخ مدرسي آمن",
   "ref": "1-2-1-3",
   "p": [
    {
@@ -665,8 +692,14 @@ var DATA = [
   "cn": "بناء خبرات التعلم",
   "code": "2-1-1-1",
   "text": "توفر المدرسة فرصًا متكافئة للتعلم تلبي احتياجات المتعلمين، ومنهم ذوو الإعاقة والموهوبون.",
+  "st": "فرص تعلم متكافئة",
   "tool": "الملاحظة الصفية",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "نماذج الملاحظة الصفية (عينة)",
+   "تقرير نتائج الملاحظة الصفية",
+   "خطة المعالجة المبنية على الملاحظات"
+  ]
  },
  {
   "d": 2,
@@ -675,6 +708,7 @@ var DATA = [
   "cn": "بناء خبرات التعلم",
   "code": "2-1-1-2",
   "text": "تدعم المدرسة تنفيذ المناهج بما يحقق نواتج التعلم المستهدفة.",
+  "st": "تنفيذ المناهج",
   "ref": "2-1-1-2",
   "p": [
    {
@@ -705,8 +739,14 @@ var DATA = [
   "cn": "بناء خبرات التعلم",
   "code": "2-1-1-3",
   "text": "تنوع المدرسة في إستراتيجيات التعليم والتعلم لتلبية احتياجات المتعلمين، ودعم تعلمهم.",
+  "st": "تنويع استراتيجيات التدريس",
   "tool": "الملاحظة الصفية",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "نماذج الملاحظة الصفية (عينة)",
+   "تقرير نتائج الملاحظة الصفية",
+   "خطة المعالجة المبنية على الملاحظات"
+  ]
  },
  {
   "d": 2,
@@ -715,8 +755,14 @@ var DATA = [
   "cn": "بناء خبرات التعلم",
   "code": "2-1-1-4",
   "text": "تفعّل المدرسة التقنية الرقمية لدعم تعلم المتعلمين وتلبية احتياجاتهم.",
+  "st": "توظيف التقنية الرقمية",
   "tool": "الملاحظة الصفية",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "نماذج الملاحظة الصفية (عينة)",
+   "تقرير نتائج الملاحظة الصفية",
+   "خطة المعالجة المبنية على الملاحظات"
+  ]
  },
  {
   "d": 2,
@@ -725,8 +771,14 @@ var DATA = [
   "cn": "بناء خبرات التعلم",
   "code": "2-1-1-5",
   "text": "تنفذ المدرسة أنشطة تعلم تطبيقية ترتبط بحياة المتعلمين.",
+  "st": "أنشطة تعلّم تطبيقية",
   "tool": "الملاحظة الصفية",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "نماذج الملاحظة الصفية (عينة)",
+   "تقرير نتائج الملاحظة الصفية",
+   "خطة المعالجة المبنية على الملاحظات"
+  ]
  },
  {
   "d": 2,
@@ -735,6 +787,7 @@ var DATA = [
   "cn": "بناء خبرات التعلم",
   "code": "2-1-1-6",
   "text": "تنمي المدرسة المهارات القرائية والعددية الأساسية لدى المتعلمين.",
+  "st": "القراءة والعدد",
   "ref": "2-1-1-6",
   "p": [
    {
@@ -759,6 +812,7 @@ var DATA = [
   "cn": "بناء خبرات التعلم",
   "code": "2-1-1-7",
   "text": "تنمي المدرسة مهارات التفكير والبحث والابتكار لدى المتعلمين.",
+  "st": "التفكير والبحث والابتكار",
   "ref": "2-1-1-7",
   "p": [
    {
@@ -778,8 +832,14 @@ var DATA = [
   "cn": "بناء خبرات التعلم",
   "code": "2-1-1-8",
   "text": "تنمي المدرسة المهارات العاطفية والاجتماعية لدى المتعلمين.",
+  "st": "المهارات العاطفية والاجتماعية",
   "tool": "الملاحظة الصفية",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "نماذج الملاحظة الصفية (عينة)",
+   "تقرير نتائج الملاحظة الصفية",
+   "خطة المعالجة المبنية على الملاحظات"
+  ]
  },
  {
   "d": 2,
@@ -788,8 +848,14 @@ var DATA = [
   "cn": "بناء خبرات التعلم",
   "code": "2-1-1-9",
   "text": "تعزز المدرسة دافعية المتعلمين للتعلم، والاستمتاع به.",
+  "st": "دافعية المتعلمين",
   "tool": "الملاحظة الصفية",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "نماذج الملاحظة الصفية (عينة)",
+   "تقرير نتائج الملاحظة الصفية",
+   "خطة المعالجة المبنية على الملاحظات"
+  ]
  },
  {
   "d": 2,
@@ -798,6 +864,7 @@ var DATA = [
   "cn": "تقويم التعلم",
   "code": "2-2-1-1",
   "text": "تطبق المدرسة أساليب وأدوات تقويم متنوعة للكشف عن مستويات أداء المتعلمين المختلفة.",
+  "st": "أدوات تقويم متنوعة",
   "ref": "2-2-1-1",
   "p": [
    {
@@ -819,8 +886,14 @@ var DATA = [
   "cn": "تقويم التعلم",
   "code": "2-2-1-2",
   "text": "تطبق المدرسة أساليب وأدوات متنوعة لتقويم نواتج التعلم المستهدفة في مناهج التعليم.",
+  "st": "تقويم نواتج التعلم",
   "tool": "الملاحظة الصفية",
   "proposed": false,
+  "rq": [
+   "مصفوفة المواءمة التقويمية",
+   "عينات من أدوات التقويم",
+   "تقارير التقويم الإلكتروني ومستوى الإتقان"
+  ],
   "g": [
    {
     "n": 2,
@@ -853,6 +926,7 @@ var DATA = [
   "cn": "تقويم التعلم",
   "code": "2-2-1-3",
   "text": "تحلل المدرسة نتائج التقويم، وتوظفها في تحسين عمليات التعليم والتعلم والتقويم.",
+  "st": "تحليل نتائج التقويم",
   "ref": "2-2-1-2",
   "p": [
    {
@@ -875,6 +949,7 @@ var DATA = [
   "cn": "تقويم التعلم",
   "code": "2-2-1-4",
   "text": "تقدم المدرسة التغذية الراجعة للمتعلمين وأولياء أمورهم، وتتابع تقدمهم بشكل مستمر.",
+  "st": "التغذية الراجعة",
   "ref": "2-2-1-3",
   "p": [
    {
@@ -895,8 +970,14 @@ var DATA = [
   "cn": "التحصيل التعليمي",
   "code": "3-1-1-1",
   "text": "يحقق المتعلمون نتائج مرتفعة في مجال القراءة وفقًا للاختبارات الوطنية.",
+  "st": "نتائج القراءة (الاختبارات الوطنية)",
   "tool": "الاختبارات الوطنية (نافس)",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "تقرير نتائج الاختبارات الوطنية",
+   "تحليل النتائج والمهارات المحتاجة إلى تحسين",
+   "خطة العلاج والإثراء"
+  ]
  },
  {
   "d": 3,
@@ -905,8 +986,14 @@ var DATA = [
   "cn": "التحصيل التعليمي",
   "code": "3-1-1-2",
   "text": "يحقق المتعلمون نتائج مرتفعة في مجال الرياضيات وفقًا للاختبارات الوطنية.",
+  "st": "نتائج الرياضيات (الاختبارات الوطنية)",
   "tool": "الاختبارات الوطنية (نافس)",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "تقرير نتائج الاختبارات الوطنية",
+   "تحليل النتائج والمهارات المحتاجة إلى تحسين",
+   "خطة العلاج والإثراء"
+  ]
  },
  {
   "d": 3,
@@ -915,8 +1002,14 @@ var DATA = [
   "cn": "التحصيل التعليمي",
   "code": "3-1-1-3",
   "text": "يحقق المتعلمون نتائج مرتفعة في مجال العلوم وفقًا للاختبارات الوطنية.",
+  "st": "نتائج العلوم (الاختبارات الوطنية)",
   "tool": "الاختبارات الوطنية (نافس)",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "تقرير نتائج الاختبارات الوطنية",
+   "تحليل النتائج والمهارات المحتاجة إلى تحسين",
+   "خطة العلاج والإثراء"
+  ]
  },
  {
   "d": 3,
@@ -925,8 +1018,14 @@ var DATA = [
   "cn": "التحصيل التعليمي",
   "code": "3-1-1-4",
   "text": "يحقق المتعلمون تقدمًا في مجال القراءة قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية.",
+  "st": "تقدّم نتائج القراءة",
   "tool": "الاختبارات الوطنية (نافس)",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "تقرير مقارنة النتائج بالأداء السابق",
+   "تحليل التقدم في المهارات",
+   "خطة العلاج والإثراء"
+  ]
  },
  {
   "d": 3,
@@ -935,8 +1034,14 @@ var DATA = [
   "cn": "التحصيل التعليمي",
   "code": "3-1-1-5",
   "text": "يحقق المتعلمون تقدمًا في مجال الرياضيات قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية.",
+  "st": "تقدّم نتائج الرياضيات",
   "tool": "الاختبارات الوطنية (نافس)",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "تقرير مقارنة النتائج بالأداء السابق",
+   "تحليل التقدم في المهارات",
+   "خطة العلاج والإثراء"
+  ]
  },
  {
   "d": 3,
@@ -945,8 +1050,14 @@ var DATA = [
   "cn": "التحصيل التعليمي",
   "code": "3-1-1-6",
   "text": "يحقق المتعلمون تقدمًا في مجال العلوم قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية.",
+  "st": "تقدّم نتائج العلوم",
   "tool": "الاختبارات الوطنية (نافس)",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "تقرير مقارنة النتائج بالأداء السابق",
+   "تحليل التقدم في المهارات",
+   "خطة العلاج والإثراء"
+  ]
  },
  {
   "d": 3,
@@ -955,8 +1066,14 @@ var DATA = [
   "cn": "التطور الشخصي والصحي والاجتماعي",
   "code": "3-2-1-1",
   "text": "يظهر المتعلمون الاعتزاز بالقيم والهوية الوطنية.",
+  "st": "الاعتزاز بالقيم والهوية",
   "tool": "استبانات المتعلم والأسرة",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "نتائج استبانة المتعلمين",
+   "نتائج استبانة أولياء الأمور",
+   "تقرير تحليل النتائج"
+  ]
  },
  {
   "d": 3,
@@ -965,8 +1082,14 @@ var DATA = [
   "cn": "التطور الشخصي والصحي والاجتماعي",
   "code": "3-2-1-2",
   "text": "يظهر المتعلمون اتجاهات إيجابية نحو ذواتهم والآخرين.",
+  "st": "الاتجاه الإيجابي نحو الذات والآخرين",
   "tool": "استبانات المتعلم والأسرة",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "نتائج استبانة المتعلمين",
+   "نتائج استبانة أولياء الأمور",
+   "تقرير تحليل النتائج"
+  ]
  },
  {
   "d": 3,
@@ -975,8 +1098,14 @@ var DATA = [
   "cn": "التطور الشخصي والصحي والاجتماعي",
   "code": "3-2-1-3",
   "text": "يظهر المتعلمون التزامًا بالممارسات الصحية السليمة.",
+  "st": "الممارسات الصحية",
   "tool": "استبانات المتعلم والأسرة",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "نتائج استبانة المتعلمين",
+   "نتائج استبانة أولياء الأمور",
+   "تقرير تحليل النتائج"
+  ]
  },
  {
   "d": 3,
@@ -985,6 +1114,7 @@ var DATA = [
   "cn": "التطور الشخصي والصحي والاجتماعي",
   "code": "3-2-1-4",
   "text": "يشارك المتعلمون في الأنشطة المجتمعية والأعمال التطوعية.",
+  "st": "العمل التطوعي",
   "ref": "3-2-1-4",
   "p": [
    {
@@ -1005,6 +1135,7 @@ var DATA = [
   "cn": "التطور الشخصي والصحي والاجتماعي",
   "code": "3-2-1-5",
   "text": "يلتزم المتعلمون بقواعد السلوك والانضباط المدرسي.",
+  "st": "الالتزام بالسلوك والحضور",
   "ref": "3-2-1-5",
   "p": [
    {
@@ -1034,8 +1165,14 @@ var DATA = [
   "cn": "التطور الشخصي والصحي والاجتماعي",
   "code": "3-2-1-6",
   "text": "يظهر المتعلمون الاستقلالية والقدرة على التعلم الذاتي.",
+  "st": "الاستقلالية والتعلم الذاتي",
   "tool": "استبانات المتعلم والأسرة",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "نتائج استبانة المتعلمين",
+   "نتائج استبانة أولياء الأمور",
+   "تقرير تحليل النتائج"
+  ]
  },
  {
   "d": 3,
@@ -1044,8 +1181,14 @@ var DATA = [
   "cn": "التطور الشخصي والصحي والاجتماعي",
   "code": "3-2-1-7",
   "text": "يظهر المتعلمون اعتزازًا بثقافتهم واحترامًا للتنوع الثقافي في المجتمع.",
+  "st": "الاعتزاز بالثقافة وتقبّل التنوع",
   "tool": "استبانات المتعلم والأسرة",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "نتائج استبانة المتعلمين",
+   "نتائج استبانة أولياء الأمور",
+   "تقرير تحليل النتائج"
+  ]
  },
  {
   "d": 4,
@@ -1054,8 +1197,13 @@ var DATA = [
   "cn": "المبنى المدرسي",
   "code": "4-1-1-1",
   "text": "توفر المدرسة مبنى تعليمي يستوفي المواصفات والاشتراطات المعتمدة من حيث النوع والخدمات المساندة.",
+  "st": "مواصفات المبنى المدرسي",
   "tool": "المعاينة الميدانية",
   "proposed": false,
+  "rq": [
+   "قرار تكليف لجنة جاهزية المبنى",
+   "ملف مطابقة المبنى وقائمة التحقق"
+  ],
   "g": [
    {
     "n": 1,
@@ -1084,8 +1232,14 @@ var DATA = [
   "cn": "المبنى المدرسي",
   "code": "4-1-1-2",
   "text": "تنظيم مبنى المدرسة ملائم لعدد المتعلمين وخصائص المرحلة العمرية، ومنهم ذوو الإعاقة.",
+  "st": "ملاءمة المبنى لعدد المتعلمين",
   "tool": "المعاينة الميدانية",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "محضر المعاينة الميدانية",
+   "قائمة التحقق من المواصفات",
+   "تقرير الملاحظات ومعالجتها"
+  ]
  },
  {
   "d": 4,
@@ -1094,8 +1248,14 @@ var DATA = [
   "cn": "المبنى المدرسي",
   "code": "4-1-1-3",
   "text": "تتوافر فصول ومعامل ملائمة للعملية التعليمية تلبي احتياجات المتعلمين، ومنهم ذوو الإعاقة.",
+  "st": "الفصول والمعامل",
   "tool": "المعاينة الميدانية",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "محضر المعاينة الميدانية",
+   "قائمة التحقق من المواصفات",
+   "تقرير الملاحظات ومعالجتها"
+  ]
  },
  {
   "d": 4,
@@ -1104,8 +1264,14 @@ var DATA = [
   "cn": "المبنى المدرسي",
   "code": "4-1-1-4",
   "text": "تلبي المرافق والتجهيزات والخدمات المساندة احتياجات المتعلمين، ومنهم ذوو الإعاقة.",
+  "st": "المرافق والخدمات المساندة",
   "tool": "المعاينة الميدانية",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "محضر المعاينة الميدانية",
+   "قائمة التحقق من المواصفات",
+   "تقرير الملاحظات ومعالجتها"
+  ]
  },
  {
   "d": 4,
@@ -1114,6 +1280,7 @@ var DATA = [
   "cn": "الأمن والسلامة",
   "code": "4-2-1-1",
   "text": "تتوافر في مبنى المدرسة ومرافقها جميع متطلبات الأمن والسلامة.",
+  "st": "الأمن والسلامة",
   "ref": "4-2-1-1",
   "p": [
    {
@@ -1142,6 +1309,7 @@ var DATA = [
   "cn": "الأمن والسلامة",
   "code": "4-2-1-2",
   "text": "تتابع المدرسة صيانة المبنى وجميع مرافقه وتجهيزاته بشكل دوري.",
+  "st": "صيانة المبنى",
   "ref": "4-2-1-2",
   "p": [
    {
@@ -1161,8 +1329,14 @@ var DATA = [
   "cn": "الأمن والسلامة",
   "code": "4-2-1-3",
   "text": "تتابع المدرسة نظافة المبنى المدرسي وجميع مرافقه بشكل مستمر.",
+  "st": "نظافة المبنى",
   "tool": "المعاينة الميدانية",
-  "proposed": false
+  "proposed": false,
+  "rq": [
+   "خطة النظافة وجداولها",
+   "محضر متابعة النظافة",
+   "التقويم الدوري (ربع سنوي) للنظافة"
+  ]
  }
 ];
 
@@ -1211,6 +1385,94 @@ function countFiles_(folder) {
   var s = folder.getFolders();
   while (s.hasNext()) n += countFiles_(s.next());
   return n;
+}
+
+/* ========== قواعد التسمية والتحقق ========== */
+var DOC_EXT    = ["pdf","docx","doc","xlsx","xls","pptx","ppt","png","jpg","jpeg","txt","csv"];
+var IMG_EXT    = ["jpg","jpeg","png","webp","heic"];
+var REPORT_EXT = ["pdf"];
+var MIN_BYTES  = { doc: 1000, img: 20000, report: 30000 };
+var STAT_OK = "✔ متحقق", STAT_FIX = "⚠ يحتاج تصحيح", STAT_NO = "✖ مرفوض";
+var SAMPLE_MOD = 5; // عيّنة المشرف: ملف من كل خمسة (20%)
+var GENERIC_RE = /^(img|dsc|dscn|image|photo|screenshot|scan|scanned|document|doc|file|new|untitled|whatsapp|wa|مستند|ملف|صورة|صوره|لقطة|بدون عنوان)[\s_\-\.0-9()a-z]*$/i;
+function strip_(s) { return norm_(s).replace(/[^\u0600-\u06FFa-zA-Z0-9]/g, ""); }
+function splitName_(name) { var m = /^(.*?)(?:\.([A-Za-z0-9]+))?$/.exec(String(name)); return { base: m[1], ext: (m[2] || "").toLowerCase() }; }
+function reportPhotos_(name) {
+  var t = String(name).replace(/[\u0660-\u0669]/g, function (d) { return String(d.charCodeAt(0) - 0x0660); });
+  var m = /(\d+)\s*صور/.exec(t); return m ? parseInt(m[1], 10) : null;
+}
+function reportWarn_(n) { return n === null ? "عدد الصور غير مذكور في اسم الملف" : (n < 6 ? "يحوي " + n + " من 6 صور، ينقصه " + (6 - n) : ""); }
+function cls_(kind) { return kind === "item" ? "doc" : kind; }
+function extOk_(ext, kind) { var L = cls_(kind) === "img" ? IMG_EXT : (kind === "report" ? REPORT_EXT : DOC_EXT); return L.indexOf(ext) >= 0; }
+function cleanDesc_(base, ctx) {
+  var s = norm_(base).replace(/_/g, " ");
+  s = s.split(ctx.code).join(" ");
+  if (ctx.label) s = s.split(norm_(ctx.label)).join(" ");
+  s = s.replace(/التقرير البصري/g, " ").replace(/(^|\s)ف\d+(\s|$)/g, " ").replace(/صوره?\s*-?\s*\d*/g, " ").replace(/لقطه\s*-?\s*\d*/g, " ").replace(/شاهد\s*\d*/g, " ").replace(/20\d\d(-\d\d){0,2}/g, " ");
+  return s.replace(/[-()]+/g, " ").replace(/\s+/g, " ").trim();
+}
+function nameCheck_(name, ctx, size) {
+  var pr = splitName_(name), issues = [], st = strip_(pr.base), c = cls_(ctx.kind);
+  if (st.indexOf(strip_(ctx.code)) !== 0) issues.push("لا يبدأ برمز المؤشر " + ctx.code);
+  if (c === "doc" && ctx.label && st.indexOf(strip_(ctx.label)) < 0) issues.push("لا يذكر «" + ctx.label + "»");
+  if (ctx.kind === "report" && st.indexOf(strip_("التقرير البصري")) < 0) issues.push("لا يحوي «التقرير البصري»");
+  if (ctx.kind === "report" && reportPhotos_(name) === null) issues.push("لا يذكر عدد الصور (مثل 6صور)");
+  if (c === "img") {
+    if (!/صوره|لقطه/.test(norm_(pr.base))) issues.push("لا يحوي كلمة «صورة» أو «لقطة»");
+    if (cleanDesc_(pr.base, ctx).replace(/[^\u0600-\u06FFa-zA-Z]/g, "").length < 3) issues.push("لا وصف واضح للصورة");
+    if (/وصف\s*مطلوب/.test(cleanDesc_(pr.base, ctx))) issues.push("الوصف لم يُكتب (وصف-مطلوب)");
+  }
+  if (GENERIC_RE.test(pr.base.trim())) issues.push("اسم عام (مثل IMG أو WhatsApp)");
+  if (!extOk_(pr.ext, ctx.kind)) issues.push("امتداد غير مقبول (" + (pr.ext || "بلا امتداد") + ")");
+  if (size != null && size < MIN_BYTES[c]) issues.push("الملف صغير جداً أو فارغ");
+  return { ok: issues.length === 0, issues: issues };
+}
+function ymd_(d, full) { if (!d) return ""; var y = d.getFullYear(), m = pad2_(d.getMonth() + 1); return full ? y + "-" + m + "-" + pad2_(d.getDate()) : y + "-" + m; }
+function proposedName_(name, ctx, created, seq) {
+  var pr = splitName_(name), desc = GENERIC_RE.test(pr.base.trim()) ? "" : cleanDesc_(pr.base, ctx);
+  if (desc.length > 40) desc = desc.substring(0, 40).trim();
+  var ext = pr.ext || (ctx.kind === "report" ? "pdf" : ""), parts = [ctx.code];
+  if (ctx.kind === "doc")        { parts.push("ف" + pad2_(ctx.para)); parts.push(ctx.label); }
+  else if (ctx.kind === "item")  { parts.push("شاهد" + ctx.para); parts.push(ctx.label); }
+  else if (ctx.kind === "img")   { parts.push("صورة-" + pad2_(seq || 1)); }
+  else if (ctx.kind === "report"){ parts.push("التقرير البصري"); if (ctx.label) parts.push(ctx.label); var rn = reportPhotos_(name); parts.push(rn === null ? "؟صور" : rn + "صور"); }
+  if (ctx.kind === "img") parts.push(desc || "وصف-مطلوب"); else if (desc && ctx.kind !== "report") parts.push(desc);
+  if (ctx.kind !== "report") parts.push(ymd_(created, ctx.kind === "img"));
+  return parts.filter(function (x) { return x; }).join("_") + (ext ? "." + ext : "");
+}
+function inSample_(id) { var s = 0; id = String(id); for (var i = 0; i < id.length; i++) s += id.charCodeAt(i); return s % SAMPLE_MOD === 0; }
+function verifiedFlag_(coord, sup, sample, nameOk) { return !!nameOk && coord === STAT_OK && !(sample && sup === STAT_NO); }
+function listFiles_(folder, recursive) {
+  var out = [], f = folder.getFiles();
+  while (f.hasNext()) out.push(f.next());
+  if (recursive) { var s = folder.getFolders(); while (s.hasNext()) out = out.concat(listFiles_(s.next(), true)); }
+  return out;
+}
+
+/* ========== ورقة التحقق ========== */
+var VER_HEAD = ["معرّف الملف","رمز المؤشر","النوع","الفقرة / الشاهد","السجل / البند","الاسم الحالي","الاسم مطابق؟","ملاحظات الاسم","الاسم المقترح","طبّق الاسم","فحص المنسّق","في عيّنة المشرف","مراجعة المشرف","ملاحظة","تنبيه (يُكتب بالأحمر)"];
+function verSheet_(ss) {
+  var sh = ss.getSheetByName("التحقق");
+  if (!sh) { sh = ss.insertSheet("التحقق"); sh.setRightToLeft(true); sh.appendRow(VER_HEAD); sh.setFrozenRows(1); }
+  return sh;
+}
+function readVer_(ss) {
+  var v = verSheet_(ss).getDataRange().getValues(), m = {};
+  for (var r = 1; r < v.length; r++) m[v[r][0]] = { apply: v[r][9] === true, coord: v[r][10], sup: v[r][12], note: v[r][13] };
+  return m;
+}
+function writeVer_(ss, rows) {
+  var sh = verSheet_(ss); sh.clearContents();
+  sh.getRange(1, 1, 1, VER_HEAD.length).setValues([VER_HEAD]);
+  if (rows.length) {
+    sh.getRange(2, 1, rows.length, VER_HEAD.length).setValues(rows);
+    sh.getRange(2, 10, rows.length, 1).insertCheckboxes();
+    var rule = SpreadsheetApp.newDataValidation().requireValueInList([STAT_OK, STAT_FIX, STAT_NO], true).build();
+    sh.getRange(2, 11, rows.length, 1).setDataValidation(rule);
+    sh.getRange(2, 13, rows.length, 1).setDataValidation(rule);
+    sh.getRange(2, 15, rows.length, 1).setFontColor("#dc2626").setFontWeight("bold");
+  }
+  sh.setFrozenRows(1);
 }
 
 /* ========== Google Sheet ========== */
@@ -1266,16 +1528,23 @@ function setupStructure() {
         }
       }
     } else {
+      var tf = child_(ind, TOOLS_FOLDER);
       var key2 = "T|" + i.code;
       if (!idx[key2]) {
-        var tf = child_(ind, TOOLS_FOLDER);
         textFile_(ind, "أداة القياس - " + i.tool + ".txt",
           "المؤشر: " + i.code + " " + i.text +
           "\nلم يرد في تقرير مصادر السجلات؛ يُقاس بأداة أخرى غير السجلات." +
           "\nأداة القياس: " + i.tool +
-          "\nترفع الشواهد الداعمة في مجلد «" + TOOLS_FOLDER + "».");
+          "\nالشواهد المطلوبة (لكل شاهد مجلد داخل «" + TOOLS_FOLDER + "»):\n- " + (i.rq || []).join("\n- "));
         var row2 = [key2, "أداة أخرى", i.code, "", i.tool, "", tf.getId()];
         idxSheet.appendRow(row2); idx[key2] = row2; added++;
+      }
+      for (var m = 0; m < (i.rq || []).length; m++) {
+        var ekey = "E|" + i.code + "|" + (m + 1);
+        if (idx[ekey]) continue;
+        var ef = child_(tf, "شاهد " + (m + 1) + " - " + i.rq[m]);
+        var erow = [ekey, "شاهد مطلوب", i.code, m + 1, i.rq[m], "", ef.getId()];
+        idxSheet.appendRow(erow); idx[ekey] = erow; added++;
       }
       if (i.g) {
         var gf = child_(ind, GUIDE_FOLDER);
@@ -1306,27 +1575,65 @@ function setupStructure() {
 
 /* ========== 2) تحديث الحالة ========== */
 function refreshStatus() {
-  var ss = sheet_(), idx = readIndex_(ss), out = { generatedAt: new Date().toISOString(), registers: {}, tools: {}, guide: {}, photos: {}, reports: {}, errors: [] };
-  var rows = [["رمز المؤشر", "الفقرة", "السجل / الأداة", "المصدر", "عدد الملفات", "مرفوع وفيه شواهد"]];
+  var t0 = Date.now(), ss = sheet_(), idx = readIndex_(ss), ver = readVer_(ss);
+  var out = { generatedAt: new Date().toISOString(), registers: {}, named: {}, verified: {}, ev: {}, evNamed: {}, evVer: {}, tools: {}, guide: {}, photos: {}, photosRaw: {}, reports: {}, reportsRaw: {}, reportsList: {}, errors: [], partial: false };
+  var stRows = [["رمز المؤشر", "الفقرة / الشاهد", "السجل / البند", "المصدر", "عدد الملفات", "مطابق للتسمية", "متحقق منه"]], verRows = [];
+  var byCode = {}; DATA.forEach(function (i) { byCode[i.code] = i; });
   var keys = Object.keys(idx).sort();
   for (var k = 0; k < keys.length; k++) {
-    var v = idx[keys[k]], n = 0;
-    try { n = (v[1] === "تقرير بصري") ? countDirect_(DriveApp.getFolderById(v[6])) : countFiles_(DriveApp.getFolderById(v[6])); }
-    catch (e) { out.errors.push({ key: keys[k], error: e.message }); n = -1; }
-    if (v[1] === "سجل") out.registers[keys[k]] = n;
-    else if (v[1] === "وثيقة مقترحة") out.guide[keys[k]] = n;
-    else if (v[1] === "صور") out.photos[v[2]] = n;
-    else if (v[1] === "تقرير بصري") out.reports[v[2]] = n;
-    else out.tools[v[2]] = n;
-    rows.push([v[2], v[3], v[4], v[5], n, n > 0]);
+    if (Date.now() - t0 > TIME_LIMIT_MS) { out.partial = true; break; }
+    var key = keys[k], v = idx[key], type = v[1], code = v[2], n = 0, named = 0, vf = 0;
+    try {
+      var folder = DriveApp.getFolderById(v[6]);
+      if (type === "سجل" || type === "شاهد مطلوب" || type === "صور" || type === "تقرير بصري") {
+        var files = listFiles_(folder, type !== "تقرير بصري");
+        files.sort(function (a, b) { return a.getName() < b.getName() ? -1 : 1; });
+        n = files.length;
+        var ctx = { code: code, kind: type === "سجل" ? "doc" : (type === "شاهد مطلوب" ? "item" : (type === "صور" ? "img" : "report")), label: v[4], para: v[3] };
+        if (type === "تقرير بصري") ctx.label = byCode[code] ? byCode[code].st : "";
+        for (var x = 0; x < files.length; x++) {
+          var f = files[x], id = f.getId(), nm = f.getName(), chk = nameCheck_(nm, ctx, f.getSize());
+          var prev = ver[id] || {}, smp = inSample_(id);
+          if (chk.ok) named++;
+          var isVer = verifiedFlag_(prev.coord, prev.sup, smp, chk.ok); if (isVer) vf++;
+          var rn = (type === "تقرير بصري") ? reportPhotos_(nm) : null, warn = (type === "تقرير بصري") ? reportWarn_(rn) : "";
+          if (type === "تقرير بصري") (out.reportsList[code] = out.reportsList[code] || []).push({ id: id, name: nm, ok: chk.ok, n: rn, ver: isVer });
+          verRows.push([id, code, type === "سجل" ? "سجل" : (type === "شاهد مطلوب" ? "شاهد مطلوب" : (type === "صور" ? "صورة" : "تقرير بصري")), v[3], type === "صور" ? "الصور" : v[4], nm,
+            chk.ok ? "✔" : "✖", chk.issues.join("؛ "), chk.ok ? "" : proposedName_(nm, ctx, f.getDateCreated(), x + 1),
+            (!chk.ok && prev.apply === true), prev.coord || "", smp ? "نعم" : "", prev.sup || "", prev.note || "", warn]);
+        }
+      } else { n = countFiles_(folder); }
+    } catch (e) { out.errors.push({ key: key, error: e.message }); n = -1; }
+    if (type === "سجل") { out.registers[key] = n; out.named[key] = named; out.verified[key] = vf; }
+    else if (type === "شاهد مطلوب") { out.ev[key] = n; out.evNamed[key] = named; out.evVer[key] = vf; }
+    else if (type === "وثيقة مقترحة") out.guide[key] = n;
+    else if (type === "صور") { out.photos[code] = named; out.photosRaw[code] = n; }
+    else if (type === "تقرير بصري") { out.reports[code] = named; out.reportsRaw[code] = n; }
+    else out.tools[code] = n;
+    stRows.push([code, v[3], v[4], v[5], n, named, vf]);
   }
   var st = ss.getSheetByName("الحالة");
-  st.clear(); st.getRange(1, 1, rows.length, 6).setValues(rows);
-  st.getRange(2, 6, rows.length - 1, 1).insertCheckboxes();
-  st.setFrozenRows(1);
+  st.clear(); st.getRange(1, 1, stRows.length, 7).setValues(stRows); st.setFrozenRows(1);
+  if (!out.partial) writeVer_(ss, verRows);
   var json = JSON.stringify(out);
   try { CacheService.getScriptCache().put(CACHE_KEY, json, CACHE_SECONDS); } catch (e) {}
   return json;
+}
+
+/* تطبيق الأسماء المقترحة التي وُضعت عليها علامة «طبّق الاسم» (يُحفظ الاسم الأصلي في وصف الملف) */
+function applyRenames() {
+  var ss = sheet_(), sh = verSheet_(ss), v = sh.getDataRange().getValues(), done = 0, failed = 0;
+  for (var r = 1; r < v.length; r++) {
+    if (v[r][9] !== true || !v[r][8] || v[r][8] === v[r][5]) continue;
+    try {
+      var f = DriveApp.getFileById(v[r][0]), old = f.getName(), d = f.getDescription();
+      f.setDescription("الاسم الأصلي: " + old + (d ? "\n" + d : ""));
+      f.setName(v[r][8]);
+      sh.getRange(r + 1, 6).setValue(v[r][8]); sh.getRange(r + 1, 10).setValue(false); done++;
+    } catch (e) { failed++; }
+  }
+  Logger.log("أُعيدت تسمية " + done + " ملفاً، وتعذّر " + failed + ".");
+  refreshStatus();
 }
 
 /* ========== 3) مشغّل زمني اختياري ========== */

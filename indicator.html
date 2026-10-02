@@ -50,7 +50,7 @@ summary::-webkit-details-marker{display:none}
 .note{background:#fff1f2;border:1px solid #fecdd3;color:#9f1239;border-radius:10px;padding:7px 10px;font-size:12px;margin:6px 0}
 .tag{font-size:10.5px;color:var(--warn);background:var(--warnbg);border:1px solid #fde68a;border-radius:999px;padding:0 8px;font-weight:700}
 .qrbox{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
-#qr{width:132px;height:132px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px;display:flex;align-items:center;justify-content:center}
+#qr a{display:block;line-height:0;cursor:pointer}#qr{width:132px;height:132px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px;display:flex;align-items:center;justify-content:center}
 .foot{margin-top:14px;font-size:11.5px;color:var(--mut);line-height:1.8}
 </style>
 </head>
@@ -104,11 +104,11 @@ function render(code){
    <div class="card"><h2><i class="fa-solid fa-camera"></i> الصور ولقطات الوثائق</h2><p class="sub">${val(ph)} من ٦ صور أو لقطات وثائق</p><details><summary>ما يُنصح بتصويره (${x.gd.length} لقطة)</summary>${x.gn?`<div class="note"><i class="fa-solid fa-shield-halved"></i> ${esc(x.gn)}</div>`:""}${shots}</details></div>
    <div class="card"><h2><i class="fa-solid fa-file-pdf"></i> التقرير البصري</h2><p class="sub">${val(rp)} تقرير في المجلد</p><p style="margin:0;font-size:12px;color:var(--mut)">قالب موحّد: بطاقة المؤشر، والسجل الداعم نصاً، وست صور، والتواقيع.</p></div>
    <div class="card"><h2><i class="fa-solid fa-user-tag"></i> ممن نطلب السجلات ومن المسؤول</h2><p class="sub">الجهة التي تسلّم السجلات، وفريق العمل</p><div>${srcChips(x)}</div><p style="margin:8px 0 0;font-size:12px">منسّق المؤشر: <b>${esc(x.r)}</b><br>المشرف: <b>${esc(x.a)}</b></p></div>
-   <div class="card"><h2><i class="fa-solid fa-user-check"></i> مراجعة المشرف</h2><p class="sub">يراجع المشرف المؤشر ويعتمده</p><p style="margin:0;font-size:12px;color:var(--mut)">تتم المراجعة خارج هذه الصفحة.</p></div>
-   <div class="card wide"><h2><i class="fa-solid fa-qrcode"></i> رمز QR لهذا المؤشر</h2><p class="sub">ضعه في التقرير البصري ليفتح مجلد المؤشر في Drive عند مسحه أو الضغط عليه</p>
-     <div class="qrbox"><div id="qr"></div><div style="display:flex;flex-direction:column;gap:8px"><button class="btn pri" id="dl"><i class="fa-solid fa-download"></i> تنزيل الصورة (PNG)</button><button class="btn" id="cp"><i class="fa-regular fa-copy"></i> نسخ الرابط</button><span style="font-size:11px;color:var(--mut);direction:ltr;text-align:right;word-break:break-all">${FOLDER(x.f)}</span></div></div></div>`;
+   <div class="card"><h2><i class="fa-solid fa-user-check"></i> مراجعة المشرف</h2><p class="sub">يراجع المشرف المؤشر ويُقرّه</p><p style="margin:0;font-size:12px;color:var(--mut)">تتم المراجعة خارج هذه الصفحة.</p></div>
+   <div class="card wide"><h2><i class="fa-solid fa-qrcode"></i> رمز QR لهذا المؤشر</h2><p class="sub">اضغط عليه أو امسحه لفتح مجلد المؤشر في Drive، وضعه في التقرير البصري</p>
+     <div class="qrbox"><div id="qr"></div><div style="display:flex;flex-direction:column;gap:8px"><button class="btn pri" id="dl"><i class="fa-solid fa-download"></i> تنزيل الصورة (PNG)</button><button class="btn" id="cp"><i class="fa-regular fa-copy"></i> نسخ الرابط</button><a href="${FOLDER(x.f)}" target="_blank" rel="noopener" style="font-size:11px;color:#0f766e;direction:ltr;text-align:right;word-break:break-all">${FOLDER(x.f)}</a></div></div></div>`;
   const q=document.getElementById('qr'); q.innerHTML="";
-  try{ new QRCode(q,{text:FOLDER(x.f),width:120,height:120,correctLevel:QRCode.CorrectLevel.M}); }catch(e){ q.innerHTML='<i class="fa-solid fa-qrcode" style="font-size:60px;color:#94a3b8"></i>'; }
+  try{ const ql=document.createElement("a"); ql.href=FOLDER(x.f); ql.target="_blank"; ql.rel="noopener"; ql.title="اضغط لفتح مجلد المؤشر في Drive"; ql.setAttribute("aria-label","رمز QR: اضغط أو امسح لفتح مجلد المؤشر في Drive"); q.appendChild(ql); new QRCode(ql,{text:FOLDER(x.f),width:120,height:120,correctLevel:QRCode.CorrectLevel.M}); }catch(e){ q.innerHTML='<i class="fa-solid fa-qrcode" style="font-size:60px;color:#94a3b8"></i>'; }
   document.getElementById('dl').onclick=()=>{ const c=q.querySelector('canvas'); const u=c?c.toDataURL('image/png'):(q.querySelector('img')||{}).src; if(!u) return; const a=document.createElement('a'); a.href=u; a.download='QR-'+x.code+'.png'; a.click(); };
   document.getElementById('cp').onclick=async()=>{ try{ await navigator.clipboard.writeText(FOLDER(x.f)); document.getElementById('cp').textContent='تم النسخ'; }catch(e){} };
 }
@@ -123,6 +123,7 @@ function load(){
 }
 load();
 </script>
+<script src="legal-notice.js"></script>
 <script src="content-protect.js"></script>
 </body>
 </html>
