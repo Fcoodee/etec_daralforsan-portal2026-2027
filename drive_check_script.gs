@@ -14,6 +14,8 @@
  *   doGet(e)          ← واجهة JSON لصفحة evidence-link.html
  *                       ?refresh=1 لإجبار التحديث، ?callback=fn لصيغة JSONP
  *
+ * وثائق مقترحة: لثلاثة مؤشرات لا ترد في تقرير المصادر (1-5-1-1، 2-2-1-2، 4-1-1-1) — «إضاءات من دليل فبراير 2026»، ولا تدخل في الـ147.
+ * الشواهد المصوّرة: لكل مؤشر مجلد «التقرير البصري» وداخله «صور»؛ يعدّ السكربت الصور (المطلوب ٦ على الأقل، تشمل لقطات الوثائق) وملفات التقرير.
  * قاعدة العلامة ✅: مجلد السجل داخل «وثائق السجلات» يحوي ملفاً واحداً على الأقل.
  * قاعدة الفقرة: جميع السجلات مطلوبة (AND).
  */
@@ -22,8 +24,11 @@ var ROOT_FOLDER_ID = "1IDVvAtEyYMA_FZhua_vLDmw_z1cjSBdQ"; // تسكين الشو
 var SHEET_NAME     = "لوحة حالة ربط الشواهد_etec26";
 var DOCS_FOLDER    = "وثائق السجلات";
 var TOOLS_FOLDER   = "شواهد داعمة";
-var CACHE_KEY      = "evidence_status_v1";
-var CACHE_SECONDS  = 600;
+var GUIDE_FOLDER   = "وثائق مقترحة - إضاءات من دليل فبراير 2026";
+var REPORT_FOLDER  = "التقرير البصري";   // داخل كل مؤشر: يحوي ملف/ملفات التقرير البصري
+var PHOTOS_FOLDER  = "صور";             // داخل «التقرير البصري»: الصور ولقطات الوثائق (ست على الأقل لكل مؤشر)
+var CACHE_KEY      = "evidence_status_v3";
+var CACHE_SECONDS  = 21600; // 6 ساعات (أقصى حد في Apps Script)؛ يجدّدها المشغّل الزمني كل ساعة ويجبرها زر «تحديث الحالة الآن»
 var TIME_LIMIT_MS  = 5 * 60 * 1000; // هامش أمان قبل حد Apps Script (6 دقائق)
 
 /* ========== البيانات: 52 مؤشراً (28 بسجلات من تقرير الهيئة + 24 بأدوات أخرى) ========== */
@@ -382,7 +387,7 @@ var DATA = [
   "c": "1-4",
   "cn": "التطوير المؤسسي",
   "code": "1-4-1-1",
-  "text": "(*) توفر المدرسة كادرًا تعليميًّا مكتملًا ومؤهلًا بما يتسق مع المهام الموكلة له.",
+  "text": "توفر المدرسة كادرًا تعليميًّا مكتملًا ومؤهلًا بما يتسق مع المهام الموكلة له.",
   "ref": "1-4-1-1",
   "p": [
    {
@@ -415,7 +420,7 @@ var DATA = [
   "c": "1-4",
   "cn": "التطوير المؤسسي",
   "code": "1-4-1-2",
-  "text": "(*) توفر المدرسة كادرًا إداريًّا مكتملًا ومؤهلًا بما يتسق مع المهام الموكلة له.",
+  "text": "توفر المدرسة كادرًا إداريًّا مكتملًا ومؤهلًا بما ينسق مع المهام الموكلة له.",
   "ref": "1-4-1-2",
   "p": [
    {
@@ -446,7 +451,7 @@ var DATA = [
   "c": "1-4",
   "cn": "التطوير المؤسسي",
   "code": "1-4-1-3",
-  "text": "(*) تظهر المدرسة الملاءة والاستدامة المالية.",
+  "text": "تظهر المدرسة الملاءة والاستدامة المالية.",
   "ref": "1-4-1-3",
   "p": [
    {
@@ -600,7 +605,35 @@ var DATA = [
   "code": "1-5-1-1",
   "text": "تلتزم المدرسة بالمحافظة على حقوق المتعلمين، وحمايتهم.",
   "tool": "تحليل الوثائق",
-  "proposed": false
+  "proposed": false,
+  "g": [
+   {
+    "n": 1,
+    "t": "إجراءات حماية حقوق المتعلمين المعتمدة"
+   },
+   {
+    "n": 2,
+    "t": "برامج التوعية بالحقوق وآليات الإبلاغ"
+   },
+   {
+    "n": 4,
+    "t": "نماذج الرصد المبكر والإحالة"
+   },
+   {
+    "n": 5,
+    "t": "نماذج التبليغ الرسمية"
+   },
+   {
+    "n": 6,
+    "t": "ملخص مجمّع للحالات بلا أسماء"
+   },
+   {
+    "n": 8,
+    "t": "تقارير المراجعة الدورية لحماية الحقوق"
+   }
+  ],
+  "gsrc": "الموجه الطلابي",
+  "gnote": "الحالات الفردية سرّية: لا تُرفع ملفاتها إلى Drive المشترك؛ يُرفع فقط السياسات والنماذج الفارغة والتقارير المجمّعة بلا أسماء."
  },
  {
   "d": 1,
@@ -671,7 +704,7 @@ var DATA = [
   "c": "2-1",
   "cn": "بناء خبرات التعلم",
   "code": "2-1-1-3",
-  "text": "تنوع المدرسة في استراتيجيات التعليم والتعلم لتلبية احتياجات المتعلمين، ودعم تعلمهم.",
+  "text": "تنوع المدرسة في إستراتيجيات التعليم والتعلم لتلبية احتياجات المتعلمين، ودعم تعلمهم.",
   "tool": "الملاحظة الصفية",
   "proposed": false
  },
@@ -762,7 +795,7 @@ var DATA = [
   "d": 2,
   "dn": "التعليم والتعلم",
   "c": "2-2",
-  "cn": "تقويم التعليم",
+  "cn": "تقويم التعلم",
   "code": "2-2-1-1",
   "text": "تطبق المدرسة أساليب وأدوات تقويم متنوعة للكشف عن مستويات أداء المتعلمين المختلفة.",
   "ref": "2-2-1-1",
@@ -783,17 +816,41 @@ var DATA = [
   "d": 2,
   "dn": "التعليم والتعلم",
   "c": "2-2",
-  "cn": "تقويم التعليم",
+  "cn": "تقويم التعلم",
   "code": "2-2-1-2",
   "text": "تطبق المدرسة أساليب وأدوات متنوعة لتقويم نواتج التعلم المستهدفة في مناهج التعليم.",
   "tool": "الملاحظة الصفية",
-  "proposed": false
+  "proposed": false,
+  "g": [
+   {
+    "n": 2,
+    "t": "عينات من أدوات التقويم المتنوعة"
+   },
+   {
+    "n": 3,
+    "t": "مصفوفة المواءمة التقويمية"
+   },
+   {
+    "n": 5,
+    "t": "سجل المعالجات التعليمية للنواتج غير المتحققة"
+   },
+   {
+    "n": 6,
+    "t": "تقارير التقويم الإلكتروني ومستوى الإتقان"
+   },
+   {
+    "n": 8,
+    "t": "مراجعة جودة التقويم"
+   }
+  ],
+  "gsrc": "وكيل الشؤون التعليمية",
+  "gnote": ""
  },
  {
   "d": 2,
   "dn": "التعليم والتعلم",
   "c": "2-2",
-  "cn": "تقويم التعليم",
+  "cn": "تقويم التعلم",
   "code": "2-2-1-3",
   "text": "تحلل المدرسة نتائج التقويم، وتوظفها في تحسين عمليات التعليم والتعلم والتقويم.",
   "ref": "2-2-1-2",
@@ -815,7 +872,7 @@ var DATA = [
   "d": 2,
   "dn": "التعليم والتعلم",
   "c": "2-2",
-  "cn": "تقويم التعليم",
+  "cn": "تقويم التعلم",
   "code": "2-2-1-4",
   "text": "تقدم المدرسة التغذية الراجعة للمتعلمين وأولياء أمورهم، وتتابع تقدمهم بشكل مستمر.",
   "ref": "2-2-1-3",
@@ -895,7 +952,7 @@ var DATA = [
   "d": 3,
   "dn": "نواتج التعلم",
   "c": "3-2",
-  "cn": "التطوير الشخصي والصحي والثقافي",
+  "cn": "التطور الشخصي والصحي والاجتماعي",
   "code": "3-2-1-1",
   "text": "يظهر المتعلمون الاعتزاز بالقيم والهوية الوطنية.",
   "tool": "استبانات المتعلم والأسرة",
@@ -905,7 +962,7 @@ var DATA = [
   "d": 3,
   "dn": "نواتج التعلم",
   "c": "3-2",
-  "cn": "التطوير الشخصي والصحي والثقافي",
+  "cn": "التطور الشخصي والصحي والاجتماعي",
   "code": "3-2-1-2",
   "text": "يظهر المتعلمون اتجاهات إيجابية نحو ذواتهم والآخرين.",
   "tool": "استبانات المتعلم والأسرة",
@@ -915,7 +972,7 @@ var DATA = [
   "d": 3,
   "dn": "نواتج التعلم",
   "c": "3-2",
-  "cn": "التطوير الشخصي والصحي والثقافي",
+  "cn": "التطور الشخصي والصحي والاجتماعي",
   "code": "3-2-1-3",
   "text": "يظهر المتعلمون التزامًا بالممارسات الصحية السليمة.",
   "tool": "استبانات المتعلم والأسرة",
@@ -925,7 +982,7 @@ var DATA = [
   "d": 3,
   "dn": "نواتج التعلم",
   "c": "3-2",
-  "cn": "التطوير الشخصي والصحي والثقافي",
+  "cn": "التطور الشخصي والصحي والاجتماعي",
   "code": "3-2-1-4",
   "text": "يشارك المتعلمون في الأنشطة المجتمعية والأعمال التطوعية.",
   "ref": "3-2-1-4",
@@ -945,7 +1002,7 @@ var DATA = [
   "d": 3,
   "dn": "نواتج التعلم",
   "c": "3-2",
-  "cn": "التطوير الشخصي والصحي والثقافي",
+  "cn": "التطور الشخصي والصحي والاجتماعي",
   "code": "3-2-1-5",
   "text": "يلتزم المتعلمون بقواعد السلوك والانضباط المدرسي.",
   "ref": "3-2-1-5",
@@ -974,7 +1031,7 @@ var DATA = [
   "d": 3,
   "dn": "نواتج التعلم",
   "c": "3-2",
-  "cn": "التطوير الشخصي والصحي والثقافي",
+  "cn": "التطور الشخصي والصحي والاجتماعي",
   "code": "3-2-1-6",
   "text": "يظهر المتعلمون الاستقلالية والقدرة على التعلم الذاتي.",
   "tool": "استبانات المتعلم والأسرة",
@@ -984,7 +1041,7 @@ var DATA = [
   "d": 3,
   "dn": "نواتج التعلم",
   "c": "3-2",
-  "cn": "التطوير الشخصي والصحي والثقافي",
+  "cn": "التطور الشخصي والصحي والاجتماعي",
   "code": "3-2-1-7",
   "text": "يظهر المتعلمون اعتزازًا بثقافتهم واحترامًا للتنوع الثقافي في المجتمع.",
   "tool": "استبانات المتعلم والأسرة",
@@ -996,9 +1053,29 @@ var DATA = [
   "c": "4-1",
   "cn": "المبنى المدرسي",
   "code": "4-1-1-1",
-  "text": "توفر المدرسة مبنًى تعليميًّا يستوفي المواصفات والاشتراطات المعتمدة من حيث النوع والخدمات المساندة.",
+  "text": "توفر المدرسة مبنى تعليمي يستوفي المواصفات والاشتراطات المعتمدة من حيث النوع والخدمات المساندة.",
   "tool": "المعاينة الميدانية",
-  "proposed": false
+  "proposed": false,
+  "g": [
+   {
+    "n": 1,
+    "t": "قرار تكليف مسؤول أو لجنة جاهزية المبنى"
+   },
+   {
+    "n": 2,
+    "t": "ملف مطابقة المبنى وقائمة التحقق"
+   },
+   {
+    "n": 4,
+    "t": "سجل الجولات الداخلية قبل وبعد"
+   },
+   {
+    "n": 5,
+    "t": "سجل بلاغات المخاطر والأعطال"
+   }
+  ],
+  "gsrc": "وكيل الشؤون المدرسية",
+  "gnote": ""
  },
  {
   "d": 4,
@@ -1095,14 +1172,38 @@ function domainName_(i)    { return "المجال " + i.d + " - " + i.dn; }
 function criterionName_(i) { return "المعيار " + i.c + " - " + i.cn; }
 function indicatorName_(i) { return "المؤشر " + i.code + " - " + i.text; }
 function paragraphName_(p) { return "الفقرة " + pad2_(p.n) + " - " + p.text; }
+function guideName_(d)     { return "إضاءة " + d.n + " - " + d.t; }
 
 /* ========== أدوات Drive ========== */
+/* مطابقة الأسماء مع تجاهل التشكيل واختلاف الهمزات (تمنع إنشاء مجلدات مكررة إن اختلف تشكيل الاسم) */
+function norm_(s) {
+  return String(s).replace(/[\u064B-\u0652\u0670\u0640]/g, "")
+    .replace(/[\u0623\u0625\u0622\u0671]/g, "\u0627").replace(/\u0649/g, "\u064A").replace(/\u0629/g, "\u0647")
+    .replace(/\s+/g, " ").trim();
+}
+var CHILD_CACHE_ = {};
 function child_(parent, name) {
-  var it = parent.getFoldersByName(name);
-  return it.hasNext() ? it.next() : parent.createFolder(name);
+  var pid = parent.getId(), key = norm_(name), map = CHILD_CACHE_[pid];
+  if (!map) {
+    map = {};
+    var it = parent.getFolders();
+    while (it.hasNext()) { var f = it.next(), k = norm_(f.getName()); if (!map[k]) map[k] = f; }
+    CHILD_CACHE_[pid] = map;
+  }
+  if (map[key]) return map[key];
+  var created = parent.createFolder(name);
+  map[key] = created;
+  return created;
 }
 function textFile_(folder, name, content) {
-  if (!folder.getFilesByName(name).hasNext()) folder.createFile(name, content, MimeType.PLAIN_TEXT);
+  var key = norm_(name), it = folder.getFiles();
+  while (it.hasNext()) { if (norm_(it.next().getName()) === key) return; }
+  folder.createFile(name, content, MimeType.PLAIN_TEXT);
+}
+function countDirect_(folder) {
+  var n = 0, f = folder.getFiles();
+  while (f.hasNext()) { f.next(); n++; }
+  return n;
 }
 function countFiles_(folder) {
   var n = 0, f = folder.getFiles();
@@ -1166,16 +1267,38 @@ function setupStructure() {
       }
     } else {
       var key2 = "T|" + i.code;
-      if (idx[key2]) continue;
-      var tf = child_(ind, TOOLS_FOLDER);
-      textFile_(ind, "أداة القياس - " + i.tool + ".txt",
-        "المؤشر: " + i.code + " " + i.text +
-        "\nلم يرد في تقرير مصادر السجلات؛ يُقاس بأداة أخرى غير السجلات." +
-        "\nأداة القياس: " + i.tool + (i.proposed ? " (مقترحة — بانتظار الاعتماد)" : "") +
-        "\nترفع الشواهد الداعمة في مجلد «" + TOOLS_FOLDER + "».");
-      var row2 = [key2, "أداة أخرى", i.code, "", i.tool + (i.proposed ? " (مقترحة)" : ""), "", tf.getId()];
-      idxSheet.appendRow(row2); idx[key2] = row2; added++;
+      if (!idx[key2]) {
+        var tf = child_(ind, TOOLS_FOLDER);
+        textFile_(ind, "أداة القياس - " + i.tool + ".txt",
+          "المؤشر: " + i.code + " " + i.text +
+          "\nلم يرد في تقرير مصادر السجلات؛ يُقاس بأداة أخرى غير السجلات." +
+          "\nأداة القياس: " + i.tool +
+          "\nترفع الشواهد الداعمة في مجلد «" + TOOLS_FOLDER + "».");
+        var row2 = [key2, "أداة أخرى", i.code, "", i.tool, "", tf.getId()];
+        idxSheet.appendRow(row2); idx[key2] = row2; added++;
+      }
+      if (i.g) {
+        var gf = child_(ind, GUIDE_FOLDER);
+        textFile_(gf, "مقترح - إضاءات من دليل فبراير 2026.txt",
+          "المؤشر: " + i.code + " " + i.text +
+          "\nوثائق مقترحة مستخلصة من «إضاءات نحو تحقيق المؤشر» في دليل معايير التقويم والاعتماد المدرسي (فبراير 2026)." +
+          "\nلم ترد في تقرير مصادر السجلات؛ ولا تدخل في نسبة السجلات الـ147." +
+          "\nالمصدر (المسؤول) المقترح: " + i.gsrc +
+          (i.gnote ? "\nتنبيه: " + i.gnote : "") +
+          "\nالوثائق:\n- " + i.g.map(guideName_).join("\n- "));
+        for (var q = 0; q < i.g.length; q++) {
+          var gkey = "G|" + i.code + "|" + i.g[q].n;
+          if (idx[gkey]) continue;
+          var gd = child_(gf, guideName_(i.g[q]));
+          var grow = [gkey, "وثيقة مقترحة", i.code, i.g[q].n, i.g[q].t, i.gsrc, gd.getId()];
+          idxSheet.appendRow(grow); idx[gkey] = grow; added++;
+        }
+      }
     }
+    var rf = child_(ind, REPORT_FOLDER), pf = child_(rf, PHOTOS_FOLDER);
+    var rkey = "RP|" + i.code, pkey = "PH|" + i.code;
+    if (!idx[rkey]) { var rrow = [rkey, "تقرير بصري", i.code, "", "التقرير البصري", "", rf.getId()]; idxSheet.appendRow(rrow); idx[rkey] = rrow; added++; }
+    if (!idx[pkey]) { var prow = [pkey, "صور", i.code, "", "الصور (٦ على الأقل)", "", pf.getId()]; idxSheet.appendRow(prow); idx[pkey] = prow; added++; }
     if (Date.now() - t0 > TIME_LIMIT_MS) { Logger.log("توقف مؤقت — أعد تشغيل setupStructure للإكمال."); return; }
   }
   Logger.log("اكتمل الهيكل. أُضيف في هذا التشغيل: " + added);
@@ -1183,14 +1306,18 @@ function setupStructure() {
 
 /* ========== 2) تحديث الحالة ========== */
 function refreshStatus() {
-  var ss = sheet_(), idx = readIndex_(ss), out = { generatedAt: new Date().toISOString(), registers: {}, tools: {}, errors: [] };
+  var ss = sheet_(), idx = readIndex_(ss), out = { generatedAt: new Date().toISOString(), registers: {}, tools: {}, guide: {}, photos: {}, reports: {}, errors: [] };
   var rows = [["رمز المؤشر", "الفقرة", "السجل / الأداة", "المصدر", "عدد الملفات", "مرفوع وفيه شواهد"]];
   var keys = Object.keys(idx).sort();
   for (var k = 0; k < keys.length; k++) {
     var v = idx[keys[k]], n = 0;
-    try { n = countFiles_(DriveApp.getFolderById(v[6])); }
+    try { n = (v[1] === "تقرير بصري") ? countDirect_(DriveApp.getFolderById(v[6])) : countFiles_(DriveApp.getFolderById(v[6])); }
     catch (e) { out.errors.push({ key: keys[k], error: e.message }); n = -1; }
-    if (v[1] === "سجل") out.registers[keys[k]] = n; else out.tools[v[2]] = n;
+    if (v[1] === "سجل") out.registers[keys[k]] = n;
+    else if (v[1] === "وثيقة مقترحة") out.guide[keys[k]] = n;
+    else if (v[1] === "صور") out.photos[v[2]] = n;
+    else if (v[1] === "تقرير بصري") out.reports[v[2]] = n;
+    else out.tools[v[2]] = n;
     rows.push([v[2], v[3], v[4], v[5], n, n > 0]);
   }
   var st = ss.getSheetByName("الحالة");

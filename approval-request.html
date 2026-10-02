@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>طلب اعتماد رقمنة زيارة اللجنة - مدارس دار الفرسان - قسم الدبلوما الأمريكية (بنين)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{--teal:#006666;--teal7:#003d3d;--gold:#c29b38;--ink:#0f172a;--mut:#64748b;--line:#e2e8f0;--bg:#f1f5f9;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--ink);line-height:1.85}
+button,input{font-family:inherit}:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.bar{background:#0f172a;color:#fff;padding:9px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:12px;font-weight:700}
+.bar .sp{flex:1}.bar a,.bar button{color:#fff;background:rgba(255,255,255,.14);border:0;border-radius:999px;padding:5px 14px;font-size:12px;font-weight:700;text-decoration:none;cursor:pointer}
+.doc{max-width:920px;margin:14px auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:30px 34px}
+.head{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:3px solid var(--teal);padding-bottom:12px;margin-bottom:14px}
+.head img{height:62px}.head .tt{text-align:center;flex:1}.head h1{margin:0;font-size:24px;font-weight:900;color:var(--teal7)}.head p{margin:2px 0 0;font-size:12.5px;color:var(--mut)}
+.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:12.5px;margin-bottom:10px}
+.meta label{font-weight:700;color:#475569;display:block}.meta input{width:100%;border:0;border-bottom:1.5px dotted #94a3b8;background:transparent;padding:3px 2px;font-size:13px;color:var(--ink)}
+.sum{background:#ecfdf5;border:1px solid #a7f3d0;border-radius:12px;padding:12px 16px;font-size:14px;font-weight:700;color:#065f46;line-height:1.9;margin:12px 0}
+h2{font-size:17px;font-weight:900;color:var(--teal7);margin:22px 0 6px;display:flex;align-items:center;gap:8px;border-right:5px solid var(--gold);padding-right:10px}
+h3{font-size:14px;font-weight:800;margin:12px 0 4px}
+p{margin:4px 0;font-size:13.5px}ul{margin:4px 0;padding-right:20px;font-size:13.5px}li{margin:2px 0}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0}
+.kpi{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#f8fafc;text-align:center}.kpi b{display:block;font-size:26px;font-weight:900;color:var(--teal7);line-height:1.2}.kpi span{font-size:11.5px;color:var(--mut)}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0}
+th,td{border:1px solid #cbd5e1;padding:6px 8px;text-align:right;vertical-align:top}th{background:#e8f1f1;font-weight:800;color:#0f3b3b}td.c,th.c{text-align:center}
+tfoot td{background:#f1f5f9;font-weight:800}
+.note{font-size:11.5px;color:var(--mut);margin:4px 0}
+.chip{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:0 9px;background:#fdf2f8;color:#9d174d;border:1px solid #fbcfe8}
+.tl{margin:10px 0}.ph{display:grid;grid-template-columns:170px 1fr;gap:10px;align-items:center;margin:8px 0;padding:8px 10px;border:1px solid var(--line);border-radius:10px}
+.ph .nm{font-size:12.5px;font-weight:800}.ph .rng{font-size:11.5px;color:var(--mut)}.ph .bw{height:10px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:4px}.ph .bw i{display:block;height:100%;background:linear-gradient(90deg,#2dd4bf,#c29b38)}
+.ph ul{margin:4px 0 0;font-size:12px}
+.ctl{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0}
+.ctl label{font-size:12px;font-weight:700;display:block;color:#475569}.ctl input{border:1px solid #cbd5e1;border-radius:8px;padding:5px 8px;font-size:13px}.ctl input[type=number]{width:62px}
+.msg{padding:8px 12px;border-radius:10px;font-size:13px;font-weight:700;margin:6px 0}.msg.ok{background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0}.msg.bad{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}.msg.inf{background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe}
+.dec{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}.dec div{border:1.5px solid #94a3b8;border-radius:10px;padding:10px 12px;font-size:13.5px;font-weight:800}
+.sig{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:18px;text-align:center;font-size:13px;font-weight:800}.sig span{display:block;font-weight:600;margin-top:34px;border-top:1px dotted #64748b;padding-top:4px}
+.lines{border-bottom:1.5px dotted #94a3b8;height:26px}
+.foot{font-size:11px;color:var(--mut);text-align:center;margin-top:20px;border-top:1px solid var(--line);padding-top:8px}
+@media(max-width:700px){.doc{padding:18px 14px}.kpis{grid-template-columns:repeat(2,1fr)}.meta,.dec,.sig{grid-template-columns:1fr}.ph{grid-template-columns:1fr}table{font-size:11px}.head h1{font-size:19px}.head img{height:44px}}
+@media print{@page{size:A4;margin:12mm}body{background:#fff}.bar,.noprint{display:none!important}.doc{max-width:none;margin:0;border:0;border-radius:0;padding:0}h2{break-after:avoid}table,.ph,.dec,.kpis,.sig{break-inside:avoid}.pb{break-before:page}}
+</style>
+</head>
+<body>
+<div class="bar noprint"><span><i class="fa-solid fa-file-signature"></i> وثيقة للعرض على الإدارة</span><span class="sp"></span><a href="evidence-link.html">لوحة المتابعة</a><button id="printBtn"><i class="fa-solid fa-print"></i> طباعة / حفظ PDF</button></div>
+<main class="doc">
+  <div class="head"><img src="logo1.png" alt="مدارس دار الفرسان"><div class="tt"><h1>طلب اعتماد رقمنة زيارة اللجنة</h1><p>مشروع ربط الشواهد بالسجلات — قسم الدبلوما الأمريكية (بنين) — العام الدراسي 2026 - 2027 م</p></div><img src="logo0.png" alt="قسم الدبلوما"></div>
+  <div class="meta"><div><label>مقدّم الطلب</label><input type="text" id="reqName" placeholder="................."></div><div><label>الصفة</label><input type="text" id="reqRole" placeholder="................."></div><div><label>تاريخ الطلب</label><input type="text" id="reqDate" readonly></div></div>
+
+  <div class="sum"><i class="fa-solid fa-circle-info"></i> نطلب اعتماد المشروع للعرض على لجنة هيئة تقويم التعليم والتدريب، بدءاً بتجربة أولى على أربعة مؤشرات خلال أسبوعين، ثم تطبيقه على المؤشرات الـ52، وعرضه على اللجنة عبر جهاز آيباد مخصص يرافقها أثناء الزيارة.</div>
+
+  <h2><i class="fa-solid fa-bullseye"></i> 1 · الغاية</h2>
+  <p>تحويل زيارة اللجنة من ملفات متفرقة إلى <b>تجربة رقمية موحدة</b>: لكل مؤشر مجلد واحد يضم سجلاته وتقريره البصري وصوره، يُفتح بضغطة أو بمسح رمز QR، وتُعرض في صفحة واحدة تتابع جاهزية المؤشرات كلها.</p>
+
+  <h2><i class="fa-solid fa-triangle-exclamation"></i> 2 · المشكلة التي يعالجها</h2>
+  <ul><li>الشواهد مرتبطة بـ<b>52 مؤشراً</b> و<b>147 سجلاً</b> موزعة على الفقرات، ويصعب على أي زائر الوصول إلى سجل بعينه أثناء الزيارة.</li>
+  <li>لا يوجد شكل موحد للشواهد المصورة، ولا قاعدة معلنة لعددها أو لخصوصية الطلاب فيها.</li>
+  <li>لا توجد صورة واحدة للإدارة تبيّن ما اكتمل وما تأخر، ومن المسؤول عنه.</li></ul>
+
+  <h2><i class="fa-solid fa-lightbulb"></i> 3 · المقترح</h2>
+  <div class="kpis"><div class="kpi"><b id="k1">52</b><span>مؤشراً مرتبطاً بمجلداته</span></div><div class="kpi"><b>147</b><span>مجلد سجل في Drive</span></div><div class="kpi"><b>312</b><span>صورة ولقطة وثيقة (6 لكل مؤشر كحد أدنى)</span></div><div class="kpi"><b>52</b><span>تقريراً بصرياً موحداً بـ QR</span></div></div>
+  <table><tr><th style="width:26%">المكوّن</th><th>الوصف</th></tr>
+  <tr><td>لوحة المتابعة</td><td>صفحة تبيّن لكل مجال وعضو ما اكتمل وما ينقص وماذا يفعل الآن، مع «نظرة الإدارة» التي تلخّص الوضع في جملة واحدة.</td></tr>
+  <tr><td>مرجع الهيئة</td><td>نسخة رقمية من تقرير مصادر سجلات الهيئة، وبجانب كل مؤشر رابط مجلده في Drive.</td></tr>
+  <tr><td>مجلدات Drive</td><td>شجرة كاملة (4 مجالات، 11 معياراً، 52 مؤشراً، 52 فقرة) تُرفع فيها السجلات والصور.</td></tr>
+  <tr><td>مولّد التقرير البصري</td><td>يكتب بيانات المؤشر والسجل الداعم ورمز QR تلقائياً، ويرتّب الصور الست التي يختارها العضو من جهازه، ويُخرج صفحة A4 موحدة.</td></tr>
+  <tr><td>دليل التصوير</td><td>362 لقطة مقترحة لـ52 مؤشراً، مستخلصة من إضاءات دليل معايير التقويم والاعتماد المدرسي (فبراير 2026).</td></tr>
+  <tr><td><b>رفيق اللجنة</b></td><td>جهاز آيباد مخصص يعرض المشروع كاملاً للجنة أثناء الزيارة. وتفاصيل صيغة العرض وما يُطبع منه تُحسم بعد الاعتماد.</td></tr></table>
+
+  <h2><i class="fa-solid fa-check-double"></i> 4 · أين وصلنا اليوم</h2>
+  <ul><li>اكتمل التجهيز: مجلدات المؤشرات في Drive، ولوحة المتابعة، ومرجع الهيئة، والقالب المحدّث للتقرير البصري ومولّده، ودليل التصوير.</li>
+  <li>اعتُمدت مسميات المجالات والمعايير والمؤشرات من دليل معايير التقويم والاعتماد المدرسي (فبراير 2026).</li>
+  <li>حُددت فرق العمل: <b>4 مشرفين و12 عضواً</b>، وتوزيع المؤشرات عليهم (مقترح بانتظار اعتماد المشرفين).</li>
+  <li><b>لم يبدأ بعد جمع الشواهد</b>؛ فلا مؤشر منجزاً اليوم، ويبدأ العمل بعد الاعتماد.</li></ul>
+
+  <h2 class="pb"><i class="fa-solid fa-table"></i> 5 · حجم العمل في كل مجال</h2>
+  <table id="domTbl"><thead><tr><th>المجال</th><th class="c">المؤشرات</th><th class="c">داخل تقرير السجلات</th><th class="c">خارج تقرير السجلات</th><th class="c">مجلدات السجلات</th><th class="c">الصور المطلوبة</th><th class="c">ساعات تقديرية</th><th>المشرف · الأعضاء</th></tr></thead><tbody></tbody><tfoot></tfoot></table>
+  <p class="note">• «داخل تقرير السجلات» (28 مؤشراً): ترد لها سجلات في تقرير الهيئة. «خارج تقرير السجلات» (24 مؤشراً): تُقاس بوسائل أخرى كالاختبارات الوطنية والملاحظة الصفية والاستبانات والمعاينة.<br>• الساعات تقدير أولي: 3 ساعات لكل مؤشر (تصوير وتقرير) + 15 دقيقة لكل مجلد سجل، وتُراجع بعد التجربة. يتركز العبء في <b>المجال الأول (79% من مجلدات السجلات)</b>.</p>
+
+  <h2><i class="fa-solid fa-flask"></i> 6 · التجربة الأولى (قبل التطبيق على بقية المؤشرات)</h2>
+  <p>أربعة مؤشرات، واحد من كل مجال، تختلف شواهدها: وثائق، وحصة دراسية، ونشاط، ومرافق. الغاية: <b>أن نرى ما سينتجه المشروع فعلاً، ونصحّح الأخطاء بتكلفة صغيرة قبل تطبيقه على المؤشرات كلها.</b></p>
+  <table><tr><th>المؤشر</th><th>المجال</th><th>ما سنجرّبه</th><th>منسّق المؤشر المقترح</th></tr>
+  <tr><td>1-1-1-1 · الخطة التشغيلية</td><td>1</td><td>مؤشر شواهده سجلات ووثائق</td><td>أ. سعيد الجهني</td></tr>
+  <tr><td>2-1-1-3 · تنويع استراتيجيات التدريس</td><td>2</td><td>مؤشر خارج تقرير السجلات، شواهده من حصة دراسية</td><td>أ. مصطفى أشرف</td></tr>
+  <tr><td>3-2-1-3 · الممارسات الصحية</td><td>3</td><td>مؤشر خارج تقرير السجلات، شواهده من نشاط أو فعالية</td><td>أ. إسلام صابر</td></tr>
+  <tr><td>4-2-1-2 · صيانة المبنى</td><td>4</td><td>مؤشر شواهده سجل الصيانة وصور المرافق</td><td>أ. ضياء حسين</td></tr></table>
+  <h3>معيار نجاح التجربة (مقترح)</h3>
+  <ul><li>اكتمال المؤشرات الأربعة بالتعريف المعتمد: السجلات مرفوعة، وست صور غير مكررة، وتقرير بصري بالقالب، ورمز QR يعمل، واعتماد المشرف.</li>
+  <li>تقارير متسقة الشكل بين الأعضاء الأربعة.</li><li>خلو الشواهد من وجوه طلاب بلا موافقة ومن بيانات حساسة.</li><li>تقدير فعلي لزمن المؤشر الواحد لتعديل خطة العمل على بقية المؤشرات.</li></ul>
+
+  <h2 class="pb"><i class="fa-solid fa-timeline"></i> 7 · الخط الزمني</h2>
+  <div class="ctl"><div><label for="visit">موعد زيارة اللجنة المتوقع</label><input type="date" id="visit"></div>
+    <div><label>مدد المراحل بالأسابيع</label><span id="wks"></span></div></div>
+  <div id="tlMsg"></div><div class="tl" id="tl"></div>
+  <p class="note">المدد تقديرية قابلة للتعديل أعلاه. وإن أدخلتم موعد الزيارة، حُسبت التواريخ عكسياً منه وظهر هل الوقت كافٍ.</p>
+
+  <h2><i class="fa-solid fa-hand-holding-dollar"></i> 8 · الموارد المطلوبة</h2>
+  <table><tr><th style="width:24%">المورد</th><th>التفصيل</th></tr>
+  <tr><td>بشرية</td><td>16 شخصاً (4 مشرفين + 12 عضواً) بنحو <b>192 ساعة</b> مجتمعة (متوسط 16 ساعة للعضو) على امتداد المراحل، تُراجع بعد التجربة.</td></tr>
+  <tr><td>جهاز العرض</td><td>جهاز آيباد واحد مخصص لعرض المشروع على اللجنة، ومسؤول عنه، وشاحن ونسخة احتياطية.</td></tr>
+  <tr><td>التخزين</td><td>أقل من 1 جيجابايت تقريباً (312 صورة بحجم محدود + 52 ملف PDF).</td></tr>
+  <tr><td>البرمجيات</td><td>لا ترخيص جديد في التصميم الحالي؛ يعتمد على Google Drive وصفحات الويب الحالية للبوابة.</td></tr>
+  <tr><td>تدريب</td><td>جلسة قصيرة للأعضاء على لوحة المتابعة ومولّد التقرير.</td></tr></table>
+
+  <h2><i class="fa-solid fa-scale-balanced"></i> 9 · البدائل التي نُظر فيها</h2>
+  <table><tr><th>البديل</th><th>المزايا</th><th>العيوب</th></tr>
+  <tr><td>الاكتفاء بملفات ورقية</td><td>مألوف ولا يحتاج جهازاً</td><td>صعوبة البحث، وتضخم الحجم، وتشتت الأشكال، وتعذّر التحديث</td></tr>
+  <tr><td>مجلدات Drive دون واجهة</td><td>سريع الإعداد</td><td>لا متابعة ولا تقارير موحدة ولا نظرة شاملة للإدارة</td></tr>
+  <tr><td><b>المشروع المقترح</b></td><td>موحد ومتتبَّع وقابل لإعادة الاستخدام في الأعوام التالية</td><td>يحتاج جهداً تنسيقياً من الفرق، ويعتمد على اتصال الإنترنت أثناء العرض</td></tr></table>
+
+  <h2 class="pb"><i class="fa-solid fa-shield-halved"></i> 10 · المخاطر والضوابط</h2>
+  <table><tr><th style="width:30%">الخطر</th><th>الضابط المقترح</th></tr>
+  <tr><td>تأخر جمع الشواهد</td><td>متابعة أسبوعية على «نظرة الإدارة»، ومهام بالأولوية لكل عضو، وجدول زمني بالتواريخ.</td></tr>
+  <tr><td>اختلال العبء بين الفرق</td><td>دعم فريق المجال الأول من أعضاء المجالات الأخرى، أو إعادة التوزيع بعد التجربة.</td></tr>
+  <tr><td>خصوصية صور الطلاب</td><td>قاعدة معتمدة: لا وجوه بلا موافقة ولي الأمر، ولقطات الوثائق بعد إخفاء الحساس، وإقرار العضو قبل إخراج كل تقرير. <b>يلزم تأكيد وجود موافقات أولياء الأمور.</b></td></tr>
+  <tr><td>سجلات تحوي بيانات حساسة</td><td>لا تُرفع الحالات الفردية (حماية الحقوق، السلوك، الصحة)، وتُرفع النماذج الفارغة والتقارير المجمّعة بلا أسماء.</td></tr>
+  <tr><td>تغيّر معرّفات المجلدات (يعطّل رموز QR)</td><td>نقل ملكية Drive إلى حساب المدرسة بدلاً من نسخ المجلدات، وعدم طباعة رموز QR قبل استقرار الملكية.</td></tr>
+  <tr><td>الاعتماد على اتصال الإنترنت أثناء العرض</td><td>اختبار الاتصال في بروفة العرض وتجهيز بديل (اتصال احتياطي) قبل الزيارة.</td></tr>
+  <tr><td>الاعتماد على شخص واحد في التشغيل</td><td>توثيق الإجراءات وتدريب بديل وحفظ نسخة احتياطية من ملفات المشروع.</td></tr>
+  <tr><td>حدود الحماية التقنية</td><td>الدخول إلى صفحات المشروع بكلمة مرور تنظيمية، وحماية الملفات الفعلية بصلاحيات Drive لكل مجلد.</td></tr></table>
+
+  <h2><i class="fa-solid fa-ban"></i> 11 · ما لا يشمله الطلب</h2>
+  <ul><li>الأرقام في اللوحة تبيّن <b>جاهزية التوثيق</b> ولا تحكم على أداء المدرسة.</li><li>لا يحلّ المشروع محل أنظمة الهيئة أو التقويم الميداني.</li><li>لا يشمل المشروع إدارة محتوى السجلات نفسها.</li></ul>
+
+  <h2 class="pb"><i class="fa-solid fa-gavel"></i> 12 · المطلوب من الإدارة</h2>
+  <table><tr><th class="c" style="width:44px">#</th><th>القرار</th></tr>
+  <tr><td class="c">1</td><td>اعتماد المشروع وبدء التجربة الأولى على المؤشرات الأربعة.</td></tr>
+  <tr><td class="c">2</td><td>اعتماد القالب المحدّث للتقرير البصري (إضافة بطاقة المؤشر والسجل الداعم وشعار الدبلوما، وإلغاء مربع النشاط الافتراضي).</td></tr>
+  <tr><td class="c">3</td><td>اعتماد سياسة الصور: ست صور للمؤشر، ولقطات الوثائق شواهد، ولا تكرار، ولا وجوه بلا موافقة ولي الأمر.</td></tr>
+  <tr><td class="c">4</td><td>تكليف المشرفين الأربعة والأعضاء الـ12 رسمياً وتحديد الوقت المخصص للمشروع.</td></tr>
+  <tr><td class="c">5</td><td>اعتماد مشاركة مجلدات Drive مع الفرق ونقل ملكيتها إلى حساب المدرسة.</td></tr>
+  <tr><td class="c">6</td><td>تخصيص جهاز آيباد للعرض على اللجنة وتحديد المسؤول عنه.</td></tr>
+  <tr><td class="c">7</td><td>تحديد موعد الزيارة المتوقع أو نطاقه الزمني.</td></tr></table>
+
+  <h2><i class="fa-solid fa-pen-to-square"></i> 13 · قرار الإدارة</h2>
+  <div class="dec"><div>☐ موافق</div><div>☐ موافق بشروط</div><div>☐ غير موافق</div></div>
+  <p><b>الملاحظات والشروط:</b></p><div class="lines"></div><div class="lines"></div><div class="lines"></div>
+  <div class="sig"><div>مدير الإشراف والتطوير<span>أ. حسن ياسين</span></div><div>مدير المدرسة<span>أ. وليد حيدر</span></div></div>
+  <div class="foot" id="foot"></div>
+</main>
+<script src="portal-config.js"></script>
+<script>
+const DATA={"rows": [{"d": 1, "dn": "الإدارة المدرسية", "crit": 5, "ind": 19, "rec": 18, "tool": 1, "paras": 39, "links": 116, "photos": 114, "reports": 19, "sup": "أ. عبدالشافي إسماعيل", "mem": ["أ. سعيد الجهني", "أ. يسري أدهم", "أ. خالد المغربي"], "hours": 86}, {"d": 2, "dn": "التعليم والتعلم", "crit": 2, "ind": 13, "rec": 6, "tool": 7, "paras": 7, "links": 21, "photos": 78, "reports": 13, "sup": "أ. حسين خالد", "mem": ["أ. يوسف مجدي", "أ. خالد الجهني", "أ. مصطفى أشرف"], "hours": 44}, {"d": 3, "dn": "نواتج التعلم", "crit": 2, "ind": 13, "rec": 2, "tool": 11, "paras": 3, "links": 6, "photos": 78, "reports": 13, "sup": "أ. أحمد ماهر", "mem": ["أ. خالد الزهراني", "أ. إسلام صابر", "أ. عبدالعزيز الحسانين"], "hours": 40}, {"d": 4, "dn": "البيئة المدرسية", "crit": 2, "ind": 7, "rec": 2, "tool": 5, "paras": 3, "links": 4, "photos": 42, "reports": 7, "sup": "أ. مصطفى عبدالجليل", "mem": ["أ. محمد جمال", "أ. عبدالرحمن صابر", "أ. ضياء حسين"], "hours": 22}], "tot": {"crit": 11, "ind": 52, "rec": 28, "tool": 24, "paras": 52, "links": 147, "photos": 312, "reports": 52, "hours": 192}};
+const ar=n=>String(n).replace(/\d/g,d=>"٠١٢٣٤٥٦٧٨٩"[d]);
+const fd=d=>d.toLocaleDateString("ar-SA-u-ca-gregory",{year:"numeric",month:"long",day:"numeric"});
+const today=new Date(); today.setHours(0,0,0,0);
+document.getElementById('reqDate').value=fd(today);
+document.getElementById('foot').textContent="أُعدّت هذه الوثيقة بتاريخ "+fd(today)+" بأرقام الحالة الراهنة للمشروع؛ والمدد والساعات تقديرات أولية تُراجع بعد التجربة الأولى.";
+document.getElementById('printBtn').onclick=()=>window.print();
+/* جدول المجالات */
+const tb=document.querySelector('#domTbl tbody'), tf=document.querySelector('#domTbl tfoot');
+tb.innerHTML=DATA.rows.map(r=>`<tr><td><b>${r.d} · ${r.dn}</b><br><span class="note">${r.crit} معايير · ${r.paras} فقرة</span></td><td class="c">${r.ind}</td><td class="c">${r.rec}</td><td class="c">${r.tool}</td><td class="c">${r.links}</td><td class="c">${r.photos}</td><td class="c">${r.hours}</td><td>${r.sup} (مشرف)<br><span class="note">${r.mem.join("، ")}</span></td></tr>`).join("");
+const T=DATA.tot; tf.innerHTML=`<tr><td>الإجمالي</td><td class="c">${T.ind}</td><td class="c">${T.rec}</td><td class="c">${T.tool}</td><td class="c">${T.links}</td><td class="c">${T.photos}</td><td class="c">${T.hours}</td><td>4 مشرفين + 12 عضواً</td></tr>`;
+/* الخط الزمني */
+const PH=[
+ {n:"المرحلة 0 · الاعتماد والتجهيز",w:1,it:["اعتماد الطلب","تشغيل سكريبت التقرير البصري","مشاركة مجلدات التجربة مع أعضائها الأربعة","تدريب قصير على لوحة المتابعة ومولّد التقرير"]},
+ {n:"المرحلة 1 · التجربة الأولى (4 مؤشرات)",w:2,it:["جمع السجلات والصور وإنتاج التقارير الأربعة","مراجعة التقارير الناتجة والأخطاء","تقرير نتائج التجربة وقرار التطبيق على بقية المؤشرات"]},
+ {n:"المرحلة 2 · بقية المؤشرات (48 مؤشراً)",w:5,it:["جمع الشواهد عبر الفرق الأربعة بإشراف المعتمِدين","متابعة أسبوعية على «نظرة الإدارة»","إنتاج التقارير البصرية للمؤشرات"]},
+ {n:"المرحلة 3 · المراجعة والاعتماد",w:2,it:["مراجعة المشرفين لكل مؤشر","تدقيق الصور: التكرار والخصوصية والجودة","معالجة الفجوات"]},
+ {n:"المرحلة 4 · تجهيز العرض",w:1,it:["تجهيز جهاز الآيباد","بروفة عرض كاملة واختبار الاتصال","تدريب مرافقي اللجنة ونسخة احتياطية"]}];
+const wk=document.getElementById('wks'); wk.innerHTML=PH.map((p,i)=>`<input type="number" min="1" max="12" value="${p.w}" data-w="${i}" aria-label="أسابيع ${p.n}"> `).join("");
+const add=(d,n)=>{ const x=new Date(d); x.setDate(x.getDate()+n); return x; };
+function drawTL(){
+  PH.forEach((p,i)=>p.w=Math.max(1,+wk.querySelector('[data-w="'+i+'"]').value||1));
+  const tot=PH.reduce((a,p)=>a+p.w,0), v=document.getElementById('visit').value, msg=document.getElementById('tlMsg');
+  let cursor, starts=[];
+  if(v){ const vd=new Date(v+"T00:00:00"); let end=vd; for(let i=PH.length-1;i>=0;i--){ const st=add(end,-PH[i].w*7); starts[i]={s:st,e:add(end,-1)}; end=st; } 
+    const first=starts[0].s, avail=Math.floor((vd-today)/(7*864e5));
+    msg.innerHTML= first<today ? `<div class="msg bad"><i class="fa-solid fa-triangle-exclamation"></i> المتاح حتى الزيارة ${ar(avail)} أسبوعاً والمطلوب ${ar(tot)}؛ العجز ${ar(tot-avail)} أسبوعاً. قلّلوا المدد أو قدّموا الاعتماد، وأبكر موعد ممكن لو بدأنا اليوم: <b>${fd(add(today,tot*7))}</b>.</div>`
+      : `<div class="msg ok"><i class="fa-solid fa-circle-check"></i> الوقت كافٍ: المطلوب ${ar(tot)} أسبوعاً والمتاح ${ar(avail)}. أخر موعد لبدء التنفيذ: <b>${fd(first)}</b> (هامش ${ar(avail-tot)} أسبوعاً).</div>`; }
+  else { let c=today; PH.forEach((p,i)=>{ starts[i]={s:c,e:add(c,p.w*7-1)}; c=add(c,p.w*7); }); msg.innerHTML=`<div class="msg inf"><i class="fa-solid fa-circle-info"></i> بدءاً من اليوم، أبكر موعد ممكن للزيارة: <b>${fd(add(today,tot*7))}</b> (${ar(tot)} أسبوعاً). أدخلوا موعد الزيارة لحساب التواريخ عكسياً.</div>`; }
+  document.getElementById('tl').innerHTML=PH.map((p,i)=>`<div class="ph"><div><div class="nm">${p.n}</div><div class="rng">${fd(starts[i].s)} ← ${fd(starts[i].e)} · ${ar(p.w)} أسبوع</div><div class="bw"><i style="width:${Math.round(p.w*100/tot)}%"></i></div></div><ul>${p.it.map(t=>"<li>"+t+"</li>").join("")}</ul></div>`).join("");
+}
+if(window.ETEC_VISIT_DATE) document.getElementById("visit").value=window.ETEC_VISIT_DATE;
+if(window.ETEC_PLAN_WEEKS&&window.ETEC_PLAN_WEEKS.length===5) window.ETEC_PLAN_WEEKS.forEach((w,i)=>{ wk.querySelector('[data-w="'+i+'"]').value=w; });
+document.getElementById('visit').addEventListener('change',drawTL); wk.addEventListener('input',drawTL); drawTL();
+</script>
+<script src="content-protect.js"></script>
+</body>
+</html>
