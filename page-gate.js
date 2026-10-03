@@ -7,6 +7,7 @@
  *   <script src="page-gate.js" data-lazy="1"></script>     بلا قفل: يوفّر DFGate.require(cb) لطلب الدخول عند الحاجة فقط.
  *   <script src="page-gate.js"></script>                   قفل اختياري: تُقفل الصفحة فقط إن وُجد في access.txt سطر  #@gate,اسم-الصفحة.html
  * الدخول الصحيح يسجّل «جلسة عمل مصرح بها» مشتركة بين الصفحات والتبويبات (8 ساعات)، وعندها يتوقف مربع الحوار القانوني.
+ * صلاحية إرسال الرسائل (DFGate.canMail): سطر اختياري في access.txt  #@mail,مستخدم1,مستخدم2  يحصر الإرسال في المذكورين؛ وبلا السطر يُسمح لكل مصرح له.
  * عند تعذّر قراءة access.txt تبقى الصفحات المقفلة مقفلة (fail-closed).
  * ⚠ هذا قفل في المتصفح لا خادم: يردع الاطلاع العابر ولا يحجب المصدر عمّن يعرف قراءته. (انظر ملاحظات الإصدار)
  */
@@ -19,7 +20,7 @@
   var MSG = DS.msg || 'هذه الصفحة للتشاور بين فريق العمل والإشراف الأكاديمي للقسم. فضلاً أدخل بيانات الدخول المعتمدة لتتصفحها معنا.';
   var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   var AK = 'df_auth_v1', TTL = 8 * 60 * 60 * 1000, TRY = 'df_gate_try', LOCK = 'df_gate_until', CK = 'df_ck';
-  var html = document.documentElement, frag = null, mark = null, users = [], gates = [], loaded = false, locked = false, overlay = null, lastCred = null;
+  var html = document.documentElement, frag = null, mark = null, users = [], gates = [], mailers = [], loaded = false, locked = false, overlay = null, lastCred = null;
   function S(k, v, del) { try { if (del) sessionStorage.removeItem(k); else if (v === undefined) return sessionStorage.getItem(k); else sessionStorage.setItem(k, v); } catch (e) {} return null; }
   function L(k, v, del) { try { if (del) localStorage.removeItem(k); else if (v === undefined) return localStorage.getItem(k); else localStorage.setItem(k, v); } catch (e) {} return null; }
   function ping() { try { window.dispatchEvent(new Event('df-auth')); } catch (e) {} }
@@ -45,7 +46,8 @@
     '#pg-x{position:absolute;top:10px;left:12px;width:30px;height:30px;border:0;border-radius:50%;background:#f1f5f9;color:#475569;font-size:18px;line-height:1;cursor:pointer}' +
     '#pg-box .ic{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#c29b38,#006666);display:flex;align-items:center;justify-content:center;margin-bottom:12px}' +
     '#pg-box h2{margin:0 0 6px;font-size:17px;font-weight:900;color:#003d3d}#pg-box p{margin:0 0 12px;font-size:12.5px;line-height:1.9;color:#475569}' +
-    '#pg-box input{width:100%;box-sizing:border-box;font:600 13px Cairo,Tahoma,sans-serif;padding:11px 12px;border:1px solid #cbd5e1;border-radius:10px;margin-bottom:9px;direction:ltr;text-align:right}' +
+    '#pg-overlay,#pg-box{color-scheme:light}' +
+    '#pg-box input{width:100%;box-sizing:border-box;font:600 13px Cairo,Tahoma,sans-serif;padding:11px 12px;border:1px solid #cbd5e1;border-radius:10px;margin-bottom:9px;direction:ltr;text-align:right;background:#fff;color:#0f172a}' +
     '#pg-box input:focus{outline:none;border-color:#006666;box-shadow:0 0 0 3px rgba(0,102,102,.15)}' +
     '#pg-err{display:none;font-size:12px;color:#b91c1c;background:#fef2f2;border:1px solid #fecaca;border-radius:9px;padding:8px 10px;margin-bottom:9px;line-height:1.7}' +
     '#pg-go{width:100%;border:0;border-radius:12px;background:#006666;color:#fff;font:800 14px Cairo,Tahoma,sans-serif;padding:12px;cursor:pointer}#pg-go:disabled{opacity:.55;cursor:not-allowed}' +
@@ -57,10 +59,11 @@
 
   /* ----- قراءة access.txt بدالة fetch ----- */
   function parse(text) {
-    users = []; gates = [];
+    users = []; gates = []; mailers = [];
     text.split(/\r?\n/).forEach(function (raw) {
       var l = raw.trim(); if (!l) return;
       if (l.indexOf('#@gate,') === 0) { gates.push(l.slice(7).trim().toLowerCase()); return; }
+      if (l.indexOf('#@mail,') === 0) { l.slice(7).split(',').forEach(function (x) { x = x.trim().toLowerCase(); if (x) mailers.push(x); }); return; }
       if (l.charAt(0) === '#') return;
       var i = l.indexOf(','); if (i < 1) return;
       users.push({ u: l.slice(0, i).trim(), p: l.slice(i + 1).trim() });
@@ -163,7 +166,9 @@
   window.DFGate = {
     _booted: true, isAuth: isAuth, user: function () { var i = info(); return i ? i.u : ''; },
     require: function (cb, opts) { if (isAuth() && !(opts && opts.force)) { cb(); return; } openLogin({ onOk: cb, title: (opts && opts.title) || 'دخول بجلسة عمل مصرح بها', msg: (opts && opts.msg) || 'أدخل بيانات الدخول المعتمدة لتسجيل جلسة عمل مصرح بها.' }); },
-    logout: function () { clearAuth(); }, unlockContacts: unlockContacts
+    logout: function () { clearAuth(); }, unlockContacts: unlockContacts,
+    /* صلاحية إرسال الرسائل: إن وُجد في access.txt سطر  #@mail,مستخدم1,مستخدم2  اقتُصر الإرسال عليهم، وإلا فلكل مستخدم مصرح له */
+    canMail: function () { return (loaded ? Promise.resolve() : load()).then(function () { var i = info(), u = ((i && i.u) || '').toLowerCase(); return !!i && (mailers.length === 0 || mailers.indexOf(u) >= 0); }); }
   };
 
   window.addEventListener('storage', function (e) { if (e.key === AK && locked && isAuth()) reveal(info().u); });

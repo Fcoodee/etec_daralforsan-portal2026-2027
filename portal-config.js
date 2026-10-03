@@ -8,6 +8,9 @@
    4) ETEC_PHASE1: المرحلة السابقة (جمع الشواهد وإتمام التقويم الذاتي): نسبتها وتاريخ قياسها (من لوحة 2026-2027).
    5) ETEC_EVIDENCE_REF_URL: «مرجع الشواهد المؤمَّنة» (درايف مكتب الإشراف والتطوير). يخدم تغذية التقرير البصري فقط.
    6) ETEC_OFFICIAL_CENTER_URL: صفحة المركز الوطني للتقويم والتميز المدرسي (تميز).
+  10) ETEC_SHORT_LINKS: روابط مختصرة تحلّ محل الطويلة في رسائل البريد. المفتاح الرابط الطويل كاملاً والقيمة الرابط المختصر.
+       مثال:  "https://.../evidence-link.html?team=1": "https://tinyurl.com/xxxx"   (انظر قائمة الروابط في الحزمة الخاصة).
+  10) ETEC_SHORTENER: "isgd" لاختصار الروابط تلقائياً في رسائل البريد (خدمة خارجية)، و"" لتعطيله.
    9) ETEC_SITE_BASE: العنوان الأساسي للموقع المنشور، تُبنى منه الروابط داخل رسائل البريد.
    8) ETEC_RIGHTS_OWNER: صاحب الحقوق الذي يظهر في مربع الحوار القانوني (مثل: «مدارس دار الفرسان الأهلية»). اتركه فارغاً حتى يُحدَّد قانونياً.
    7) ETEC_PROJECT_ORGANIZER: اسم منظّم المشروع (مهندس بيانات النظام) الذي يظهر في صفحة التسليم المطبوعة. */
@@ -20,3 +23,5 @@ window.ETEC_OFFICIAL_CENTER_URL = "https://etec.gov.sa/ar/centers/ncsee";
 window.ETEC_PROJECT_ORGANIZER = "";
 window.ETEC_RIGHTS_OWNER = "";
 window.ETEC_SITE_BASE = "https://fcoodee.github.io/etec_daralforsan-portal2026-2027/";
+window.ETEC_SHORT_LINKS = {};
+window.ETEC_SHORTENER = "isgd";

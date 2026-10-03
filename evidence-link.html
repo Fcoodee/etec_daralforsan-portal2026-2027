@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" style="color-scheme:light">
 <head>
 <meta charset="UTF-8">
+<meta name="color-scheme" content="light">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مشروع ربط الشواهد بالسجلات - قسم الدبلوما الأمريكية (بنين) - مدارس دار الفرسان</title>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -201,12 +202,14 @@ details[open] .chev{transform:rotate(-90deg)}
     <div class="text-[12px] font-bold text-slate-600 mt-3 mb-1">المستلمون <span class="font-normal text-gray-400">(ألغِ التحديد عمّن لا تريده)</span></div>
     <div id="mmTo" class="flex flex-wrap gap-2"></div>
     <label for="mmSubj" class="block text-[12px] font-bold text-slate-600 mt-3 mb-1">الموضوع</label>
-    <input id="mmSubj" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-[13px]">
+    <input id="mmSubj" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-[13px] bg-white text-slate-800">
+    <div id="mmAttBox" class="hidden mt-3 bg-sky-50 border border-sky-200 rounded-lg px-3 py-2"><div class="text-[12px] font-black text-sky-900 mb-1"><i class="fa-solid fa-paperclip"></i> المرفقات (PDF) المراد إرفاقها يدوياً</div><ul id="mmAtt" class="text-[11.5px] text-sky-900 leading-7 list-none p-0 m-0"></ul><div class="flex flex-wrap items-center gap-2 mt-2"><button type="button" id="mmAttAll" class="vbtn pri"><i class="fa-solid fa-download"></i> تنزيل المرفقات كلها</button><button type="button" id="mmAttShare" class="vbtn" style="display:none"><i class="fa-solid fa-share-nodes"></i> مشاركتها إلى تطبيق البريد (الأجهزة الذكية)</button><span id="mmAttSt" class="text-[11px] text-sky-900"></span></div><div class="text-[11px] text-sky-800 mt-1 leading-5">روابط البريد لا تحمل مرفقات. نزّل الملفات ثم اسحبها إلى الرسالة، أو على iOS/Android اضغط «مشاركتها» لتصل مرفقةً إلى تطبيق Gmail.</div></div>
     <label for="mmBody" class="block text-[12px] font-bold text-slate-600 mt-3 mb-1">نص الرسالة <span class="font-normal text-gray-400">(يمكنك تعديله قبل الإرسال)</span></label>
-    <textarea id="mmBody" rows="13" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-[12.5px] leading-7"></textarea>
+    <textarea id="mmBody" rows="14" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-[12.5px] leading-7 bg-white text-slate-800"></textarea>
+    <label class="inline-flex items-center gap-2 text-[11.5px] text-slate-600 mt-1"><input type="checkbox" id="mmShort" checked> اختصار الروابط تلقائياً (is.gd)</label> <span id="mmShortSt" class="text-[11px] text-gray-500"></span>
     <div id="mmLen" class="text-[11px] text-gray-500 mt-1"></div>
-    <div class="flex flex-wrap gap-2 mt-3"><a id="mmGmail" class="vbtn pri" target="_blank" rel="noopener"><i class="fa-brands fa-google"></i> فتح في Gmail</a><a id="mmMailto" class="vbtn"><i class="fa-solid fa-envelope"></i> فتح في برنامج البريد</a><button type="button" id="mmCopy" class="vbtn"><i class="fa-regular fa-copy"></i> نسخ الرسالة</button></div>
-    <p class="text-[11px] text-gray-400 mt-3 leading-5">المرفقات هنا <b>روابط</b> (لوحة المتابعة، وتقرير استلام المهام، والمولّد، والمراجع). وإن أردتَ إرفاق ملفات PDF فاحفظها من الصفحات ثم أرفقها يدوياً قبل الإرسال.</p>
+    <div class="flex flex-wrap gap-2 mt-3"><button type="button" id="mmRich" class="vbtn pri"><i class="fa-solid fa-table"></i> نسخ الرسالة منسّقة (جدول)</button><a id="mmGmail" class="vbtn" target="_blank" rel="noopener"><i class="fa-brands fa-google"></i> فتح في Gmail</a><a id="mmMailto" class="vbtn"><i class="fa-solid fa-envelope"></i> فتح في برنامج البريد</a><button type="button" id="mmCopy" class="vbtn"><i class="fa-regular fa-copy"></i> نسخ نص عادي</button></div>
+    <p class="text-[11px] text-gray-400 mt-3 leading-5">«النسخ المنسّق» يلصق جدول المؤشرات بشكله في Gmail (اضغط Ctrl+V في نص الرسالة). أما روابط الفتح المباشر فنصٌّ عادي، والجدول فيها بخطوط فاصلة.</p>
   </div>
 </div>
 <div id="qrModal" class="hidden fixed inset-0 z-50 items-center justify-center p-3" role="dialog" aria-modal="true" aria-labelledby="qmTitle">
@@ -520,51 +523,103 @@ function renderExtra(){
 const SITE=(window.ETEC_SITE_BASE||new URL(".",location.href).href).replace(/\/?$/,"/");
 const ORGANIZER=window.ETEC_PROJECT_ORGANIZER||"";
 const PROJ_FOLDER="https://drive.google.com/drive/folders/1IDVvAtEyYMA_FZhua_vLDmw_z1cjSBdQ";
-function mailBtns(d,wide){ const k=(kind,ic,l,t)=>`<button type="button" class="vbtn" data-mail="${d}|${kind}" style="${wide?"":"font-size:10.5px;padding:3px 9px"}" title="${t}" aria-label="${t}"><i class="fa-solid ${ic}"></i> ${l}</button>`;
-  return `<div class="${wide?"flex flex-wrap gap-2":"flex gap-1.5 mt-1.5"}">${k("assign","fa-envelope-open-text","تكليف","إرسال تكليف ببدء العمل لفريق المجال "+d+" مع الروابط والتقارير")}${k("progress","fa-envelope-circle-check","تقدّم","إرسال تقدم العمل لفريق المجال "+d)}</div>`; }
+const authOK=()=>!!window.ETEC_CONTACTS_DEMO||!!(window.DFGate&&DFGate.isAuth());
+function mailBtns(d,wide){ const lock=authOK()?"":'<i class="fa-solid fa-lock" style="font-size:9px;opacity:.65"></i> ';
+  const k=(kind,ic,l,t)=>`<button type="button" class="vbtn" data-mail="${d}|${kind}" style="${wide?"":"font-size:10.5px;padding:3px 9px"}" title="${t}${authOK()?"":" — لأصحاب الصلاحية: يطلب الدخول أولاً"}" aria-label="${t}">${lock}<i class="fa-solid ${ic}"></i> ${l}</button>`;
+  return `<div class="${wide?"flex flex-wrap gap-2":"flex gap-1.5 mt-1.5"}">${k("assign","fa-envelope-open-text","تكليف","إرسال تكليف ببدء العمل لفريق عمل المجال "+d)}${k("progress","fa-envelope-circle-check","تقدّم","إرسال تقدم العمل لفريق عمل المجال "+d)}</div>`; }
 const DEMO_CONTACTS=()=>{ const o={}; Object.keys(TEAMS).forEach(d=>{ o[d]={sup:{n:TEAMS[d].sup,e:["supervisor"+d+"@example.com"]},mem:TEAMS[d].mem.map((m,x)=>({n:m,e:["member"+d+"-"+(x+1)+"@example.com"]}))}; }); return o; };
 async function getContacts(){ if(window.ETEC_CONTACTS_DEMO) return DEMO_CONTACTS(); if(!window.ETEC_CONTACTS_ENC) throw new Error("no-contacts"); if(!window.DFGate) throw new Error("no-gate"); return DFGate.unlockContacts(window.ETEC_CONTACTS_ENC); }
 const todayAr=()=>new Date().toLocaleDateString("ar-SA-u-ca-gregory",{year:"numeric",month:"long",day:"numeric"});
-const sign=()=>"\nمع خالص التقدير والمودة،\n"+(ORGANIZER?ORGANIZER+" — ":"")+"منظّم المشروع (مهندس بيانات النظام)";
-const LEGAL_LINE="\n\nهذا العمل يخضع لـ PDPL و IP، فنرجو ألا يُنسخ أو يُرفع إلى أدوات الذكاء الاصطناعي دون إذن كتابي. وتفتح الأدوات بعد الدخول ببيانات فريقنا.";
-function composeAssign(d,C){
-  const t=TEAMS[d], s=statsFor(i=>i.d===d), people=C[d].mem;
-  const lines=t.mem.map((m,x)=>{ const cs=DATA.filter(i=>i.d===d&&ownerIdx(i)===x).map(i=>i.code); return "• "+m+": "+cs.length+" مؤشرات ("+cs.join("، ")+")"; }).join("\n");
-  const hc=t.mem.map((m,x)=>"   - "+m+": "+SITE+"hardcopy.html?d="+d+"&m="+x).join("\n");
+const stName=m=>m.replace(/^أ\.\s*/,"");
+const pdfName=(d,x)=>"تقرير_استلام_المهام_المجال"+d+"_"+(x==="all"?"نسخة_المشرف":stName(TEAMS[d].mem[x]).replace(/\s+/g,"_"))+".pdf";
+const memberOf=(d,x)=>DATA.filter(i=>i.d===d&&ownerIdx(i)===x).sort((a,b)=>a.code.localeCompare(b.code));
+const FOOT=()=>"\nمع خالص التقدير والمودة،\n"+(ORGANIZER?ORGANIZER+" — ":"")+"منظّم المشروع (مهندس بيانات النظام)\n\nهذا العمل يخضع لـ PDPL و IP، فنرجو ألا يُنسخ أو يُرفع إلى أدوات الذكاء الاصطناعي دون إذن كتابي.";
+const PROJ_DESC="مشروع داخلي لمدارس دار الفرسان (قسم الدبلوما الأمريكية — بنين) يربط شواهد معايير هيئة تقويم التعليم والتدريب (ETEC) ومؤشراتها بسجلاتها، ويوثّقها بتقرير بصري موحد لكل مؤشر، استعداداً لزيارة التقويم الخارجي للمدارس وسعياً إلى التميز المدرسي.";
+function composeAssign(d){
+  const n=DATA.filter(i=>i.d===d).length, rows=TEAMS[d].mem.map((m,x)=>memberOf(d,x).map(i=>i.code+" | "+i.st+" | "+m).join("\n")).join("\n");
+  const links=[["لوحة متابعة المجال",SITE+"evidence-link.html?team="+d],["مرجع تقرير مصادر السجلات (الهيئة)",SITE+"records-sources.html"],["مرجع الشواهد المؤمَّنة (لتغذية التقرير البصري فقط)",REF_URL],["مجلد المشروع في Drive",PROJ_FOLDER]].map(([l,u])=>"• "+l+": "+u).join("\n");
   return {subject:"تكليف ببدء العمل — مشروع ربط الشواهد بالسجلات — المجال "+d+" · "+DOMAINS[d],
-    body:"السلام عليكم ورحمة الله وبركاته،\n\nزملاءنا الأعزاء في فريق المجال "+d+" ("+DOMAINS[d]+")،\n\nيسعدنا أن نبدأ معاً مرحلة «ربط الشواهد بالسجلات» استعداداً لزيارة التقويم الخارجي، شاكرين لكم جهدكم في جمع الشواهد (نحو "+PH1.pct+"%).\n\nفي مجالنا "+s.ind+" مؤشراً، ونقترح أن نتقاسمها هكذا:\n"+lines+"\n\nما بين أيدينا:\n• لوحة المتابعة: "+SITE+"evidence-link.html?team="+d+"\n• تقرير استلام المهام (للطباعة):\n"+hc+"\n   - المشرف: "+SITE+"hardcopy.html?d="+d+"&m=all\n• المولّد: "+SITE+"output.html\n• مرجع الهيئة: "+SITE+"records-sources.html\n• مرجع الشواهد المؤمَّنة (لتغذية التقرير البصري فقط): "+REF_URL+"\n• مجلد المشروع: "+PROJ_FOLDER+"\n• طلب الرقمنة: "+SITE+"approval-request.html\n\nخطواتنا: نطبع تقرير الاستلام ونوقّعه، ثم نجمع السجلات ونرفعها في مجلد كل مؤشر، ثم ننشئ التقرير البصري بست صور.\n\nنحن معكم في كل خطوة، ونرحّب بأي ملاحظة."+sign()+LEGAL_LINE};
+    attach:TEAMS[d].mem.map((m,x)=>({name:pdfName(d,x),file:"att-d"+d+"-m"+x+".pdf",m:x})).concat([{name:pdfName(d,"all"),file:"att-d"+d+"-all.pdf",m:"all"}]),
+    body:"السلام عليكم ورحمة الله وبركاته،\n\nزملاءنا الأعزاء في فريق عمل المجال "+d+" · "+DOMAINS[d]+"،\n\nمشروع «ربط الشواهد بالسجلات»\n"+PROJ_DESC+"\n\nيسعدنا أن نبلغكم ببدء هذه المرحلة استعداداً لزيارة التقويم الخارجي للمدارس، شاكرين لكم جهدكم في جمع الشواهد والتي بلغت نسبة "+PH1.pct+"%.\n\nفي المجال "+d+" · "+DOMAINS[d]+" ("+n+" مؤشراً)، ونقترح أن يتم تقسيم العمل بالطريقة التالية:\n\nالرقم | اسم المؤشر | منسّق المؤشر\n"+rows+"\n\nالمطلوب لكل مؤشر: جمع السجلات المطلوبة لفقراته من مصادرها وفق تقرير مصادر السجلات الصادر عن الهيئة، ورفعها في مجلد المؤشر وتسميتها وفق قاعدة التسمية، ثم إنشاء التقرير البصري للمؤشر بست صور على الأقل.\n\nالمرفقات (PDF): «تقرير استلام المهام» لكل زميل ونسخة المشرف؛ نرجو طباعته واستعماله مرجعاً أثناء العمل وتوقيع الإقرار في آخره.\n\nالروابط:\n"+links+"\n\nللحصول على بيانات الدخول إلى أدوات المشروع المقفلة يُرجى التواصل مع منظّم المشروع.\n\nونرحّب بأي ملاحظة أو استفسار."+FOOT()};
 }
-function composeProgress(d,C){
-  const t=TEAMS[d], s=statsFor(i=>i.d===d), cn={done:0,prog:0,none:0}; DATA.filter(i=>i.d===d).forEach(i=>cn[indState(i)]++);
-  const mem=t.mem.map((m,x)=>{ const my=DATA.filter(i=>i.d===d&&ownerIdx(i)===x), g=my.filter(i=>indState(i)==="done").length, nx=my.filter(i=>indState(i)!=="done").sort((a,b)=>readiness(a)-readiness(b))[0];
-    return "• "+m+": "+g+" منجز من "+my.length+" ("+pct(g,my.length)+"%)"+(nx?" — المطلوب الآن في "+nx.code+": "+nextAction(nx).t.slice(0,70):" — أنجز كل مؤشراته"); }).join("\n");
-  return {subject:"تقدم العمل — مشروع ربط الشواهد بالسجلات — المجال "+d+" · "+DOMAINS[d],
-    body:"السلام عليكم ورحمة الله وبركاته،\n\nزملاءنا الأعزاء في فريق المجال "+d+" ("+DOMAINS[d]+")،\n\nنشارككم حالة عملنا المشترك بحسب لوحة المتابعة بتاريخ "+todayAr()+":\n• المؤشرات ("+cn.done+cn.prog+cn.none+"): "+cn.done+" منجز · "+cn.prog+" قيد التنفيذ · "+cn.none+" لم يبدأ\n• تقدم الأدلة "+P100(domProg(d,evProg))+"% · تقدم التقرير البصري "+P100(domProg(d,visProg))+"%\n"+(s.repShort?"• تقارير بصرية تحوي أقل من 6 صور: "+s.repShort+"\n":"")+(s.rename?"• ملفات تحتاج إعادة تسمية: "+Math.round(s.rename)+"\n":"")+"\nوبالنسبة لكل زميل:\n"+mem+"\n\nلوحة المتابعة: "+SITE+"evidence-link.html?team="+d+"\n\nشكراً لكم على ما تبذلونه، وإن كان في الطريق ما يعيقكم فأخبرونا لنتعاون على تذليله."+sign()+LEGAL_LINE};
+function composeProgress(d){
+  const cn={done:0,prog:0,none:0}; DATA.filter(i=>i.d===d).forEach(i=>cn[indState(i)]++); const n=cn.done+cn.prog+cn.none, s=statsFor(i=>i.d===d);
+  const cut=(t,k)=>t.length>k?t.slice(0,k)+"…":t;
+  const mem=TEAMS[d].mem.map((m,x)=>{ const my=memberOf(d,x), g=my.filter(i=>indState(i)==="done").length, nx=my.filter(i=>indState(i)!=="done").sort((a,b)=>readiness(a)-readiness(b))[0]; return m+" | "+g+" من "+my.length+" | "+pct(g,my.length)+"% | "+(nx?nx.code+" — "+cut(nextAction(nx).t,58):"أنجز كل مؤشراته"); }).join("\n");
+  return {subject:"تقدم العمل — مشروع ربط الشواهد بالسجلات — المجال "+d+" · "+DOMAINS[d], attach:[],
+    body:"السلام عليكم ورحمة الله وبركاته،\n\nزملاءنا الأعزاء في فريق عمل المجال "+d+" · "+DOMAINS[d]+"،\n\nنشارككم حالة العمل في مشروع «ربط الشواهد بالسجلات» بحسب لوحة المتابعة بتاريخ "+todayAr()+":\n\nالحالة | عدد المؤشرات | النسبة\nمنجز | "+cn.done+" | "+pct(cn.done,n)+"%\nقيد التنفيذ | "+cn.prog+" | "+pct(cn.prog,n)+"%\nلم يبدأ | "+cn.none+" | "+pct(cn.none,n)+"%\n\nتقدم الأدلة في المجال: "+P100(domProg(d,evProg))+"% · تقدم التقرير البصري: "+P100(domProg(d,visProg))+"%\n"+(s.repShort?"تقارير بصرية تحوي أقل من 6 صور: "+s.repShort+"\n":"")+(s.rename?"ملفات تحتاج إعادة تسمية: "+Math.round(s.rename)+"\n":"")+"\nمنسّق المؤشر | المؤشرات المنجزة | النسبة | المطلوب الآن\n"+mem+"\n\nلوحة متابعة المجال: "+SITE+"evidence-link.h"+"tml?team="+d+"\n\nشاكرين لكم جهدكم، وإن كان في الطريق ما يعيقكم فنرجو إبلاغنا لتذليله."+FOOT()};
 }
-let mailCtx=null;
-function setMailLinks(){ if(!mailCtx) return; const to=[...document.querySelectorAll("#mmTo input:checked")].map(x=>x.dataset.e).join(","), su=encodeURIComponent(mmSubj.value), bo=encodeURIComponent(mmBody.value);
-  mmGmail.href="https://mail.google.com/mail/?view=cm&fs=1&to="+encodeURIComponent(to)+"&su="+su+"&body="+bo; mmMailto.href="mailto:"+to+"?subject="+su+"&body="+bo;
-  const len=mmGmail.href.length, long=len>7500; mmLen.innerHTML=`${to?to.split(",").length:0} مستلم · طول الرابط ${len} حرفاً${long?' <b class="text-amber-700">— الرسالة طويلة وقد لا يقبلها برنامج البريد؛ استعمل «نسخ الرسالة» أو قصّر النص.</b>':""}`;
-  const blocked=!to||(mailCtx.demo&&mailCtx.kind==="progress"); [mmGmail,mmMailto].forEach(a=>{ a.style.opacity=blocked?".45":"1"; a.style.pointerEvents=blocked?"none":"auto"; }); }
+/* ----- اختصار الروابط (is.gd عبر JSONP؛ عند الفشل تبقى الروابط الطويلة) ----- */
+const SHORT_KEY="df_short_v1"; let shortCache={}; try{ shortCache=JSON.parse(localStorage.getItem(SHORT_KEY)||"{}"); }catch(e){}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function shortOne(url){ if(shortCache[url]) return Promise.resolve(shortCache[url]);
+  return new Promise((res,rej)=>{ const cb="__sh"+Math.random().toString(36).slice(2), s=document.createElement("script"); let done=false;
+    const fin=()=>{ done=true; clearTimeout(to); try{ delete window[cb]; }catch(e){ window[cb]=undefined; } s.remove(); };
+    const to=setTimeout(()=>{ if(!done){ fin(); rej(new Error("timeout")); } },9000);
+    window[cb]=d=>{ if(done) return; fin(); if(d&&d.shorturl){ shortCache[url]=d.shorturl; try{ localStorage.setItem(SHORT_KEY,JSON.stringify(shortCache)); }catch(e){} res(d.shorturl); } else rej(new Error((d&&d.errormessage)||"fail")); };
+    s.onerror=()=>{ if(!done){ fin(); rej(new Error("net")); } }; s.src="https://is.gd/create.php?format=json&callback="+cb+"&url="+encodeURIComponent(url); document.head.appendChild(s); }); }
+async function shortenBody(run){
+  if(window.ETEC_SHORTENER===""||!mmShort.checked){ mmShortSt.textContent=""; return; }
+  const urls=[...new Set((mmBody.value.match(/https?:\/\/[^\s<>"')]+/g)||[]))].filter(u=>!/^https:\/\/is\.gd\//.test(u)); if(!urls.length) return;
+  let ok=0,fail=0; mmShortSt.textContent="جارٍ اختصار "+urls.length+" روابط…";
+  for(const u of urls){ if(!mailCtx||mailCtx.run!==run) return; try{ const s=await shortOne(u); mmBody.value=mmBody.value.split(u).join(s); ok++; }catch(e){ fail++; } setMailLinks(); await sleep(shortCache[u]?0:350); }
+  mmShortSt.textContent=fail?`اختُصر ${ok} من ${ok+fail}؛ تعذّر الباقي فبقيت روابطه كاملة.`:`اختُصرت ${ok} روابط.`; }
+/* ----- التحويل من النص العادي إلى HTML بجدول ----- */
+const escH=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const linkH=s=>s.replace(/https?:\/\/[^\s<]+/g,u=>`<a href="${u}">${u}</a>`);
+function plainToHtml(t){ const out=[]; let tb=[];
+  const flush=()=>{ if(!tb.length) return; const R=tb.map(r=>r.split(" | ").map(c=>c.trim())); const th='style="border:1px solid #94a3b8;background:#e6f0f0;padding:6px 10px;text-align:right"', td='style="border:1px solid #94a3b8;padding:6px 10px;text-align:right"';
+    out.push('<table dir="rtl" style="border-collapse:collapse;margin:8px 0;font-size:14px"><thead><tr>'+R[0].map(c=>`<th ${th}>${escH(c)}</th>`).join("")+'</tr></thead><tbody>'+R.slice(1).map(r=>'<tr>'+r.map(c=>`<td ${td}>${linkH(escH(c))}</td>`).join("")+'</tr>').join("")+'</tbody></table>'); tb=[]; };
+  t.split("\n").forEach(l=>{ if(l.includes(" | ")){ tb.push(l); return; } flush(); if(!l.trim()){ out.push('<div style="height:8px"></div>'); return; } out.push(/^•\s/.test(l)?'<div style="margin:2px 0">• '+linkH(escH(l.slice(2)))+'</div>':'<div>'+linkH(escH(l))+'</div>'); }); flush();
+  return '<div dir="rtl" style="font-family:Tahoma,Arial,sans-serif;font-size:14px;line-height:1.9;direction:rtl;text-align:right">'+out.join("")+'</div>'; }
+async function copyRich(btn,label){ const plain="إلى: "+checkedTo().join(", ")+"\nالموضوع: "+mmSubj.value+"\n\n"+mmBody.value, html=plainToHtml(mmBody.value);
+  try{ if(window.ClipboardItem) await navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([html],{type:"text/html"}),"text/plain":new Blob([plain],{type:"text/plain"})})]); else await navigator.clipboard.writeText(plain);
+    if(btn){ const o=btn.innerHTML; btn.innerHTML='<i class="fa-solid fa-check"></i> '+(label||"تم النسخ"); setTimeout(()=>{ btn.innerHTML=o; },2000); } return true; }catch(e){ return false; } }
+/* ----- النافذة ----- */
+let mailCtx=null; const MAXURL=7500;
+const checkedTo=()=>[...document.querySelectorAll("#mmTo input:checked")].map(x=>x.dataset.e);
+function setMailLinks(){ if(!mailCtx) return; const to=checkedTo().join(","), su=encodeURIComponent(mmSubj.value), bo=encodeURIComponent(mmBody.value);
+  const g="https://mail.google.com/mail/?view=cm&fs=1&to="+encodeURIComponent(to)+"&su="+su, m="mailto:"+to+"?subject="+su, full=g.length+bo.length+6, long=full>MAXURL;
+  mmGmail.href=long?g:g+"&body="+bo; mmMailto.href=long?m:m+"&body="+bo; mailCtx.long=long;
+  mmLen.innerHTML=`${to?to.split(",").length:0} مستلم · طول الرابط ${full} حرفاً`+(long?' <b class="text-amber-700">— الرسالة طويلة: يفتح الزر المستلمين والموضوع فقط، ونسخنا لك الرسالة منسّقة لتلصقها (Ctrl+V).</b>':"");
+  const blocked=!to||(mailCtx.demo&&mailCtx.kind==="progress"); [mmGmail,mmMailto,mmRich].forEach(a=>{ a.style.opacity=blocked?".45":"1"; a.style.pointerEvents=blocked?"none":"auto"; }); }
 function closeMail(){ mailModal.classList.add("hidden"); mailModal.classList.remove("flex"); mailCtx=null; }
 async function openMail(d,kind){
   mailModal.classList.remove("hidden"); mailModal.classList.add("flex"); mmTitle.textContent=(kind==="assign"?"تكليف ببدء العمل":"تقدم العمل")+" — المجال "+d+" · "+DOMAINS[d];
-  mmWarn.innerHTML='<div class="text-[12px] text-gray-500"><i class="fa-solid fa-circle-notch fa-spin"></i> جارٍ فتح قائمة البريد…</div>'; mmTo.innerHTML=""; mmSubj.value=""; mmBody.value=""; mmLen.textContent="";
-  [mmGmail,mmMailto].forEach(a=>{ a.style.pointerEvents="none"; a.style.opacity=".45"; });
+  mmWarn.innerHTML='<div class="text-[12px] text-gray-500"><i class="fa-solid fa-circle-notch fa-spin"></i> جارٍ فتح قائمة البريد…</div>'; mmTo.innerHTML=""; mmSubj.value=""; mmBody.value=""; mmLen.textContent=""; mmShortSt.textContent=""; mmAttBox.classList.add("hidden");
+  [mmGmail,mmMailto,mmRich].forEach(a=>{ a.style.pointerEvents="none"; a.style.opacity=".45"; });
+  if(!window.ETEC_CONTACTS_DEMO){
+    if(!(window.DFGate&&DFGate.isAuth())){ closeMail(); if(window.DFGate) DFGate.require(()=>openMail(d,kind),{title:"الرسائل لأصحاب الصلاحية",msg:"إرسال الرسائل متاح للمصرح لهم فقط. أدخل بيانات الدخول المعتمدة."}); return; }
+    let ok=false; try{ ok=await DFGate.canMail(); }catch(e){}
+    if(!ok){ mmWarn.innerHTML='<div class="text-[12px] bg-red-50 border border-red-200 text-red-700 rounded-lg px-3 py-2 leading-6"><i class="fa-solid fa-lock"></i> هذا الحساب غير مصرح له بإرسال الرسائل. اطلب الصلاحية من منظّم المشروع.</div>'; return; }
+  }
   let C; try{ C=await getContacts(); }catch(err){ mmWarn.innerHTML=`<div class="text-[12px] bg-red-50 border border-red-200 text-red-700 rounded-lg px-3 py-2 leading-6">${err&&err.message==="no-wrap"?"هذا الحساب غير مصرح له بفتح قائمة البريد. اطلب من منظّم المشروع إعادة توليدها.":"تعذّر فتح قائمة البريد. تأكد من إدخال بيانات الدخول الصحيحة وأن الموقع يعمل عبر خادم."}</div>`; return; }
   const T=C[d]; if(!T){ mmWarn.textContent="لا بيانات اتصال لهذا المجال."; return; }
-  const demo=!!window.__demoVisit, isDemoContacts=!!window.ETEC_CONTACTS_DEMO; mailCtx={d,kind,demo:demo};
-  const m=kind==="assign"?composeAssign(d,C):composeProgress(d,C);
-  mmWarn.innerHTML=(isDemoContacts?'<div class="text-[12px] bg-amber-50 border border-amber-200 text-amber-800 rounded-lg px-3 py-2 mb-2 leading-6"><i class="fa-solid fa-flask"></i> عناوين تجريبية (example.com) في المعاينة فقط.</div>':"")+(demo&&kind==="progress"?'<div class="text-[12px] bg-red-50 border border-red-200 text-red-700 rounded-lg px-3 py-2 leading-6"><i class="fa-solid fa-triangle-exclamation"></i> الأرقام الآن وهمية (وضع التجربة). عُطّل الفتح في البريد لئلا تُرسل أرقام غير حقيقية؛ أوقف «التجربة بأرقام وهمية» أولاً.</div>':"");
-  const all=[{...T.sup,role:"المشرف"}].concat(T.mem.map(x=>({...x,role:"منسّق مؤشر"})));
+  const demo=!!window.__demoVisit, run=Date.now(); mailCtx={d,kind,demo,run};
+  const m=kind==="assign"?composeAssign(d):composeProgress(d); mailCtx.attach=m.attach;
+  mmWarn.innerHTML=(window.ETEC_CONTACTS_DEMO?'<div class="text-[12px] bg-amber-50 border border-amber-200 text-amber-800 rounded-lg px-3 py-2 mb-2 leading-6"><i class="fa-solid fa-flask"></i> عناوين تجريبية (example.com) في المعاينة فقط.</div>':"")+(demo&&kind==="progress"?'<div class="text-[12px] bg-red-50 border border-red-200 text-red-700 rounded-lg px-3 py-2 leading-6"><i class="fa-solid fa-triangle-exclamation"></i> الأرقام الآن وهمية (وضع التجربة). عُطّل الإرسال لئلا تُرسل أرقام غير حقيقية؛ أوقف «التجربة بأرقام وهمية» أولاً.</div>':"");
+  const all=[{...T.sup}].concat(T.mem.map(x=>({...x})));
   mmTo.innerHTML=all.map(p=>p.e.map(e=>`<label class="inline-flex items-center gap-1.5 border border-gray-200 rounded-full px-3 py-1 text-[11.5px] bg-slate-50"><input type="checkbox" checked data-e="${esc(e)}"> <b>${esc(p.n)}</b> <span class="text-gray-400" dir="ltr">${esc(e)}</span></label>`).join("")).join("");
-  mmSubj.value=m.subject; mmBody.value=m.body; setMailLinks(); mmPanel.focus();
+  mmSubj.value=m.subject; mmBody.value=m.body;
+  if(m.attach.length){ mmAttBox.classList.remove("hidden"); mmAtt.innerHTML=m.attach.map(f=>`<li><i class="fa-regular fa-file-pdf"></i> <b>${esc(f.name)}</b> <a class="underline" href="${SITE+f.file}" download="${esc(f.name)}" target="_blank" rel="noopener">تنزيل</a> · <a class="underline" href="hardcopy.html?d=${d}&m=${f.m}" target="_blank" rel="noopener">نسخة جديدة: طباعة ← حفظ PDF</a></li>`).join(""); mmAttSt.textContent=""; mmAttShare.style.display=(navigator.canShare&&typeof File!=="undefined")?"inline-flex":"none"; }
+  setMailLinks(); mmPanel.focus(); shortenBody(run);
 }
-mailModal.addEventListener("input",setMailLinks); mailModal.addEventListener("change",setMailLinks);
+mailModal.addEventListener("input",setMailLinks); mailModal.addEventListener("change",e=>{ setMailLinks(); if(e.target.id==="mmShort"&&mailCtx) shortenBody(mailCtx.run); });
+async function fetchAtt(){ const out=[]; for(const a of mailCtx.attach){ const r=await fetch(SITE+a.file,{cache:"no-store"}); if(!r.ok) throw new Error("HTTP "+r.status); out.push(new File([await r.blob()],a.name,{type:"application/pdf"})); } return out; }
+mmAttAll.addEventListener("click",async()=>{ if(!mailCtx) return; mmAttSt.textContent="جارٍ جلب الملفات من المستودع…";
+  try{ const fs=await fetchAtt(); fs.forEach((f,i)=>setTimeout(()=>{ const u=URL.createObjectURL(f), a=document.createElement("a"); a.href=u; a.download=f.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),4000); },i*600)); mmAttSt.textContent="نُزّلت "+fs.length+" ملفات. اسحبها إلى الرسالة."; }
+  catch(e){ mmAttSt.textContent="تعذّر جلب الملفات: تأكد أنها رُفعت إلى المستودع بالأسماء att-d"+mailCtx.d+"-m0.pdf … att-d"+mailCtx.d+"-all.pdf."; } });
+mmAttShare.addEventListener("click",async()=>{ if(!mailCtx) return; mmAttSt.textContent="جارٍ تجهيز الملفات…";
+  try{ const fs=await fetchAtt(); if(navigator.canShare&&navigator.canShare({files:fs})){ await navigator.share({files:fs,title:mmSubj.value,text:mmSubj.value}); mmAttSt.textContent=""; } else mmAttSt.textContent="هذا المتصفح لا يدعم مشاركة الملفات؛ استعمل «تنزيل المرفقات كلها»."; }
+  catch(e){ mmAttSt.textContent=(e&&e.name==="AbortError")?"":"تعذّرت المشاركة: "+(e&&e.message||""); } });
 mmClose.addEventListener("click",closeMail); mmBackdrop.addEventListener("click",closeMail);
-mmCopy.addEventListener("click",async()=>{ try{ await navigator.clipboard.writeText("إلى: "+[...document.querySelectorAll("#mmTo input:checked")].map(x=>x.dataset.e).join(", ")+"\nالموضوع: "+mmSubj.value+"\n\n"+mmBody.value); mmCopy.innerHTML='<i class="fa-solid fa-check"></i> تم النسخ'; setTimeout(()=>{ mmCopy.innerHTML='<i class="fa-regular fa-copy"></i> نسخ الرسالة'; },1800); }catch(e){} });
+mmRich.addEventListener("click",()=>copyRich(mmRich,"تم النسخ — الصقها في Gmail"));
+mmCopy.addEventListener("click",async()=>{ try{ await navigator.clipboard.writeText("إلى: "+checkedTo().join(", ")+"\nالموضوع: "+mmSubj.value+"\n\n"+mmBody.value); mmCopy.innerHTML='<i class="fa-solid fa-check"></i> تم النسخ'; setTimeout(()=>{ mmCopy.innerHTML='<i class="fa-regular fa-copy"></i> نسخ نص عادي'; },1800); }catch(e){} });
+[mmGmail,mmMailto].forEach(a=>a.addEventListener("click",()=>{ if(mailCtx&&mailCtx.long) copyRich(null); }));
 document.addEventListener("click",e=>{ const mb=e.target.closest("[data-mail]"); if(!mb) return; e.preventDefault(); e.stopPropagation(); const [d,k]=mb.dataset.mail.split("|"); openMail(+d,k); },true);
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!mailModal.classList.contains("hidden")&&!document.getElementById("pg-overlay")) closeMail(); });
+window.addEventListener("df-auth",()=>{ try{ render(); }catch(e){} });
+window.addEventListener("load",()=>{ if(window.DFGate&&DFGate.isAuth()) try{ render(); }catch(e){} }); /* DFGate يُحمَّل بعد هذا السكربت، فنُعيد الرسم ليختفي قفل الأزرار في جلسة قائمة */
 function ringHTML(layers,tick,center,S){ S=S||150; let s=`<svg width="${S}" height="${S}" viewBox="0 0 140 140" role="img" aria-label="${center}">`;
   layers.forEach(L=>{ const C=2*Math.PI*L.r; s+=`<circle cx="70" cy="70" r="${L.r}" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="${L.w}"/><circle cx="70" cy="70" r="${L.r}" fill="none" stroke="${L.c}" stroke-width="${L.w}" stroke-linecap="round" stroke-dasharray="${C.toFixed(2)}" stroke-dashoffset="${(C*(1-Math.min(1,Math.max(0,L.p)))).toFixed(2)}" transform="rotate(-90 70 70)"/>`; });
   if(tick!=null){ const L=layers[0], a=(-90+tick*360)*Math.PI/180, r1=L.r-L.w/2-2, r2=L.r+L.w/2+2; s+=`<line x1="${(70+r1*Math.cos(a)).toFixed(1)}" y1="${(70+r1*Math.sin(a)).toFixed(1)}" x2="${(70+r2*Math.cos(a)).toFixed(1)}" y2="${(70+r2*Math.sin(a)).toFixed(1)}" stroke="#fff" stroke-width="2.5"/>`; }
