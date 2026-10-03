@@ -192,6 +192,23 @@ details[open] .chev{transform:rotate(-90deg)}
 
 </main>
 
+<div id="mailModal" class="hidden fixed inset-0 z-50 items-center justify-center p-3" role="dialog" aria-modal="true" aria-labelledby="mmTitle">
+  <div id="mmBackdrop" class="absolute inset-0 bg-slate-900/60"></div>
+  <div id="mmPanel" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-5" style="max-height:92vh;overflow-y:auto" tabindex="-1">
+    <button type="button" id="mmClose" class="absolute top-3 left-3 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200" aria-label="إغلاق"><i class="fa-solid fa-xmark"></i></button>
+    <h3 id="mmTitle" class="font-black text-slate-800 text-[15px] px-8 leading-7"></h3>
+    <div id="mmWarn" class="mt-2"></div>
+    <div class="text-[12px] font-bold text-slate-600 mt-3 mb-1">المستلمون <span class="font-normal text-gray-400">(ألغِ التحديد عمّن لا تريده)</span></div>
+    <div id="mmTo" class="flex flex-wrap gap-2"></div>
+    <label for="mmSubj" class="block text-[12px] font-bold text-slate-600 mt-3 mb-1">الموضوع</label>
+    <input id="mmSubj" type="text" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-[13px]">
+    <label for="mmBody" class="block text-[12px] font-bold text-slate-600 mt-3 mb-1">نص الرسالة <span class="font-normal text-gray-400">(يمكنك تعديله قبل الإرسال)</span></label>
+    <textarea id="mmBody" rows="13" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-[12.5px] leading-7"></textarea>
+    <div id="mmLen" class="text-[11px] text-gray-500 mt-1"></div>
+    <div class="flex flex-wrap gap-2 mt-3"><a id="mmGmail" class="vbtn pri" target="_blank" rel="noopener"><i class="fa-brands fa-google"></i> فتح في Gmail</a><a id="mmMailto" class="vbtn"><i class="fa-solid fa-envelope"></i> فتح في برنامج البريد</a><button type="button" id="mmCopy" class="vbtn"><i class="fa-regular fa-copy"></i> نسخ الرسالة</button></div>
+    <p class="text-[11px] text-gray-400 mt-3 leading-5">المرفقات هنا <b>روابط</b> (لوحة المتابعة، وتقرير استلام المهام، والمولّد، والمراجع). وإن أردتَ إرفاق ملفات PDF فاحفظها من الصفحات ثم أرفقها يدوياً قبل الإرسال.</p>
+  </div>
+</div>
 <div id="qrModal" class="hidden fixed inset-0 z-50 items-center justify-center p-3" role="dialog" aria-modal="true" aria-labelledby="qmTitle">
   <div id="qmBackdrop" class="absolute inset-0 bg-slate-900/60"></div>
   <div id="qmPanel" class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-5 text-center" tabindex="-1">
@@ -499,6 +516,55 @@ function renderExtra(){
   const parts=[a,b].filter(s=>!isE(s)); list.innerHTML=parts.length?parts.join('<div class="h-3"></div>'):empty(); }
 
 /* ===== نظرة الإدارة ===== */
+/* ===== رسائل البريد: تكليف ببدء العمل + تقدم العمل ===== */
+const SITE=(window.ETEC_SITE_BASE||new URL(".",location.href).href).replace(/\/?$/,"/");
+const ORGANIZER=window.ETEC_PROJECT_ORGANIZER||"";
+const PROJ_FOLDER="https://drive.google.com/drive/folders/1IDVvAtEyYMA_FZhua_vLDmw_z1cjSBdQ";
+function mailBtns(d,wide){ const k=(kind,ic,l,t)=>`<button type="button" class="vbtn" data-mail="${d}|${kind}" style="${wide?"":"font-size:10.5px;padding:3px 9px"}" title="${t}" aria-label="${t}"><i class="fa-solid ${ic}"></i> ${l}</button>`;
+  return `<div class="${wide?"flex flex-wrap gap-2":"flex gap-1.5 mt-1.5"}">${k("assign","fa-envelope-open-text","تكليف","إرسال تكليف ببدء العمل لفريق المجال "+d+" مع الروابط والتقارير")}${k("progress","fa-envelope-circle-check","تقدّم","إرسال تقدم العمل لفريق المجال "+d)}</div>`; }
+const DEMO_CONTACTS=()=>{ const o={}; Object.keys(TEAMS).forEach(d=>{ o[d]={sup:{n:TEAMS[d].sup,e:["supervisor"+d+"@example.com"]},mem:TEAMS[d].mem.map((m,x)=>({n:m,e:["member"+d+"-"+(x+1)+"@example.com"]}))}; }); return o; };
+async function getContacts(){ if(window.ETEC_CONTACTS_DEMO) return DEMO_CONTACTS(); if(!window.ETEC_CONTACTS_ENC) throw new Error("no-contacts"); if(!window.DFGate) throw new Error("no-gate"); return DFGate.unlockContacts(window.ETEC_CONTACTS_ENC); }
+const todayAr=()=>new Date().toLocaleDateString("ar-SA-u-ca-gregory",{year:"numeric",month:"long",day:"numeric"});
+const sign=()=>"\nمع خالص التقدير والمودة،\n"+(ORGANIZER?ORGANIZER+" — ":"")+"منظّم المشروع (مهندس بيانات النظام)";
+const LEGAL_LINE="\n\nهذا العمل يخضع لـ PDPL و IP، فنرجو ألا يُنسخ أو يُرفع إلى أدوات الذكاء الاصطناعي دون إذن كتابي. وتفتح الأدوات بعد الدخول ببيانات فريقنا.";
+function composeAssign(d,C){
+  const t=TEAMS[d], s=statsFor(i=>i.d===d), people=C[d].mem;
+  const lines=t.mem.map((m,x)=>{ const cs=DATA.filter(i=>i.d===d&&ownerIdx(i)===x).map(i=>i.code); return "• "+m+": "+cs.length+" مؤشرات ("+cs.join("، ")+")"; }).join("\n");
+  const hc=t.mem.map((m,x)=>"   - "+m+": "+SITE+"hardcopy.html?d="+d+"&m="+x).join("\n");
+  return {subject:"تكليف ببدء العمل — مشروع ربط الشواهد بالسجلات — المجال "+d+" · "+DOMAINS[d],
+    body:"السلام عليكم ورحمة الله وبركاته،\n\nزملاءنا الأعزاء في فريق المجال "+d+" ("+DOMAINS[d]+")،\n\nيسعدنا أن نبدأ معاً مرحلة «ربط الشواهد بالسجلات» استعداداً لزيارة التقويم الخارجي، شاكرين لكم جهدكم في جمع الشواهد (نحو "+PH1.pct+"%).\n\nفي مجالنا "+s.ind+" مؤشراً، ونقترح أن نتقاسمها هكذا:\n"+lines+"\n\nما بين أيدينا:\n• لوحة المتابعة: "+SITE+"evidence-link.html?team="+d+"\n• تقرير استلام المهام (للطباعة):\n"+hc+"\n   - المشرف: "+SITE+"hardcopy.html?d="+d+"&m=all\n• المولّد: "+SITE+"output.html\n• مرجع الهيئة: "+SITE+"records-sources.html\n• مرجع الشواهد المؤمَّنة (لتغذية التقرير البصري فقط): "+REF_URL+"\n• مجلد المشروع: "+PROJ_FOLDER+"\n• طلب الرقمنة: "+SITE+"approval-request.html\n\nخطواتنا: نطبع تقرير الاستلام ونوقّعه، ثم نجمع السجلات ونرفعها في مجلد كل مؤشر، ثم ننشئ التقرير البصري بست صور.\n\nنحن معكم في كل خطوة، ونرحّب بأي ملاحظة."+sign()+LEGAL_LINE};
+}
+function composeProgress(d,C){
+  const t=TEAMS[d], s=statsFor(i=>i.d===d), cn={done:0,prog:0,none:0}; DATA.filter(i=>i.d===d).forEach(i=>cn[indState(i)]++);
+  const mem=t.mem.map((m,x)=>{ const my=DATA.filter(i=>i.d===d&&ownerIdx(i)===x), g=my.filter(i=>indState(i)==="done").length, nx=my.filter(i=>indState(i)!=="done").sort((a,b)=>readiness(a)-readiness(b))[0];
+    return "• "+m+": "+g+" منجز من "+my.length+" ("+pct(g,my.length)+"%)"+(nx?" — المطلوب الآن في "+nx.code+": "+nextAction(nx).t.slice(0,70):" — أنجز كل مؤشراته"); }).join("\n");
+  return {subject:"تقدم العمل — مشروع ربط الشواهد بالسجلات — المجال "+d+" · "+DOMAINS[d],
+    body:"السلام عليكم ورحمة الله وبركاته،\n\nزملاءنا الأعزاء في فريق المجال "+d+" ("+DOMAINS[d]+")،\n\nنشارككم حالة عملنا المشترك بحسب لوحة المتابعة بتاريخ "+todayAr()+":\n• المؤشرات ("+cn.done+cn.prog+cn.none+"): "+cn.done+" منجز · "+cn.prog+" قيد التنفيذ · "+cn.none+" لم يبدأ\n• تقدم الأدلة "+P100(domProg(d,evProg))+"% · تقدم التقرير البصري "+P100(domProg(d,visProg))+"%\n"+(s.repShort?"• تقارير بصرية تحوي أقل من 6 صور: "+s.repShort+"\n":"")+(s.rename?"• ملفات تحتاج إعادة تسمية: "+Math.round(s.rename)+"\n":"")+"\nوبالنسبة لكل زميل:\n"+mem+"\n\nلوحة المتابعة: "+SITE+"evidence-link.html?team="+d+"\n\nشكراً لكم على ما تبذلونه، وإن كان في الطريق ما يعيقكم فأخبرونا لنتعاون على تذليله."+sign()+LEGAL_LINE};
+}
+let mailCtx=null;
+function setMailLinks(){ if(!mailCtx) return; const to=[...document.querySelectorAll("#mmTo input:checked")].map(x=>x.dataset.e).join(","), su=encodeURIComponent(mmSubj.value), bo=encodeURIComponent(mmBody.value);
+  mmGmail.href="https://mail.google.com/mail/?view=cm&fs=1&to="+encodeURIComponent(to)+"&su="+su+"&body="+bo; mmMailto.href="mailto:"+to+"?subject="+su+"&body="+bo;
+  const len=mmGmail.href.length, long=len>7500; mmLen.innerHTML=`${to?to.split(",").length:0} مستلم · طول الرابط ${len} حرفاً${long?' <b class="text-amber-700">— الرسالة طويلة وقد لا يقبلها برنامج البريد؛ استعمل «نسخ الرسالة» أو قصّر النص.</b>':""}`;
+  const blocked=!to||(mailCtx.demo&&mailCtx.kind==="progress"); [mmGmail,mmMailto].forEach(a=>{ a.style.opacity=blocked?".45":"1"; a.style.pointerEvents=blocked?"none":"auto"; }); }
+function closeMail(){ mailModal.classList.add("hidden"); mailModal.classList.remove("flex"); mailCtx=null; }
+async function openMail(d,kind){
+  mailModal.classList.remove("hidden"); mailModal.classList.add("flex"); mmTitle.textContent=(kind==="assign"?"تكليف ببدء العمل":"تقدم العمل")+" — المجال "+d+" · "+DOMAINS[d];
+  mmWarn.innerHTML='<div class="text-[12px] text-gray-500"><i class="fa-solid fa-circle-notch fa-spin"></i> جارٍ فتح قائمة البريد…</div>'; mmTo.innerHTML=""; mmSubj.value=""; mmBody.value=""; mmLen.textContent="";
+  [mmGmail,mmMailto].forEach(a=>{ a.style.pointerEvents="none"; a.style.opacity=".45"; });
+  let C; try{ C=await getContacts(); }catch(err){ mmWarn.innerHTML=`<div class="text-[12px] bg-red-50 border border-red-200 text-red-700 rounded-lg px-3 py-2 leading-6">${err&&err.message==="no-wrap"?"هذا الحساب غير مصرح له بفتح قائمة البريد. اطلب من منظّم المشروع إعادة توليدها.":"تعذّر فتح قائمة البريد. تأكد من إدخال بيانات الدخول الصحيحة وأن الموقع يعمل عبر خادم."}</div>`; return; }
+  const T=C[d]; if(!T){ mmWarn.textContent="لا بيانات اتصال لهذا المجال."; return; }
+  const demo=!!window.__demoVisit, isDemoContacts=!!window.ETEC_CONTACTS_DEMO; mailCtx={d,kind,demo:demo};
+  const m=kind==="assign"?composeAssign(d,C):composeProgress(d,C);
+  mmWarn.innerHTML=(isDemoContacts?'<div class="text-[12px] bg-amber-50 border border-amber-200 text-amber-800 rounded-lg px-3 py-2 mb-2 leading-6"><i class="fa-solid fa-flask"></i> عناوين تجريبية (example.com) في المعاينة فقط.</div>':"")+(demo&&kind==="progress"?'<div class="text-[12px] bg-red-50 border border-red-200 text-red-700 rounded-lg px-3 py-2 leading-6"><i class="fa-solid fa-triangle-exclamation"></i> الأرقام الآن وهمية (وضع التجربة). عُطّل الفتح في البريد لئلا تُرسل أرقام غير حقيقية؛ أوقف «التجربة بأرقام وهمية» أولاً.</div>':"");
+  const all=[{...T.sup,role:"المشرف"}].concat(T.mem.map(x=>({...x,role:"منسّق مؤشر"})));
+  mmTo.innerHTML=all.map(p=>p.e.map(e=>`<label class="inline-flex items-center gap-1.5 border border-gray-200 rounded-full px-3 py-1 text-[11.5px] bg-slate-50"><input type="checkbox" checked data-e="${esc(e)}"> <b>${esc(p.n)}</b> <span class="text-gray-400" dir="ltr">${esc(e)}</span></label>`).join("")).join("");
+  mmSubj.value=m.subject; mmBody.value=m.body; setMailLinks(); mmPanel.focus();
+}
+mailModal.addEventListener("input",setMailLinks); mailModal.addEventListener("change",setMailLinks);
+mmClose.addEventListener("click",closeMail); mmBackdrop.addEventListener("click",closeMail);
+mmCopy.addEventListener("click",async()=>{ try{ await navigator.clipboard.writeText("إلى: "+[...document.querySelectorAll("#mmTo input:checked")].map(x=>x.dataset.e).join(", ")+"\nالموضوع: "+mmSubj.value+"\n\n"+mmBody.value); mmCopy.innerHTML='<i class="fa-solid fa-check"></i> تم النسخ'; setTimeout(()=>{ mmCopy.innerHTML='<i class="fa-regular fa-copy"></i> نسخ الرسالة'; },1800); }catch(e){} });
+document.addEventListener("click",e=>{ const mb=e.target.closest("[data-mail]"); if(!mb) return; e.preventDefault(); e.stopPropagation(); const [d,k]=mb.dataset.mail.split("|"); openMail(+d,k); },true);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!mailModal.classList.contains("hidden")&&!document.getElementById("pg-overlay")) closeMail(); });
 function ringHTML(layers,tick,center,S){ S=S||150; let s=`<svg width="${S}" height="${S}" viewBox="0 0 140 140" role="img" aria-label="${center}">`;
   layers.forEach(L=>{ const C=2*Math.PI*L.r; s+=`<circle cx="70" cy="70" r="${L.r}" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="${L.w}"/><circle cx="70" cy="70" r="${L.r}" fill="none" stroke="${L.c}" stroke-width="${L.w}" stroke-linecap="round" stroke-dasharray="${C.toFixed(2)}" stroke-dashoffset="${(C*(1-Math.min(1,Math.max(0,L.p)))).toFixed(2)}" transform="rotate(-90 70 70)"/>`; });
   if(tick!=null){ const L=layers[0], a=(-90+tick*360)*Math.PI/180, r1=L.r-L.w/2-2, r2=L.r+L.w/2+2; s+=`<line x1="${(70+r1*Math.cos(a)).toFixed(1)}" y1="${(70+r1*Math.sin(a)).toFixed(1)}" x2="${(70+r2*Math.cos(a)).toFixed(1)}" y2="${(70+r2*Math.sin(a)).toFixed(1)}" stroke="#fff" stroke-width="2.5"/>`; }
@@ -524,12 +590,12 @@ function renderOverview(){
   overviewSum.innerHTML=`<div class="bg-white border border-gray-100 rounded-xl px-4 py-3 text-[13.5px] font-bold text-slate-700 leading-7"><i class="fa-solid fa-circle-info text-etecteal-500"></i> ${sentence}${shortN?`<div class="mt-1 text-[12.5px] font-extrabold text-red-600"><i class="fa-solid fa-triangle-exclamation"></i> ${shortN} ${shortN===1?"تقرير بصري يحوي":"تقارير بصرية تحوي"} أقل من 6 صور: ${Object.entries(shortBy).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>k+" ("+v+")").join("، ")}</div>`:""}<div class="mt-1 text-[12.5px] font-semibold text-slate-500">تقدم الأدلة في المشروع <b class="text-etecteal-700">${P100(projProg(evProg))}%</b> · تقدم التقرير البصري <b class="text-sky-700">${P100(projProg(visProg))}%</b></div>${planHTML()}</div>`;
   overview.innerHTML=Object.keys(TEAMS).map(d=>{ const c=TEAM_COLOR[d], o=dm[d], n=o.done+o.prog+o.none, evD=P100(domProg(+d,evProg)), vsD=P100(domProg(+d,visProg));
     const late=started?Object.keys(o.mem).map(k=>({k:+k,n:o.mem[k]})).sort((a,b)=>b.n-a.n).slice(0,2).map(x=>`${esc(TEAMS[d].mem[x.k])} (${x.n})`).join("، "):"";
-    return `<button type="button" class="ov" data-ov="${d}" style="--tc:${c}" aria-label="عرض فريق المجال ${d} - ${esc(DOMAINS[d])}">
+    return `<div class="ovw"><button type="button" class="ov" data-ov="${d}" style="--tc:${c}" aria-label="عرض فريق المجال ${d} - ${esc(DOMAINS[d])}">
       <div class="flex items-center gap-2 mb-2"><span class="dot" style="background:${c}"></span><span class="text-[12.5px] font-black text-slate-800 truncate">${d} · ${esc(DOMAINS[d])}</span></div>
       <div class="flex h-2 rounded-full overflow-hidden bg-slate-100 mb-2"><span style="flex:${o.done};background:#10b981"></span><span style="flex:${o.prog};background:#f59e0b"></span><span style="flex:${o.none};background:#cbd5e1"></span></div>
       <div class="flex flex-wrap gap-x-3 gap-y-0.5 text-[11.5px]"><span class="text-emerald-700 font-black">منجز ${o.done}</span><span class="text-amber-700 font-black">قيد التنفيذ ${o.prog}</span><span class="text-slate-500 font-black">لم يبدأ ${o.none}</span></div>
       <div class="text-[10.5px] font-bold text-slate-500 mt-1">المنجز ${pct(o.done,n)}% · الأدلة ${evD}% · التقرير البصري ${vsD}%</div>
-      ${o.short?`<div class="text-[10.5px] font-extrabold text-red-600 mt-1">تقارير ناقصة الصور: ${o.short}</div>`:""}<div class="text-[10.5px] text-gray-400 mt-1.5">${n} مؤشراً${late?` · يحتاج متابعة: ${late}`:""}</div></button>`; }).join(""); }
+      ${o.short?`<div class="text-[10.5px] font-extrabold text-red-600 mt-1">تقارير ناقصة الصور: ${o.short}</div>`:""}<div class="text-[10.5px] text-gray-400 mt-1.5">${n} مؤشراً${late?` · يحتاج متابعة: ${late}`:""}</div></button>${mailBtns(d)}</div>`; }).join(""); }
 
 /* ===== اختيار المجال والعضو + مساحة العمل ===== */
 function renderPickers(){
@@ -551,7 +617,7 @@ function renderWorkspace(){
   const pl=sc.filter(i=>PILOT.has(i.code)&&indState(i)!=="done");
   workspace.innerHTML=`<div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-4" style="border-right:5px solid ${c}">
     <div class="flex flex-wrap items-center gap-3">${avatar(name,c,48)}<div class="flex-1 min-w-[220px]"><div class="text-[15px] font-black text-slate-800">${esc(title)}</div><div class="text-[11.5px] font-bold mt-0.5" style="color:${c}">${esc(role)}</div></div>
-      <div class="flex flex-wrap gap-2"><a class="vbtn" href="hardcopy.html?d=${d}&m=${SEL.p}" target="_blank" rel="noopener"><i class="fa-solid fa-print"></i> تقرير استلام المهام (للطباعة)</a><button type="button" class="vbtn" data-openteam="${d}"><i class="fa-solid fa-chart-pie"></i> تفاصيل الفريق</button><button type="button" class="vbtn" data-copylink><i class="fa-regular fa-copy"></i> نسخ رابط مساحتي</button><button type="button" class="vbtn" data-clearsel><i class="fa-solid fa-xmark"></i> عرض كل المجالات</button></div></div>
+      <div class="flex flex-wrap gap-2">${mailBtns(d,true)}<a class="vbtn" href="hardcopy.html?d=${d}&m=${SEL.p}" target="_blank" rel="noopener"><i class="fa-solid fa-print"></i> تقرير استلام المهام (للطباعة)</a><button type="button" class="vbtn" data-openteam="${d}"><i class="fa-solid fa-chart-pie"></i> تفاصيل الفريق</button><button type="button" class="vbtn" data-copylink><i class="fa-regular fa-copy"></i> نسخ رابط مساحتي</button><button type="button" class="vbtn" data-clearsel><i class="fa-solid fa-xmark"></i> عرض كل المجالات</button></div></div>
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mt-4">
       ${tile("المؤشرات المنجزة",cn.done+" من "+sc.length,cn.prog+" قيد التنفيذ · "+cn.none+" لم يبدأ",pct(cn.done,sc.length),c)}
       ${tile("تقدم الأدلة",P100(evS)+"%","رُفع "+s.up+" · سُمّي "+s.nm+" · تُحقق "+s.vf+" من "+s.units,P100(evS),c)}
@@ -759,6 +825,8 @@ function tick(){ const d=new Date(); document.getElementById("dash-live-date").t
 tick(); setInterval(tick,30000);
 render(); loadStatus(false);
 </script>
+<script src="page-gate.js" data-lazy="1"></script>
+<script src="team-contacts.js"></script>
 <script src="legal-notice.js"></script>
 <script src="content-protect.js"></script>
 </body>

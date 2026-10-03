@@ -246,6 +246,7 @@
 
             sessionStorage.setItem(SESSION_KEY, 'true');
             sessionStorage.setItem(SESSION_USER_KEY, username);
+            try { localStorage.setItem('df_auth_v1', JSON.stringify({ u: username, exp: Date.now() + 8 * 3600 * 1000 })); window.dispatchEvent(new Event('df-auth')); } catch (e) {}
             overlay.classList.remove('df-show');
             applyUnlocked();
         });
@@ -253,6 +254,7 @@
         logoutBtn.addEventListener('click', function () {
             sessionStorage.removeItem(SESSION_KEY);
             sessionStorage.removeItem(SESSION_USER_KEY);
+            try { localStorage.removeItem('df_auth_v1'); window.dispatchEvent(new Event('df-auth')); } catch (e) {}
             applyLocked();
         });
     });

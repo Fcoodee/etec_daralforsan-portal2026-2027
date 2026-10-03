@@ -2,13 +2,21 @@
  * legal-notice.js — مربع حوار قانوني يظهر عند كل نقرة على رابط أو انتقال بين الصفحات.
  * النص: «هذا العمل يخضع لـ PDPL (نظام حماية البيانات الشخصية) و IP (أنظمة حماية الملكية الفكرية)» + زر «نعم أعي ذلك».
  * - يعترض كل <a href> (عدا الروابط الداخلية # و javascript: والتنزيلات)، وكذلك window.open، ويوفّر DFLegal.go(url) للتنقل البرمجي.
+ * - لا يظهر في «جلسة عمل مصرح بها»: أي دخول صحيح بكلمة مرور من access.txt (عبر page-gate.js أو content-protect.js أو login.html) يوقف المربع لثماني ساعات،
+ *   ويظهر عندها شريط صغير «جلسة عمل مصرح بها · إنهاء».
  * - لا يمنع النسخ بنفسه؛ هو إقرار وتنبيه. (الحماية التقنية الأقوى: انظر ملاحظات الإصدار)
  * - إعدادات اختيارية في portal-config.js: ETEC_RIGHTS_OWNER (صاحب الحقوق).
  */
 (function () {
   'use strict';
   if (window.DFLegal) return;
-  var bypass = false, last = null, overlay = null, yesCb = null;
+  var bypass = false, last = null, overlay = null, yesCb = null, AK = 'df_auth_v1';
+  function authInfo() {
+    try { var o = JSON.parse(localStorage.getItem(AK) || 'null'); if (o && o.exp > Date.now()) return o; } catch (e) {}
+    try { if (sessionStorage.getItem('df_content_unlocked') === 'true') return { u: sessionStorage.getItem('df_content_unlocked_user') || '' }; if (sessionStorage.getItem('df_logged_in') === 'true') return { u: sessionStorage.getItem('df_username') || '' }; } catch (e) {}
+    return null;
+  }
+  function authorized() { return !!authInfo(); }
 
   var CSS = '#dfl-overlay{position:fixed;inset:0;z-index:2147483000;background:rgba(2,12,12,.74);display:none;align-items:center;justify-content:center;padding:16px;font-family:Cairo,Tahoma,sans-serif;direction:rtl}' +
     '#dfl-overlay.dfl-show{display:flex}' +
@@ -25,7 +33,10 @@
     '#dfl-yes{display:block;width:100%;margin-top:14px;border:0;border-radius:12px;background:#006666;color:#fff;font:800 14px Cairo,Tahoma,sans-serif;padding:12px;cursor:pointer}' +
     '#dfl-yes:hover{background:#005252}#dfl-yes:focus-visible,#dfl-x:focus-visible{outline:3px solid #c29b38;outline-offset:2px}' +
     '#dfl-ft{margin-top:8px;text-align:center;font-size:10.5px;color:#94a3b8}' +
-    '@media print{#dfl-overlay{display:none!important}}';
+    '#dfl-lg{display:block;margin:10px auto 0;background:none;border:0;color:#006666;font:700 12px Cairo,Tahoma,sans-serif;text-decoration:underline;cursor:pointer}' +
+    '#dfl-sess{position:fixed;bottom:14px;left:14px;z-index:9998;display:flex;align-items:center;gap:8px;background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;border-radius:999px;padding:6px 8px 6px 12px;font:700 11px Cairo,Tahoma,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.18);direction:rtl}' +
+    '#dfl-sess button{background:#065f46;color:#fff;border:0;border-radius:999px;font:700 10.5px Cairo,Tahoma,sans-serif;padding:4px 10px;cursor:pointer}' +
+    '@media print{#dfl-overlay,#dfl-sess{display:none!important}}';
 
   function ensure() {
     if (overlay) return;
@@ -39,20 +50,26 @@
       '<ul><li><b>PDPL</b><span>نظام حماية البيانات الشخصية</span></li><li><b>IP</b><span>أنظمة حماية الملكية الفكرية</span></li></ul>' +
       '<p class="dfl-sm">ولا يجوز نسخ محتوياته أو هندسته أو خوارزمياته، ولا رفعها إلى نماذج الذكاء الاصطناعي أو أي جهة خارجية، دون إذن كتابي من صاحب الحقوق.</p>' +
       '<button type="button" id="dfl-yes">نعم أعي ذلك</button>' +
+      '<button type="button" id="dfl-lg">لديّ جلسة عمل مصرح بها — تسجيل الدخول</button>' +
       '<div id="dfl-ft"></div></div>';
     document.body.appendChild(overlay);
     overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
     document.getElementById('dfl-x').addEventListener('click', close);
     document.getElementById('dfl-yes').addEventListener('click', function () { var cb = yesCb; close(true); if (cb) cb(); });
+    document.getElementById('dfl-lg').addEventListener('click', function () {
+      var cb = yesCb; close(true);
+      if (window.DFGate) window.DFGate.require(function () { if (cb) cb(); }, { title: 'دخول بجلسة عمل مصرح بها', msg: 'أدخل بيانات الدخول المعتمدة. وبعد الدخول لن يظهر التنبيه القانوني خلال هذه الجلسة.' });
+    });
     overlay.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') { e.preventDefault(); close(); return; }
-      if (e.key === 'Tab') { var f = [document.getElementById('dfl-x'), document.getElementById('dfl-yes')]; var i = f.indexOf(document.activeElement); e.preventDefault(); f[(i + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus(); }
+      if (e.key === 'Tab') { var f = [document.getElementById('dfl-x'), document.getElementById('dfl-yes')]; if (document.getElementById('dfl-lg').style.display !== 'none') f.push(document.getElementById('dfl-lg')); var i = f.indexOf(document.activeElement); e.preventDefault(); f[(i + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus(); }
     });
   }
   function show(cb) {
-    if (!document.body) { cb(); return; }
+    if (!document.body || authorized()) { cb(); return; }
     ensure(); yesCb = cb; last = document.activeElement;
     var owner = window.ETEC_RIGHTS_OWNER || '';
+    var lg = document.getElementById('dfl-lg'); if (lg) lg.style.display = window.DFGate ? 'block' : 'none';
     document.getElementById('dfl-ft').textContent = '© ' + new Date().getFullYear() + ' — ' + (owner ? 'جميع الحقوق محفوظة لـ ' + owner : 'جميع الحقوق محفوظة');
     overlay.classList.add('dfl-show');
     setTimeout(function () { var y = document.getElementById('dfl-yes'); if (y) y.focus(); }, 30);
@@ -90,7 +107,26 @@
     show(function () { bypass = true; try { _open(u, t, f); } finally { bypass = false; } });
     return null;
   };
+  /* شريط «جلسة عمل مصرح بها» */
+  function pill() {
+    var o = authInfo(), el = document.getElementById('dfl-sess');
+    if (!o) { if (el) el.remove(); return; }
+    if (!document.body) return;
+    ensure();
+    if (!el) {
+      el = document.createElement('div'); el.id = 'dfl-sess';
+      el.innerHTML = '<span id="dfl-su"></span><button type="button" id="dfl-so">إنهاء</button>'; document.body.appendChild(el);
+      document.getElementById('dfl-so').addEventListener('click', function () {
+        if (window.DFGate) window.DFGate.logout(); else { try { localStorage.removeItem(AK); ['df_content_unlocked', 'df_content_unlocked_user', 'df_logged_in', 'df_username', 'df_ck'].forEach(function (k) { sessionStorage.removeItem(k); }); } catch (e) {} }
+        location.reload();
+      });
+    }
+    document.getElementById('dfl-su').textContent = 'جلسة عمل مصرح بها' + (o.u ? ' · ' + o.u.split('@')[0] : '');
+  }
+  window.addEventListener('df-auth', pill); window.addEventListener('storage', function (e) { if (e.key === AK) pill(); });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', pill); else pill();
   window.DFLegal = {
+    authorized: authorized,
     go: function (url, newTab) { show(function () { bypass = true; try { if (newTab && _open) _open(url, '_blank', 'noopener'); else location.href = url; } finally { bypass = false; } }); },
     show: show
   };
