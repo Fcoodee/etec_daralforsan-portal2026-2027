@@ -206,7 +206,7 @@ details[open] .chev{transform:rotate(-90deg)}
     <div id="mmAttBox" class="hidden mt-3 bg-sky-50 border border-sky-200 rounded-lg px-3 py-2"><div class="text-[12px] font-black text-sky-900 mb-1"><i class="fa-solid fa-paperclip"></i> المرفقات (PDF) المراد إرفاقها يدوياً</div><ul id="mmAtt" class="text-[11.5px] text-sky-900 leading-7 list-none p-0 m-0"></ul><div class="flex flex-wrap items-center gap-2 mt-2"><button type="button" id="mmAttAll" class="vbtn pri"><i class="fa-solid fa-download"></i> تنزيل المرفقات كلها</button><button type="button" id="mmAttShare" class="vbtn" style="display:none"><i class="fa-solid fa-share-nodes"></i> مشاركتها إلى تطبيق البريد (الأجهزة الذكية)</button><span id="mmAttSt" class="text-[11px] text-sky-900"></span></div><div class="text-[11px] text-sky-800 mt-1 leading-5">روابط البريد لا تحمل مرفقات. نزّل الملفات ثم اسحبها إلى الرسالة، أو على iOS/Android اضغط «مشاركتها» لتصل مرفقةً إلى تطبيق Gmail.</div></div>
     <label for="mmBody" class="block text-[12px] font-bold text-slate-600 mt-3 mb-1">نص الرسالة <span class="font-normal text-gray-400">(يمكنك تعديله قبل الإرسال)</span></label>
     <textarea id="mmBody" rows="14" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-[12.5px] leading-7 bg-white text-slate-800"></textarea>
-    <label class="inline-flex items-center gap-2 text-[11.5px] text-slate-600 mt-1"><input type="checkbox" id="mmShort" checked> اختصار الروابط تلقائياً (is.gd)</label> <span id="mmShortSt" class="text-[11px] text-gray-500"></span>
+    <label class="inline-flex items-center gap-2 text-[11.5px] text-slate-600 mt-1"><input type="checkbox" id="mmShort" checked> اختصار الروابط تلقائياً (is.gd)</label> <span id="mmShortSt" class="text-[11px] text-gray-500"></span> <button type="button" id="mmFreeze" class="underline text-[11px] text-sky-800" style="display:none" title="ينسخ الروابط المختصرة لتلصقها في آخر portal-config.js فتثبت لكل من يرسل">نسخ الروابط المختصرة لتثبيتها</button><div id="mmShortFail"></div>
     <div id="mmLen" class="text-[11px] text-gray-500 mt-1"></div>
     <div class="flex flex-wrap gap-2 mt-3"><button type="button" id="mmRich" class="vbtn pri"><i class="fa-solid fa-table"></i> نسخ الرسالة منسّقة (جدول)</button><a id="mmGmail" class="vbtn" target="_blank" rel="noopener"><i class="fa-brands fa-google"></i> فتح في Gmail</a><a id="mmMailto" class="vbtn"><i class="fa-solid fa-envelope"></i> فتح في برنامج البريد</a><button type="button" id="mmCopy" class="vbtn"><i class="fa-regular fa-copy"></i> نسخ نص عادي</button></div>
     <p class="text-[11px] text-gray-400 mt-3 leading-5">«النسخ المنسّق» يلصق جدول المؤشرات بشكله في Gmail (اضغط Ctrl+V في نص الرسالة). أما روابط الفتح المباشر فنصٌّ عادي، والجدول فيها بخطوط فاصلة.</p>
@@ -537,7 +537,7 @@ const FOOT=()=>"\nمع خالص التقدير والمودة،\n"+(ORGANIZER?OR
 const PROJ_DESC="مشروع داخلي لمدارس دار الفرسان (قسم الدبلوما الأمريكية — بنين) يربط شواهد معايير هيئة تقويم التعليم والتدريب (ETEC) ومؤشراتها بسجلاتها، ويوثّقها بتقرير بصري موحد لكل مؤشر، استعداداً لزيارة التقويم الخارجي للمدارس وسعياً إلى التميز المدرسي.";
 function composeAssign(d){
   const n=DATA.filter(i=>i.d===d).length, rows=TEAMS[d].mem.map((m,x)=>memberOf(d,x).map(i=>i.code+" | "+i.st+" | "+m).join("\n")).join("\n");
-  const links=[["لوحة متابعة المجال",SITE+"evidence-link.html?team="+d],["مرجع تقرير مصادر السجلات (الهيئة)",SITE+"records-sources.html"],["مرجع الشواهد المؤمَّنة (لتغذية التقرير البصري فقط)",REF_URL],["مجلد المشروع في Drive",PROJ_FOLDER]].map(([l,u])=>"• "+l+": "+u).join("\n");
+  const links=[["لوحة متابعة المجال",SITE+"evidence-link.html?team="+d],["مرجع تقرير مصادر السجلات (الهيئة)",SITE+"records-sources.html"],["مرجع الشواهد المؤمَّنة (لتغذية التقرير البصري فقط)",REF_URL],["مجلد المشروع في Drive",PROJ_FOLDER]].map(([l,u])=>"• "+l+": "+S(u)).join("\n");
   return {subject:"تكليف ببدء العمل — مشروع ربط الشواهد بالسجلات — المجال "+d+" · "+DOMAINS[d],
     attach:TEAMS[d].mem.map((m,x)=>({name:pdfName(d,x),file:"att-d"+d+"-m"+x+".pdf",m:x})).concat([{name:pdfName(d,"all"),file:"att-d"+d+"-all.pdf",m:"all"}]),
     body:"السلام عليكم ورحمة الله وبركاته،\n\nزملاءنا الأعزاء في فريق عمل المجال "+d+" · "+DOMAINS[d]+"،\n\nمشروع «ربط الشواهد بالسجلات»\n"+PROJ_DESC+"\n\nيسعدنا أن نبلغكم ببدء هذه المرحلة استعداداً لزيارة التقويم الخارجي للمدارس، شاكرين لكم جهدكم في جمع الشواهد والتي بلغت نسبة "+PH1.pct+"%.\n\nفي المجال "+d+" · "+DOMAINS[d]+" ("+n+" مؤشراً)، ونقترح أن يتم تقسيم العمل بالطريقة التالية:\n\nالرقم | اسم المؤشر | منسّق المؤشر\n"+rows+"\n\nالمطلوب لكل مؤشر: جمع السجلات المطلوبة لفقراته من مصادرها وفق تقرير مصادر السجلات الصادر عن الهيئة، ورفعها في مجلد المؤشر وتسميتها وفق قاعدة التسمية، ثم إنشاء التقرير البصري للمؤشر بست صور على الأقل.\n\nالمرفقات (PDF): «تقرير استلام المهام» لكل زميل ونسخة المشرف؛ نرجو طباعته واستعماله مرجعاً أثناء العمل وتوقيع الإقرار في آخره.\n\nالروابط:\n"+links+"\n\nللحصول على بيانات الدخول إلى أدوات المشروع المقفلة يُرجى التواصل مع منظّم المشروع.\n\nونرحّب بأي ملاحظة أو استفسار."+FOOT()};
@@ -547,23 +547,38 @@ function composeProgress(d){
   const cut=(t,k)=>t.length>k?t.slice(0,k)+"…":t;
   const mem=TEAMS[d].mem.map((m,x)=>{ const my=memberOf(d,x), g=my.filter(i=>indState(i)==="done").length, nx=my.filter(i=>indState(i)!=="done").sort((a,b)=>readiness(a)-readiness(b))[0]; return m+" | "+g+" من "+my.length+" | "+pct(g,my.length)+"% | "+(nx?nx.code+" — "+cut(nextAction(nx).t,58):"أنجز كل مؤشراته"); }).join("\n");
   return {subject:"تقدم العمل — مشروع ربط الشواهد بالسجلات — المجال "+d+" · "+DOMAINS[d], attach:[],
-    body:"السلام عليكم ورحمة الله وبركاته،\n\nزملاءنا الأعزاء في فريق عمل المجال "+d+" · "+DOMAINS[d]+"،\n\nنشارككم حالة العمل في مشروع «ربط الشواهد بالسجلات» بحسب لوحة المتابعة بتاريخ "+todayAr()+":\n\nالحالة | عدد المؤشرات | النسبة\nمنجز | "+cn.done+" | "+pct(cn.done,n)+"%\nقيد التنفيذ | "+cn.prog+" | "+pct(cn.prog,n)+"%\nلم يبدأ | "+cn.none+" | "+pct(cn.none,n)+"%\n\nتقدم الأدلة في المجال: "+P100(domProg(d,evProg))+"% · تقدم التقرير البصري: "+P100(domProg(d,visProg))+"%\n"+(s.repShort?"تقارير بصرية تحوي أقل من 6 صور: "+s.repShort+"\n":"")+(s.rename?"ملفات تحتاج إعادة تسمية: "+Math.round(s.rename)+"\n":"")+"\nمنسّق المؤشر | المؤشرات المنجزة | النسبة | المطلوب الآن\n"+mem+"\n\nلوحة متابعة المجال: "+SITE+"evidence-link.h"+"tml?team="+d+"\n\nشاكرين لكم جهدكم، وإن كان في الطريق ما يعيقكم فنرجو إبلاغنا لتذليله."+FOOT()};
+    body:"السلام عليكم ورحمة الله وبركاته،\n\nزملاءنا الأعزاء في فريق عمل المجال "+d+" · "+DOMAINS[d]+"،\n\nنشارككم حالة العمل في مشروع «ربط الشواهد بالسجلات» بحسب لوحة المتابعة بتاريخ "+todayAr()+":\n\nالحالة | عدد المؤشرات | النسبة\nمنجز | "+cn.done+" | "+pct(cn.done,n)+"%\nقيد التنفيذ | "+cn.prog+" | "+pct(cn.prog,n)+"%\nلم يبدأ | "+cn.none+" | "+pct(cn.none,n)+"%\n\nتقدم الأدلة في المجال: "+P100(domProg(d,evProg))+"% · تقدم التقرير البصري: "+P100(domProg(d,visProg))+"%\n"+(s.repShort?"تقارير بصرية تحوي أقل من 6 صور: "+s.repShort+"\n":"")+(s.rename?"ملفات تحتاج إعادة تسمية: "+Math.round(s.rename)+"\n":"")+"\nمنسّق المؤشر | المؤشرات المنجزة | النسبة | المطلوب الآن\n"+mem+"\n\nلوحة متابعة المجال: "+S(SITE+"evidence-link.h"+"tml?team="+d)+"\n\nشاكرين لكم جهدكم، وإن كان في الطريق ما يعيقكم فنرجو إبلاغنا لتذليله."+FOOT()};
 }
-/* ----- اختصار الروابط (is.gd عبر JSONP؛ عند الفشل تبقى الروابط الطويلة) ----- */
+/* ----- اختصار الروابط: خريطة مثبّتة (portal-config.js) ← ذاكرة المتصفح ← is.gd ← v.gd (JSONP)؛ وعند الفشل تبقى الروابط كاملة مع بيان السبب ----- */
 const SHORT_KEY="df_short_v1"; let shortCache={}; try{ shortCache=JSON.parse(localStorage.getItem(SHORT_KEY)||"{}"); }catch(e){}
+const PRESET=()=>window.ETEC_SHORT_LINKS||{};
+const S=u=>PRESET()[u]||shortCache[u]||u;                 /* يُستعمل لحظة التأليف: لا شبكة ولا وميض */
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-function shortOne(url){ if(shortCache[url]) return Promise.resolve(shortCache[url]);
-  return new Promise((res,rej)=>{ const cb="__sh"+Math.random().toString(36).slice(2), s=document.createElement("script"); let done=false;
+const PROVIDERS=[{n:"is.gd",u:"https://is.gd/create.php"},{n:"v.gd",u:"https://v.gd/create.php"}];
+function jsonp(prov,url){ return new Promise((res,rej)=>{ const cb="__sh"+Math.random().toString(36).slice(2), s=document.createElement("script"); let done=false;
     const fin=()=>{ done=true; clearTimeout(to); try{ delete window[cb]; }catch(e){ window[cb]=undefined; } s.remove(); };
-    const to=setTimeout(()=>{ if(!done){ fin(); rej(new Error("timeout")); } },9000);
-    window[cb]=d=>{ if(done) return; fin(); if(d&&d.shorturl){ shortCache[url]=d.shorturl; try{ localStorage.setItem(SHORT_KEY,JSON.stringify(shortCache)); }catch(e){} res(d.shorturl); } else rej(new Error((d&&d.errormessage)||"fail")); };
-    s.onerror=()=>{ if(!done){ fin(); rej(new Error("net")); } }; s.src="https://is.gd/create.php?format=json&callback="+cb+"&url="+encodeURIComponent(url); document.head.appendChild(s); }); }
+    const to=setTimeout(()=>{ if(!done){ fin(); rej(new Error("لا استجابة خلال 9 ثوانٍ")); } },9000);
+    window[cb]=d=>{ if(done) return; fin(); if(d&&d.shorturl) res(d.shorturl); else rej(new Error((d&&d.errormessage)||"ردّت الخدمة بخطأ")); };
+    s.onerror=()=>{ if(!done){ fin(); rej(new Error("تعذّر الاتصال بالخدمة (حجب الشبكة أو سياسة أمان الصفحة)")); } };
+    s.src=prov.u+"?format=json&callback="+cb+"&url="+encodeURIComponent(url); document.head.appendChild(s); }); }
+async function shortOne(url){ if(PRESET()[url]) return PRESET()[url]; if(shortCache[url]) return shortCache[url]; const why=[];
+  for(const p of PROVIDERS){ try{ const sh=await jsonp(p,url); shortCache[url]=sh; try{ localStorage.setItem(SHORT_KEY,JSON.stringify(shortCache)); }catch(e){} return sh; }catch(e){ why.push(p.n+": "+e.message); } }
+  throw new Error(why.join(" — ")); }
+const OURS=u=>u.indexOf(SITE)===0||u===REF_URL||u===PROJ_FOLDER;
 async function shortenBody(run){
+  mmShortFail.innerHTML=""; mmFreeze.style.display="none";
   if(window.ETEC_SHORTENER===""||!mmShort.checked){ mmShortSt.textContent=""; return; }
-  const urls=[...new Set((mmBody.value.match(/https?:\/\/[^\s<>"')]+/g)||[]))].filter(u=>!/^https:\/\/is\.gd\//.test(u)); if(!urls.length) return;
-  let ok=0,fail=0; mmShortSt.textContent="جارٍ اختصار "+urls.length+" روابط…";
-  for(const u of urls){ if(!mailCtx||mailCtx.run!==run) return; try{ const s=await shortOne(u); mmBody.value=mmBody.value.split(u).join(s); ok++; }catch(e){ fail++; } setMailLinks(); await sleep(shortCache[u]?0:350); }
-  mmShortSt.textContent=fail?`اختُصر ${ok} من ${ok+fail}؛ تعذّر الباقي فبقيت روابطه كاملة.`:`اختُصرت ${ok} روابط.`; }
+  const urls=[...new Set((mmBody.value.match(/https?:\/\/[^\s<>"')]+/g)||[]))].filter(u=>!/^https:\/\/(is|v)\.gd\//.test(u)); if(!urls.length){ mmShortSt.textContent="كل الروابط مختصرة."; return; }
+  let ok=0; const fails=[]; mmShortSt.textContent="جارٍ اختصار "+urls.length+" روابط…";
+  for(const u of urls){ if(!mailCtx||mailCtx.run!==run) return; const had=!!(PRESET()[u]||shortCache[u]);
+    try{ const sh=await shortOne(u); mmBody.value=mmBody.value.split(u).join(sh); ok++; }catch(e){ fails.push([u,e.message]); } setMailLinks(); if(!had) await sleep(350); }
+  mmShortSt.textContent=fails.length?"":`اختُصرت ${ok} روابط.`;
+  if(fails.length){ const gh=fails.filter(f=>f[0].indexOf(SITE)===0).length;
+    mmShortFail.innerHTML=`<div class="mt-2 text-[11.5px] bg-amber-50 border border-amber-200 text-amber-900 rounded-lg px-3 py-2 leading-6"><b>لم تُختصر ${fails.length} من ${ok+fails.length} روابط${gh?` (منها ${gh} إلى المستودع)`:""}</b> فبقيت كاملة. السبب: ${esc(fails[0][1])}.<br>إن كنتَ على معاينة المحادثة فهي تمنع الاتصال بخدمات الاختصار؛ يعمل الاختصار على الموقع المنشور. <button type="button" id="mmShortRetry" class="underline font-bold">إعادة المحاولة</button></div>`;
+    const rt=document.getElementById("mmShortRetry"); if(rt) rt.addEventListener("click",()=>{ if(mailCtx) shortenBody(mailCtx.run); }); }
+  const mine=Object.keys(shortCache).filter(OURS); if(mine.length&&!fails.length) mmFreeze.style.display="inline"; }
+function freezeText(){ const m={}; Object.keys(shortCache).filter(OURS).sort().forEach(k=>m[k]=shortCache[k]); Object.assign(m,Object.fromEntries(Object.entries(PRESET())));
+  return "// SHORT-LINKS-BEGIN\nwindow.ETEC_SHORT_LINKS = "+JSON.stringify(m,null,2)+";\n// SHORT-LINKS-END"; }
 /* ----- التحويل من النص العادي إلى HTML بجدول ----- */
 const escH=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const linkH=s=>s.replace(/https?:\/\/[^\s<]+/g,u=>`<a href="${u}">${u}</a>`);
@@ -613,6 +628,7 @@ mmAttShare.addEventListener("click",async()=>{ if(!mailCtx) return; mmAttSt.text
   try{ const fs=await fetchAtt(); if(navigator.canShare&&navigator.canShare({files:fs})){ await navigator.share({files:fs,title:mmSubj.value,text:mmSubj.value}); mmAttSt.textContent=""; } else mmAttSt.textContent="هذا المتصفح لا يدعم مشاركة الملفات؛ استعمل «تنزيل المرفقات كلها»."; }
   catch(e){ mmAttSt.textContent=(e&&e.name==="AbortError")?"":"تعذّرت المشاركة: "+(e&&e.message||""); } });
 mmClose.addEventListener("click",closeMail); mmBackdrop.addEventListener("click",closeMail);
+mmFreeze.addEventListener("click",async()=>{ try{ await navigator.clipboard.writeText(freezeText()); mmFreeze.textContent="نُسخت: ألصقها في آخر portal-config.js ثم ارفعه"; setTimeout(()=>{ mmFreeze.textContent="نسخ الروابط المختصرة لتثبيتها"; },6000); }catch(e){ mmFreeze.textContent="تعذّر النسخ"; } });
 mmRich.addEventListener("click",()=>copyRich(mmRich,"تم النسخ — الصقها في Gmail"));
 mmCopy.addEventListener("click",async()=>{ try{ await navigator.clipboard.writeText("إلى: "+checkedTo().join(", ")+"\nالموضوع: "+mmSubj.value+"\n\n"+mmBody.value); mmCopy.innerHTML='<i class="fa-solid fa-check"></i> تم النسخ'; setTimeout(()=>{ mmCopy.innerHTML='<i class="fa-regular fa-copy"></i> نسخ نص عادي'; },1800); }catch(e){} });
 [mmGmail,mmMailto].forEach(a=>a.addEventListener("click",()=>{ if(mailCtx&&mailCtx.long) copyRich(null); }));

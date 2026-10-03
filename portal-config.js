@@ -10,6 +10,8 @@
    6) ETEC_OFFICIAL_CENTER_URL: صفحة المركز الوطني للتقويم والتميز المدرسي (تميز).
   10) ETEC_SHORT_LINKS: روابط مختصرة تحلّ محل الطويلة في رسائل البريد. المفتاح الرابط الطويل كاملاً والقيمة الرابط المختصر.
        مثال:  "https://.../evidence-link.html?team=1": "https://tinyurl.com/xxxx"   (انظر قائمة الروابط في الحزمة الخاصة).
+  12) ETEC_SHORT_LINKS: روابط مختصرة مثبّتة (الرابط الكامل ← المختصر) تُستعمل في رسائل البريد قبل أي اتصال بخدمة الاختصار.
+       تُملأ تلقائياً بزر «نسخ الروابط المختصرة لتثبيتها» في نافذة الرسالة أو بأداة make_short_links.js، ثم يُرفع هذا الملف.
   11) ETEC_LEGAL_POLICY: ظهور التنويه القانوني: first = عدد النقرات الأولى التي يظهر فيها دائماً، ثم highMinutes (روابط Drive والملفات والأدوات المقفلة والبريد) و mediumMinutes (صفحات المراجع والتحليل)
        و lowMinutes (التنقل العادي؛ 0 = لا يظهر). ولا يظهر أصلاً في جلسة عمل مصرح بها.
   10) ETEC_SHORTENER: "isgd" لاختصار الروابط تلقائياً في رسائل البريد (خدمة خارجية)، و"" لتعطيله.
@@ -28,3 +30,6 @@ window.ETEC_SITE_BASE = "https://fcoodee.github.io/etec_daralforsan-portal2026-2
 window.ETEC_SHORT_LINKS = {};
 window.ETEC_SHORTENER = "isgd";
 window.ETEC_LEGAL_POLICY = { first: 3, highMinutes: 20, mediumMinutes: 1440, lowMinutes: 0 };
+// SHORT-LINKS-BEGIN
+window.ETEC_SHORT_LINKS = {};
+// SHORT-LINKS-END
