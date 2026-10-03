@@ -215,7 +215,7 @@
 
             // حفظ حالة الجلسة
             sessionStorage.setItem('df_logged_in', 'true');
-            sessionStorage.setItem('df_username', username);try{localStorage.setItem('df_auth_v1',JSON.stringify({u:username,exp:Date.now()+8*3600*1000}));}catch(e){};
+            sessionStorage.setItem('df_username', username);try{localStorage.setItem('df_auth_v1',JSON.stringify({u:username,exp:Date.now()+3600*1000}));}catch(e){};
             if (document.getElementById('remember').checked) {
                 localStorage.setItem('df_remember_user', username);
             }

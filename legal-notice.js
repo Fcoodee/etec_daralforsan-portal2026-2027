@@ -1,39 +1,90 @@
 /*
- * legal-notice.js — مربع حوار قانوني يظهر عند كل نقرة على رابط أو انتقال بين الصفحات.
- * النص: «هذا العمل يخضع لـ PDPL (نظام حماية البيانات الشخصية) و IP (أنظمة حماية الملكية الفكرية)» + زر «نعم أعي ذلك».
- * - يعترض كل <a href> (عدا الروابط الداخلية # و javascript: والتنزيلات)، وكذلك window.open، ويوفّر DFLegal.go(url) للتنقل البرمجي.
- * - لا يظهر في «جلسة عمل مصرح بها»: أي دخول صحيح بكلمة مرور من access.txt (عبر page-gate.js أو content-protect.js أو login.html) يوقف المربع لثماني ساعات،
- *   ويظهر عندها شريط صغير «جلسة عمل مصرح بها · إنهاء».
- * - لا يمنع النسخ بنفسه؛ هو إقرار وتنبيه. (الحماية التقنية الأقوى: انظر ملاحظات الإصدار)
- * - إعدادات اختيارية في portal-config.js: ETEC_RIGHTS_OWNER (صاحب الحقوق).
+ * legal-notice.js — تنويه قانوني وأخلاقي يظهر بشكل انتقائي عند النقر على الروابط.
+ * نص التنويه: هذا المحتوى يخضع لـ PDPL (نظام حماية البيانات الشخصية) وأنظمة الملكية الفكرية IP
+ *   ومبادئ أخلاقيات الذكاء الاصطناعي (سدايا SDAIA) والذكاء الاصطناعي المسؤول،
+ *   ويجب أخذ الموافقة الخطية من إدارة مدارس دار الفرسان الأهلية لأي استخدام للمحتوى بأي شكل. + زر «نعم أعي ذلك».
+ *
+ * متى يظهر؟
+ *   1) أول ثلاث نقرات على أي رابط (يُعدّ كل إقرار «نعم أعي ذلك»؛ والإغلاق بـ Esc أو × لا يُحتسب فيعود المربع).
+ *   2) بعدها انتقائياً بحسب أهمية الوصول إلى المحتوى:
+ *        مرتفعة  (مجلدات Drive وملفاته، والملفات PDF/Excel/Word، والأدوات المقفلة: المولّد وتقرير الاستلام وطلب الرقمنة، ورسائل البريد)
+ *                 ← تذكير كل 20 دقيقة تقريباً.
+ *        متوسطة  (صفحات المراجع والتحليل: مرجع الهيئة، وغلاف المؤشر، واللوحتان، والملخصات، والحوكمة) ← مرة كل يوم.
+ *        منخفضة  (التنقل العادي بين صفحات المشروع، والمواقع الخارجية العامة) ← لا يظهر.
+ *   3) لا يظهر إطلاقاً في «جلسة عمل مصرح بها» (دخول صحيح بكلمة مرور من access.txt، ساعة واحدة)، ويظهر شريط صغير بدلاً منه.
+ * الإعداد (اختياري) في portal-config.js:
+ *   window.ETEC_LEGAL_POLICY = { first: 3, highMinutes: 20, mediumMinutes: 1440, lowMinutes: 0 };   // 0 = لا يظهر
+ *   window.ETEC_RIGHTS_OWNER = "..."  (يظهر في تذييل المربع)
+ * يعترض كل <a href> (عدا # و javascript: والتنزيلات)، وكذلك window.open، ويوفّر DFLegal.go(url) للتنقل البرمجي.
+ * لا يمنع النسخ بنفسه؛ هو تنويه وإقرار. (الحماية التقنية الأقوى: انظر ملاحظات الإصدار)
  */
 (function () {
   'use strict';
   if (window.DFLegal) return;
-  var bypass = false, last = null, overlay = null, yesCb = null, AK = 'df_auth_v1';
+  var bypass = false, last = null, overlay = null, pending = null, AK = 'df_auth_v1', SK = 'df_legal_v2', mem = { ack: 0, high: 0, med: 0, low: 0 };
+
+  /* ----- الجلسة المصرح بها ----- */
   function authInfo() {
     try { var o = JSON.parse(localStorage.getItem(AK) || 'null'); if (o && o.exp > Date.now()) return o; } catch (e) {}
-    try { if (sessionStorage.getItem('df_content_unlocked') === 'true') return { u: sessionStorage.getItem('df_content_unlocked_user') || '' }; if (sessionStorage.getItem('df_logged_in') === 'true') return { u: sessionStorage.getItem('df_username') || '' }; } catch (e) {}
     return null;
   }
   function authorized() { return !!authInfo(); }
 
-  var CSS = '#dfl-overlay{position:fixed;inset:0;z-index:2147483000;background:rgba(2,12,12,.74);display:none;align-items:center;justify-content:center;padding:16px;font-family:Cairo,Tahoma,sans-serif;direction:rtl}' +
+  /* ----- سياسة الظهور الانتقائي ----- */
+  function num(v, d) { v = Number(v); return isFinite(v) && v >= 0 ? v : d; }
+  function policy() {
+    var p = window.ETEC_LEGAL_POLICY || {};
+    return { first: num(p.first, 3), high: num(p.highMinutes, 20), med: num(p.mediumMinutes, 1440), low: num(p.lowMinutes, 0) };
+  }
+  function loadSt() { try { var o = JSON.parse(localStorage.getItem(SK) || 'null'); if (o && typeof o.ack === 'number') return o; } catch (e) {} return mem; }
+  function saveSt(o) { mem = o; try { localStorage.setItem(SK, JSON.stringify(o)); } catch (e) {} }
+  var MEDIUM = /(^|\/)(records-sources|indicator|all_summary|report-all|governance|2026-2027|index-2025-2026)\.html?$/i;
+  var HIGH_PAGES = /(^|\/)(output|hardcopy|approval-request)\.html?$/i;
+  var FILES = /\.(pdf|xlsx?|docx?|pptx?|zip|csv)$/i;
+  function tierOf(url) {
+    var u; try { u = new URL(String(url || ''), location.href); } catch (e) { return 'low'; }
+    var proto = u.protocol, host = u.hostname.toLowerCase(), path = u.pathname;
+    if (proto === 'mailto:') return 'high';
+    if (host === 'mail.google.com') return 'high';
+    if (host === 'drive.google.com' || host === 'docs.google.com') return 'high';
+    if (FILES.test(path) || /(^|\/)att-d\d/i.test(path)) return 'high';
+    if (HIGH_PAGES.test(path)) return 'high';
+    if (MEDIUM.test(path) && u.origin === location.origin) return 'medium';
+    return 'low';
+  }
+  function decide(url) {
+    var st = loadSt(), p = policy(), now = Date.now();
+    if (st.ack < p.first) return { mode: 'first', n: st.ack + 1, of: p.first };
+    var t = tierOf(url), gap = (t === 'high' ? p.high : (t === 'medium' ? p.med : p.low)) * 60000;
+    if (!gap) return null;
+    var lastT = t === 'high' ? st.high : (t === 'medium' ? st.med : st.low);
+    return now - (lastT || 0) > gap ? { mode: t } : null;
+  }
+  function stamp(mode) {
+    var st = loadSt(), now = Date.now(), o = { ack: st.ack || 0, high: st.high || 0, med: st.med || 0, low: st.low || 0 };
+    if (mode === 'first') { o.ack++; o.high = o.med = o.low = now; }
+    else if (mode === 'high') { o.high = o.med = o.low = now; }
+    else if (mode === 'medium') { o.med = o.low = now; }
+    else { o.low = now; }
+    saveSt(o);
+  }
+
+  var CSS = '#dfl-overlay{position:fixed;inset:0;z-index:2147483000;background:rgba(2,12,12,.74);display:none;align-items:center;justify-content:center;padding:16px;font-family:Cairo,Tahoma,sans-serif;direction:rtl;color-scheme:light}' +
     '#dfl-overlay.dfl-show{display:flex}' +
-    '#dfl-box{position:relative;background:#fff;color:#0f172a;border-radius:18px;max-width:440px;width:100%;padding:24px 24px 18px;box-shadow:0 24px 70px rgba(0,0,0,.45);text-align:right;border-top:6px solid #c29b38}' +
+    '#dfl-box{position:relative;background:#fff;color:#0f172a;border-radius:18px;max-width:460px;width:100%;max-height:94vh;overflow-y:auto;padding:24px 24px 16px;box-shadow:0 24px 70px rgba(0,0,0,.45);text-align:right;border-top:6px solid #c29b38}' +
     '#dfl-x{position:absolute;top:10px;left:12px;width:30px;height:30px;border:0;border-radius:50%;background:#f1f5f9;color:#475569;font-size:18px;line-height:1;cursor:pointer}' +
     '#dfl-x:hover{background:#e2e8f0}' +
-    '#dfl-ic{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#006666,#003d3d);display:flex;align-items:center;justify-content:center;margin-bottom:10px}' +
+    '#dfl-ic{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#006666,#003d3d);display:flex;align-items:center;justify-content:center;margin-bottom:8px}' +
     '#dfl-box h3{margin:0 0 6px;font-size:16px;font-weight:900;color:#003d3d}' +
     '#dfl-box p{margin:0;font-size:12.5px;line-height:1.9;color:#334155}' +
     '#dfl-box ul{margin:8px 0;padding:0;list-style:none}' +
-    '#dfl-box li{display:flex;gap:8px;align-items:baseline;background:#f0fafa;border:1px solid #cdeaea;border-radius:10px;padding:7px 10px;margin-bottom:6px;font-size:12.5px;line-height:1.7}' +
-    '#dfl-box li b{color:#006666;font-size:13px;min-width:44px;direction:ltr;text-align:left}' +
-    '#dfl-box .dfl-sm{font-size:11.5px;color:#64748b;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:8px 10px}' +
-    '#dfl-yes{display:block;width:100%;margin-top:14px;border:0;border-radius:12px;background:#006666;color:#fff;font:800 14px Cairo,Tahoma,sans-serif;padding:12px;cursor:pointer}' +
+    '#dfl-box li{display:flex;gap:10px;align-items:baseline;background:#f0fafa;border:1px solid #cdeaea;border-radius:10px;padding:6px 10px;margin-bottom:5px;font-size:12.5px;line-height:1.7}' +
+    '#dfl-box li b{color:#006666;font-size:12.5px;min-width:52px;direction:ltr;text-align:left}' +
+    '#dfl-box .dfl-sm{font-size:12px;font-weight:700;color:#7c2d12;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:8px 10px;line-height:1.8}' +
+    '#dfl-yes{display:block;width:100%;margin-top:12px;border:0;border-radius:12px;background:#006666;color:#fff;font:800 14px Cairo,Tahoma,sans-serif;padding:12px;cursor:pointer}' +
     '#dfl-yes:hover{background:#005252}#dfl-yes:focus-visible,#dfl-x:focus-visible{outline:3px solid #c29b38;outline-offset:2px}' +
-    '#dfl-ft{margin-top:8px;text-align:center;font-size:10.5px;color:#94a3b8}' +
-    '#dfl-lg{display:block;margin:10px auto 0;background:none;border:0;color:#006666;font:700 12px Cairo,Tahoma,sans-serif;text-decoration:underline;cursor:pointer}' +
+    '#dfl-note{margin-top:8px;text-align:center;font-size:10.5px;color:#64748b;line-height:1.7}' +
+    '#dfl-ft{margin-top:4px;text-align:center;font-size:10.5px;color:#94a3b8}' +
     '#dfl-sess{position:fixed;bottom:14px;left:14px;z-index:9998;display:flex;align-items:center;gap:8px;background:#ecfdf5;color:#065f46;border:1px solid #a7f3d0;border-radius:999px;padding:6px 8px 6px 12px;font:700 11px Cairo,Tahoma,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.18);direction:rtl}' +
     '#dfl-sess button{background:#065f46;color:#fff;border:0;border-radius:999px;font:700 10.5px Cairo,Tahoma,sans-serif;padding:4px 10px;cursor:pointer}' +
     '@media print{#dfl-overlay,#dfl-sess{display:none!important}}';
@@ -44,45 +95,46 @@
     overlay = document.createElement('div'); overlay.id = 'dfl-overlay'; overlay.setAttribute('role', 'dialog'); overlay.setAttribute('aria-modal', 'true'); overlay.setAttribute('aria-labelledby', 'dfl-title');
     overlay.innerHTML = '<div id="dfl-box">' +
       '<button type="button" id="dfl-x" aria-label="إغلاق دون المتابعة">&times;</button>' +
-      '<div id="dfl-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5z"/><path d="M9 12l2 2 4-4"/></svg></div>' +
-      '<h3 id="dfl-title">تنبيه قانوني قبل المتابعة</h3>' +
-      '<p>هذا العمل يخضع لـ:</p>' +
-      '<ul><li><b>PDPL</b><span>نظام حماية البيانات الشخصية</span></li><li><b>IP</b><span>أنظمة حماية الملكية الفكرية</span></li></ul>' +
-      '<p class="dfl-sm">ولا يجوز نسخ محتوياته أو هندسته أو خوارزمياته، ولا رفعها إلى نماذج الذكاء الاصطناعي أو أي جهة خارجية، دون إذن كتابي من صاحب الحقوق.</p>' +
+      '<div id="dfl-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.4 9.3-8 11-4.6-1.7-8-6-8-11V5z"/><path d="M9 12l2 2 4-4"/></svg></div>' +
+      '<h3 id="dfl-title">تنويه</h3>' +
+      '<p>هذا المحتوى يخضع لـ:</p>' +
+      '<ul>' +
+      '<li><b>PDPL</b><span>نظام حماية البيانات الشخصية</span></li>' +
+      '<li><b>IP</b><span>أنظمة الملكية الفكرية</span></li>' +
+      '<li><b>SDAIA</b><span>مبادئ أخلاقيات الذكاء الاصطناعي (الهيئة السعودية للبيانات والذكاء الاصطناعي)</span></li>' +
+      '<li><b>AI</b><span>الذكاء الاصطناعي المسؤول</span></li>' +
+      '</ul>' +
+      '<p class="dfl-sm">ويجب أخذ الموافقة الخطية من إدارة مدارس دار الفرسان الأهلية لأي استخدام للمحتوى بأي شكل.</p>' +
       '<button type="button" id="dfl-yes">نعم أعي ذلك</button>' +
-      '<button type="button" id="dfl-lg">لديّ جلسة عمل مصرح بها — تسجيل الدخول</button>' +
-      '<div id="dfl-ft"></div></div>';
+      '<div id="dfl-note"></div><div id="dfl-ft"></div></div>';
     document.body.appendChild(overlay);
     overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
     document.getElementById('dfl-x').addEventListener('click', close);
-    document.getElementById('dfl-yes').addEventListener('click', function () { var cb = yesCb; close(true); if (cb) cb(); });
-    document.getElementById('dfl-lg').addEventListener('click', function () {
-      var cb = yesCb; close(true);
-      if (window.DFGate) window.DFGate.require(function () { if (cb) cb(); }, { title: 'دخول بجلسة عمل مصرح بها', msg: 'أدخل بيانات الدخول المعتمدة. وبعد الدخول لن يظهر التنبيه القانوني خلال هذه الجلسة.' });
-    });
+    document.getElementById('dfl-yes').addEventListener('click', function () { var pd = pending; if (pd) stamp(pd.mode); close(true); if (pd && pd.cb) pd.cb(); });
     overlay.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') { e.preventDefault(); close(); return; }
-      if (e.key === 'Tab') { var f = [document.getElementById('dfl-x'), document.getElementById('dfl-yes')]; if (document.getElementById('dfl-lg').style.display !== 'none') f.push(document.getElementById('dfl-lg')); var i = f.indexOf(document.activeElement); e.preventDefault(); f[(i + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus(); }
+      if (e.key === 'Tab') { var f = [document.getElementById('dfl-x'), document.getElementById('dfl-yes')], i = f.indexOf(document.activeElement); e.preventDefault(); f[(i + (e.shiftKey ? f.length - 1 : 1)) % f.length].focus(); }
     });
   }
-  function show(cb) {
+  function show(cb, url) {
     if (!document.body || authorized()) { cb(); return; }
-    ensure(); yesCb = cb; last = document.activeElement;
+    var d = decide(url); if (!d) { cb(); return; }
+    ensure(); pending = { cb: cb, mode: d.mode }; last = document.activeElement;
     var owner = window.ETEC_RIGHTS_OWNER || '';
-    var lg = document.getElementById('dfl-lg'); if (lg) lg.style.display = window.DFGate ? 'block' : 'none';
+    document.getElementById('dfl-note').textContent = d.mode === 'first' ? 'يظهر هذا التنويه في أول ' + d.of + ' نقرات على الروابط (النقرة ' + d.n + ' من ' + d.of + ')، ثم بحسب أهمية المحتوى الذي تفتحه.' : 'تذكير بحسب أهمية المحتوى الذي تفتحه.';
     document.getElementById('dfl-ft').textContent = '© ' + new Date().getFullYear() + ' — ' + (owner ? 'جميع الحقوق محفوظة لـ ' + owner : 'جميع الحقوق محفوظة');
     overlay.classList.add('dfl-show');
     setTimeout(function () { var y = document.getElementById('dfl-yes'); if (y) y.focus(); }, 30);
   }
   function close(accepted) {
-    if (!overlay) return; overlay.classList.remove('dfl-show'); if (!accepted) yesCb = null;
+    if (!overlay) return; overlay.classList.remove('dfl-show'); if (!accepted) pending = null; /* الإغلاق دون إقرار لا يُحتسب */
     try { if (last && last.focus) last.focus(); } catch (e) {}
   }
   function intercept(a, viaMiddle) {
     show(function () {
       if (viaMiddle) { bypass = true; try { window.open(a.href, '_blank', 'noopener'); } finally { bypass = false; } return; }
       bypass = true; try { a.click(); } finally { bypass = false; }
-    });
+    }, a.href);
   }
   function relevant(a) {
     if (!a || a.closest('#dfl-overlay') || a.hasAttribute('data-nolegal') || a.hasAttribute('download')) return false;
@@ -92,22 +144,26 @@
     if (bypass) return;
     var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
     if (!relevant(a)) return;
+    if (authorized() || !decide(a.href)) return; /* لا مربع: يمضي الرابط بسلوكه الطبيعي */
     e.preventDefault(); e.stopPropagation(); intercept(a, false);
   }, true);
   document.addEventListener('auxclick', function (e) {
     if (bypass || e.button !== 1) return;
     var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
     if (!relevant(a)) return;
+    if (authorized() || !decide(a.href)) return;
     e.preventDefault(); e.stopPropagation(); intercept(a, true);
   }, true);
 
   var _open = window.open ? window.open.bind(window) : null;
   if (_open) window.open = function (u, t, f) {
     if (bypass) return _open(u, t, f);
-    show(function () { bypass = true; try { _open(u, t, f); } finally { bypass = false; } });
+    if (authorized() || !decide(u)) return _open(u, t, f);
+    show(function () { bypass = true; try { _open(u, t, f); } finally { bypass = false; } }, u);
     return null;
   };
-  /* شريط «جلسة عمل مصرح بها» */
+
+  /* ----- شريط «جلسة عمل مصرح بها» ----- */
   function pill() {
     var o = authInfo(), el = document.getElementById('dfl-sess');
     if (!o) { if (el) el.remove(); return; }
@@ -121,13 +177,18 @@
         location.reload();
       });
     }
-    document.getElementById('dfl-su').textContent = 'جلسة عمل مصرح بها' + (o.u ? ' · ' + o.u.split('@')[0] : '');
+    var left = Math.max(1, Math.ceil((o.exp - Date.now()) / 60000));
+    document.getElementById('dfl-su').textContent = 'جلسة عمل مصرح بها' + (o.u ? ' · ' + o.u.split('@')[0] : '') + ' · تنتهي بعد ' + left + ' د';
   }
+  var wasAuth = !!authInfo();
+  setInterval(function () { var now = !!authInfo(); if (wasAuth && !now) { try { localStorage.removeItem(AK); } catch (e) {} try { window.dispatchEvent(new Event('df-auth')); } catch (e) {} } wasAuth = now; pill(); }, 20000);
   window.addEventListener('df-auth', pill); window.addEventListener('storage', function (e) { if (e.key === AK) pill(); });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', pill); else pill();
+
   window.DFLegal = {
     authorized: authorized,
-    go: function (url, newTab) { show(function () { bypass = true; try { if (newTab && _open) _open(url, '_blank', 'noopener'); else location.href = url; } finally { bypass = false; } }); },
-    show: show
+    go: function (url, newTab) { show(function () { bypass = true; try { if (newTab && _open) _open(url, '_blank', 'noopener'); else location.href = url; } finally { bypass = false; } }, url); },
+    show: show, tierOf: tierOf, state: loadSt,
+    reset: function () { mem = { ack: 0, high: 0, med: 0, low: 0 }; try { localStorage.removeItem(SK); } catch (e) {} }
   };
 })();

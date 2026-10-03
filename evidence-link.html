@@ -533,7 +533,7 @@ const todayAr=()=>new Date().toLocaleDateString("ar-SA-u-ca-gregory",{year:"nume
 const stName=m=>m.replace(/^أ\.\s*/,"");
 const pdfName=(d,x)=>"تقرير_استلام_المهام_المجال"+d+"_"+(x==="all"?"نسخة_المشرف":stName(TEAMS[d].mem[x]).replace(/\s+/g,"_"))+".pdf";
 const memberOf=(d,x)=>DATA.filter(i=>i.d===d&&ownerIdx(i)===x).sort((a,b)=>a.code.localeCompare(b.code));
-const FOOT=()=>"\nمع خالص التقدير والمودة،\n"+(ORGANIZER?ORGANIZER+" — ":"")+"منظّم المشروع (مهندس بيانات النظام)\n\nهذا العمل يخضع لـ PDPL و IP، فنرجو ألا يُنسخ أو يُرفع إلى أدوات الذكاء الاصطناعي دون إذن كتابي.";
+const FOOT=()=>"\nمع خالص التقدير والمودة،\n"+(ORGANIZER?ORGANIZER+" — ":"")+"منظّم المشروع (مهندس بيانات النظام)\n\nهذا المحتوى يخضع لـ PDPL وأنظمة الملكية الفكرية IP ومبادئ أخلاقيات الذكاء الاصطناعي (SDAIA) والذكاء الاصطناعي المسؤول، ويجب أخذ الموافقة الخطية من إدارة مدارس دار الفرسان الأهلية لأي استخدام للمحتوى بأي شكل.";
 const PROJ_DESC="مشروع داخلي لمدارس دار الفرسان (قسم الدبلوما الأمريكية — بنين) يربط شواهد معايير هيئة تقويم التعليم والتدريب (ETEC) ومؤشراتها بسجلاتها، ويوثّقها بتقرير بصري موحد لكل مؤشر، استعداداً لزيارة التقويم الخارجي للمدارس وسعياً إلى التميز المدرسي.";
 function composeAssign(d){
   const n=DATA.filter(i=>i.d===d).length, rows=TEAMS[d].mem.map((m,x)=>memberOf(d,x).map(i=>i.code+" | "+i.st+" | "+m).join("\n")).join("\n");

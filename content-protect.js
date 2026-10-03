@@ -120,7 +120,7 @@
                 <div class="df-icon-wrap"><i class="fa-solid fa-shield-halved"></i></div>
                 <h3>هذا المحتوى محمي</h3>
                 <p class="df-notice">
-                    هذا المحتوى يخضع لنظام حماية البيانات الشخصية (PDPL) ولأنظمة حماية الملكية الفكرية (IP) في المملكة العربية السعودية، ولا يجوز نسخه أو رفعه إلى نماذج الذكاء الاصطناعي دون إذن كتابي
+                    هذا المحتوى يخضع لنظام حماية البيانات الشخصية (PDPL) وأنظمة الملكية الفكرية (IP) ومبادئ أخلاقيات الذكاء الاصطناعي (SDAIA) والذكاء الاصطناعي المسؤول، ويجب أخذ الموافقة الخطية من إدارة مدارس دار الفرسان الأهلية لأي استخدام للمحتوى بأي شكل
                     لمدارس دار الفرسان الأهلية 2026 - 2027. يرجى إدخال بيانات الدخول المعتمدة لإتاحة التحديد والنسخ لجلستكم الحالية فقط.
                 </p>
                 <div id="df-lock-error"></div>
@@ -181,7 +181,9 @@
     }
 
     function isUnlocked() {
-        return sessionStorage.getItem(SESSION_KEY) === 'true';
+        if (sessionStorage.getItem(SESSION_KEY) !== 'true') return false;
+        try { var a = JSON.parse(localStorage.getItem('df_auth_v1') || 'null'); if (!(a && a.exp > Date.now())) { sessionStorage.removeItem(SESSION_KEY); sessionStorage.removeItem(SESSION_USER_KEY); return false; } } catch (e) {}
+        return true;
     }
 
     // منع أحداث النسخ/القص عندما يكون المحتوى مقفلاً (طبقة حماية إضافية غير الـCSS)
@@ -246,7 +248,7 @@
 
             sessionStorage.setItem(SESSION_KEY, 'true');
             sessionStorage.setItem(SESSION_USER_KEY, username);
-            try { localStorage.setItem('df_auth_v1', JSON.stringify({ u: username, exp: Date.now() + 8 * 3600 * 1000 })); window.dispatchEvent(new Event('df-auth')); } catch (e) {}
+            try { localStorage.setItem('df_auth_v1', JSON.stringify({ u: username, exp: Date.now() + 3600 * 1000 })); window.dispatchEvent(new Event('df-auth')); } catch (e) {}
             overlay.classList.remove('df-show');
             applyUnlocked();
         });

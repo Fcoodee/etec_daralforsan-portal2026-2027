@@ -6,7 +6,8 @@
  *       الافتراضي نزع محتوى الصفحة من DOM حتى الدخول؛ وللصفحات ذات التهيئة غير المتزامنة (IndexedDB أو fetch) أضف data-detach="0" فيكتفي بالإخفاء.
  *   <script src="page-gate.js" data-lazy="1"></script>     بلا قفل: يوفّر DFGate.require(cb) لطلب الدخول عند الحاجة فقط.
  *   <script src="page-gate.js"></script>                   قفل اختياري: تُقفل الصفحة فقط إن وُجد في access.txt سطر  #@gate,اسم-الصفحة.html
- * الدخول الصحيح يسجّل «جلسة عمل مصرح بها» مشتركة بين الصفحات والتبويبات (8 ساعات)، وعندها يتوقف مربع الحوار القانوني.
+ * الدخول الصحيح يسجّل «جلسة عمل مصرح بها» مشتركة بين الصفحات والتبويبات (ساعة واحدة)، وعندها يتوقف مربع الحوار القانوني.
+ * عند انقضاء الساعة تُقفل الصفحات المقفلة من جديد تلقائياً دون إعادة تحميل، وتعود الأزرار المقفلة ومربع التنبيه.
  * صلاحية إرسال الرسائل (DFGate.canMail): سطر اختياري في access.txt  #@mail,مستخدم1,مستخدم2  يحصر الإرسال في المذكورين؛ وبلا السطر يُسمح لكل مصرح له.
  * عند تعذّر قراءة access.txt تبقى الصفحات المقفلة مقفلة (fail-closed).
  * ⚠ هذا قفل في المتصفح لا خادم: يردع الاطلاع العابر ولا يحجب المصدر عمّن يعرف قراءته. (انظر ملاحظات الإصدار)
@@ -19,7 +20,7 @@
   var TITLE = DS.title || 'صفحة خاصة بفريقنا';
   var MSG = DS.msg || 'هذه الصفحة للتشاور بين فريق العمل والإشراف الأكاديمي للقسم. فضلاً أدخل بيانات الدخول المعتمدة لتتصفحها معنا.';
   var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-  var AK = 'df_auth_v1', TTL = 8 * 60 * 60 * 1000, TRY = 'df_gate_try', LOCK = 'df_gate_until', CK = 'df_ck';
+  var AK = 'df_auth_v1', TTL = 60 * 60 * 1000, TRY = 'df_gate_try', LOCK = 'df_gate_until', CK = 'df_ck';
   var html = document.documentElement, frag = null, mark = null, users = [], gates = [], mailers = [], loaded = false, locked = false, overlay = null, lastCred = null;
   function S(k, v, del) { try { if (del) sessionStorage.removeItem(k); else if (v === undefined) return sessionStorage.getItem(k); else sessionStorage.setItem(k, v); } catch (e) {} return null; }
   function L(k, v, del) { try { if (del) localStorage.removeItem(k); else if (v === undefined) return localStorage.getItem(k); else localStorage.setItem(k, v); } catch (e) {} return null; }
@@ -28,14 +29,24 @@
   /* ----- جلسة العمل المصرح بها ----- */
   function info() {
     try { var o = JSON.parse(L(AK) || 'null'); if (o && o.exp > Date.now()) return o; } catch (e) {}
-    if (S('df_content_unlocked') === 'true') return { u: S('df_content_unlocked_user') || '' };
-    if (S('df_logged_in') === 'true') return { u: S('df_username') || '' };
-    return null;
+    return null; /* مصدر الحقيقة الوحيد: df_auth_v1 بتاريخ انتهاء، فلا تُعدّ مفاتيح الجلسة القديمة دخولاً */
   }
   function isAuth() { return !!info(); }
-  function setAuth(u) { L(AK, JSON.stringify({ u: u, exp: Date.now() + TTL })); ping(); }
+  function setAuth(u) { L(AK, JSON.stringify({ u: u, exp: Date.now() + TTL })); ping(); watch(); }
   function clearAuth() { L(AK, null, true); ['df_content_unlocked', 'df_content_unlocked_user', 'df_logged_in', 'df_username', CK].forEach(function (k) { S(k, null, true); }); lastCred = null; ping(); }
 
+  /* ----- انتهاء الجلسة: تُقفل الصفحة المقفلة من جديد دون إعادة تحميل ----- */
+  var expT = null;
+  function lockAgain(why) {
+    if (!ALWAYS || locked) return;
+    locked = true; html.classList.add('pg-locked'); if (DETACH) detach();
+    openLogin({ full: true, title: why === 'out' ? 'أُنهيت جلسة العمل' : 'انتهت جلسة العمل', msg: why === 'out' ? 'أُنهيت الجلسة من تبويب آخر. أدخل بيانات الدخول لمتابعة العمل.' : 'انقضت ساعة على الدخول. أدخل بيانات الدخول لمتابعة العمل.' });
+  }
+  function watch() {
+    clearTimeout(expT); var i = info(); if (!i || !i.exp) return;
+    expT = setTimeout(function () { if (!isAuth()) { L(AK, null, true); ping(); lockAgain(); } else watch(); }, Math.max(0, i.exp - Date.now()) + 300);
+  }
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && !isAuth() && L(AK)) { L(AK, null, true); ping(); lockAgain(); } });
   /* ----- منع الفهرسة ونماذج الذكاء الاصطناعي (إشارات اختيارية) ----- */
   if (!LAZY) [['robots', 'noindex,nofollow,noarchive,noimageindex'], ['robots', 'noai,noimageai'], ['googlebot', 'noindex,nofollow,noarchive']].forEach(function (m) { var t = document.createElement('meta'); t.name = m[0]; t.content = m[1]; document.head.appendChild(t); });
 
@@ -113,7 +124,7 @@
       '<div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></div>' +
       '<h2 id="pg-t"></h2><p id="pg-m"></p><div id="pg-err" role="alert"></div>' +
       '<form id="pg-form" autocomplete="on"><input id="pg-u" type="text" placeholder="اسم المستخدم" autocomplete="username" required aria-label="اسم المستخدم"><input id="pg-p" type="password" placeholder="كلمة المرور" autocomplete="current-password" required aria-label="كلمة المرور"><button id="pg-go" type="submit">دخول</button></form>' +
-      '<div class="ft">الدخول يسجّل جلسة عمل مصرح بها. وهذا العمل يخضع لنظام حماية البيانات الشخصية (PDPL) ولأنظمة حماية الملكية الفكرية (IP).' + (o.full ? '<br><a href="evidence-link.html">العودة إلى لوحة المتابعة</a>' : '') + '</div></div>';
+      '<div class="ft">الدخول يسجّل جلسة عمل مصرح بها لمدة ساعة. هذا المحتوى يخضع لنظام حماية البيانات الشخصية (PDPL) وأنظمة الملكية الفكرية (IP) ومبادئ أخلاقيات الذكاء الاصطناعي (SDAIA) والذكاء الاصطناعي المسؤول، ويجب أخذ الموافقة الخطية من إدارة مدارس دار الفرسان الأهلية لأي استخدام للمحتوى بأي شكل.' + (o.full ? '<br><a href="evidence-link.html">العودة إلى لوحة المتابعة</a>' : '') + '</div></div>';
     document.body.appendChild(overlay);
     overlay.querySelector('#pg-t').textContent = o.title || TITLE; overlay.querySelector('#pg-m').textContent = o.msg || MSG;
     var form = overlay.querySelector('#pg-form'), err = overlay.querySelector('#pg-err'), go = overlay.querySelector('#pg-go');
@@ -164,16 +175,16 @@
   }
 
   window.DFGate = {
-    _booted: true, isAuth: isAuth, user: function () { var i = info(); return i ? i.u : ''; },
+    _booted: true, isAuth: isAuth, expiresAt: function () { var i = info(); return i ? i.exp : 0; }, user: function () { var i = info(); return i ? i.u : ''; },
     require: function (cb, opts) { if (isAuth() && !(opts && opts.force)) { cb(); return; } openLogin({ onOk: cb, title: (opts && opts.title) || 'دخول بجلسة عمل مصرح بها', msg: (opts && opts.msg) || 'أدخل بيانات الدخول المعتمدة لتسجيل جلسة عمل مصرح بها.' }); },
     logout: function () { clearAuth(); }, unlockContacts: unlockContacts,
     /* صلاحية إرسال الرسائل: إن وُجد في access.txt سطر  #@mail,مستخدم1,مستخدم2  اقتُصر الإرسال عليهم، وإلا فلكل مستخدم مصرح له */
     canMail: function () { return (loaded ? Promise.resolve() : load()).then(function () { var i = info(), u = ((i && i.u) || '').toLowerCase(); return !!i && (mailers.length === 0 || mailers.indexOf(u) >= 0); }); }
   };
 
-  window.addEventListener('storage', function (e) { if (e.key === AK && locked && isAuth()) reveal(info().u); });
+  window.addEventListener('storage', function (e) { if (e.key !== AK) return; if (locked && isAuth()) reveal(info().u); else if (!locked && !isAuth()) lockAgain('out'); else watch(); });
   function boot() {
-    if (isAuth()) { html.classList.remove('pg-locked'); return; }
+    if (isAuth()) { html.classList.remove('pg-locked'); watch(); return; }
     if (LAZY) return;
     if (ALWAYS) { locked = true; if (DETACH) detach(); openLogin({ full: true }); return; }
     load().then(function () { if (gates.indexOf(PAGE) >= 0) { locked = true; detach(); openLogin({ full: true }); } else html.classList.remove('pg-locked'); })
