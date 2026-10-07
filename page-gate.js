@@ -9,6 +9,7 @@
  * الدخول الصحيح يسجّل «جلسة عمل مصرح بها» مشتركة بين الصفحات والتبويبات (ساعة واحدة)، وعندها يتوقف مربع الحوار القانوني.
  * عند انقضاء الساعة تُقفل الصفحات المقفلة من جديد تلقائياً دون إعادة تحميل، وتعود الأزرار المقفلة ومربع التنبيه.
  * صلاحية إرسال الرسائل (DFGate.canMail): سطر اختياري في access.txt  #@mail,مستخدم1,مستخدم2  يحصر الإرسال في المذكورين؛ وبلا السطر يُسمح لكل مصرح له.
+ * مدير النظام (DFGate.isAdmin): سطر اختياري  #@admin,مستخدم1,مستخدم2  ؛ وبلا السطر يُعدّ المستخدم «admin» وحده مديراً. تُستعمل لفتح المراحل «جارٍ العمل» (stages.html).
  * عند تعذّر قراءة access.txt تبقى الصفحات المقفلة مقفلة (fail-closed).
  * ⚠ هذا قفل في المتصفح لا خادم: يردع الاطلاع العابر ولا يحجب المصدر عمّن يعرف قراءته. (انظر ملاحظات الإصدار)
  */
@@ -21,7 +22,7 @@
   var MSG = DS.msg || 'هذه الصفحة للتشاور بين فريق العمل والإشراف الأكاديمي للقسم. فضلاً أدخل بيانات الدخول المعتمدة لتتصفحها معنا.';
   var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   var AK = 'df_auth_v1', TTL = 60 * 60 * 1000, TRY = 'df_gate_try', LOCK = 'df_gate_until', CK = 'df_ck';
-  var html = document.documentElement, frag = null, mark = null, users = [], gates = [], mailers = [], loaded = false, locked = false, overlay = null, lastCred = null;
+  var html = document.documentElement, frag = null, mark = null, users = [], gates = [], mailers = [], admins = [], loaded = false, locked = false, overlay = null, lastCred = null;
   function S(k, v, del) { try { if (del) sessionStorage.removeItem(k); else if (v === undefined) return sessionStorage.getItem(k); else sessionStorage.setItem(k, v); } catch (e) {} return null; }
   function L(k, v, del) { try { if (del) localStorage.removeItem(k); else if (v === undefined) return localStorage.getItem(k); else localStorage.setItem(k, v); } catch (e) {} return null; }
   function ping() { try { window.dispatchEvent(new Event('df-auth')); } catch (e) {} }
@@ -70,11 +71,12 @@
 
   /* ----- قراءة access.txt بدالة fetch ----- */
   function parse(text) {
-    users = []; gates = []; mailers = [];
+    users = []; gates = []; mailers = []; admins = [];
     text.split(/\r?\n/).forEach(function (raw) {
       var l = raw.trim(); if (!l) return;
       if (l.indexOf('#@gate,') === 0) { gates.push(l.slice(7).trim().toLowerCase()); return; }
       if (l.indexOf('#@mail,') === 0) { l.slice(7).split(',').forEach(function (x) { x = x.trim().toLowerCase(); if (x) mailers.push(x); }); return; }
+      if (l.indexOf('#@admin,') === 0) { l.slice(8).split(',').forEach(function (x) { x = x.trim().toLowerCase(); if (x) admins.push(x); }); return; }
       if (l.charAt(0) === '#') return;
       var i = l.indexOf(','); if (i < 1) return;
       users.push({ u: l.slice(0, i).trim(), p: l.slice(i + 1).trim() });
@@ -179,6 +181,8 @@
     require: function (cb, opts) { if (isAuth() && !(opts && opts.force)) { cb(); return; } openLogin({ onOk: cb, title: (opts && opts.title) || 'دخول بجلسة عمل مصرح بها', msg: (opts && opts.msg) || 'أدخل بيانات الدخول المعتمدة لتسجيل جلسة عمل مصرح بها.' }); },
     logout: function () { clearAuth(); }, unlockContacts: unlockContacts,
     /* صلاحية إرسال الرسائل: إن وُجد في access.txt سطر  #@mail,مستخدم1,مستخدم2  اقتُصر الإرسال عليهم، وإلا فلكل مستخدم مصرح له */
+    /* مدير النظام: المذكورون في سطر  #@admin,مستخدم1,مستخدم2  في access.txt؛ وبلا السطر يُعدّ المستخدم «admin» وحده مديراً. تعيد وعداً بقيمة true/false */
+    isAdmin: function () { return (loaded ? Promise.resolve() : load()).then(function () { var i = info(), u = ((i && i.u) || '').toLowerCase(); return !!i && (admins.length ? admins : ['admin']).indexOf(u) >= 0; }).catch(function () { return false; }); },
     canMail: function () { return (loaded ? Promise.resolve() : load()).then(function () { var i = info(), u = ((i && i.u) || '').toLowerCase(); return !!i && (mailers.length === 0 || mailers.indexOf(u) >= 0); }); }
   };
 

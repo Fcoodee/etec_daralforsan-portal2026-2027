@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختيار المرحلة — مشروع ربط الشواهد بالسجلات</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script>
+tailwind.config = { theme: { extend: { colors: { etecteal: { 50:'#f0f7f7',100:'#d9ebeb',500:'#006666',600:'#005252',700:'#003d3d',900:'#002424' }, accentgold:'#c29b38' } } } };
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+body{font-family:'Cairo',sans-serif;background:#f8fafc;color-scheme:light}
+.stage{transition:transform .25s ease,box-shadow .25s ease}
+.stage-open:hover,.stage-open:focus-visible{transform:translateY(-4px);box-shadow:0 18px 40px rgba(0,61,61,.18)}
+.stage-wip{background:#f1f5f9;border:1px dashed #94a3b8;cursor:pointer}
+.stage-wip .ic{filter:grayscale(1);opacity:.75}
+.stage-wip:hover,.stage-wip:focus-visible{background:#e8eef4}
+.stage-wip.mine{background:#fffbeb;border:1px dashed #c29b38}
+.stage-wip.mine .ic{filter:none;opacity:1}
+a:focus-visible,button:focus-visible{outline:3px solid #c29b38;outline-offset:3px}
+@media (prefers-reduced-motion:reduce){.stage{transition:none}.stage-open:hover{transform:none}}
+</style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+<div class="bg-slate-900 text-white text-xs font-bold px-4 py-2 flex justify-between items-center">
+  <span class="text-[11px] text-slate-300">مشروع ربط الشواهد بالسجلات · قسم الدبلوما الأمريكية (بنين)</span>
+  <a href="index.html" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded-full text-[11px] font-bold flex items-center gap-1.5"><i class="fa-solid fa-house text-accentgold"></i> البوابة الرئيسية</a>
+</div>
+
+<header class="bg-white border-b border-gray-100 shadow-sm py-6 px-4">
+  <div class="max-w-5xl mx-auto flex flex-col items-center">
+    <div class="flex flex-wrap justify-center items-center gap-8 mb-5">
+      <img src="logo0.png" alt="Logo_Diploma2026" class="max-h-16 object-contain">
+      <img src="logo1.png" alt="Dar Al-Forsan Logo" class="max-h-16 object-contain">
+      <img src="logo2.png" alt="ETEC Logo" class="max-h-16 object-contain">
+    </div>
+    <h1 class="text-2xl md:text-3xl font-black text-etecteal-900 text-center">اختر المرحلة الدراسية</h1>
+    <p class="text-sm text-gray-500 mt-2 text-center">قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان</p>
+  </div>
+</header>
+
+<main class="flex-1 max-w-5xl mx-auto w-full px-4 py-10">
+  <div id="stages" class="grid grid-cols-1 md:grid-cols-3 gap-6" role="list"></div>
+  <div id="note" class="hidden mt-6 max-w-2xl mx-auto text-center text-sm font-bold text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3" role="status" aria-live="polite"></div>
+  <p class="mt-8 text-center text-[11px] text-gray-400 leading-6">المراحل الجاري العمل عليها تُفتح لمدير النظام فقط إلى أن يكتمل بناؤها.</p>
+</main>
+
+<script src="portal-config.js"></script>
+<script src="page-gate.js" data-lazy="1"></script>
+<script src="legal-notice.js"></script>
+<script src="content-protect.js"></script>
+<script>
+(function () {
+  'use strict';
+  var STAGES = window.ETEC_STAGES || [{ id: 'primary', name: 'الابتدائي', open: true, url: 'evidence-link.html' }];
+  var ICONS = { primary: 'fa-seedling', intermediate: 'fa-book-open-reader', secondary: 'fa-graduation-cap' };
+  var box = document.getElementById('stages'), note = document.getElementById('note'), isAdmin = false;
+
+  function esc(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+  function say(t) { note.textContent = t; note.classList.toggle('hidden', !t); }
+  function withQuery(u) { return u + (u.indexOf('?') < 0 ? location.search : (location.search ? '&' + location.search.slice(1) : '')); }
+
+  function draw() {
+    box.innerHTML = '';
+    STAGES.forEach(function (s) {
+      var ic = '<i class="fa-solid ' + (ICONS[s.id] || 'fa-layer-group') + ' text-2xl"></i>';
+      if (s.open) {
+        var a = document.createElement('a');
+        a.href = withQuery(s.url); a.setAttribute('role', 'listitem');
+        a.className = 'stage stage-open group block bg-white rounded-2xl shadow-sm border border-gray-100 p-7 text-center';
+        a.innerHTML = '<div class="mx-auto mb-4 w-16 h-16 rounded-2xl bg-gradient-to-br from-etecteal-500 to-slate-900 text-white flex items-center justify-center shadow">' + ic + '</div>' +
+          '<h2 class="text-xl font-black text-etecteal-900 mb-2">' + esc(s.name) + '</h2>' +
+          '<span class="mx-auto flex w-fit items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 text-[11px] font-bold px-3 py-1 rounded-full"><i class="fa-solid fa-circle-check"></i> مفتوحة</span>' +
+          '<div class="mt-5 mx-auto flex w-fit items-center gap-1.5 bg-etecteal-700 group-hover:bg-etecteal-900 text-white text-sm font-black px-5 py-2.5 rounded-xl">الدخول <i class="fa-solid fa-arrow-left"></i></div>';
+        box.appendChild(a);
+      } else {
+        var b = document.createElement('button');
+        b.type = 'button'; b.setAttribute('role', 'listitem'); b.setAttribute('data-stage', s.id);
+        b.className = 'stage stage-wip w-full rounded-2xl p-7 text-center' + (isAdmin ? ' mine' : '');
+        b.setAttribute('aria-label', s.name + ' — جارٍ العمل' + (isAdmin ? '، مفتوحة لمدير النظام' : '، مقفلة لمدير النظام'));
+        b.innerHTML = '<div class="ic mx-auto mb-4 w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-500 to-slate-800 text-white flex items-center justify-center shadow">' + ic + '</div>' +
+          '<h2 class="text-xl font-black text-slate-700 mb-2">' + esc(s.name) + '</h2>' +
+          '<span class="mx-auto flex w-fit items-center gap-1.5 bg-amber-50 text-amber-900 border border-amber-200 text-[11px] font-bold px-3 py-1 rounded-full"><i class="fa-solid fa-person-digging"></i> جارٍ العمل</span>' +
+          '<div class="mt-5 flex items-center justify-center gap-1.5 text-slate-600 text-xs font-bold"><i class="fa-solid ' + (isAdmin ? 'fa-lock-open' : 'fa-lock') + '"></i> ' + (isAdmin ? 'مفتوحة لك بصفتك مدير النظام' : 'مقفلة · يفتحها مدير النظام') + '</div>';
+        b.addEventListener('click', function () { tryOpen(s); });
+        box.appendChild(b);
+      }
+    });
+  }
+
+  function go(s) { location.href = withQuery(s.wipUrl || ('stage-wip.html?s=' + encodeURIComponent(s.id))); }
+  function tryOpen(s) {
+    say('');
+    var G = window.DFGate;
+    if (!G) { say('«' + s.name + '»: جارٍ العمل، وسيُفتح قريباً.'); return; }
+    G.require(function () {
+      G.isAdmin().then(function (ok) {
+        isAdmin = ok; draw();
+        if (ok) go(s); else say('«' + s.name + '»: جارٍ العمل، وسيُفتح قريباً. هذه المرحلة يفتحها مدير النظام فقط.');
+      });
+    }, { title: 'دخول مدير النظام', msg: 'المرحلة «' + s.name + '» جارٍ العمل عليها، ويفتحها مدير النظام فقط. أدخل بيانات الدخول المعتمدة.' });
+  }
+
+  function refresh() { if (window.DFGate && DFGate.isAuth()) DFGate.isAdmin().then(function (ok) { if (ok !== isAdmin) { isAdmin = ok; draw(); } }); else if (isAdmin) { isAdmin = false; draw(); } }
+  draw(); refresh();
+  window.addEventListener('df-auth', refresh);
+})();
+</script>
+</body>
+</html>

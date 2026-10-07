@@ -10,11 +10,14 @@
    6) ETEC_OFFICIAL_CENTER_URL: صفحة المركز الوطني للتقويم والتميز المدرسي (تميز).
   10) ETEC_SHORT_LINKS: روابط مختصرة تحلّ محل الطويلة في رسائل البريد. المفتاح الرابط الطويل كاملاً والقيمة الرابط المختصر.
        مثال:  "https://.../evidence-link.html?team=1": "https://tinyurl.com/xxxx"   (انظر قائمة الروابط في الحزمة الخاصة).
+  13) ETEC_SHORT_BASE: أساس الروابط المختصرة المستضافة على نطاقك (صفحات تحويل في مجلد s). الافتراضي https://fcoodee.github.io/s/ ؛ وللمجلد داخل مستودع المشروع: .../etec_daralforsan-portal2026-2027/s/ ؛ و"" لتعطيلها.
   12) ETEC_SHORT_LINKS: روابط مختصرة مثبّتة (الرابط الكامل ← المختصر) تُستعمل في رسائل البريد قبل أي اتصال بخدمة الاختصار.
        تُملأ تلقائياً بزر «نسخ الروابط المختصرة لتثبيتها» في نافذة الرسالة أو بأداة make_short_links.js، ثم يُرفع هذا الملف.
   11) ETEC_LEGAL_POLICY: ظهور التنويه القانوني: first = عدد النقرات الأولى التي يظهر فيها دائماً، ثم highMinutes (روابط Drive والملفات والأدوات المقفلة والبريد) و mediumMinutes (صفحات المراجع والتحليل)
        و lowMinutes (التنقل العادي؛ 0 = لا يظهر). ولا يظهر أصلاً في جلسة عمل مصرح بها.
   10) ETEC_SHORTENER: "isgd" لاختصار الروابط تلقائياً في رسائل البريد (خدمة خارجية)، و"" لتعطيله.
+  14) ETEC_STAGES: مراحل قسم الدبلوما في صفحة الاختيار (stages.html). لكل مرحلة: id والاسم (بلا صفوف) وopen (true = تُفتح لكل المستخدمين) وurl (لوحة المرحلة) وwipUrl (مساحة الإعداد لمدير النظام).
+       لفتح مرحلة لاحقاً: غيّر open إلى true وحدّد url لوحتها، دون تعديل أي صفحة.
    9) ETEC_SITE_BASE: العنوان الأساسي للموقع المنشور، تُبنى منه الروابط داخل رسائل البريد.
    8) ETEC_RIGHTS_OWNER: صاحب الحقوق الذي يظهر في مربع الحوار القانوني (مثل: «مدارس دار الفرسان الأهلية»). اتركه فارغاً حتى يُحدَّد قانونياً.
    7) ETEC_PROJECT_ORGANIZER: اسم منظّم المشروع (مهندس بيانات النظام) الذي يظهر في صفحة التسليم المطبوعة. */
@@ -30,6 +33,11 @@ window.ETEC_SITE_BASE = "https://fcoodee.github.io/etec_daralforsan-portal2026-2
 window.ETEC_SHORT_LINKS = {};
 window.ETEC_SHORTENER = "isgd";
 window.ETEC_LEGAL_POLICY = { first: 3, highMinutes: 20, mediumMinutes: 1440, lowMinutes: 0 };
+window.ETEC_STAGES = [
+  { id: "primary",      name: "الابتدائي", open: true,  url: "evidence-link.html" },
+  { id: "intermediate", name: "المتوسط",   open: false, wipUrl: "stage-wip.html?s=intermediate" },
+  { id: "secondary",    name: "الثانوي",   open: false, wipUrl: "stage-wip.html?s=secondary" }
+];
 // SHORT-LINKS-BEGIN
 window.ETEC_SHORT_LINKS = {};
 // SHORT-LINKS-END
