@@ -16,6 +16,10 @@
   11) ETEC_LEGAL_POLICY: ظهور التنويه القانوني: first = عدد النقرات الأولى التي يظهر فيها دائماً، ثم highMinutes (روابط Drive والملفات والأدوات المقفلة والبريد) و mediumMinutes (صفحات المراجع والتحليل)
        و lowMinutes (التنقل العادي؛ 0 = لا يظهر). ولا يظهر أصلاً في جلسة عمل مصرح بها.
   10) ETEC_SHORTENER: "isgd" لاختصار الروابط تلقائياً في رسائل البريد (خدمة خارجية)، و"" لتعطيله.
+  15) ETEC_DOC_ALIASES / ETEC_DOC_STAGE_SCOPED / ETEC_DOC_REFS: كتالوج الوثائق المشتركة (لوحة evidence-link).
+       ETEC_DOC_ALIASES: اسم متقارب ← الاسم الرسمي، يُدمجان في وثيقة واحدة. لا يُضاف شيء هنا إلا بقرار منظّم المشروع (مثال: "سجل البرامج والأنشطة": "سجل الأنشطة والبرامج").
+       ETEC_DOC_STAGE_SCOPED: أسماء رسمية لوثائق خاصة بكل مرحلة (الافتراضي: كل الوثائق «للمدرسة كلها»).
+       ETEC_DOC_REFS: إحالة اختيارية لكل مؤشر تبيّن ما يخصه من الوثيقة، المفتاح «رمز المؤشر|الاسم الرسمي» (مثال: "1-2-1-1|سجل التوجيه والإرشاد": "الصفحات 3-7: برنامج الولاء"). لا تدخل في النسبة.
   14) ETEC_STAGES: مراحل قسم الدبلوما في صفحة الاختيار (stages.html). لكل مرحلة: id والاسم (بلا صفوف) وopen (true = تُفتح لكل المستخدمين) وurl (لوحة المرحلة) وwipUrl (مساحة الإعداد لمدير النظام).
        لفتح مرحلة لاحقاً: غيّر open إلى true وحدّد url لوحتها، دون تعديل أي صفحة.
    9) ETEC_SITE_BASE: العنوان الأساسي للموقع المنشور، تُبنى منه الروابط داخل رسائل البريد.
@@ -38,6 +42,9 @@ window.ETEC_STAGES = [
   { id: "intermediate", name: "المتوسط",   open: false, wipUrl: "stage-wip.html?s=intermediate" },
   { id: "secondary",    name: "الثانوي",   open: false, wipUrl: "stage-wip.html?s=secondary" }
 ];
+window.ETEC_DOC_ALIASES = {};
+window.ETEC_DOC_STAGE_SCOPED = [];
+window.ETEC_DOC_REFS = {};
 // SHORT-LINKS-BEGIN
 window.ETEC_SHORT_LINKS = {};
 // SHORT-LINKS-END

@@ -47,6 +47,7 @@ ol,ul{margin:3px 0;padding-right:18px}li{margin:1px 0}
 @media(max-width:700px){.sheet{padding:10px 8px}.kv{grid-template-columns:repeat(2,1fr)}.ih{grid-template-columns:auto 1fr}.shots{columns:1}th,td{font-size:10px}}
 @media print{@page{size:A4;margin:9mm}body{background:#fff;font-size:11px}.bar,.noprint{display:none!important}.doc{max-width:none;margin:0;padding:0}.sheet{border:0;border-radius:0;padding:0;margin:0}.cover{break-after:page}.ack{break-before:page}.hand{break-before:page}.ind{break-inside:avoid}#df-lock-btn,#df-logout-btn{display:none!important}}
 </style>
+<script src="portal-meta.js"></script>
 </head>
 <body>
 <div class="bar noprint">
@@ -101,13 +102,13 @@ function indHTML(i,opts){
   } else {
     rows=`<tr class="pr"><td colspan="8">مؤشر خارج تقرير السجلات — يُقاس بـ «${esc(i.tool)}». الشواهد المطلوبة (لكل شاهد مجلد داخل «شواهد داعمة»):</td></tr>`+i.rq.map((t,k)=>`<tr><td>شاهد ${k+1}: ${esc(t)}</td><td class="c" style="font-size:10px">—</td><td class="bx">${BOX}</td><td class="bx">${BOX}</td><td class="bx">${BOX}</td><td class="bx">${BOX}</td>${sys(itemSt(i.code,k+1))}<td></td></tr>`).join("");
   }
-  const rep=`<table style="margin-top:4px"><tr><th style="width:30%">التقرير البصري (ست صور في كل تقرير)</th><th>أُنشئ</th><th>ست صور</th><th>سُمّي</th><th>رُفع</th><th>تُحقق</th><th>النظام</th><th>ملاحظات</th></tr>
+  const rep=`<table style="margin-top:4px"><tr><th style="width:30%">التقرير البصري (ست صور في كل تقرير)</th><th>أُنشئ</th><th>ست صور</th><th>سُمّي</th><th>رُفع</th><th>راجعها المشرف</th><th>النظام</th><th>ملاحظات</th></tr>
     <tr><td>التقرير الأول</td><td class="bx">${BOX}</td><td class="bx">${BOX}</td><td class="bx">${BOX}</td><td class="bx">${BOX}</td><td class="bx">${BOX}</td>${repSt(i)}<td></td></tr>
     <tr><td>تقرير إضافي (إن لزم)</td><td class="bx">${BOX}</td><td class="bx">${BOX}</td><td class="bx">${BOX}</td><td class="bx">${BOX}</td><td class="bx">${BOX}</td><td class="sys no"></td><td></td></tr></table>
     <div class="fn">${esc(i.code)}_التقرير البصري_${esc(i.st)}_6صور.pdf</div>`;
   const shots=opts.shots?`<div class="sub"><b>ما يُنصح بتصويره</b> (من إضاءات دليل فبراير 2026):${i.gn?` <span style="color:#b91c1c">${esc(i.gn)}</span>`:""}</div><ul class="shots">${i.gd.slice(0,6).map((g,k)=>`<li>${k+1}. ${esc(g.t)} <span class="chip">${g.k==="p"?"صورة":"لقطة وثيقة"}</span></li>`).join("")}</ul>`:"";
   return `<section class="ind"><div class="ih"><div class="code">${i.code}</div><div class="ti"><b>${esc(i.st)}</b>${opts.text?`<span>${esc(i.text)}</span>`:""}</div><div class="own">${own}</div><div class="qr" data-q="${esc(FOLDER(i.f))}" title="يفتح مجلد المؤشر في Drive"></div></div>
-  <table><tr><th style="width:36%">${i.p?"السجل المطلوب":"الشاهد المطلوب"}</th><th>ممن يُطلب</th><th>جُمع</th><th>رُفع</th><th>سُمّي</th><th>تُحقق</th><th>النظام</th><th style="width:15%">ملاحظات</th></tr>${rows}</table>${rep}${shots}</section>`;
+  <table><tr><th style="width:36%">${i.p?"السجل المطلوب":"الشاهد المطلوب"}</th><th>ممن يُطلب</th><th>جُمع</th><th>رُفع</th><th>سُمّي</th><th>راجعها المشرف</th><th>النظام</th><th style="width:15%">ملاحظات</th></tr>${rows}</table>${rep}${shots}</section>`;
 }
 function render(){
   const S=scope(), t=TEAMS[SEL.d], isM=typeof SEL.p==="number", c="#006666";
@@ -127,7 +128,7 @@ function render(){
       <li><b>اقرأ مؤشرك:</b> يبيّن لك كل مؤشر السجلات المطلوبة وممن تطلبها.</li>
       <li><b>اجمع وارفع:</b> اجمع السجل من مصدره وارفعه في مجلد المؤشر في Drive (<b>امسح رمز QR أو اضغط عليه</b> فيفتح المجلد، وهو قابل للنقر أيضاً في نسخة PDF)، وسمِّه وفق قاعدة التسمية.</li>
       <li><b>أشّر بقلمك ✔ هنا</b> في الخانة المقابلة فور إنجاز الخطوة، وأنشئ التقرير البصري بست صور، ثم سلّم الورقة إلى منظّم المشروع.</li></ol></div>
-    <div class="box"><h3>معنى الخانات</h3><b>جُمع</b>: حصلتُ على الملف من مصدره · <b>رُفع</b>: رفعتُه في مجلد المؤشر · <b>سُمّي</b>: اسمه يطابق القاعدة (رمز المؤشر_ف رقم الفقرة_اسم السجل_…) · <b>تُحقق</b>: فحصتُه أو فحصه المنسّق · <b>النظام</b>: ما تقرؤه لوحة المتابعة وقت الطباعة (✔ منجز · ◐ جزء · ○ لا شيء · — غير متصل).</div>
+    <div class="box"><h3>معنى الخانات</h3><b>جُمع</b>: حصلتُ على الملف من مصدره · <b>رُفع</b>: رفعتُه في مجلد المؤشر · <b>سُمّي</b>: اسمه يطابق القاعدة (رمز المؤشر_ف رقم الفقرة_اسم السجل_…) · <b>راجعها المشرف</b>: راجعها مشرف الفريق (المراجعة له وحده) · <b>النظام</b>: ما تقرؤه لوحة المتابعة وقت الطباعة (✔ منجز · ◐ جزء · ○ لا شيء · — غير متصل).</div>
     <div class="box" style="display:flex;gap:10px;align-items:center"><div class="qr" data-q="${esc(REF_URL)}" data-s="76"></div><div><h3>مرجع الشواهد المؤمَّنة (درايف مكتب الإشراف والتطوير)</h3>هذا الرابط يخدم <b>تغذية التقرير البصري للمؤشر فقط</b>: افتحه للحصول على الصور المناسبة لتقرير المؤشر، ولا ترفع إليه ملفات هذا المشروع.<div class="fn" style="padding:0"><a class="u" href="${esc(REF_URL)}" target="_blank" rel="noopener">${esc(REF_URL)}</a></div></div></div>
     <div class="foot">رمز الإصدار: <b dir="ltr" style="unicode-bidi:isolate">${code}</b> · طُبعت: ${stamp} · ${LINKED?"قُرئت حالة النظام وقت الطباعة":"حالة النظام غير متصلة وقت الطباعة"} · لوحة داخلية للمدرسة ولا تحل محل منصة التقويم المدرسي الرسمية</div>
   </section>
