@@ -16,6 +16,20 @@ button{min-height:44px;padding:0 16px;font-size:15px}
 <button type="button" id="go">اختبر حسابي</button>
 <pre id="out" role="status">—</pre>
 <script>
+/* وضع المعاينة المحلية: عند فتح الملف مباشرة من الجهاز لا يوجد google.script.run،
+   فنحاكيه ببيانات وهمية. داخل Apps Script الحقيقي لا يُستخدم هذا الجزء. */
+if (typeof google === 'undefined') {
+  document.body.insertAdjacentHTML('afterbegin', '<p style="background:#fff3cd;padding:10px;border-radius:8px">وضع المعاينة المحلية: البيانات وهمية، وليس هذا هو الاتصال الحقيقي بالشيت.</p>');
+  var mockRun = function (ok, fail) {
+    return {
+      withSuccessHandler: function (f) { return mockRun(f, fail); },
+      withFailureHandler: function (f) { return mockRun(ok, f); },
+      api_me: function () { setTimeout(function () { ok({ name: 'مستخدم تجريبي', role: 'counselor', stage: 'primary' }); }, 300); },
+      api_students: function () { setTimeout(function () { ok(new Array(10).fill(0)); }, 300); }
+    };
+  };
+  window.google = { script: { run: mockRun(function () {}, function () {}) } };
+}
 document.getElementById('go').addEventListener('click', function () {
   var out = document.getElementById('out'); out.textContent = 'جارٍ التحقق…';
   google.script.run
