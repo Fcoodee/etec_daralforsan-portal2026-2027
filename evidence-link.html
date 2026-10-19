@@ -56,7 +56,7 @@ body[data-ut="edu"] .ov:hover,body[data-ut="edu"] .ov:focus-visible{border-color
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media print{#utBar,#utModal,#utPanel{display:none!important}#teamModal,#ownerCard{display:none!important}#dash-clock-bar,#controls,#refreshBtn,#df-lock-btn,#df-logout-btn{display:none!important}details{break-inside:avoid}}
 </style>
-<script src="portal-meta.js"></script>
+<script src="portal-meta.js?v=8.10.10r2"></script>
 </head>
 <body class="text-gray-800 antialiased min-h-screen flex flex-col">
 
@@ -264,8 +264,8 @@ body[data-ut="edu"] .ov:hover,body[data-ut="edu"] .ov:focus-visible{border-color
 
 <footer class="text-center text-[11px] text-gray-400 py-6">مدارس دار الفرسان — قسم الدبلوما الأمريكية (بنين) — مشروع ربط الشواهد بالسجلات</footer>
 
-<script src="portal-config.js"></script>
-<script src="portal-names.js"></script>
+<script src="portal-config.js?v=8.10.10r2"></script>
+<script src="portal-names.js?v=8.10.10r2"></script>
 <script>
 /* رابط تطبيق الويب لـ drive_check_script.gs بعد النشر (Deploy → Web app) */
 const STATUS_URL = window.ETEC_STATUS_URL || ""; /* يُضبط في portal-config.js */
@@ -922,12 +922,12 @@ function setConn(kind,msg){ const m={ok:["bg-emerald-400/15 text-emerald-300","f
 
 /* v8.10.10: لقطة تقدّم فعلية من Drive تُعرض ما دام ETEC_STATUS_URL فارغاً. ليست حالة حيّة؛ تُستبدل بالمباشر عند ضبط الرابط. الأرقام: الوثائق فقط (درجة التقرير = 0). */
 function renderSnapshot(){
-  const S=window.ETEC_SNAPSHOT, N=window.ETEC_NAMES_EN; if(!S) return;
+  const S=window.ETEC_SNAPSHOT, N=window.ETEC_NAMES_EN; if(!S){ const m=document.querySelector("main"); if(m&&!document.getElementById("snapErr")){ const e=document.createElement("div"); e.id="snapErr"; e.className="bg-rose-50 border border-rose-200 text-rose-700 text-[12px] font-bold rounded-xl p-3 mb-4"; e.textContent="تعذّر تحميل portal-names.js — لقطة التقدم والأسماء الإنجليزية غير ظاهرة. حدّث الصفحة تحديثاً قسرياً (Ctrl+Shift+R)."; m.insertBefore(e,m.firstChild);} return; }
   let box=document.getElementById("snapCard"); const main=document.querySelector("main"); if(!main) return;
   if(!box){ box=document.createElement("section"); box.id="snapCard"; box.className="bg-white border border-amber-200 rounded-xl p-4 mb-6"; main.insertBefore(box,main.firstChild); }
   const dn={}; DATA.forEach(i=>{ dn[i.d]=i.dn; });
   const rows=Object.keys(S.domains).map(d=>`<tr class="border-t border-gray-100"><td class="py-1 px-2 font-bold text-slate-700">${esc(dn[d]||d)}<span class="block text-[10px] text-slate-400 font-semibold" dir="ltr" lang="en">${esc((N&&N.domains[d])||"")}</span></td><td class="py-1 px-2 text-slate-800 font-black" dir="ltr">${S.domains[d]}%</td></tr>`).join("");
-  box.innerHTML=`<div class="flex flex-wrap items-center gap-3 mb-2"><b class="text-[13px] text-slate-800">لقطة التقدّم الفعلي من Drive · ${esc(S.asof)}</b><span class="text-[11px] font-black text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-0.5">ليست حالة حيّة</span></div>
+  box.innerHTML=`<div class="flex flex-wrap items-center gap-3 mb-2"><b class="text-[13px] text-slate-800">لقطة التقدّم الفعلي من Drive · ${esc(S.asof)}</b><span class="text-[10px] text-slate-400" dir="ltr">build 8.10.10r2</span><span class="text-[11px] font-black text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2.5 py-0.5">ليست حالة حيّة</span></div>
   <div class="text-[12px] text-slate-600 leading-6 mb-2">الوثائق المرفوعة <b dir="ltr">${S.uploaded}</b> من <b dir="ltr">${S.required}</b> خانة مطلوبة · نسبة المشروع <b dir="ltr">${S.pct}%</b> (وثائق فقط؛ درجة التقرير 0 حتى الآن، ولذلك لا تتجاوز أي نسبة 50% للمؤشر).</div>
   <table class="text-[11.5px] w-full max-w-md"><tbody>${rows}</tbody></table>
   <div class="text-[10.5px] text-slate-400 mt-2 leading-5">الأسماء الإنجليزية ترجمة مقترحة بانتظار الاعتماد. الأرقام مأخوذة من عدّ ملفات .docx في مجلدات «الوثائق» لكل مؤشر.</div>`;
