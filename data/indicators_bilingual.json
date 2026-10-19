@@ -1,0 +1,554 @@
+{
+ "version": "names-1.0",
+ "generated": "2026-10-19",
+ "status": "English text is a proposed translation pending approval; Arabic is verbatim from DATA (v8.10.9).",
+ "domains": [
+  {
+   "d": 1,
+   "ar": "الإدارة المدرسية",
+   "en": "School Administration"
+  },
+  {
+   "d": 2,
+   "ar": "التعليم والتعلم",
+   "en": "Teaching and Learning"
+  },
+  {
+   "d": 3,
+   "ar": "نواتج التعلم",
+   "en": "Learning Outcomes"
+  },
+  {
+   "d": 4,
+   "ar": "البيئة المدرسية",
+   "en": "School Environment"
+  }
+ ],
+ "criteria": [
+  {
+   "c": "1-1",
+   "ar": "التخطيط",
+   "en": "Planning"
+  },
+  {
+   "c": "1-2",
+   "ar": "قيادة العملية التعليمية",
+   "en": "Leading the Educational Process"
+  },
+  {
+   "c": "1-3",
+   "ar": "المجتمع المدرسي",
+   "en": "School Community"
+  },
+  {
+   "c": "1-4",
+   "ar": "التطوير المؤسسي",
+   "en": "Institutional Development"
+  },
+  {
+   "c": "1-5",
+   "ar": "حقوق المتعلم وحمايته",
+   "en": "Learner Rights and Protection"
+  },
+  {
+   "c": "2-1",
+   "ar": "بناء خبرات التعلم",
+   "en": "Building Learning Experiences"
+  },
+  {
+   "c": "2-2",
+   "ar": "تقويم التعلم",
+   "en": "Assessment of Learning"
+  },
+  {
+   "c": "3-1",
+   "ar": "التحصيل التعليمي",
+   "en": "Academic Achievement"
+  },
+  {
+   "c": "3-2",
+   "ar": "التطور الشخصي والصحي والاجتماعي",
+   "en": "Personal, Health and Social Development"
+  },
+  {
+   "c": "4-1",
+   "ar": "المبنى المدرسي",
+   "en": "School Building"
+  },
+  {
+   "c": "4-2",
+   "ar": "الأمن والسلامة",
+   "en": "Safety and Security"
+  }
+ ],
+ "indicators": [
+  {
+   "code": "1-1-1-1",
+   "d": 1,
+   "c": "1-1",
+   "ar": "تضع المدرسة خطة تشغيلية شاملة وفق أهداف تطويرية محددة.",
+   "en": "The school develops a comprehensive operational plan based on defined development goals.",
+   "docs_required": 4,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "1-1-1-2",
+   "d": 1,
+   "c": "1-1",
+   "ar": "تتابع المدرسة تنفيذ خطتها التشغيلية وتطورها بما يضمن تحقيق أهدافها.",
+   "en": "The school monitors the implementation and progress of its operational plan to ensure its goals are achieved.",
+   "docs_required": 6,
+   "docs_uploaded": 1
+  },
+  {
+   "code": "1-2-1-1",
+   "d": 1,
+   "c": "1-2",
+   "ar": "تعزز المدرسة القيم الإسلامية والهوية الوطنية.",
+   "en": "The school promotes Islamic values and national identity.",
+   "docs_required": 3,
+   "docs_uploaded": 2
+  },
+  {
+   "code": "1-2-1-2",
+   "d": 1,
+   "c": "1-2",
+   "ar": "تطبق المدرسة قيم مهنة التعليم وأخلاقياتها، وتتابع الالتزام بها.",
+   "en": "The school applies the values and ethics of the teaching profession and monitors compliance with them.",
+   "docs_required": 10,
+   "docs_uploaded": 8
+  },
+  {
+   "code": "1-2-1-3",
+   "d": 1,
+   "c": "1-2",
+   "ar": "تطبق المدرسة إجراءات محددة لدعم الانضباط المدرسي، وتتابع الالتزام بها.",
+   "en": "The school applies defined procedures to support school discipline and monitors compliance with them.",
+   "docs_required": 7,
+   "docs_uploaded": 4
+  },
+  {
+   "code": "1-2-1-4",
+   "d": 1,
+   "c": "1-2",
+   "ar": "تنفذ المدرسة برامج وأنشطة تربوية داعمة للسلوك الإيجابي لدى المتعلمين، ومنهم ذوو الإعاقة والموهوبون، وتتابعها.",
+   "en": "The school implements educational programs and activities that support positive behavior among learners, including learners with disabilities and gifted learners, and monitors them.",
+   "docs_required": 4,
+   "docs_uploaded": 3
+  },
+  {
+   "code": "1-2-1-5",
+   "d": 1,
+   "c": "1-2",
+   "ar": "تنفذ المدرسة برامج وأنشطة إثرائية لتطوير مواهب المتعلمين، وتهيئهم للمستقبل، وتتابعها.",
+   "en": "The school implements enrichment programs and activities that develop learners' talents and prepare them for the future, and monitors them.",
+   "docs_required": 6,
+   "docs_uploaded": 4
+  },
+  {
+   "code": "1-3-1-1",
+   "d": 1,
+   "c": "1-3",
+   "ar": "تعزز المدرسة بناء العلاقات الإيجابية والتعاون في المجتمع المدرسي.",
+   "en": "The school fosters positive relationships and cooperation within the school community.",
+   "docs_required": 3,
+   "docs_uploaded": 2
+  },
+  {
+   "code": "1-3-1-2",
+   "d": 1,
+   "c": "1-3",
+   "ar": "تعزز المدرسة مشاركة الأسرة في تعلم أبنائهم، والتحضير لمستقبلهم.",
+   "en": "The school promotes family involvement in their children's learning and in preparing for their future.",
+   "docs_required": 8,
+   "docs_uploaded": 4
+  },
+  {
+   "code": "1-3-1-3",
+   "d": 1,
+   "c": "1-3",
+   "ar": "تعزز المدرسة الشراكة المجتمعية لدعم التعلم والتأثير الإيجابي في المجتمع.",
+   "en": "The school promotes community partnership to support learning and make a positive impact on the community.",
+   "docs_required": 4,
+   "docs_uploaded": 3
+  },
+  {
+   "code": "1-4-1-1",
+   "d": 1,
+   "c": "1-4",
+   "ar": "توفر المدرسة كادرًا تعليميًّا مكتملًا ومؤهلًا بما يتسق مع المهام الموكلة له.",
+   "en": "The school provides a complete and qualified teaching staff consistent with the tasks assigned to them.",
+   "docs_required": 7,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "1-4-1-2",
+   "d": 1,
+   "c": "1-4",
+   "ar": "توفر المدرسة كادرًا إداريًّا مكتملًا ومؤهلًا بما ينسق مع المهام الموكلة له.",
+   "en": "The school provides a complete and qualified administrative staff consistent with the tasks assigned to them.",
+   "docs_required": 5,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "1-4-1-3",
+   "d": 1,
+   "c": "1-4",
+   "ar": "تظهر المدرسة الملاءة والاستدامة المالية.",
+   "en": "The school demonstrates financial solvency and sustainability.",
+   "docs_required": 7,
+   "docs_uploaded": 1
+  },
+  {
+   "code": "1-4-1-4",
+   "d": 1,
+   "c": "1-4",
+   "ar": "تدعم المدرسة منسوبيها للحصول على الرخصة المهنية، وتتابعها.",
+   "en": "The school supports its staff in obtaining the professional license and monitors progress.",
+   "docs_required": 2,
+   "docs_uploaded": 1
+  },
+  {
+   "code": "1-4-1-5",
+   "d": 1,
+   "c": "1-4",
+   "ar": "تدعم المدرسة التطوير المهني لمنسوبيها وفقًا لنتائج التقويم وتحليل احتياجاتهم.",
+   "en": "The school supports the professional development of its staff based on evaluation results and an analysis of their needs.",
+   "docs_required": 1,
+   "docs_uploaded": 1
+  },
+  {
+   "code": "1-4-1-6",
+   "d": 1,
+   "c": "1-4",
+   "ar": "تطبق المدرسة التقويم الذاتي المبني على المعايير المعتمدة من الهيئة بشكل مستمر.",
+   "en": "The school continuously applies self-evaluation based on the standards approved by the Commission.",
+   "docs_required": 2,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "1-4-1-7",
+   "d": 1,
+   "c": "1-4",
+   "ar": "تنفذ المدرسة خطة التحسين بناءً على نتائج التقويم المدرسي، وتتابعها.",
+   "en": "The school implements an improvement plan based on school evaluation results and monitors it.",
+   "docs_required": 2,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "1-5-1-1",
+   "d": 1,
+   "c": "1-5",
+   "ar": "تلتزم المدرسة بالمحافظة على حقوق المتعلمين، وحمايتهم.",
+   "en": "The school is committed to safeguarding learners' rights and protecting them.",
+   "docs_required": 3,
+   "docs_uploaded": 1
+  },
+  {
+   "code": "1-5-1-2",
+   "d": 1,
+   "c": "1-5",
+   "ar": "توفر المدرسة مناخًا آمنًا للتعلم والنمو نفسيًّا واجتماعيًّا.",
+   "en": "The school provides a safe climate for learning and for psychological and social growth.",
+   "docs_required": 5,
+   "docs_uploaded": 5
+  },
+  {
+   "code": "2-1-1-1",
+   "d": 2,
+   "c": "2-1",
+   "ar": "توفر المدرسة فرصًا متكافئة للتعلم تلبي احتياجات المتعلمين، ومنهم ذوو الإعاقة والموهوبون.",
+   "en": "The school provides equitable learning opportunities that meet the needs of learners, including learners with disabilities and gifted learners.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "2-1-1-2",
+   "d": 2,
+   "c": "2-1",
+   "ar": "تدعم المدرسة تنفيذ المناهج بما يحقق نواتج التعلم المستهدفة.",
+   "en": "The school supports curriculum implementation to achieve the targeted learning outcomes.",
+   "docs_required": 4,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "2-1-1-3",
+   "d": 2,
+   "c": "2-1",
+   "ar": "تنوع المدرسة في إستراتيجيات التعليم والتعلم لتلبية احتياجات المتعلمين، ودعم تعلمهم.",
+   "en": "The school uses diverse teaching and learning strategies to meet learners' needs and support their learning.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "2-1-1-4",
+   "d": 2,
+   "c": "2-1",
+   "ar": "تفعّل المدرسة التقنية الرقمية لدعم تعلم المتعلمين وتلبية احتياجاتهم.",
+   "en": "The school activates digital technology to support learners' learning and meet their needs.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "2-1-1-5",
+   "d": 2,
+   "c": "2-1",
+   "ar": "تنفذ المدرسة أنشطة تعلم تطبيقية ترتبط بحياة المتعلمين.",
+   "en": "The school implements applied learning activities connected to learners' lives.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "2-1-1-6",
+   "d": 2,
+   "c": "2-1",
+   "ar": "تنمي المدرسة المهارات القرائية والعددية الأساسية لدى المتعلمين.",
+   "en": "The school develops learners' basic literacy and numeracy skills.",
+   "docs_required": 6,
+   "docs_uploaded": 2
+  },
+  {
+   "code": "2-1-1-7",
+   "d": 2,
+   "c": "2-1",
+   "ar": "تنمي المدرسة مهارات التفكير والبحث والابتكار لدى المتعلمين.",
+   "en": "The school develops learners' thinking, research and innovation skills.",
+   "docs_required": 1,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "2-1-1-8",
+   "d": 2,
+   "c": "2-1",
+   "ar": "تنمي المدرسة المهارات العاطفية والاجتماعية لدى المتعلمين.",
+   "en": "The school develops learners' emotional and social skills.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "2-1-1-9",
+   "d": 2,
+   "c": "2-1",
+   "ar": "تعزز المدرسة دافعية المتعلمين للتعلم، والاستمتاع به.",
+   "en": "The school enhances learners' motivation to learn and enjoy learning.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "2-2-1-1",
+   "d": 2,
+   "c": "2-2",
+   "ar": "تطبق المدرسة أساليب وأدوات تقويم متنوعة للكشف عن مستويات أداء المتعلمين المختلفة.",
+   "en": "The school applies diverse assessment methods and tools to reveal learners' different performance levels.",
+   "docs_required": 3,
+   "docs_uploaded": 1
+  },
+  {
+   "code": "2-2-1-2",
+   "d": 2,
+   "c": "2-2",
+   "ar": "تطبق المدرسة أساليب وأدوات متنوعة لتقويم نواتج التعلم المستهدفة في مناهج التعليم.",
+   "en": "The school applies diverse methods and tools to assess the targeted learning outcomes in the curricula.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "2-2-1-3",
+   "d": 2,
+   "c": "2-2",
+   "ar": "تحلل المدرسة نتائج التقويم، وتوظفها في تحسين عمليات التعليم والتعلم والتقويم.",
+   "en": "The school analyzes assessment results and uses them to improve teaching, learning and assessment processes.",
+   "docs_required": 4,
+   "docs_uploaded": 1
+  },
+  {
+   "code": "2-2-1-4",
+   "d": 2,
+   "c": "2-2",
+   "ar": "تقدم المدرسة التغذية الراجعة للمتعلمين وأولياء أمورهم، وتتابع تقدمهم بشكل مستمر.",
+   "en": "The school provides feedback to learners and their parents and continuously monitors their progress.",
+   "docs_required": 2,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "3-1-1-1",
+   "d": 3,
+   "c": "3-1",
+   "ar": "يحقق المتعلمون نتائج مرتفعة في مجال القراءة وفقًا للاختبارات الوطنية.",
+   "en": "Learners achieve high results in reading according to national tests.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "3-1-1-2",
+   "d": 3,
+   "c": "3-1",
+   "ar": "يحقق المتعلمون نتائج مرتفعة في مجال الرياضيات وفقًا للاختبارات الوطنية.",
+   "en": "Learners achieve high results in mathematics according to national tests.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "3-1-1-3",
+   "d": 3,
+   "c": "3-1",
+   "ar": "يحقق المتعلمون نتائج مرتفعة في مجال العلوم وفقًا للاختبارات الوطنية.",
+   "en": "Learners achieve high results in science according to national tests.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "3-1-1-4",
+   "d": 3,
+   "c": "3-1",
+   "ar": "يحقق المتعلمون تقدمًا في مجال القراءة قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية.",
+   "en": "Learners make progress in reading relative to the school's previous performance level in national tests.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "3-1-1-5",
+   "d": 3,
+   "c": "3-1",
+   "ar": "يحقق المتعلمون تقدمًا في مجال الرياضيات قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية.",
+   "en": "Learners make progress in mathematics relative to the school's previous performance level in national tests.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "3-1-1-6",
+   "d": 3,
+   "c": "3-1",
+   "ar": "يحقق المتعلمون تقدمًا في مجال العلوم قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية.",
+   "en": "Learners make progress in science relative to the school's previous performance level in national tests.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "3-2-1-1",
+   "d": 3,
+   "c": "3-2",
+   "ar": "يظهر المتعلمون الاعتزاز بالقيم والهوية الوطنية.",
+   "en": "Learners show pride in national values and identity.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "3-2-1-2",
+   "d": 3,
+   "c": "3-2",
+   "ar": "يظهر المتعلمون اتجاهات إيجابية نحو ذواتهم والآخرين.",
+   "en": "Learners show positive attitudes toward themselves and others.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "3-2-1-3",
+   "d": 3,
+   "c": "3-2",
+   "ar": "يظهر المتعلمون التزامًا بالممارسات الصحية السليمة.",
+   "en": "Learners show commitment to sound health practices.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "3-2-1-4",
+   "d": 3,
+   "c": "3-2",
+   "ar": "يشارك المتعلمون في الأنشطة المجتمعية والأعمال التطوعية.",
+   "en": "Learners participate in community activities and volunteer work.",
+   "docs_required": 2,
+   "docs_uploaded": 2
+  },
+  {
+   "code": "3-2-1-5",
+   "d": 3,
+   "c": "3-2",
+   "ar": "يلتزم المتعلمون بقواعد السلوك والانضباط المدرسي.",
+   "en": "Learners abide by the rules of conduct and school discipline.",
+   "docs_required": 4,
+   "docs_uploaded": 2
+  },
+  {
+   "code": "3-2-1-6",
+   "d": 3,
+   "c": "3-2",
+   "ar": "يظهر المتعلمون الاستقلالية والقدرة على التعلم الذاتي.",
+   "en": "Learners show independence and the ability to learn on their own.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "3-2-1-7",
+   "d": 3,
+   "c": "3-2",
+   "ar": "يظهر المتعلمون اعتزازًا بثقافتهم واحترامًا للتنوع الثقافي في المجتمع.",
+   "en": "Learners show pride in their culture and respect for cultural diversity in society.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "4-1-1-1",
+   "d": 4,
+   "c": "4-1",
+   "ar": "توفر المدرسة مبنى تعليمي يستوفي المواصفات والاشتراطات المعتمدة من حيث النوع والخدمات المساندة.",
+   "en": "The school provides an educational building that meets the approved specifications and requirements in terms of type and supporting services.",
+   "docs_required": 2,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "4-1-1-2",
+   "d": 4,
+   "c": "4-1",
+   "ar": "تنظيم مبنى المدرسة ملائم لعدد المتعلمين وخصائص المرحلة العمرية، ومنهم ذوو الإعاقة.",
+   "en": "The school building is organized in a way that suits the number of learners and the characteristics of the age group, including learners with disabilities.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "4-1-1-3",
+   "d": 4,
+   "c": "4-1",
+   "ar": "تتوافر فصول ومعامل ملائمة للعملية التعليمية تلبي احتياجات المتعلمين، ومنهم ذوو الإعاقة.",
+   "en": "Classrooms and laboratories suitable for the educational process are available and meet learners' needs, including learners with disabilities.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "4-1-1-4",
+   "d": 4,
+   "c": "4-1",
+   "ar": "تلبي المرافق والتجهيزات والخدمات المساندة احتياجات المتعلمين، ومنهم ذوو الإعاقة.",
+   "en": "Facilities, equipment and supporting services meet learners' needs, including learners with disabilities.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  },
+  {
+   "code": "4-2-1-1",
+   "d": 4,
+   "c": "4-2",
+   "ar": "تتوافر في مبنى المدرسة ومرافقها جميع متطلبات الأمن والسلامة.",
+   "en": "The school building and its facilities meet all safety and security requirements.",
+   "docs_required": 3,
+   "docs_uploaded": 1
+  },
+  {
+   "code": "4-2-1-2",
+   "d": 4,
+   "c": "4-2",
+   "ar": "تتابع المدرسة صيانة المبنى وجميع مرافقه وتجهيزاته بشكل دوري.",
+   "en": "The school regularly monitors the maintenance of the building and all its facilities and equipment.",
+   "docs_required": 1,
+   "docs_uploaded": 1
+  },
+  {
+   "code": "4-2-1-3",
+   "d": 4,
+   "c": "4-2",
+   "ar": "تتابع المدرسة نظافة المبنى المدرسي وجميع مرافقه بشكل مستمر.",
+   "en": "The school continuously monitors the cleanliness of the school building and all its facilities.",
+   "docs_required": 3,
+   "docs_uploaded": 0
+  }
+ ]
+}

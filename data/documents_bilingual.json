@@ -1,0 +1,315 @@
+{
+ "doc_en": {
+  "سجل البرامج الوقائية والعلاجية": [
+   "Preventive and Remedial Programs_Tracking Form"
+  ],
+  "سجل الحالات الطارئة": [
+   "Emergency Incidents Register_Case Log"
+  ],
+  "سجل المخالفات السلوكية": [
+   "Behavior Incidents Register_Case Log"
+  ],
+  "سجل التحفيز والتكريم": [
+   "Recognition and Rewards Register_Log"
+  ],
+  "سجل العمل التطوعي": [
+   "Volunteer Service Register_Initiatives Log"
+  ],
+  "سجل مجالس الحوار الطلابي": [
+   "Student Dialogue Councils_Sessions Log"
+  ],
+  "سجل الموهوبين": [
+   "Gifted Students Register_Care Template"
+  ],
+  "سجل المسابقات": [
+   "Competitions Register_Participation Log"
+  ],
+  "سجل استئذان الموظفين": [
+   "Staff Permission Register_Request Form"
+  ],
+  "سجل حصر الغياب والتأخر": [
+   "Absence and Tardiness Register_Student Log"
+  ],
+  "سجل التواصل مع أولياء الأمور": [
+   "Parent Communication Register_Contact Log"
+  ],
+  "سجل استطلاع الرأي والاستبانات": [
+   "Surveys and Feedback Register_Tracking Log"
+  ],
+  "سجل التوجيه والإرشاد": [
+   "Counseling and Guidance Register_Counseling Plan"
+  ],
+  "سجل لجنة التوجيه والإرشاد": [
+   "Guidance Committee Register_Committee Charter",
+   "Guidance Committee Register_Meeting Minutes"
+  ],
+  "سجل النمو المهني": [
+   "Professional Growth Register_Growth Log"
+  ],
+  "سجل الشراكة المجتمعية": [
+   "Community Partnership Register_Partnership Log"
+  ],
+  "سجل برامج النشاط": [
+   "Activity Programs Register_Programs Log"
+  ],
+  "سجل البرامج والأنشطة": [
+   "Programs and Events Register_Annual Events Log"
+  ],
+  "سجل الأنشطة الإثرائية": [
+   "Enrichment Activities Register_Enrichment Plan"
+  ],
+  "سجل التبليغات": [
+   "Notifications Register_Internal Notices Log"
+  ],
+  "نشرات": [
+   "School Bulletins Register_Circulars Log"
+  ],
+  "سجل الاجتماعات": [
+   "Meetings Register_Meetings and Minutes"
+  ],
+  "إجراءات حماية الحقوق المعتمدة": [
+   "Learner Rights Protection_Rights Register"
+  ],
+  "سجل السياسات المالية": [
+   "Financial Policies_Financial Regulations"
+  ],
+  "ملف لجنة الأمن والسلامة": [
+   "Safety and Security Register_Committee File"
+  ],
+  "سجل الصيانة": [
+   "Facility Maintenance Register_Maintenance Log"
+  ],
+  "استمارة الرسوم الدراسية": [
+   "Tuition Fees_Fee Form"
+  ],
+  "التقويم الدوري (ربع سنوي) للنظافة": [
+   "Cleanliness Monitoring_Quarterly Review Calendar"
+  ],
+  "الجدول المدرسي": [
+   "School Timetable_Master Schedule"
+  ],
+  "الموقع الإلكتروني للمدرسة": [
+   "School Website_Reference Sheet"
+  ],
+  "بيانات الكادر الإداري من نظام نور": [
+   "Administrative Staff Data_Noor System Extract"
+  ],
+  "بيانات الكادر التعليمي من نظام نور": [
+   "Teaching Staff Data_Noor System Extract"
+  ],
+  "تحليل التقدم في المهارات": [
+   "Skills Progress Analysis_Analysis Report"
+  ],
+  "تحليل النتائج والمهارات المحتاجة إلى تحسين": [
+   "Results and Skills Needing Improvement_Analysis Report"
+  ],
+  "تقارير التقويم الإلكتروني ومستوى الإتقان": [
+   "E-Assessment and Mastery Level_Reports"
+  ],
+  "تقرير المراجعة الدورية (مجمّع بلا أسماء)": [
+   "Periodic Review Report_Anonymized Summary"
+  ],
+  "تقرير الملاحظات ومعالجتها": [
+   "Observations and Follow-up Actions_Report"
+  ],
+  "تقرير تحليل النتائج": [
+   "Results Analysis_Report"
+  ],
+  "تقرير مقارنة النتائج بالأداء السابق": [
+   "Results vs Prior Performance_Comparison Report"
+  ],
+  "تقرير نتائج الاختبارات الوطنية": [
+   "National Test Results_Report"
+  ],
+  "تقرير نتائج الملاحظة الصفية": [
+   "Classroom Observation Results_Report"
+  ],
+  "توزيع الأنصبة": [
+   "Teaching Load Distribution_Schedule"
+  ],
+  "خطة العلاج والإثراء": [
+   "Remedial and Enrichment_Plan"
+  ],
+  "خطة المعالجة المبنية على الملاحظات": [
+   "Observation-Based Improvement_Action Plan"
+  ],
+  "خطة النظافة وجداولها": [
+   "Cleanliness_Plan and Schedules"
+  ],
+  "خطة متابعة السلوك الوظيفي": [
+   "Staff Conduct Monitoring_Follow-up Plan"
+  ],
+  "سجل أحوال الموظفين": [
+   "Staff Status Register_Status Log"
+  ],
+  "سجل إنجاز المتعلمين / الكتب": [
+   "Learner Achievement and Books Register_Completion Log"
+  ],
+  "سجل الأنشطة العلاجية": [
+   "Remedial Activities Register_Activity Log"
+  ],
+  "سجل الأنشطة والبرامج": [
+   "Activities and Programs Register_Activity Log"
+  ],
+  "سجل الانضباط المدرسي": [
+   "School Discipline Register_Case Log"
+  ],
+  "سجل التقويم الذاتي": [
+   "Self-Evaluation Register_Evaluation Log"
+  ],
+  "سجل التكاليف": [
+   "Assignments Register_Task Log"
+  ],
+  "سجل التكليفات": [
+   "Administrative Assignments Register_Assignment Log"
+  ],
+  "سجل التواصل مع الأسرة": [
+   "Family Communication Register_Contact Log"
+  ],
+  "سجل التوجيه والإرشاد (التكريم)": [
+   "Counseling and Recognition Register_Recognition Log"
+  ],
+  "سجل التوقيع على قواعد السلوك والمواظبة": [
+   "Conduct and Attendance Rules Register_Acknowledgment Log"
+  ],
+  "سجل الخطة التشغيلية": [
+   "Operational Plan Register_Plan Log"
+  ],
+  "سجل الخطة التشغيلية (قسم المتابعة والتقويم)": [
+   "Operational Plan Register_Follow-up and Evaluation Log"
+  ],
+  "سجل الخطة المالية": [
+   "Financial Plan Register_Plan Log"
+  ],
+  "سجل الرخص المهنية": [
+   "Professional Licenses Register_License Log"
+  ],
+  "سجل اللجان المدرسية": [
+   "School Committees Register_Committee Log"
+  ],
+  "سجل اللجنة الإدارية": [
+   "Administrative Committee Register_Meeting Log"
+  ],
+  "سجل المخالفات": [
+   "Violations Register_Case Log"
+  ],
+  "سجل الموازنة المالية": [
+   "Financial Budget Register_Budget Log"
+  ],
+  "سجل الموجه الصحي": [
+   "Health Counselor Register_Case Log"
+  ],
+  "سجل الوصف الوظيفي": [
+   "Job Descriptions Register_Description Log"
+  ],
+  "سجل برامج الإرشاد": [
+   "Guidance Programs Register_Programs Log"
+  ],
+  "سجل برامج الخطة التشغيلية": [
+   "Operational Plan Programs Register_Programs Log"
+  ],
+  "سجل تحدي القراءة": [
+   "Reading Challenge Register_Participation Log"
+  ],
+  "سجل تحصيل الرسوم": [
+   "Fee Collection Register_Collection Log"
+  ],
+  "سجل تحضير الدروس": [
+   "Lesson Planning Register_Preparation Log"
+  ],
+  "سجل تحليل النتائج (لتخصصات مختلفة)": [
+   "Results Analysis Register_Multi-Subject Log"
+  ],
+  "سجل تطوير وتحسين الخطة التشغيلية": [
+   "Operational Plan Improvement Register_Development Log"
+  ],
+  "سجل تعزيز السلوك الإيجابي": [
+   "Positive Behavior Reinforcement Register_Program Log"
+  ],
+  "سجل توثيق البرامج": [
+   "Programs Documentation Register_Documentation Log"
+  ],
+  "سجل توزيع الأنصبة": [
+   "Teaching Load Distribution Register_Allocation Log"
+  ],
+  "سجل سد الفجوة (الرياضيات)": [
+   "Gap Closing Register_Mathematics Log"
+  ],
+  "سجل فريق الصندوق المدرسي": [
+   "School Fund Team Register_Team Log"
+  ],
+  "سجل لجنة التحصيل الدراسي": [
+   "Academic Achievement Committee Register_Committee Log"
+  ],
+  "سجل لجنة التميز": [
+   "Excellence Committee Register_Committee Log"
+  ],
+  "سجل لجنة التميز المدرسي": [
+   "School Excellence Committee Register_Committee Log"
+  ],
+  "سجل متابعة أداء المتعلمين": [
+   "Learner Performance Monitoring Register_Follow-up Log"
+  ],
+  "سجل مجالس أولياء الأمور": [
+   "Parent Councils Register_Sessions Log"
+  ],
+  "سجل ملف البرامج والأنشطة": [
+   "Programs and Activities File Register_File Log"
+  ],
+  "شهادة الأمن والسلامة من الدفاع المدني (سارية)": [
+   "Civil Defense Safety Certificate_Valid Certificate"
+  ],
+  "عينات من أدوات التقويم": [
+   "Assessment Tools_Samples"
+  ],
+  "عينة من الأنشطة الصفية": [
+   "Classroom Activities_Sample"
+  ],
+  "عينة من الأنشطة الصفية الخاصة بالمتعلمين": [
+   "Learner Classroom Activities_Sample"
+  ],
+  "عينة من خطة توزيع المنهج": [
+   "Curriculum Distribution Plan_Sample"
+  ],
+  "عينة من ملفات إنجاز المعلمين": [
+   "Teacher Portfolios_Sample"
+  ],
+  "قائمة التحقق من المواصفات": [
+   "Specifications_Verification Checklist"
+  ],
+  "قرار تكليف لجنة جاهزية المبنى": [
+   "Building Readiness Committee_Assignment Decision"
+  ],
+  "محضر المعاينة الميدانية": [
+   "Field Inspection_Minutes"
+  ],
+  "محضر متابعة النظافة": [
+   "Cleanliness Follow-up_Minutes"
+  ],
+  "مصفوفة المواءمة التقويمية": [
+   "Assessment Alignment_Matrix"
+  ],
+  "ملف متابعة تنفيذ المنهج": [
+   "Curriculum Implementation Follow-up_File"
+  ],
+  "ملف مطابقة المبنى وقائمة التحقق": [
+   "Building Compliance_File and Checklist"
+  ],
+  "نتائج استبانة أولياء الأمور": [
+   "Parent Survey_Results"
+  ],
+  "نتائج استبانة المتعلمين": [
+   "Learner Survey_Results"
+  ],
+  "نتائج الاختبارات الوطنية": [
+   "National Test Results_Results Sheet"
+  ],
+  "نماذج الرصد المبكر والتبليغ (فارغة)": [
+   "Early Detection and Reporting_Blank Forms"
+  ],
+  "نماذج الملاحظة الصفية (عينة)": [
+   "Classroom Observation_Form Samples"
+  ]
+ },
+ "status": "approved by FD 2026-10-19 (all 77 as proposed); alias merges not decided"
+}

@@ -124,7 +124,6 @@ body[data-ut="edu"] .ov:hover,body[data-ut="edu"] .ov:focus-visible{border-color
     </div>
     <div class="flex flex-wrap items-center gap-3 mt-4">
       <span id="connPill" class="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1.5 rounded-full bg-white/10"><i class="fa-solid fa-circle-notch fa-spin"></i> جارٍ تحديث حالة الرفع</span>
-      <button id="demoBtn" type="button" class="hidden inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20" aria-pressed="false"><i class="fa-solid fa-flask"></i> <span>تجربة بأرقام وهمية</span></button>
       <button id="refreshBtn" class="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1.5 rounded-full bg-accentgold text-etecteal-900 hover:brightness-110"><i class="fa-solid fa-rotate"></i> تحديث</button>
       <a href="https://drive.google.com/drive/folders/1IDVvAtEyYMA_FZhua_vLDmw_z1cjSBdQ" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20"><i class="fa-brands fa-google-drive"></i> مجلد المشروع في Drive</a>
       <a href="output.html" class="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20"><i class="fa-solid fa-file-pdf"></i> مولّد تقرير الشواهد</a>
@@ -344,11 +343,17 @@ function docsOf(i){ if(i._docs) return i._docs; const cat=catalog(), m=new Map()
   return (i._docs=[...m.values()]); }
 function stageOf(n,named,ver,rej){ n=n||0; if(n<=0) return {n:0,s1:0,s2:0,s3:0,p:0,rej:0}; const nm=Math.min(named||0,n), vf=Math.min(ver||0,nm); return {n,s1:1,s2:nm/n,s3:vf/n,p:1,rej:rej||0}; }
 /* الوثيقة المشتركة مرفوعة إن رُفع لها ملف في مجلدها المشترك، أو في مجلد أي مؤشر مرتبط بها (الصيغة القديمة): تُؤخذ أفضل نتيجة */
-function docStatus(d){ const S=STATUS; let b=null; const take=k=>{ const n=S.docs[k]; if(n>0&&(!b||n>b.n)) b={n,named:S.docsNamed[k]||0,ver:S.docsVer[k]||0,rej:S.docsRej[k]||0}; };
+function docStatus(d){ if(snapOn()) return d.links.some(c=>snapHas(c,d))?{n:1,named:1,ver:0,rej:0}:null; const S=STATUS; let b=null; const take=k=>{ const n=S.docs[k]; if(n>0&&(!b||n>b.n)) b={n,named:S.docsNamed[k]||0,ver:S.docsVer[k]||0,rej:S.docsRej[k]||0}; };
   take(d.key); d.links.forEach(c=>(d.allRaws||[d.n]).concat(d.n).forEach(r=>take(DOC_KEY_OLD(c,r)))); return b; }
-const docStage=(i,d)=>{ const b=docStatus(d); return b?stageOf(b.n,b.named,b.ver,b.rej):stageOf(0); };
+const snapHas=(code,d)=>{ const sn=ETEC_SNAPSHOT.ind[code]; return !!(sn&&sn.docs&&sn.docs.includes(d.n)); };
+const docStage=(i,d)=>{ if(snapOn()) return snapHas(i.code,d)?stageOf(1,1,0,0):stageOf(0); const b=docStatus(d); return b?stageOf(b.n,b.named,b.ver,b.rej):stageOf(0); };
+const enDocs=n=>((window.ETEC_DOC_EN&&ETEC_DOC_EN[n])||[]);
+const enDocLine=n=>{ const e=enDocs(n); return `<span class="block text-[10.5px] font-semibold ${e.length?"text-slate-400":"text-slate-300"} leading-5" dir="ltr" lang="en">${e.length?e.map(esc).join(" + "):"English name: pending"}</span>`; };
 const avg=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:0;
-const docProg=i=>avg(docsOf(i).map(d=>docStage(i,d).p));
+/* v8.10.10: عند غياب ETEC_STATUS_URL تُستمدّ نسبة الوثائق لكل مؤشر من لقطة Drive (مرفوع/مطلوب)، فتتحدّث المؤشرات والمعايير والمجالات والمشروع؛ تُعطَّل في التجربة الوهمية */
+const snapOn=()=>!STATUS_URL&&!!(window.ETEC_SNAPSHOT&&ETEC_SNAPSHOT.ind);
+const snapOf=i=>snapOn()?ETEC_SNAPSHOT.ind[i.code]:null;
+const docProg=i=>{ const sn=snapOf(i); if(sn&&sn.req>0) return Math.min(sn.up,sn.req)/sn.req; return avg(docsOf(i).map(d=>docStage(i,d).p)); };
 const evProg=docProg;
 const shortMsg=r=>`تنبيه: يحوي تقرير الشواهد ${r.n===0?"0 صور":(r.n+" "+(r.n===1?"صورة":"صور"))} فقط من 6 المطلوبة، ينقصه ${6-r.n}`;
 function visInfo(i){ const L=(STATUS.reportsList[i.code]||[]), valid=L.filter(r=>r.valid!==false), n=valid.length, ph=STATUS.photos[i.code]||0, photos=Math.min(ph,6), declared=Math.max(0,...valid.map(r=>r.n||0));
@@ -360,7 +365,7 @@ function domProg(d,f){ const cs=[...new Set(DATA.filter(i=>i.d===d).map(i=>i.c))
 const projProg=f=>avg([1,2,3,4].map(d=>domProg(d,f)));
 const P100=x=>Math.round(x*100);
 function paraCovered(i,p){ const ds=docsOf(i); let ok=0; p.regs.forEach(r=>{ const d=ds.find(x=>x.raws.includes(r)); if(d&&docStage(i,d).s1===1) ok++; }); return {ok,total:p.regs.length,done:ok===p.regs.length}; }
-function indStat(i){ const ds=docsOf(i), ok=ds.filter(d=>docStage(i,d).s1===1).length; return {ok,total:ds.length,p:docProg(i)}; }
+function indStat(i){ const sn=snapOf(i); if(sn&&sn.req>0) return {ok:Math.min(sn.up,sn.req),total:sn.req,p:docProg(i)}; const ds=docsOf(i), ok=ds.filter(d=>docStage(i,d).s1===1).length; return {ok,total:ds.length,p:docProg(i)}; }
 function stateOf(ok,total){ return ok===0?"none":ok===total?"done":"partial"; }
 
 function cb(n){ if(n===undefined) return '<span class="cb" role="checkbox" aria-checked="false" aria-disabled="true" title="غير مرفوع"><i class="fa-solid fa-check"></i></span>';
@@ -546,7 +551,7 @@ function marks(i){ const U=evUnits(i), t=U.length, up=U.filter(x=>x.st.s1===1).l
 const markHTML=m=>`<span class="inline-flex items-center gap-1 text-[10.5px] font-bold rounded-full px-2 py-0.5 border ${m.red?"bg-red-50 text-red-700 border-red-200":(m.warn?"bg-orange-50 text-orange-700 border-orange-200":(m.ok?"bg-emerald-50 text-emerald-700 border-emerald-200":"bg-slate-50 text-slate-500 border-slate-200"))}"><i class="fa-solid ${m.ok?"fa-circle-check":"fa-circle"}" style="font-size:9px"></i> ${m.l}: ${m.t}</span>`;
 /* مقارنة المخطط بالفعلي (إن حُدّد موعد الزيارة في portal-config.js) */
 function planInfo(){
-  const V=window.ETEC_VISIT_DATE||window.__demoVisit||""; if(!V) return null;
+  const V=window.ETEC_VISIT_DATE||""; if(!V) return null;
   const W=(window.ETEC_PLAN_WEEKS&&window.ETEC_PLAN_WEEKS.length===5)?window.ETEC_PLAN_WEEKS:[1,2,5,2,1];
   const vd=new Date(V+"T00:00:00"); if(isNaN(vd)) return null;
   const T=W.reduce((a,b)=>a+b,0), start=new Date(vd); start.setDate(start.getDate()-T*7);
@@ -566,14 +571,14 @@ function taskRows(){ const f=filters();
   return DATA.filter(i=>(!f.d||i.d===f.d)&&matchOwner(i,f.o)&&(!CRIT||i.c===CRIT)&&matchQ(f.q,i.code,i.text,rName(i),...docsOf(i).map(d=>d.n),i.tool)).map(i=>({i,r:readiness(i),n:nextAction(i)})); }
 function matrixHTML(i){ if(!i.p) return ""; const ds=docsOf(i);
   const th='class="p-1.5 bg-slate-50 border border-gray-100 text-[10.5px] font-bold text-slate-600"';
-  const head=`<tr><th class="text-right p-1.5 bg-slate-50 border border-gray-100 min-w-[220px] text-[11px]">الفقرة</th>${ds.map(d=>`<th ${th}>${esc(d.n)}</th>`).join("")}<th ${th}>مغطاة؟</th></tr>`;
+  const head=`<tr><th class="text-right p-1.5 bg-slate-50 border border-gray-100 min-w-[220px] text-[11px]">الفقرة</th>${ds.map(d=>`<th ${th}>${esc(d.n)}${enDocLine(d.n)}</th>`).join("")}<th ${th}>مغطاة؟</th></tr>`;
   const rows=i.p.map(p=>{ const c=paraCovered(i,p); return `<tr><td class="p-1.5 border border-gray-100 text-[12px] leading-5"><b class="text-etecteal-700">الفقرة ${p.n}</b> — ${esc(p.text)}</td>${ds.map(d=>`<td class="p-1.5 border border-gray-100 text-center">${d.ps.includes(p.n)?(docStage(i,d).s1===1?'<i class="fa-solid fa-circle-check text-emerald-600"></i>':'<i class="fa-regular fa-circle text-slate-400"></i>'):""}</td>`).join("")}<td class="p-1.5 border border-gray-100 text-center text-[11px] font-black ${c.done?"text-emerald-600":"text-slate-400"}">${c.done?"مغطاة":c.ok+"/"+c.total}</td></tr>`; }).join("");
   return `<details class="mt-2 border border-gray-100 rounded-lg"><summary class="p-2.5 text-[12px] font-black text-slate-600 cursor-pointer"><i class="fa-solid fa-table-cells text-etecteal-500"></i> مصفوفة التتبّع: الفقرات × الوثائق</summary><div class="overflow-x-auto p-2"><table class="w-full border-collapse text-[11.5px]">${head}${rows}</table></div></details>`; }
 function workDetail(i){ const e=P100(docProg(i)), v=P100(visProg(i)), o=P100(overallProg(i));
   return `<details class="mt-2 border border-gray-100 rounded-lg"><summary class="p-2.5 text-[12px] font-black text-slate-600 cursor-pointer"><i class="fa-solid fa-chart-simple text-etecteal-500"></i> تفاصيل العمل (للمنسّق والمشرف)</summary><div class="p-3 text-[12px] text-slate-600 leading-7">نسبة الوثائق المرفوعة <b>${e}%</b> · نسبة تقرير الشواهد <b>${v}%</b> · الاكتمال العام <b>${o}%</b>.</div></details>`; }
 function indBody(i){
   const title=i.p?"الوثائق المطلوبة لهذا المؤشر":"الوثائق المطلوبة لهذا المؤشر (تُقاس بـ «"+esc(i.tool)+"»)";
-  const rows=evUnits(i).map(u=>`<div class="reg">${cb(u.st.n>0?u.st.n:undefined)}<span class="flex-1 min-w-[180px]"><span class="block text-[12.5px] font-bold">${esc(u.name)}</span>${u.d.src.length?`<span class="flex flex-wrap items-center gap-1 mt-0.5"><span class="text-[10.5px] font-bold text-gray-500">تُطلب من:</span>${srcChips(u.d.src.join("، "))}</span>`:""}${u.d.ps.length?`<span class="block text-[10.5px] text-slate-500 mt-0.5">تخدم الفقرات: <b>${u.d.ps.join(" · ")}</b></span>`:""}${docMeta(i,u.d,u.st)}</span>${stageChips(u.st)}</div>`).join("");
+  const rows=evUnits(i).map(u=>`<div class="reg">${cb(u.st.n>0?u.st.n:undefined)}<span class="flex-1 min-w-[180px]"><span class="block text-[12.5px] font-bold">${esc(u.name)}</span>${enDocLine(u.name)}${u.d.src.length?`<span class="flex flex-wrap items-center gap-1 mt-0.5"><span class="text-[10.5px] font-bold text-gray-500">تُطلب من:</span>${srcChips(u.d.src.join("، "))}</span>`:""}${u.d.ps.length?`<span class="block text-[10.5px] text-slate-500 mt-0.5">تخدم الفقرات: <b>${u.d.ps.join(" · ")}</b></span>`:""}${docMeta(i,u.d,u.st)}</span>${stageChips(u.st)}</div>`).join("");
   const g=i.g?`<div class="mt-2 text-[11px] font-bold text-amber-700">وثائق نقترح رفعها (خارج النسبة) · ${GUIDE_TAG}</div>`+i.g.map(d=>{const gn=STATUS.guide["G|"+i.code+"|"+d.n]; return `<div class="reg">${cb(gn)}<span class="text-[10.5px] font-bold text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-2 py-0.5 shrink-0">إضاءة ${d.n}</span><span class="flex-1 text-[12.5px]">${esc(d.t)}</span></div>`;}).join(""):"";
   return `<div class="border border-gray-100 rounded-lg p-3"><div class="text-[11.5px] font-bold text-slate-600 mb-1">${title}</div>${rows}${g}</div>${matrixHTML(i)}${workDetail(i)}`; }
 function renderTasks(){
@@ -688,7 +693,7 @@ function setMailLinks(){ if(!mailCtx) return; const to=checkedTo().join(","), su
   const g="https://mail.google.com/mail/?view=cm&fs=1&to="+encodeURIComponent(to)+"&su="+su, m="mailto:"+to+"?subject="+su, full=g.length+bo.length+6, long=full>MAXURL;
   mmGmail.href=long?g:g+"&body="+bo; mmMailto.href=long?m:m+"&body="+bo; mailCtx.long=long;
   mmLen.innerHTML=`${to?to.split(",").length:0} مستلم · طول الرابط ${full} حرفاً`+(long?' <b class="text-amber-700">— الرسالة طويلة: يفتح الزر المستلمين والموضوع فقط، ونسخنا لك الرسالة منسّقة لتلصقها (Ctrl+V).</b>':"");
-  const blocked=!to||(mailCtx.demo&&mailCtx.kind==="progress"); [mmGmail,mmMailto,mmRich].forEach(a=>{ a.style.opacity=blocked?".45":"1"; a.style.pointerEvents=blocked?"none":"auto"; }); }
+  const blocked=!to; [mmGmail,mmMailto,mmRich].forEach(a=>{ a.style.opacity=blocked?".45":"1"; a.style.pointerEvents=blocked?"none":"auto"; }); }
 function closeMail(){ mailModal.classList.add("hidden"); mailModal.classList.remove("flex"); mailCtx=null; }
 async function openMail(d,kind){
   mailModal.classList.remove("hidden"); mailModal.classList.add("flex"); mmTitle.textContent=(kind==="assign"?"تكليف ببدء العمل":"تقدم العمل")+" — المجال "+d+" · "+DOMAINS[d];
@@ -702,7 +707,7 @@ async function openMail(d,kind){
   let C; try{ C=await getContacts(); }catch(err){ mmWarn.innerHTML=`<div class="text-[12px] bg-red-50 border border-red-200 text-red-700 rounded-lg px-3 py-2 leading-6">${err&&err.message==="no-wrap"?"هذا الحساب غير مصرح له بفتح قائمة البريد. اطلب من منظّم المشروع إعادة توليدها.":"تعذّر فتح قائمة البريد. تأكد من إدخال بيانات الدخول الصحيحة وأن الموقع يعمل عبر خادم."}</div>`; return; }
   const T=C[d]; if(!T){ mmWarn.textContent="لا بيانات اتصال لهذا المجال."; return; }
   try{ await probeSelf(); }catch(e){}
-  const demo=!!window.__demoVisit, run=Date.now(); mailCtx={d,kind,demo,run};
+  const run=Date.now(); mailCtx={d,kind,run};
   const m=kind==="assign"?composeAssign(d):composeProgress(d); mailCtx.attach=m.attach;
   mmWarn.innerHTML=(window.ETEC_CONTACTS_DEMO?'<div class="text-[12px] bg-amber-50 border border-amber-200 text-amber-800 rounded-lg px-3 py-2 mb-2 leading-6"><i class="fa-solid fa-flask"></i> عناوين تجريبية (example.com) في المعاينة فقط.</div>':"")+(demo&&kind==="progress"?'<div class="text-[12px] bg-red-50 border border-red-200 text-red-700 rounded-lg px-3 py-2 leading-6"><i class="fa-solid fa-triangle-exclamation"></i> الأرقام الآن وهمية (وضع التجربة). عُطّل الإرسال لئلا تُرسل أرقام غير حقيقية؛ أوقف «التجربة بأرقام وهمية» أولاً.</div>':"");
   const all=[{...T.sup}].concat(T.mem.map(x=>({...x})));
@@ -928,7 +933,7 @@ function renderSnapshot(){
   <div class="text-[10.5px] text-slate-400 mt-2 leading-5">الأسماء الإنجليزية ترجمة مقترحة بانتظار الاعتماد. الأرقام مأخوذة من عدّ ملفات .docx في مجلدات «الوثائق» لكل مؤشر.</div>`;
 }
 function loadStatus(force){
-  if(!STATUS_URL){ setConn("off","الرفع المباشر غير متصل — لقطة Drive بتاريخ "+((window.ETEC_SNAPSHOT||{}).asof||"")); demoBtn.classList.remove("hidden"); renderSnapshot(); render(); return; }
+  if(!STATUS_URL){ setConn("off","الرفع المباشر غير متصل — لقطة Drive بتاريخ "+((window.ETEC_SNAPSHOT||{}).asof||"")); renderSnapshot(); render(); return; }
   setConn("load","جارٍ تحديث حالة الرفع");
   const cbName="__evStatus"+Date.now(), s=document.createElement("script");
   const timer=setTimeout(()=>{ setConn("err","تعذّر تحديث حالة الرفع الآن"); cleanup(); render(); },90000);
@@ -965,24 +970,6 @@ loadSel(); syncFilters();
   document.getElementById("helpBtn").addEventListener("click",()=>box.classList.toggle("hidden"));
   document.getElementById("helpClose").addEventListener("click",()=>{ box.classList.add("hidden"); try{ localStorage.setItem(HK,"1"); }catch(e){} }); })();
 refreshBtn.addEventListener("click",()=>loadStatus(true));
-/* بيانات تجريبية للمعاينة فقط — لا تمثل حالة فعلية، وتظهر فقط قبل ربط Apps Script */
-demoBtn.addEventListener("click",()=>{ const on=demoBtn.getAttribute("aria-pressed")!=="true"; demoBtn.setAttribute("aria-pressed",on);
-  demoBtn.querySelector("span").textContent=on?"إيقاف الأرقام الوهمية":"تجربة بأرقام وهمية";
-  if(!on){ window.__demoVisit=""; STATUS=emptyStatus(); setConn("off","حالة الرفع غير متصلة بعد"); render(); return; }
-  let seed=7; const rnd=()=>{ seed=(seed*9301+49297)%233280; return seed/233280; };
-  { const dv=new Date(); dv.setDate(dv.getDate()+70); window.__demoVisit=dv.toISOString().slice(0,10); }
-  const st=emptyStatus(), guide={};
-  DATA.forEach(i=>{ const full=rnd()<0.12;
-    docsOf(i).forEach(d=>{ const k=d.key; if(!full&&st.docs[k]!==undefined) return; if(full){ st.docs[k]=1; st.docsNamed[k]=1; st.docsVer[k]=1; return; } const n=rnd()<0.6?1+Math.floor(rnd()*3):0; st.docs[k]=n; st.docsNamed[k]=n?(rnd()<0.7?n:Math.floor(n*rnd())):0; st.docsVer[k]=st.docsNamed[k]?(rnd()<0.5?st.docsNamed[k]:Math.floor(st.docsNamed[k]*rnd())):0; if(n&&rnd()<0.04) st.docsRej[k]=1; });
-    if(i.g) i.g.forEach(d=>{ guide['G|'+i.code+'|'+d.n]=rnd()<0.4?1+Math.floor(rnd()*3):0; });
-    const raw=full?6:Math.floor(rnd()*9); st.photos[i.code]=full?6:Math.min(raw,Math.floor(raw*(0.4+rnd()*0.6))); st.photosNamed[i.code]=Math.floor(st.photos[i.code]*(0.5+rnd()*0.5));
-    const nrep=full?1:(rnd()<0.55?(rnd()<0.25?2:1):0), L=[];
-    for(let q=0;q<nrep;q++){ const n=full?6:(rnd()<0.5?6:Math.floor(rnd()*6)), nameOk=full||rnd()<0.8;
-      L.push({id:i.code+"-r"+q,name:i.code+"_تقرير الشواهد_"+i.st+(q?"_نشاط "+(q+1):"")+(nameOk?"_"+n+"صور":"")+".pdf",ok:nameOk,valid:true,n:nameOk?n:null,ver:full||(nameOk&&rnd()<0.5)}); }
-    st.reportsList[i.code]=L; st.reports[i.code]=L.length; });
-  st.guide=guide; STATUS=st; 
-  setConn("err","أرقام وهمية للتجربة فقط"); render(); });
-
 function tick(){ const d=new Date(); document.getElementById("dash-live-date").textContent=d.toLocaleDateString("ar-SA-u-ca-gregory",{weekday:"long",year:"numeric",month:"long",day:"numeric"}); document.getElementById("dash-live-time").textContent=d.toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"}); }
 tick(); setInterval(tick,30000);
 
@@ -1000,7 +987,6 @@ let UT="", CRIT="";
 const UT_RULES=[
  ["#hero",["admin","sup","edu"]],
  ['#hero a[href="hardcopy.html"],#hero a[href="approval-request.html"]',["admin","sup"]],
- ["#demoBtn",["admin"]],
  ['section[aria-label="نظرة الإدارة"]',["admin","sup","self","edu"]],
  [".ovw > div",["admin","sup"]],
  ['section[aria-label="مساحة العمل"]',["admin","sup","member"]],
@@ -1098,7 +1084,7 @@ function renderExternal(){
   const out=Object.keys(G).sort().map(d=>`<h3 class="text-[13px] font-black text-slate-700 mt-4 mb-2"><span class="dot" style="background:${TEAM_COLOR[d]}"></span> المجال ${d} · ${esc(DOMAINS[d])}</h3>`+Object.keys(G[d]).sort().map(c=>`<div class="text-[11.5px] font-bold text-gray-500 mb-1 mt-2">المعيار ${ltr(c)} · ${esc(G[d][c].cn)}</div>`+G[d][c].L.map(i=>{ const is=indStat(i), v=visInfo(i);
     return `<details class="bg-white rounded-xl border border-gray-100 mb-2"><summary class="p-3.5 flex flex-wrap items-center gap-3"><span class="font-black text-etecteal-700 text-sm w-20 shrink-0" dir="ltr" style="unicode-bidi:isolate">${ltr(i.code)}</span><span class="flex-1 min-w-[220px] text-[13px] font-black text-slate-800 leading-6">${esc(i.st)}</span><span class="text-[11.5px] font-black text-slate-600 whitespace-nowrap"><i class="fa-solid fa-file-lines"></i> وثائق هذا المؤشر ${is.ok} من ${is.total} · <i class="fa-solid fa-file-pdf"></i> تقرير الشواهد ${v.n} · الصور ${v.ph}</span>${drv(i)}<i class="fa-solid fa-chevron-left chev text-gray-300 text-xs"></i></summary>
       <div class="px-4 pb-4"><div class="text-[12px] text-gray-500 leading-6 mb-2"><b>نص المؤشر:</b> ${esc(i.text)}</div>
-      <div class="border border-gray-100 rounded-lg p-3"><div class="text-[11.5px] font-bold text-slate-600 mb-1">الوثائق</div>${evUnits(i).map(u=>`<div class="reg">${cb(u.st.n>0?u.st.n:undefined)}<span class="flex-1 min-w-[180px] text-[12.5px] font-bold">${esc(u.name)}</span><span class="text-[10.5px] text-gray-400">${u.st.n?u.st.n+" ملف":"لم تُرفع"}</span></div>`).join("")}</div>
+      <div class="border border-gray-100 rounded-lg p-3"><div class="text-[11.5px] font-bold text-slate-600 mb-1">الوثائق</div>${evUnits(i).map(u=>`<div class="reg">${cb(u.st.n>0?u.st.n:undefined)}<span class="flex-1 min-w-[180px] text-[12.5px] font-bold">${esc(u.name)}${enDocLine(u.name)}</span><span class="text-[10.5px] text-gray-400">${u.st.n?u.st.n+" ملف":"لم تُرفع"}</span></div>`).join("")}</div>
       <div class="border border-gray-100 rounded-lg p-3 mt-2"><div class="text-[11.5px] font-bold text-slate-600 mb-1">تقرير الشواهد · الصور المرفوعة ${v.ph}</div>${v.L.filter(r=>r.valid!==false).map(r=>`<div class="reg"><i class="fa-solid fa-file-pdf text-emerald-600"></i><span class="flex-1 text-[12px] font-bold" dir="auto">${esc(r.name)}</span></div>`).join("")||'<div class="text-[12px] text-gray-500">لا يوجد تقرير شواهد بعد.</div>'}</div></div></details>`; }).join("")).join("")).join("");
   list.innerHTML=out||empty(); }
 /* ---- التشغيل ---- */
