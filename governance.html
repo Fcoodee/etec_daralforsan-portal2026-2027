@@ -157,13 +157,18 @@ table{border-collapse:collapse}
         </table>
     </div>
 
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6 text-[11.5px] leading-6 text-slate-600">
+    <b class="text-slate-800">مصدر الوثائق (v8.10.10):</b> النسخ العربية في مجلد <a class="text-etecteal-700 font-bold underline" href="https://drive.google.com/drive/folders/1vZas6SWwvqsqmEh3K3KYzc53b8NLCJhp" target="_blank" rel="noopener">Arabic_Documents</a>؛ والنسخ الإنجليزية داخل مجلدات «الوثائق» لكل مؤشر. الأسماء الإنجليزية الظاهرة أدناه ترجمة مقترحة لـ 9 من 30 سجلاً (حيث وُجدت مطابقة في المكتبة)، والباقي «pending». حالات الأعمدة أدناه لم تُحدَّث في هذا الإصدار.
+    <div dir="ltr" class="text-[11px] text-slate-500 mt-1">Arabic copies live in <i>Arabic_Documents</i>; English copies in each indicator's <i>Documents</i> folder. English names are proposed (9 of 30 matched); statuses below were not refreshed in this release.</div>
+</div>
+
     <!-- Full mapping table -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <h2 class="text-sm font-extrabold text-slate-900 mb-4"><i class="fa-solid fa-table-list text-etecteal-600"></i> خريطة التقاطع الكاملة — 30 سجلاً إدارياً ↔ معايير مجال القيادة والإدارة</h2>
         <div class="overflow-x-auto">
         <table class="w-full text-[11px]">
             <thead><tr class="bg-etecteal-50 text-etecteal-700 font-bold">
-                <td class="p-2">#</td><td class="p-2">السجل الإداري</td><td class="p-2">المعيار/المؤشر المتقاطع</td><td class="p-2">الحالة</td>
+                <td class="p-2">#</td><td class="p-2">السجل الإداري<span class="block text-[10px] font-semibold text-slate-400" dir="ltr">Administrative register (English name)</span></td><td class="p-2">المعيار/المؤشر المتقاطع</td><td class="p-2">الحالة</td>
             </tr></thead>
             <tbody id="tbody"></tbody>
         </table>
@@ -211,6 +216,8 @@ const rows = [
   ["29","إجراءات تعزيز الانضباط المدرسي","1-2 قيادة العملية التعليمية","stop",""],
   ["30","سجل التكليفات الإدارية","1-2 / 1-4","ok",""],
 ];
+const EN = {"2": ["Student Dialogue Councils_Sessions Log", "1-5-1-2"], "9": ["Behavior Incidents Register_Case Log", "1-2-1-3, 1-2-1-4, 1-5-1-2, 3-2-1-5"], "10": ["Volunteer Service Register_Initiatives Log", "3-2-1-4"], "13": ["Community Partnership Register_Partnership Log", "1-3-1-2, 1-3-1-3"], "14": ["Emergency Incidents Register_Case Log", "1-2-1-3, 1-5-1-2"], "15": ["Counseling and Guidance Register_Counseling Plan", "1-2-1-1 … 3-2-1-5 (9 indicators)"], "16": ["Recognition and Rewards Register_Log", "1-2-1-2"], "19": ["Staff Permission Register_Request Form", "1-2-1-2"], "28": ["Parent Communication Register_Contact Log", "1-3-1-2"]};
+const DOCS_AR = 'https://drive.google.com/drive/folders/1vZas6SWwvqsqmEh3K3KYzc53b8NLCJhp';
 const statusMeta = {
   ok:   { label:'مكتمل',       cls:'bg-emerald-50 text-emerald-700 border border-emerald-200' },
   warn: { label:'يحتاج مراجعة', cls:'bg-amber-50 text-amber-700 border border-amber-200' },
@@ -221,7 +228,7 @@ document.getElementById('tbody').innerHTML = rows.map(r => {
   const reason = r[4] ? `<div class="text-[10px] text-amber-600 mt-0.5">${r[4]}</div>` : '';
   return `<tr class="border-b border-gray-100 hover:bg-slate-50">
      <td class="p-2 text-gray-400 font-bold align-top">${r[0]}</td>
-     <td class="p-2 font-bold text-slate-800 align-top">${r[1]}</td>
+     <td class="p-2 font-bold text-slate-800 align-top">${r[1]}${EN[r[0]]?`<div class="text-[10.5px] text-slate-500 font-semibold mt-0.5" dir="ltr" lang="en">${EN[r[0]][0]}<span class="text-slate-400"> · ${EN[r[0]][1]}</span></div>`:`<div class="text-[10px] text-slate-300 mt-0.5" dir="ltr">English name: pending</div>`}</td>
      <td class="p-2 text-etecteal-700 align-top">${r[2]}</td>
      <td class="p-2 align-top"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold whitespace-nowrap ${meta.cls}">${meta.label}</span>${reason}</td>
    </tr>`;

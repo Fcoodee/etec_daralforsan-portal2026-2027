@@ -6,7 +6,7 @@
 (function () {
   'use strict';
   if (window.ETEC_META) return;
-  var META = { version: 'v8.10.9', updated: '2026-10-06T14:33:00+03:00', updatedText: '6 أكتوبر 2026 — 2:33 م' };
+  var META = { version: 'v8.10.10', updated: '2026-10-19T12:00:00+03:00', updatedText: '19 أكتوبر 2026' };
   window.ETEC_META = META;
   var UK = 'etec.utype.v1', AK = 'df_auth_v1';
   var NAMES = { admin: 'مدير النظام', sup: 'مشرف فريق السجلات والشواهد', member: 'عضو فريق السجلات والشواهد', self: 'التقويم الذاتي', edu: 'الإدارة التعليمية', ext: 'التقويم الخارجي' };
