@@ -48,15 +48,12 @@ details[open] .chev{transform:rotate(-90deg)}
 .tab[aria-pressed="true"]{background:#003d3d;border-color:#003d3d;color:#fff}
 :focus-visible{outline:2px solid #c29b38;outline-offset:2px}
 .ut-off{display:none!important}
-body[data-ut="edu"] .ov{cursor:default}
-body[data-ut="edu"] .ov:hover,body[data-ut="edu"] .ov:focus-visible{border-color:#e2e8f0;box-shadow:none}
-@media (min-width:1024px){body[data-ut="edu"] #hero>div:first-child{grid-template-columns:minmax(0,1fr) 230px!important}}
 #utList option{padding:9px 10px;border-radius:8px;margin:1px 0}
 #utList option:checked{background:#003d3d linear-gradient(#003d3d,#003d3d);color:#fff}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media print{#utBar,#utModal,#utPanel{display:none!important}#teamModal,#ownerCard{display:none!important}#dash-clock-bar,#controls,#refreshBtn,#df-lock-btn,#df-logout-btn{display:none!important}details{break-inside:avoid}}
 </style>
-<script src="portal-meta.js?v=8.10.12"></script>
+<script src="portal-meta.js?v=8.10.13"></script>
 </head>
 <body class="text-gray-800 antialiased min-h-screen flex flex-col">
 
@@ -267,9 +264,9 @@ body[data-ut="edu"] .ov:hover,body[data-ut="edu"] .ov:focus-visible{border-color
 
 <footer class="text-center text-[11px] text-gray-400 py-6">مدارس دار الفرسان — قسم الدبلوما الأمريكية (بنين) — مشروع ربط الشواهد بالسجلات</footer>
 
-<script src="portal-config.js?v=8.10.12"></script>
-<script src="portal-names.js?v=8.10.12"></script>
-<script src="etec-ref.js?v=8.10.12"></script>
+<script src="portal-config.js?v=8.10.13"></script>
+<script src="portal-names.js?v=8.10.13"></script>
+<script src="etec-ref.js?v=8.10.13"></script>
 <script>
 /* رابط تطبيق الويب لـ drive_check_script.gs بعد النشر (Deploy → Web app) */
 const STATUS_URL = window.ETEC_STATUS_URL || ""; /* يُضبط في portal-config.js */
@@ -759,9 +756,9 @@ function renderOverview(){
   const tot=DATA.length, started=D+P>0; let worst=null;
   if(started) Object.keys(dm).forEach(d=>{ const o=dm[d], sh=o.none/(o.done+o.prog+o.none); if(!worst||sh>worst.sh) worst={d,sh,n:o.none}; });
   const sentence=!started?`لم يبدأ الرفع بعد في أي مؤشر من المؤشرات الـ${tot}.`:`اكتمل رفع ${D} من ${tot} مؤشراً (${pct(D,tot)}%)، و${P} لم يكتمل بعد (${pct(P,tot)}%)، و${N} لم يبدأ (${pct(N,tot)}%).`+(worst&&worst.n?` أكثر المجالات تأخراً: المجال ${worst.d} (${DOMAINS[worst.d]})، لم يبدأ منه ${worst.n}.`:"");
-  overviewSum.innerHTML=`<div class="bg-white border border-gray-100 rounded-xl px-4 py-3 text-[13.5px] font-bold text-slate-700 leading-7"><i class="fa-solid fa-circle-info text-etecteal-500"></i> ${sentence}${shortN?`<div class="mt-1 text-[12.5px] font-extrabold text-red-600"><i class="fa-solid fa-triangle-exclamation"></i> ${shortN} ${shortN===1?"تقرير الشواهد يحوي":"تقارير الشواهد تحوي"} أقل من 6 صور${UT==="edu"?"":": "+Object.entries(shortBy).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>k+" ("+v+")").join("، ")}</div>`:""}<div class="mt-1 text-[12.5px] font-semibold text-slate-500">جاهزية الوثائق في المشروع <b class="text-etecteal-700">${P100(projProg(evProg))}%</b> · جاهزية تقرير الشواهد <b class="text-sky-700">${P100(projProg(visProg))}%</b></div>${planHTML()}</div>`;
+  overviewSum.innerHTML=`<div class="bg-white border border-gray-100 rounded-xl px-4 py-3 text-[13.5px] font-bold text-slate-700 leading-7"><i class="fa-solid fa-circle-info text-etecteal-500"></i> ${sentence}${shortN?`<div class="mt-1 text-[12.5px] font-extrabold text-red-600"><i class="fa-solid fa-triangle-exclamation"></i> ${shortN} ${shortN===1?"تقرير الشواهد يحوي":"تقارير الشواهد تحوي"} أقل من 6 صور${": "+Object.entries(shortBy).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>k+" ("+v+")").join("، ")}</div>`:""}<div class="mt-1 text-[12.5px] font-semibold text-slate-500">جاهزية الوثائق في المشروع <b class="text-etecteal-700">${P100(projProg(evProg))}%</b> · جاهزية تقرير الشواهد <b class="text-sky-700">${P100(projProg(visProg))}%</b></div>${planHTML()}</div>`;
   overview.innerHTML=Object.keys(TEAMS).map(d=>{ const c=TEAM_COLOR[d], o=dm[d], n=o.done+o.prog+o.none, evD=P100(domProg(+d,evProg)), vsD=P100(domProg(+d,visProg));
-    const late=(started&&UT!=="edu")?Object.keys(o.mem).map(k=>({k:+k,n:o.mem[k]})).sort((a,b)=>b.n-a.n).slice(0,2).map(x=>`${esc(TEAMS[d].mem[x.k])} (${x.n})`).join("، "):"";
+    const late=started?Object.keys(o.mem).map(k=>({k:+k,n:o.mem[k]})).sort((a,b)=>b.n-a.n).slice(0,2).map(x=>`${esc(TEAMS[d].mem[x.k])} (${x.n})`).join("، "):"";
     return `<div class="ovw"><button type="button" class="ov" data-ov="${d}" style="--tc:${c}" aria-label="عرض فريق المجال ${d} - ${esc(DOMAINS[d])}">
       <div class="flex items-center gap-2 mb-2"><span class="dot" style="background:${c}"></span><span class="text-[12.5px] font-black text-slate-800 truncate">${d} · ${esc(DOMAINS[d])}</span></div>
       <div class="flex h-2 rounded-full overflow-hidden bg-slate-100 mb-2"><span style="flex:${o.done};background:#10b981"></span><span style="flex:${o.prog};background:#f59e0b"></span><span style="flex:${o.none};background:#cbd5e1"></span></div>
@@ -949,7 +946,7 @@ function renderEtecRef(){ const box=document.getElementById("etecRefBody"); if(!
 function render(){ renderEtecRef(); renderSummary(); renderHero(); renderOverview(); renderPickers(); renderWorkspace();
   document.getElementById("taskTools").classList.toggle("hidden",view!=="tasks");
   document.getElementById("sortBtn").textContent=sortMode==="ready"?"الأحوج للعمل أولاً":"حسب الرمز";
-  if(UT==="ext") renderExternal(); else if(UT==="edu") list.innerHTML=""; else ({tasks:renderTasks,records:renderRecords,shots:renderShots,extra:renderExtra})[view]();
+  ({tasks:renderTasks,records:renderRecords,shots:renderShots,extra:renderExtra})[view]();
   renderUTPanel(); applyUT(); }
 
 function setConn(kind,msg){ const m={ok:["bg-emerald-400/15 text-emerald-300","fa-circle-check"],off:["bg-amber-400/15 text-amber-300","fa-link-slash"],err:["bg-rose-400/15 text-rose-300","fa-triangle-exclamation"],load:["bg-white/10","fa-circle-notch fa-spin"]}[kind];
@@ -983,7 +980,7 @@ function loadStatus(force){
 
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{ setView(b.dataset.view); render(); }));
 fOwner.innerHTML='<option value="">كل المسؤولين</option>'+Object.keys(TEAMS).map(d=>`<optgroup label="${d} - ${DOMAINS[d]}"><option value="A|${d}">${TEAMS[d].sup} (مشرف)</option>${TEAMS[d].mem.map((m,x)=>`<option value="R|${d}|${x}">${m}</option>`).join("")}</optgroup>`).join("");
-overview.addEventListener("click",e=>{ const b=e.target.closest("[data-ov]"); if(!b||UT==="edu") return; SEL={d:+b.dataset.ov,p:"all"}; autoView(); applySel(); (UT==="self"?document.getElementById("controls"):workspace).scrollIntoView({behavior:"smooth",block:"start"}); });
+overview.addEventListener("click",e=>{ const b=e.target.closest("[data-ov]"); if(!b) return; SEL={d:+b.dataset.ov,p:"all"}; autoView(); applySel(); (UT==="self"?document.getElementById("controls"):workspace).scrollIntoView({behavior:"smooth",block:"start"}); });
 pickDomain.addEventListener("click",e=>{ const b=e.target.closest("[data-d]"); if(!b) return; SEL={d:+b.dataset.d,p:"all"}; autoView(); applySel(); });
 pickPerson.addEventListener("click",e=>{ const b=e.target.closest("[data-p]"); if(!b) return; const v=b.dataset.p; SEL.p=(v==="all"||v==="A")?v:+v; autoView(); applySel(); });
 document.getElementById("totalsBtn").addEventListener("click",e=>{ const t=document.getElementById("totals"), open=t.classList.toggle("hidden")===false; e.currentTarget.setAttribute("aria-expanded",open); });
@@ -1013,23 +1010,21 @@ const UTYPES={
  admin:{n:"مدير النظام",ic:"fa-user-shield",q:"هل المنظومة سليمة؟",see:"كل الأقسام والأدوات: حالة الاتصال، والأرقام الكلية، ومراسلة الفرق، ومولّد التقارير.",hide:"لا شيء مخفي."},
  sup:{n:"مشرف فريق السجلات والشواهد",ic:"fa-user-check",q:"ما الذي ينتظر مراجعتي؟",see:"لوحة المراجعة: الملفات بانتظار مراجعتك، وما يحتاج إعادة تسمية، والتقارير الناقصة الصور، مع نظرة الإدارة ومساحة الفريق.",hide:"لا شيء مخفي مما يخص الإشراف."},
  member:{n:"عضو فريق السجلات والشواهد",ic:"fa-user-pen",q:"ماذا أرفع الآن؟",see:"«مساحتي»: مؤشراتك ووثائقك الناقصة وروابط مجلداتها وتقدم فريقك.",hide:"نظرة الإدارة والأرقام الكلية وأدوات المراسلة."},
- self:{n:"التقويم الذاتي",ic:"fa-magnifying-glass-chart",q:"أين فجواتنا؟",see:"المعايير مرتبة من الأضعف، والمؤشرات التي لم تبدأ، والنِّسب، وقائمة المؤشرات والوثائق.",hide:"أدوات الرفع والمراسلة، وإرشادات التصوير والوثائق المقترحة."},
- edu:{n:"الإدارة التعليمية",ic:"fa-landmark",q:"هل نحن جاهزون للزيارة؟",see:"ملخص تنفيذي: اكتمال المشروع، والمجالات الأربعة، وما تأخر، والأيام المتبقية للزيارة.",hide:"الوثائق التفصيلية وأسماء الأفراد."},
- ext:{n:"التقويم الخارجي",ic:"fa-clipboard-check",q:"أين شواهد المؤشر؟",see:"أعداد الوثائق والصور وتقارير الشواهد لكل مؤشر، مع رابط مجلده.",hide:"النسب وعلامات الجودة والملاحظات الداخلية وأسماء الأفراد."}
+ self:{n:"مشرف / فريق التقويم الذاتي",ic:"fa-magnifying-glass-chart",q:"أين فجواتنا؟",see:"المعايير مرتبة من الأضعف، والمؤشرات التي لم تبدأ، والنِّسب، والمرجع الرسمي (مرجع الهيئة وتحليل الأدوات)، وقائمة المؤشرات والوثائق.",hide:"أدوات الرفع والمراسلة، وإرشادات التصوير والوثائق المقترحة. للعرض والمتابعة فقط، دون اعتماد أو موافقة."}
 };
 const UT_KEY="etec.utype.v1";
 let UT="", CRIT="";
 const UT_RULES=[
- ["#hero",["admin","sup","edu"]],
+ ["#hero",["admin","sup"]],
  ['#hero a[href="hardcopy.html"],#hero a[href="approval-request.html"]',["admin","sup"]],
- ['section[aria-label="نظرة الإدارة"]',["admin","sup","self","edu"]],
+ ['section[aria-label="نظرة الإدارة"]',["admin","sup","self"]],
  [".ovw > div",["admin","sup"]],
  ['section[aria-label="مساحة العمل"]',["admin","sup","member"]],
  ["#workspace [data-mail]",["admin","sup"]],
- ["#controls",["admin","sup","member","self","ext"]],
+ ["#controls",["admin","sup","member","self"]],
  ['#controls [role="group"],#taskTools',["admin","sup","member","self"]],
  ['[data-view="shots"],[data-view="extra"]',["admin","sup","member"]],
- ["#list",["admin","sup","member","self","ext"]],
+ ["#list",["admin","sup","member","self"]],
  ["#utRefresh",["admin","sup","member","self"]],
  ["#algoBox,.algo-note,#helpBtn,#helpBox",["admin"]],
  ["#sumToolsCard",["admin","sup","member"]],
@@ -1041,12 +1036,12 @@ const UT_RULES=[
 function applyUT(){
   UT_RULES.forEach(([sel,ok])=>document.querySelectorAll(sel).forEach(el=>el.classList.toggle("ut-off",!!UT&&!ok.includes(UT))));
   document.body.dataset.ut=UT;
-  document.querySelectorAll(".ov").forEach(b=>{ if(UT==="edu"){ b.setAttribute("tabindex","-1"); b.setAttribute("aria-disabled","true"); } else { b.removeAttribute("tabindex"); b.removeAttribute("aria-disabled"); } });
+  document.querySelectorAll(".ov").forEach(b=>{ b.removeAttribute("tabindex"); b.removeAttribute("aria-disabled"); });
   if(UTCONN) utConnSet(UTCONN[0],UTCONN[1],UTCONN[2]);
   const t=UTYPES[UT]; document.getElementById("utChip").innerHTML=t?`<i class="fa-solid ${t.ic}"></i> ${esc(t.n)}`:"لم يُحدَّد بعد"; }
 let UTCONN=null;
 function utConnSet(kind,msg,ic){ UTCONN=[kind,msg,ic]; const c={ok:"bg-emerald-50 text-emerald-700",off:"bg-amber-50 text-amber-700",err:"bg-rose-50 text-rose-700",load:"bg-slate-100 text-slate-600"}[kind]||"bg-slate-100 text-slate-600";
-  const e=document.getElementById("utConn"); if(!e) return; e.className="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full "+c+((["self","edu","ext"].includes(UT)&&kind!=="ok")?" ut-off":""); e.innerHTML=`<i class="fa-solid ${ic}"></i> ${msg}`; }
+  const e=document.getElementById("utConn"); if(!e) return; e.className="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full "+c+((UT==="self"&&kind!=="ok")?" ut-off":""); e.innerHTML=`<i class="fa-solid ${ic}"></i> ${msg}`; }
 function loadUT(){ try{ const q=new URLSearchParams(location.search).get("u"); if(q&&UTYPES[q]) return q; }catch(e){}
   try{ const v=localStorage.getItem(UT_KEY); if(v&&UTYPES[v]) return v; }catch(e){} return ""; }
 function setUT(t,persist){ UT=t; try{ window.dispatchEvent(new CustomEvent("etec:utchange")); }catch(e){}
@@ -1114,15 +1109,6 @@ document.getElementById("utPanel").addEventListener("click",e=>{
   const c=e.target.closest("[data-crit]"); if(c){ CRIT=c.dataset.crit; fSearch.value=""; setView("tasks"); render(); document.getElementById("controls").scrollIntoView({behavior:"smooth"}); return; }
   if(e.target.closest("[data-critclear]")){ CRIT=""; render(); } });
 /* ---- عرض المقيّم الخارجي: أعداد وروابط فقط (بلا نسب ولا علامات جودة ولا أسماء) ---- */
-function renderExternal(){
-  const q=fSearch.value.trim(), G={};
-  DATA.filter(i=>matchQ(q,i.code,i.text,i.st,...docsOf(i).map(d=>d.n))).forEach(i=>{ ((G[i.d]=G[i.d]||{})[i.c]=G[i.d][i.c]||{cn:i.cn,L:[]}).L.push(i); });
-  const out=Object.keys(G).sort().map(d=>`<h3 class="text-[13px] font-black text-slate-700 mt-4 mb-2"><span class="dot" style="background:${TEAM_COLOR[d]}"></span> المجال ${d} · ${esc(DOMAINS[d])}</h3>`+Object.keys(G[d]).sort().map(c=>`<div class="text-[11.5px] font-bold text-gray-500 mb-1 mt-2">المعيار ${ltr(c)} · ${esc(G[d][c].cn)}</div>`+G[d][c].L.map(i=>{ const is=indStat(i), v=visInfo(i);
-    return `<details class="bg-white rounded-xl border border-gray-100 mb-2"><summary class="p-3.5 flex flex-wrap items-center gap-3"><span class="font-black text-etecteal-700 text-sm w-20 shrink-0" dir="ltr" style="unicode-bidi:isolate">${ltr(i.code)}</span><span class="flex-1 min-w-[220px] text-[13px] font-black text-slate-800 leading-6">${esc(i.st)}</span><span class="text-[11.5px] font-black text-slate-600 whitespace-nowrap"><i class="fa-solid fa-file-lines"></i> وثائق هذا المؤشر ${is.ok} من ${is.total} · <i class="fa-solid fa-file-pdf"></i> تقرير الشواهد ${v.n} · الصور ${v.ph}</span>${drv(i)}<i class="fa-solid fa-chevron-left chev text-gray-300 text-xs"></i></summary>
-      <div class="px-4 pb-4"><div class="text-[12px] text-gray-500 leading-6 mb-2"><b>نص المؤشر:</b> ${esc(i.text)}</div>
-      <div class="border border-gray-100 rounded-lg p-3"><div class="text-[11.5px] font-bold text-slate-600 mb-1">الوثائق</div>${evUnits(i).map(u=>`<div class="reg">${cb(u.st.n>0?u.st.n:undefined)}<span class="flex-1 min-w-[180px] text-[12.5px] font-bold">${esc(u.name)}${enDocLine(u.name)}</span><span class="text-[10.5px] text-gray-400">${u.st.n?u.st.n+" ملف":"لم تُرفع"}</span></div>`).join("")}</div>
-      <div class="border border-gray-100 rounded-lg p-3 mt-2"><div class="text-[11.5px] font-bold text-slate-600 mb-1">تقرير الشواهد · الصور المرفوعة ${v.ph}</div>${v.L.filter(r=>r.valid!==false).map(r=>`<div class="reg"><i class="fa-solid fa-file-pdf text-emerald-600"></i><span class="flex-1 text-[12px] font-bold" dir="auto">${esc(r.name)}</span></div>`).join("")||'<div class="text-[12px] text-gray-500">لا يوجد تقرير شواهد بعد.</div>'}</div></div></details>`; }).join("")).join("")).join("");
-  list.innerHTML=out||empty(); }
 /* ---- التشغيل ---- */
 UT=loadUT();
 if(UT){ setUT(UT,false); } else { openUT(); }

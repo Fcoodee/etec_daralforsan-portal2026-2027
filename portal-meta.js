@@ -8,10 +8,10 @@
   if (window.ETEC_META) return;
   /* showEtecLogo: false لإخفاء شعار هيئة تقويم التعليم والتدريب من ترويسات الصفحات.
      السياسات (1445هـ، ص26) تمنع المدرسة المعتمدة من استخدام شعار الهيئة أو المركز في منشوراتها؛ والافتراضي true إلى أن تقرّر إدارة المدرسة وضعها من الاعتماد. */
-  var META = { version: 'v8.10.12', updated: '2026-11-10T12:00:00+03:00', updatedText: '10 نوفمبر 2026', showEtecLogo: true };
+  var META = { version: 'v8.10.13', updated: '2026-11-10T12:00:00+03:00', updatedText: '10 نوفمبر 2026', showEtecLogo: true };
   window.ETEC_META = META;
   var UK = 'etec.utype.v1', AK = 'df_auth_v1';
-  var NAMES = { admin: 'مدير النظام', sup: 'مشرف فريق السجلات والشواهد', member: 'عضو فريق السجلات والشواهد', self: 'التقويم الذاتي', edu: 'الإدارة التعليمية', ext: 'التقويم الخارجي' };
+  var NAMES = { admin: 'مدير النظام', sup: 'مشرف فريق السجلات والشواهد', member: 'عضو فريق السجلات والشواهد', self: 'مشرف / فريق التقويم الذاتي' };
   var HAS_OWN_BAR = /(^|\/)evidence-link\.html?$/i.test(location.pathname);
 
   function ls(k, v, del) { try { if (del) localStorage.removeItem(k); else if (v === undefined) return localStorage.getItem(k); else localStorage.setItem(k, v); } catch (e) {} return null; }
