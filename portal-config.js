@@ -37,6 +37,14 @@ window.ETEC_SITE_BASE = "https://fcoodee.github.io/etec_daralforsan-portal2026-2
 window.ETEC_SHORT_LINKS = {};
 window.ETEC_SHORTENER = "isgd";
 window.ETEC_LEGAL_POLICY = { first: 3, highMinutes: 20, mediumMinutes: 1440, lowMinutes: 0 };
+/* v8.10.11 — مرجع الهيئة (reference.html) وتحليل الأدوات في evidence-link.html:
+   ETEC_DOMAIN_RESULTS: نتائج المجالات الفعلية من تقرير التقويم الذاتي على منصة تميز (نسب مئوية حقيقية فقط)، مثل {1:78,2:82,3:70,4:91}.
+      تبقى null حتى يصدر التقرير؛ وما دامت null لا يُحسب أي «حالة اعتماد متوقعة» ولا يُدخل رقم تجريبي. لا تُملأ بنسب «جاهزية الوثائق».
+   ETEC_TOOLS_STATUS: حالة جاهزية أدوات التقويم الذاتي، تُحدَّث يدوياً من المنصة. القيم: null (لم يُسجَّل) أو {done:عدد,total:عدد,note:"..."}.
+      المفاتيح: team (فريق التقويم)، surveyTeacher، surveyLearner، surveyFamily، obsClass (الملاحظات الصفية)، obsEnv، interviews، docs.
+   (إخفاء شعار الهيئة من الترويسات: المفتاح showEtecLogo في portal-meta.js — يعمل في كل الصفحات.) */
+window.ETEC_DOMAIN_RESULTS = null;
+window.ETEC_TOOLS_STATUS = { team: null, surveyTeacher: null, surveyLearner: null, surveyFamily: null, obsClass: null, obsEnv: null, interviews: null, docs: null };
 window.ETEC_STAGES = [
   { id: "primary",      name: "الابتدائي", open: true,  url: "evidence-link.html" },
   { id: "intermediate", name: "المتوسط",   open: false, wipUrl: "stage-wip.html?s=intermediate" },

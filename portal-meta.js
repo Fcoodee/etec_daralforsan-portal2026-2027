@@ -6,7 +6,9 @@
 (function () {
   'use strict';
   if (window.ETEC_META) return;
-  var META = { version: 'v8.10.10', updated: '2026-10-19T12:00:00+03:00', updatedText: '19 أكتوبر 2026 (r2)' };
+  /* showEtecLogo: false لإخفاء شعار هيئة تقويم التعليم والتدريب من ترويسات الصفحات.
+     السياسات (1445هـ، ص26) تمنع المدرسة المعتمدة من استخدام شعار الهيئة أو المركز في منشوراتها؛ والافتراضي true إلى أن تقرّر إدارة المدرسة وضعها من الاعتماد. */
+  var META = { version: 'v8.10.11', updated: '2026-11-10T12:00:00+03:00', updatedText: '10 نوفمبر 2026', showEtecLogo: true };
   window.ETEC_META = META;
   var UK = 'etec.utype.v1', AK = 'df_auth_v1';
   var NAMES = { admin: 'مدير النظام', sup: 'مشرف فريق السجلات والشواهد', member: 'عضو فريق السجلات والشواهد', self: 'التقويم الذاتي', edu: 'الإدارة التعليمية', ext: 'التقويم الخارجي' };
@@ -31,7 +33,13 @@
     box = document.createElement('div'); box.id = 'etecMetaBox';
     ver = document.createElement('div'); ver.id = 'etecMetaVer'; ver.setAttribute('aria-label', 'رقم الإصدار وتاريخ آخر تحديث');
     ver.textContent = 'الإصدار ' + META.version + ' · آخر تحديث ' + META.updatedText;
-    box.appendChild(ver); document.body.appendChild(box);
+    var note = document.createElement('div'); note.id = 'etecMetaNote'; note.textContent = 'منصة داخلية لمدارس دار الفرسان — غير تابعة لهيئة تقويم التعليم والتدريب، ولا تعرض نتيجة تقويم أو اعتماد رسمية';
+    note.style.cssText = 'font:600 9.5px/1.4 Tahoma,Arial,sans-serif;color:#64748b;background:rgba(255,255,255,.94);border:1px solid #e2e8f0;border-radius:999px;padding:1px 9px;max-width:100%';
+    box.appendChild(ver); box.appendChild(note); document.body.appendChild(box);
+    if (META.showEtecLogo === false) {
+      var imgs = document.querySelectorAll('img[alt="ETEC Logo"], img[alt="هيئة تقويم التعليم والتدريب"]');
+      for (var k = 0; k < imgs.length; k++) imgs[k].style.display = 'none';
+    }
     tick();
   }
   var lastAuth = null;
