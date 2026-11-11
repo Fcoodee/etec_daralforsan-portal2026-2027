@@ -77,6 +77,7 @@
   }
 
   var role = get();
+  try { document.documentElement.setAttribute("data-role", role); css(); } catch (e) {}
 
   function css() {
     if (document.getElementById("prCss")) return;
@@ -84,6 +85,7 @@
     st.id = "prCss";
     st.textContent =
       ".pr-off{display:none!important}" +
+      "html:not([data-role=\"admin\"]) [data-admin-only]{display:none!important}" +
       "#prBar{font-family:Cairo,Tahoma,sans-serif;direction:rtl;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:7px 14px;font-size:12px;line-height:1.7;background:#f0fdfa;border-bottom:1px solid #99f6e4;color:#134e4a}" +
       "#prBar.warn{background:#fffbeb;border-bottom-color:#fcd34d;color:#78350f}" +
       "#prBar.none{background:#eff6ff;border-bottom-color:#bfdbfe;color:#1e3a8a}" +
@@ -159,7 +161,7 @@
 
   function run() { css(); applyData(); bar(); home(); }
   window.PortalRole = { get: function () { return role; }, set: set, roles: ROLES, order: ORDER, pages: PAGES, allowed: allowed, valid: valid, refresh: function () { role = get(); run(); } };
-  window.addEventListener("etec:utchange", function () { role = get(); applyData(); });
+  window.addEventListener("etec:utchange", function () { role = get(); try { document.documentElement.setAttribute("data-role", role); } catch (e) {} applyData(); });
   window.addEventListener("etec:logout", function () { try { sessionStorage.removeItem(SKEY); } catch (e) {} role = ""; });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run); else run();
 })();

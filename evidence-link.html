@@ -55,9 +55,9 @@ details[open] .chev{transform:rotate(-90deg)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media print{#utBar,#utModal,#utPanel{display:none!important}#teamModal,#ownerCard{display:none!important}#dash-clock-bar,#controls,#refreshBtn,#df-lock-btn,#df-logout-btn{display:none!important}details{break-inside:avoid}}
 </style>
-<script src="portal-meta.js?v=8.12.1"></script>
-<script src="portal-role.js?v=8.12.1"></script>
-<script src="legacy-lock.js?v=8.12.1"></script>
+<script src="portal-meta.js?v=8.12.2"></script>
+<script src="portal-role.js?v=8.12.2"></script>
+<script src="legacy-lock.js?v=8.12.2"></script>
 </head>
 <body class="text-gray-800 antialiased min-h-screen flex flex-col">
 
@@ -91,8 +91,8 @@ details[open] .chev{transform:rotate(-90deg)}
     <span id="utChip" class="inline-flex items-center gap-1.5 font-black text-etecteal-700 bg-etecteal-50 border border-etecteal-100 rounded-full px-3 py-1">لم يُحدَّد بعد</span>
     <button type="button" id="utChange" class="vbtn"><i class="fa-solid fa-repeat"></i> تغيير نوع المستخدم</button>
     <span class="flex-1"></span>
-    <span id="utConn" class="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-600"><i class="fa-solid fa-circle-notch fa-spin"></i> جارٍ تحديث حالة الرفع</span>
-    <button type="button" id="utRefresh" class="vbtn"><i class="fa-solid fa-rotate"></i> تحديث</button>
+    <span id="utConn" data-admin-only class="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-600"><i class="fa-solid fa-circle-notch fa-spin"></i> جارٍ تحديث حالة الرفع</span>
+    <button type="button" id="utRefresh" data-admin-only class="vbtn"><i class="fa-solid fa-rotate"></i> تحديث</button>
   </div>
 </div>
 
@@ -275,9 +275,9 @@ details[open] .chev{transform:rotate(-90deg)}
 
 <footer class="text-center text-[11px] text-gray-400 py-6">مدارس دار الفرسان — قسم الدبلوما الأمريكية (بنين) — مشروع ربط الشواهد بالسجلات</footer>
 
-<script src="portal-config.js?v=8.12.1"></script>
-<script src="portal-names.js?v=8.12.1"></script>
-<script src="etec-ref.js?v=8.12.1"></script>
+<script src="portal-config.js?v=8.12.2"></script>
+<script src="portal-names.js?v=8.12.2"></script>
+<script src="etec-ref.js?v=8.12.2"></script>
 <script>
 /* رابط تطبيق الويب لـ drive_check_script.gs بعد النشر (Deploy → Web app) */
 const STATUS_URL = window.ETEC_STATUS_URL || ""; /* يُضبط في portal-config.js */
@@ -1120,7 +1120,7 @@ const UT_RULES=[
 ];
 function applyUT(){
   UT_RULES.forEach(([sel,ok])=>document.querySelectorAll(sel).forEach(el=>el.classList.toggle("ut-off",!!UT&&!ok.includes(UT))));
-  document.body.dataset.ut=UT;
+  document.body.dataset.ut=UT; document.documentElement.setAttribute("data-role",UT||"");
   document.querySelectorAll(".ov").forEach(b=>{ b.removeAttribute("tabindex"); b.removeAttribute("aria-disabled"); });
   if(UTCONN) utConnSet(UTCONN[0],UTCONN[1],UTCONN[2]);
   const t=UTYPES[UT]; document.getElementById("utChip").innerHTML=t?`<i class="fa-solid ${t.ic}"></i> ${esc(t.n)}`:"لم يُحدَّد بعد"; }
