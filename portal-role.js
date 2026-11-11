@@ -30,19 +30,20 @@
     "approval-request.html": ["admin"],
     "stage-wip.html": ["admin"],
     "governance.html": ["admin", "sup", "self"],
-    "all_summary.html": ["admin", "sup", "self"],
-    "report-all.html": ["admin", "sup", "self"],
+    "all_summary.html": ["admin"],
+    "status-report.html": ["admin", "sup", "self"],
+    "report-all.html": ["admin"],
     "records-sources.html": ["admin", "sup", "self"],
     "reference.html": ["admin", "sup", "self"],
-    "2026-2027.html": ["admin", "sup", "self"],
+    "2026-2027.html": ["admin"],
     "index-2025-2026.html": ["admin"]
   };
   /* روابط ثانوية مباشرة في مدخل كل دور (لا تتجاوز ثلاثة) */
   var SECOND = {
     admin:  [["approval-request.html", "fa-file-signature", "طلب رقمنة الزيارة"], ["governance.html", "fa-scale-balanced", "الحوكمة الإدارية"], ["reference.html", "fa-book-open", "مرجع الهيئة"]],
-    sup:    [["hardcopy.html", "fa-print", "تقرير استلام المهام"], ["output.html", "fa-file-image", "مولّد التقرير البصري"], ["reference.html", "fa-book-open", "مرجع الهيئة"]],
+    sup:    [["hardcopy.html", "fa-print", "تقرير استلام المهام"], ["output.html", "fa-file-image", "مولّد التقرير البصري"], ["status-report.html", "fa-clipboard-list", "تقرير الحالة"]],
     member: [["output.html", "fa-file-image", "مولّد التقرير البصري"]],
-    self:   [["report-all.html", "fa-chart-pie", "الرؤية الشاملة"], ["all_summary.html", "fa-table-list", "تحليل الفجوة الشامل"], ["reference.html", "fa-book-open", "مرجع الهيئة"]]
+    self:   [["status-report.html", "fa-clipboard-list", "تقرير الحالة"], ["reference.html", "fa-book-open", "مرجع الهيئة"], ["records-sources.html", "fa-list-check", "مصادر السجلات"]]
   };
 
   function pageKey() {

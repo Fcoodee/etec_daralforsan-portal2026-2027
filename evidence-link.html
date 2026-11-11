@@ -55,8 +55,9 @@ details[open] .chev{transform:rotate(-90deg)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media print{#utBar,#utModal,#utPanel{display:none!important}#teamModal,#ownerCard{display:none!important}#dash-clock-bar,#controls,#refreshBtn,#df-lock-btn,#df-logout-btn{display:none!important}details{break-inside:avoid}}
 </style>
-<script src="portal-meta.js?v=8.11.1"></script>
-<script src="portal-role.js?v=8.11.1"></script>
+<script src="portal-meta.js?v=8.12.0"></script>
+<script src="portal-role.js?v=8.12.0"></script>
+<script src="legacy-lock.js?v=8.12.0"></script>
 </head>
 <body class="text-gray-800 antialiased min-h-screen flex flex-col">
 
@@ -101,7 +102,8 @@ details[open] .chev{transform:rotate(-90deg)}
   <!-- v8.11.1: شاشة الدور — سؤال واحد، رقم واحد، إجراء واحد -->
   <section id="roleScreen" class="mb-5" aria-live="polite"></section>
 
-  <details id="fullView" class="mb-6"><summary><i class="fa-solid fa-layer-group text-etecteal-500"></i> التفاصيل الكاملة والأدوات <span class="font-semibold text-slate-400 text-[11.5px]">· كل المؤشرات والوثائق والصور</span></summary><div class="mt-4">
+  <div data-legacy-lockui class="mb-6"><button type="button" data-legacy-unlock class="w-full text-right bg-white border border-slate-200 rounded-xl px-4 py-3 text-[13px] font-extrabold text-slate-500">&#128274; التفاصيل الكاملة والأدوات القديمة <span class="font-semibold text-[11.5px]">· لمدير النظام وحده (مرحلة ما قبل «تصحيح المسار»)</span></button></div>
+  <details id="fullView" data-legacy class="mb-6"><summary><i class="fa-solid fa-layer-group text-etecteal-500"></i> التفاصيل الكاملة والأدوات <span class="font-semibold text-slate-400 text-[11.5px]">· كل المؤشرات والوثائق والصور</span></summary><div class="mt-4">
 
   <!-- لوحة تحكم المشروع: البطاقة العليا -->
   <section id="hero" class="bg-gradient-to-br from-etecteal-900 to-slate-900 text-white rounded-3xl p-5 md:p-8 mb-6 shadow-xl">
@@ -273,9 +275,9 @@ details[open] .chev{transform:rotate(-90deg)}
 
 <footer class="text-center text-[11px] text-gray-400 py-6">مدارس دار الفرسان — قسم الدبلوما الأمريكية (بنين) — مشروع ربط الشواهد بالسجلات</footer>
 
-<script src="portal-config.js?v=8.11.1"></script>
-<script src="portal-names.js?v=8.11.1"></script>
-<script src="etec-ref.js?v=8.11.1"></script>
+<script src="portal-config.js?v=8.12.0"></script>
+<script src="portal-names.js?v=8.12.0"></script>
+<script src="etec-ref.js?v=8.12.0"></script>
 <script>
 /* رابط تطبيق الويب لـ drive_check_script.gs بعد النشر (Deploy → Web app) */
 const STATUS_URL = window.ETEC_STATUS_URL || ""; /* يُضبط في portal-config.js */
@@ -957,7 +959,7 @@ function renderEtecRef(){ const box=document.getElementById("etecRefBody"); if(!
   </div><div class="mt-3"><a href="reference.html" class="vbtn pri"><i class="fa-solid fa-book-open"></i> مرجع الهيئة الكامل: المصادر والفروق والتناقضات</a></div>`; }
 /* ===== v8.11.1: شاشة الدور ===== */
 let RS_DOM=0;
-function openFull(){ const f=document.getElementById("fullView"); if(f){ f.open=true; f.scrollIntoView({behavior:"smooth",block:"start"}); } }
+function openFull(){ const go=()=>{ const f=document.getElementById("fullView"); if(f){ f.open=true; f.scrollIntoView({behavior:"smooth",block:"start"}); } }; if(window.LegacyLock&&!LegacyLock.isAdmin()) LegacyLock.request(go); else go(); }
 function waitOf(i){ let w=0; docsOf(i).forEach(d=>{ const st=docStage(i,d); w+=Math.max(0,st.n*(st.s2-st.s3)); }); w+=visInfo(i).L.filter(r=>r.valid!==false&&r.ok&&!r.ver).length; return Math.round(w); }
 const rsCard=h=>`<div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">${h}</div>`;
 const rsQ=(role,q)=>`<div class="text-[12px] font-bold text-slate-500">${esc(role)}</div><div class="text-[13px] text-slate-500 mb-1">${esc(q)}</div>`;
@@ -1002,7 +1004,7 @@ function rsSelf(){
   const domRows=doms.map(x=>{ const q=P100(x.p); return `<div class="py-2 border-t border-gray-100"><div class="flex justify-between text-[13px] font-black text-slate-700"><span>المجال ${x.d} · ${esc(DOMAINS[x.d])}</span><span>${q}%</span></div>${rsBar(q,TEAM_COLOR[x.d])}</div>`; }).join("");
   const cm=new Map(); DATA.forEach(i=>{ let o=cm.get(i.c); if(!o){ o={c:i.c,cn:i.cn,d:i.d,n:0,nS:0,sum:0}; cm.set(i.c,o); } o.n++; if(inS(i)){ o.nS++; o.sum+=docProg(i); } });
   const crit=[...cm.values()].sort((a,b)=>(a.nS?0:1)-(b.nS?0:1)||(a.nS&&b.nS?a.sum/a.nS-b.sum/b.nS:0)||a.c.localeCompare(b.c)).map(o=>rsRow("المعيار "+rsCode(o.c)+" · "+esc(o.cn),o.nS?o.nS+" من "+o.n+" مؤشراً رسمياً":"لا قوائم سجلات رسمية — غير مقاس",o.nS?`<b class="text-[13px] text-slate-700">${P100(o.sum/o.nS)}%</b>`:'<span class="text-slate-400">—</span>')).join("");
-  const links=rsDet("f-ref","المرجع والتقارير",'<div class="flex flex-wrap gap-2 pt-2"><a class="vbtn" href="reference.html">مرجع الهيئة</a><a class="vbtn" href="report-all.html">الرؤية الشاملة</a><a class="vbtn" href="all_summary.html">تحليل الفجوة</a><a class="vbtn" href="records-sources.html">مصادر السجلات</a></div>');
+  const links=rsDet("f-ref","المرجع والتقارير",'<div class="flex flex-wrap gap-2 pt-2"><a class="vbtn" href="status-report.html">تقرير الحالة</a><a class="vbtn" href="reference.html">مرجع الهيئة</a><a class="vbtn" href="records-sources.html">مصادر السجلات</a></div>');
   return rsCard(rsQ(UTYPES.self.n,UTYPES.self.q)+`<div class="mb-4"><div class="text-[12px] text-slate-500">تقدّم رفع السجلات الرسمية</div><div class="text-4xl font-black text-slate-800">${p}%</div>${rsBar(p)}<div class="text-[11.5px] text-slate-500 mt-1.5">${s.regsOk} من ${s.regs} سجلاً · ${nS} مؤشراً رسمياً · ليس نتيجة تقويم ولا اعتماداً</div></div><div class="text-[12px] font-black text-slate-500">الأضعف أولاً</div>`+domRows+rsDet("f-crit","المعايير بالتفصيل",crit)+links+rsNote("للعرض والمتابعة فقط: بلا رفع أو مراسلة."));
 }
 function rsAdmin(){

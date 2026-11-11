@@ -48,8 +48,9 @@
         .bl-locked * { pointer-events: none; }
         .bl-badge { position: absolute; top: 14px; left: 14px; background: #0f172a; color: #fde68a; font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 999px; filter: none; }
     </style>
-<script src="portal-meta.js?v=8.11.1"></script>
-<script src="portal-role.js?v=8.11.1"></script>
+<script src="portal-meta.js?v=8.12.0"></script>
+<script src="portal-role.js?v=8.12.0"></script>
+<script src="legacy-lock.js?v=8.12.0"></script>
 </head>
 <body class="text-gray-800 antialiased min-h-screen flex flex-col">
 
@@ -88,7 +89,7 @@
     <main class="flex-1 max-w-6xl mx-auto w-full px-4 py-12">
 
         <!-- Intro -->
-        <div data-roles="admin,sup,self" class="relative bg-gradient-to-br from-emerald-950 via-etecteal-900 to-slate-900 rounded-2xl shadow-lg p-8 mb-10 overflow-hidden text-center">
+        <div data-legacy class="relative bg-gradient-to-br from-emerald-950 via-etecteal-900 to-slate-900 rounded-2xl shadow-lg p-8 mb-10 overflow-hidden text-center">
             <div class="absolute -left-10 -bottom-10 w-48 h-48 bg-white/5 rounded-full"></div>
             <div class="absolute left-24 top-6 w-24 h-24 bg-white/5 rounded-full"></div>
             <div class="relative">
@@ -128,7 +129,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             <!-- 2025-2026 -->
-            <div data-roles="admin" data-lock="index-2025-2026.html" class="gate-card group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-xl hover:border-etecteal-300">
+            <div data-legacy data-lock="index-2025-2026.html" class="gate-card group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-xl hover:border-etecteal-300">
                 <div class="flex items-center justify-between gap-3 mb-2">
                     <div class="flex items-center gap-3">
                         <div class="p-3 bg-gradient-to-br from-etecteal-500 to-slate-900 text-white rounded-xl shadow-sm">
@@ -168,7 +169,7 @@
             </div>
 
             <!-- 2026-2027 -->
-            <a href="2026-2027.html" data-roles="admin,sup,self" data-lock="2026-2027.html" class="gate-card group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-xl hover:border-accentgold/60">
+            <a href="2026-2027.html" data-legacy data-lock="2026-2027.html" class="gate-card group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-xl hover:border-accentgold/60">
                 <div class="flex items-center justify-between gap-3 mb-4">
                     <div class="flex items-center gap-3">
                         <div class="p-3 bg-gradient-to-br from-accentgold to-etecteal-700 text-white rounded-xl shadow-sm">
@@ -206,7 +207,7 @@
         </div>
 
         <!-- Comprehensive Gap Analysis Report card -->
-        <a href="all_summary.html" data-roles="admin,sup,self" class="gate-card group mt-6 block bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-xl hover:border-slate-300">
+        <a href="all_summary.html" data-legacy class="gate-card group mt-6 block bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-xl hover:border-slate-300">
             <div class="flex items-center gap-4 flex-wrap">
                 <div class="p-3 bg-gradient-to-br from-slate-700 to-slate-900 text-white rounded-xl shadow-sm shrink-0">
                     <i class="fa-solid fa-diagram-project text-xl"></i>
@@ -222,6 +223,18 @@
         </a>
 
         <!-- Administrative Governance card -->
+        <a href="status-report.html" data-roles="admin,sup,self" class="gate-card group mt-6 block bg-white rounded-2xl shadow-sm border border-teal-200 p-6 hover:shadow-xl hover:border-teal-400">
+            <div class="flex items-center gap-4 flex-wrap">
+                <div class="p-3 bg-teal-50 text-teal-700 rounded-xl"><i class="fa-solid fa-clipboard-list text-xl"></i></div>
+                <div class="flex-1 min-w-[220px]">
+                    <span class="inline-flex items-center gap-1 bg-teal-50 text-teal-700 border border-teal-200 text-[10px] font-bold px-2.5 py-1 rounded-full mb-1">تصحيح المسار</span>
+                    <h3 class="text-base font-extrabold text-slate-900 mb-1">تقرير الحالة: أين نحن في جمع السجلات والوثائق</h3>
+                    <p class="text-xs text-gray-500 leading-6">تقدّم رفع السجلات الرسمية (28 مؤشراً) منفصلاً عن السجلات الداعمة (24)، على أحدث لقطة متاحة ووفق وثائق الهيئة الخمس.</p>
+                </div>
+                <span class="text-xs font-black text-teal-800">فتح التقرير <i class="fa-solid fa-arrow-left"></i></span>
+            </div>
+        </a>
+
         <a href="governance.html" data-roles="admin,sup,self" class="gate-card group mt-4 block bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-xl hover:border-etecteal-300">
             <div class="flex items-center gap-4 flex-wrap">
                 <div class="p-3 bg-gradient-to-br from-etecteal-600 to-slate-900 text-white rounded-xl shadow-sm shrink-0">
@@ -266,6 +279,9 @@
                 </span>
             </div>
         </a>
+        <div data-legacy-lockui class="mt-10 text-center">
+            <button type="button" data-legacy-unlock class="text-[11.5px] font-bold text-slate-500 hover:text-slate-800 border border-slate-200 rounded-full px-4 py-2 bg-white">&#128274; محتوى ما قبل «تصحيح المسار» (لوحات 2025-2026 و2026-2027 والتقارير القديمة) — لمدير النظام</button>
+        </div>
     </main>
 
     <!-- FOOTER -->
