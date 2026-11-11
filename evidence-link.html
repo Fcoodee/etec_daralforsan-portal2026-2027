@@ -48,13 +48,15 @@ details[open] .chev{transform:rotate(-90deg)}
 .tab[aria-pressed="true"]{background:#003d3d;border-color:#003d3d;color:#fff}
 :focus-visible{outline:2px solid #c29b38;outline-offset:2px}
 .ut-off{display:none!important}
+#fullView>summary{cursor:pointer;list-style:none;background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:12px 16px;font-weight:800;font-size:13px;color:#334155}#fullView>summary::-webkit-details-marker{display:none}#fullView[open]>summary{background:#f1f5f9}
+#roleScreen details>summary{cursor:pointer;font-size:12.5px;font-weight:700;color:#475569;padding:8px 0}
 #utList option{padding:9px 10px;border-radius:8px;margin:1px 0}
 #utList option:checked{background:#003d3d linear-gradient(#003d3d,#003d3d);color:#fff}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media print{#utBar,#utModal,#utPanel{display:none!important}#teamModal,#ownerCard{display:none!important}#dash-clock-bar,#controls,#refreshBtn,#df-lock-btn,#df-logout-btn{display:none!important}details{break-inside:avoid}}
 </style>
-<script src="portal-meta.js?v=8.11.0"></script>
-<script src="portal-role.js?v=8.11.0"></script>
+<script src="portal-meta.js?v=8.11.1"></script>
+<script src="portal-role.js?v=8.11.1"></script>
 </head>
 <body class="text-gray-800 antialiased min-h-screen flex flex-col">
 
@@ -70,14 +72,14 @@ details[open] .chev{transform:rotate(-90deg)}
   </div>
 </div>
 
-<header class="bg-white border-b border-gray-100 shadow-sm py-6 px-4">
+<header class="bg-white border-b border-gray-100 shadow-sm py-3 px-4">
   <div class="max-w-7xl mx-auto flex flex-col items-center">
-    <div class="flex flex-wrap justify-center items-center gap-8 mb-6">
-      <img src="logo0.png" alt="Logo_Diploma2026" class="max-h-20 object-contain">
-      <img src="logo1.png" alt="Dar Al-Forsan Logo" class="max-h-20 object-contain">
-      <img src="logo2.png" alt="ETEC Logo" class="max-h-20 object-contain">
+    <div class="flex flex-wrap justify-center items-center gap-5 mb-2">
+      <img src="logo0.png" alt="Logo_Diploma2026" class="max-h-10 object-contain">
+      <img src="logo1.png" alt="Dar Al-Forsan Logo" class="max-h-10 object-contain">
+      <img src="logo2.png" alt="ETEC Logo" class="max-h-10 object-contain">
     </div>
-    <h1 class="text-2xl md:text-3xl font-black text-etecteal-900 text-center">مشروع ربط الشواهد بالسجلات</h1>
+    <h1 class="text-lg md:text-xl font-black text-etecteal-900 text-center">مشروع ربط الشواهد بالسجلات</h1>
     <p class="text-sm text-gray-500 mt-1 text-center">الاستعداد لزيارة التقويم الخارجي لهيئة تقويم التعليم والتدريب — قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان</p>
     <span class="mt-3 inline-flex items-center gap-1.5 bg-accentgold/15 text-amber-800 border border-accentgold/30 text-[11px] font-black px-3 py-1.5 rounded-full"><i class="fa-solid fa-calendar-days"></i> العام الدراسي 2026 - 2027 م</span>
   </div>
@@ -94,7 +96,12 @@ details[open] .chev{transform:rotate(-90deg)}
 </div>
 
 
-<main class="flex-1 max-w-7xl mx-auto w-full px-4 py-8">
+<main class="flex-1 max-w-3xl mx-auto w-full px-4 py-6">
+
+  <!-- v8.11.1: شاشة الدور — سؤال واحد، رقم واحد، إجراء واحد -->
+  <section id="roleScreen" class="mb-5" aria-live="polite"></section>
+
+  <details id="fullView" class="mb-6"><summary><i class="fa-solid fa-layer-group text-etecteal-500"></i> التفاصيل الكاملة والأدوات <span class="font-semibold text-slate-400 text-[11.5px]">· كل المؤشرات والوثائق والصور</span></summary><div class="mt-4">
 
   <!-- لوحة تحكم المشروع: البطاقة العليا -->
   <section id="hero" class="bg-gradient-to-br from-etecteal-900 to-slate-900 text-white rounded-3xl p-5 md:p-8 mb-6 shadow-xl">
@@ -212,6 +219,7 @@ details[open] .chev{transform:rotate(-90deg)}
   </section>
 
   <section id="list" aria-live="polite"></section>
+  </div></details>
 
 </main>
 
@@ -265,9 +273,9 @@ details[open] .chev{transform:rotate(-90deg)}
 
 <footer class="text-center text-[11px] text-gray-400 py-6">مدارس دار الفرسان — قسم الدبلوما الأمريكية (بنين) — مشروع ربط الشواهد بالسجلات</footer>
 
-<script src="portal-config.js?v=8.11.0"></script>
-<script src="portal-names.js?v=8.11.0"></script>
-<script src="etec-ref.js?v=8.11.0"></script>
+<script src="portal-config.js?v=8.11.1"></script>
+<script src="portal-names.js?v=8.11.1"></script>
+<script src="etec-ref.js?v=8.11.1"></script>
 <script>
 /* رابط تطبيق الويب لـ drive_check_script.gs بعد النشر (Deploy → Web app) */
 const STATUS_URL = window.ETEC_STATUS_URL || ""; /* يُضبط في portal-config.js */
@@ -947,11 +955,82 @@ function renderEtecRef(){ const box=document.getElementById("etecRefBody"); if(!
   <div class="border border-gray-100 rounded-xl p-3"><b class="text-slate-800">أدوات القياس عبر المؤشرات الـ${DATA.length}</b><table class="text-[11.5px] w-full mt-1"><tbody>${cntRows}</tbody></table><div class="text-[10.5px] text-slate-400 mt-1">عدد المؤشرات التي تُستخدم فيها كل أداة (إرشادي).</div></div>
   <div class="border border-gray-100 rounded-xl p-3"><b class="text-slate-800">جاهزية أدوات التقويم الذاتي</b><table class="text-[11.5px] w-full mt-1"><tbody>${rq}</tbody></table><div class="text-[10.5px] text-slate-400 mt-1">الحالة تُدخل يدوياً في <code>ETEC_TOOLS_STATUS</code> من منصة تميز؛ «لم يُسجَّل» ليست صفراً.</div></div>
   </div><div class="mt-3"><a href="reference.html" class="vbtn pri"><i class="fa-solid fa-book-open"></i> مرجع الهيئة الكامل: المصادر والفروق والتناقضات</a></div>`; }
+/* ===== v8.11.1: شاشة الدور ===== */
+let RS_DOM=0;
+function openFull(){ const f=document.getElementById("fullView"); if(f){ f.open=true; f.scrollIntoView({behavior:"smooth",block:"start"}); } }
+function waitOf(i){ let w=0; docsOf(i).forEach(d=>{ const st=docStage(i,d); w+=Math.max(0,st.n*(st.s2-st.s3)); }); w+=visInfo(i).L.filter(r=>r.valid!==false&&r.ok&&!r.ver).length; return Math.round(w); }
+const rsCard=h=>`<div class="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">${h}</div>`;
+const rsQ=(role,q)=>`<div class="text-[12px] font-bold text-slate-500">${esc(role)}</div><div class="text-[13px] text-slate-500 mb-1">${esc(q)}</div>`;
+const rsBig=t=>`<div class="text-2xl font-black text-slate-800 mb-3">${t}</div>`;
+const rsCode=c=>`<span dir="ltr" style="unicode-bidi:isolate">${esc(c)}</span>`;
+const rsRow=(title,sub,btn)=>`<div class="flex items-center gap-3 py-3 border-t border-gray-100"><div class="flex-1 min-w-0"><div class="text-[13.5px] font-black text-slate-800 leading-6">${title}</div><div class="text-[11.5px] text-slate-500">${sub}</div></div>${btn||""}</div>`;
+const rsBtn=(i,pri,l)=>`<a class="vbtn${pri?" pri":""}" href="${FOLDER(i.f)}" target="_blank" rel="noopener"><i class="fa-brands fa-google-drive"></i> ${l||"افتح المجلد"}</a>`;
+const rsDet=(k,t,b)=>`<details data-k="${k}" class="border-t border-gray-100 mt-1"><summary>${t}</summary><div class="pb-2">${b}</div></details>`;
+const rsNote=t=>`<div class="text-[11.5px] text-slate-400 mt-3 leading-6">${t}</div>`;
+const rsBar=(p,c)=>`<div class="h-1.5 bg-slate-100 rounded-full overflow-hidden mt-1.5"><div style="width:${p}%;height:100%;background:${c||"#0f766e"}"></div></div>`;
+const rsCnt=n=>n===1?"مهمة واحدة":(n===2?"مهمتان":n+(n<=10?" مهام":" مهمة"));
+function rsMember(){
+  const memberSel=SEL.d&&typeof SEL.p==="number";
+  const dOpts=Object.keys(TEAMS).map(d=>`<option value="${d}"${+d===SEL.d?" selected":""}>${esc(DOMAINS[d])}</option>`).join("");
+  const pOpts=SEL.d&&TEAMS[SEL.d]?TEAMS[SEL.d].mem.map((m,x)=>`<option value="${x}"${SEL.p===x?" selected":""}>${esc(m)}</option>`).join(""):"";
+  const selCls='class="border border-gray-200 rounded-lg px-2 py-1 bg-white"';
+  const pick=`<div class="flex flex-wrap items-center gap-3 mb-3 text-[12px] font-bold text-slate-500"><label>المجال <select id="rsDom" ${selCls}><option value="">اختر…</option>${dOpts}</select></label>${SEL.d?`<label>اسمك <select id="rsPer" ${selCls}><option value="">اختر…</option>${pOpts}</select></label>`:""}</div>`;
+  const hd=rsQ(UTYPES.member.n,UTYPES.member.q);
+  if(!memberSel) return rsCard(hd+rsBig("اختر اسمك لتظهر مهامك")+pick);
+  const rows=DATA.filter(i=>matchOwner(i,selOwnerValue())).map(i=>({i,n:nextAction(i),r:readiness(i)}));
+  const todo=rows.filter(x=>x.n.k!=="done").sort((a,b)=>a.r-b.r||a.i.code.localeCompare(b.i.code)), done=rows.filter(x=>x.n.k==="done");
+  const line=x=>rsRow(esc(x.n.t),rsCode(x.i.code)+" · "+esc(x.i.st),rsBtn(x.i,false));
+  const top=todo.slice(0,3).map((x,k)=>rsRow(esc(x.n.t),rsCode(x.i.code)+" · "+esc(x.i.st),rsBtn(x.i,k===0))).join("");
+  const rest=todo.length>3?rsDet("m-rest","باقي مهامي ("+(todo.length-3)+")",todo.slice(3).map(line).join("")):"";
+  const dn=done.length?rsDet("m-done","ما أنجزته ("+done.length+")",done.map(x=>rsRow('<i class="fa-solid fa-circle-check text-emerald-600"></i> '+rsCode(x.i.code),esc(x.i.st),"")).join("")):"";
+  return rsCard(hd+pick+rsBig(todo.length?rsCnt(todo.length)+" أمامك":'<i class="fa-solid fa-circle-check text-emerald-600"></i> لا شيء مطلوب منك الآن')+top+rest+dn);
+}
+function rsSup(){
+  const dOpts=Object.keys(TEAMS).map(d=>`<option value="${d}"${+d===RS_DOM?" selected":""}>${esc(DOMAINS[d])}</option>`).join("");
+  const pick=`<label class="text-[12px] font-bold text-slate-500 block mb-3">المجال <select id="rsSupDom" class="border border-gray-200 rounded-lg px-2 py-1 bg-white"><option value="0">كل المجالات</option>${dOpts}</select></label>`;
+  const inD=i=>!RS_DOM||i.d===RS_DOM, tot=Math.round(statsFor(inD).wait);
+  const rows=DATA.filter(inD).map(i=>({i,w:waitOf(i)})).filter(x=>x.w>0).sort((a,b)=>b.w-a.w||a.i.code.localeCompare(b.i.code));
+  const line=(x,k)=>rsRow(esc(x.i.st),rsCode(x.i.code)+" · "+x.w+(x.w===1?" ملف":" ملفات")+" بانتظار مراجعتك",rsBtn(x.i,k===0,"راجع في Drive"));
+  const top=rows.slice(0,3).map(line).join("");
+  const rest=rows.length>3?rsDet("s-rest","عرض الباقي ("+(rows.length-3)+" مؤشراً)",rows.slice(3).map(line).join("")):"";
+  const prog=rsDet("s-prog","تقدّم المجالات",[1,2,3,4].map(d=>{ const p=P100(domProg(d,evProg)); return `<div class="py-1.5"><div class="flex justify-between text-[12.5px] font-bold text-slate-700"><span>${esc(DOMAINS[d])}</span><span>${p}%</span></div>${rsBar(p)}</div>`; }).join(""));
+  return rsCard(rsQ(UTYPES.sup.n,UTYPES.sup.q)+pick+rsBig(tot?(tot===1?"ملف واحد":(tot===2?"ملفان":tot+(tot<=10?" ملفات":" ملفاً")))+" بانتظار مراجعتك":'<i class="fa-solid fa-circle-check text-emerald-600"></i> لا شيء ينتظر مراجعتك')+top+rest+prog+rsNote("هذه الصفحة للعرض؛ تُنفَّذ المراجعة على الملفات في Drive."));
+}
+function rsSelf(){
+  const ev=projProg(evProg), s=statsFor(()=>true), nS=DATA.filter(inS).length, p=P100(ev);
+  const doms=[1,2,3,4].map(d=>({d,p:domProg(d,evProg)})).filter(x=>x.p!==null).sort((a,b)=>a.p-b.p);
+  const domRows=doms.map(x=>{ const q=P100(x.p); return `<div class="py-2 border-t border-gray-100"><div class="flex justify-between text-[13px] font-black text-slate-700"><span>المجال ${x.d} · ${esc(DOMAINS[x.d])}</span><span>${q}%</span></div>${rsBar(q,TEAM_COLOR[x.d])}</div>`; }).join("");
+  const cm=new Map(); DATA.forEach(i=>{ let o=cm.get(i.c); if(!o){ o={c:i.c,cn:i.cn,d:i.d,n:0,nS:0,sum:0}; cm.set(i.c,o); } o.n++; if(inS(i)){ o.nS++; o.sum+=docProg(i); } });
+  const crit=[...cm.values()].sort((a,b)=>(a.nS?0:1)-(b.nS?0:1)||(a.nS&&b.nS?a.sum/a.nS-b.sum/b.nS:0)||a.c.localeCompare(b.c)).map(o=>rsRow("المعيار "+rsCode(o.c)+" · "+esc(o.cn),o.nS?o.nS+" من "+o.n+" مؤشراً رسمياً":"لا قوائم سجلات رسمية — غير مقاس",o.nS?`<b class="text-[13px] text-slate-700">${P100(o.sum/o.nS)}%</b>`:'<span class="text-slate-400">—</span>')).join("");
+  const links=rsDet("f-ref","المرجع والتقارير",'<div class="flex flex-wrap gap-2 pt-2"><a class="vbtn" href="reference.html">مرجع الهيئة</a><a class="vbtn" href="report-all.html">الرؤية الشاملة</a><a class="vbtn" href="all_summary.html">تحليل الفجوة</a><a class="vbtn" href="records-sources.html">مصادر السجلات</a></div>');
+  return rsCard(rsQ(UTYPES.self.n,UTYPES.self.q)+`<div class="mb-4"><div class="text-[12px] text-slate-500">تقدّم رفع السجلات الرسمية</div><div class="text-4xl font-black text-slate-800">${p}%</div>${rsBar(p)}<div class="text-[11.5px] text-slate-500 mt-1.5">${s.regsOk} من ${s.regs} سجلاً · ${nS} مؤشراً رسمياً · ليس نتيجة تقويم ولا اعتماداً</div></div><div class="text-[12px] font-black text-slate-500">الأضعف أولاً</div>`+domRows+rsDet("f-crit","المعايير بالتفصيل",crit)+links+rsNote("للعرض والمتابعة فقط: بلا رفع أو مراسلة."));
+}
+function rsAdmin(){
+  const s=statsFor(()=>true), p=P100(projProg(evProg)); let none=0; DATA.forEach(i=>{ if(inS(i)&&offState(i)==="none") none++; });
+  const cn=document.getElementById("utConn"), ok=cn&&/emerald/.test(cn.className), ct=cn?cn.textContent.trim():"غير معروف";
+  const card=(l,v,c)=>`<div class="bg-slate-50 rounded-xl p-3.5"><div class="text-[11.5px] text-slate-500">${l}</div><div class="text-2xl font-black ${c||"text-slate-800"}">${v}</div></div>`;
+  const tools=rsDet("a-tools","أدوات المدير",'<div class="flex flex-wrap gap-2 pt-2"><button type="button" class="vbtn" data-openfull><i class="fa-solid fa-layer-group"></i> التفاصيل الكاملة</button><a class="vbtn" href="hardcopy.html">تقرير استلام المهام</a><a class="vbtn" href="approval-request.html">طلب الرقمنة</a><a class="vbtn" href="output.html">مولّد التقرير البصري</a><a class="vbtn" href="reference.html">مرجع الهيئة</a></div>');
+  const roles=rsDet("a-roles","الأدوار والصلاحيات",'<div class="text-[12px] text-slate-600 leading-7 pt-2">الأدوار تخصيص عرض لا حماية: بيانات الصفحات وملف <code>access.txt</code> عامّان. الحماية الفعلية تحتاج خادم مصادقة (مرحلة لاحقة).</div>');
+  return rsCard(rsQ(UTYPES.admin.n,UTYPES.admin.q)+`<div class="grid grid-cols-2 gap-3 mb-2">${card("الاتصال بـ Drive",esc(ct.length>22?ct.slice(0,22)+"…":ct),ok?"text-emerald-700 !text-lg":"text-amber-700 !text-lg")}${card("التقدّم الرسمي",p+"%")}${card("مؤشرات رسمية لم تبدأ",none)}${card("بانتظار المراجعة",Math.round(s.wait))}</div>`+tools+roles);
+}
+function renderRoleScreen(){
+  const el=document.getElementById("roleScreen"); if(!el) return;
+  const open=new Set([...el.querySelectorAll("details[open]")].map(d=>d.dataset.k));
+  const fn={member:rsMember,sup:rsSup,self:rsSelf,admin:rsAdmin}[UT];
+  el.innerHTML=fn?fn():"";
+  el.querySelectorAll("details").forEach(d=>{ if(open.has(d.dataset.k)) d.open=true; }); }
+document.getElementById("roleScreen").addEventListener("change",e=>{
+  const t=e.target;
+  if(t.id==="rsDom"){ SEL={d:+t.value||0,p:"all"}; applySel(); }
+  else if(t.id==="rsPer"){ if(t.value!=="") selectOwner("R|"+SEL.d+"|"+t.value); }
+  else if(t.id==="rsSupDom"){ RS_DOM=+t.value||0; renderRoleScreen(); } });
+document.getElementById("roleScreen").addEventListener("click",e=>{ if(e.target.closest("[data-openfull]")) openFull(); });
+
 function render(){ renderEtecRef(); renderSummary(); renderHero(); renderOverview(); renderPickers(); renderWorkspace();
   document.getElementById("taskTools").classList.toggle("hidden",view!=="tasks");
   document.getElementById("sortBtn").textContent=sortMode==="ready"?"الأحوج للعمل أولاً":"حسب الرمز";
   ({tasks:renderTasks,records:renderRecords,shots:renderShots,extra:renderExtra})[view]();
-  renderUTPanel(); applyUT(); }
+  renderUTPanel(); renderRoleScreen(); applyUT(); }
 
 function setConn(kind,msg){ const m={ok:["bg-emerald-400/15 text-emerald-300","fa-circle-check"],off:["bg-amber-400/15 text-amber-300","fa-link-slash"],err:["bg-rose-400/15 text-rose-300","fa-triangle-exclamation"],load:["bg-white/10","fa-circle-notch fa-spin"]}[kind];
   connPill.className="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1.5 rounded-full "+m[0]; connPill.innerHTML=`<i class="fa-solid ${m[1]}"></i> ${msg}`; if(typeof utConnSet==="function") utConnSet(kind,msg,m[1]); }
