@@ -53,7 +53,8 @@ details[open] .chev{transform:rotate(-90deg)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media print{#utBar,#utModal,#utPanel{display:none!important}#teamModal,#ownerCard{display:none!important}#dash-clock-bar,#controls,#refreshBtn,#df-lock-btn,#df-logout-btn{display:none!important}details{break-inside:avoid}}
 </style>
-<script src="portal-meta.js?v=8.10.13"></script>
+<script src="portal-meta.js?v=8.11.0"></script>
+<script src="portal-role.js?v=8.11.0"></script>
 </head>
 <body class="text-gray-800 antialiased min-h-screen flex flex-col">
 
@@ -152,12 +153,12 @@ details[open] .chev{transform:rotate(-90deg)}
   <!-- Summary -->
   <section class="grid md:grid-cols-3 gap-4 mb-6" aria-label="ملخص الإنجاز">
     <div class="bg-white rounded-xl border border-gray-100 p-5">
-      <div class="flex items-baseline justify-between"><span class="text-sm font-bold text-slate-600">جاهزية الوثائق (السجلات)</span><span id="sumRegsPct" class="text-3xl font-black text-etecteal-700">0</span></div>
+      <div class="flex items-baseline justify-between"><span class="text-sm font-bold text-slate-600">تقدّم رفع السجلات الرسمية</span><span id="sumRegsPct" class="text-3xl font-black text-etecteal-700">0</span></div>
       <div class="bar mt-3"><span id="sumRegsBar" style="width:0"></span></div>
       <div id="sumRegsTxt" class="text-[12px] text-gray-500 mt-2"></div>
     </div>
     <div class="bg-white rounded-xl border border-gray-100 p-5">
-      <div class="flex items-baseline justify-between"><span class="text-sm font-bold text-slate-600">جاهزية تقرير الشواهد</span><span id="sumParas" class="text-3xl font-black text-etecteal-700">0</span></div>
+      <div class="flex items-baseline justify-between"><span class="text-sm font-bold text-slate-600">جودة الشواهد (داخلي)</span><span id="sumParas" class="text-3xl font-black text-etecteal-700">0</span></div>
       <div class="bar mt-3"><span id="sumParasBar" style="width:0"></span></div>
       <div class="text-[12px] text-gray-500 mt-2"><span id="sumParasTxt"></span></div>
     </div>
@@ -170,8 +171,8 @@ details[open] .chev{transform:rotate(-90deg)}
 
   <details id="algoBox" class="bg-white border border-gray-100 rounded-xl p-4 -mt-2 mb-6 text-[12px] text-slate-600 leading-7"><summary class="font-black text-slate-800 cursor-pointer"><i class="fa-solid fa-calculator text-etecteal-500"></i> آلية عمل اللوحة: كيف تُحسب نسب الإنجاز؟ <span class="text-[10.5px] font-semibold text-gray-400">· لمدير النظام</span></summary>
 <ol class="list-decimal pr-5 space-y-0.5"><li><b>الوثيقة</b> (= السجل المطلوب) تُحسب <b>مرفوعة</b> إذا وُجد في مجلدها ملف صالح (غير فارغ وبامتداد مقبول) أياً كان اسمه. وتُجمع سجلات فقرات المؤشر المتكررة في وثيقة واحدة تخدم الفقرات المرتبطة بها.</li>
-<li><b>جاهزية الوثائق</b> = وثائق المؤشر المرفوعة ÷ المطلوبة. <b>جاهزية تقرير الشواهد</b> = (وجود تقرير صالح + الصور الصالحة ÷ 6 بحد أقصى 6) ÷ 2، وتُعدّ الصور من مجلد «صور»، ويلزم <b>ست صور على الأقل</b> في كل تقرير.</li>
-<li><b>المؤشر</b> = متوسط (الوثائق، تقرير الشواهد)، وهو «مكتمل الرفع» حين يبلغ الاثنان 100%. <b>المعيار</b> = متوسط مؤشراته. <b>المجال</b> = متوسط معاييره. <b>المشروع</b> = متوسط مجالاته الأربعة.</li>
+<li><b>تقدّم رفع السجلات الرسمية</b> للمؤشر = وثائقه الرسمية المرفوعة ÷ المطلوبة، ويقتصر على المؤشرات التي نشرت الهيئة لها قوائم سجلات (28 مؤشراً). <b>جودة الشواهد</b> (عدّاد داخلي منفصل) = (وجود تقرير صالح + الصور الصالحة ÷ 6 بحد أقصى 6) ÷ 2، ويلزم <b>ست صور على الأقل</b> في كل تقرير، ولا تدخل في النسبة الرسمية.</li>
+<li><b>المعيار</b> = متوسط مؤشراته الرسمية. <b>المجال</b> = متوسط معاييره. <b>المشروع</b> = متوسط مجالاته الأربعة. معيار أو مجال بلا مؤشرات رسمية يظهر «غير مقاس» ولا يُحسب صفراً، والسجلات الداعمة التي استحدثتها المدرسة خارج النسبة.</li>
 <li><b>التسمية</b> وفق القاعدة و<b>مراجعة المشرف</b> علامتا جودة بجانب النسبة («تحتاج إعادة تسمية» · «بانتظار التحقق»)، ولا تدخلان في النسبة.</li>
 <li><b>ما تقيسه الأرقام:</b> «جاهزية» رفع الوثائق والتقرير البصري، وهي مقياس داخلي. لا تمثّل نتيجة التقويم الذاتي أو الخارجي؛ فالوثائق أداة واحدة من 12 أداة تعتمدها الهيئة، ولا يُقاس بها بعض المؤشرات أصلاً (انظر «مرجع الهيئة وتحليل الأدوات» أدناه).</li>
 <li><b>الفقرة</b> لا يُعمل بها؛ بل تظهر وسماً على الوثيقة وفي «مصفوفة التتبّع»، وهي «مغطاة» حين تكتمل وثائقها. وتقيس الأرقام اكتمال الرفع ولا تحكم على أداء المدرسة.</li></ol></details>
@@ -264,9 +265,9 @@ details[open] .chev{transform:rotate(-90deg)}
 
 <footer class="text-center text-[11px] text-gray-400 py-6">مدارس دار الفرسان — قسم الدبلوما الأمريكية (بنين) — مشروع ربط الشواهد بالسجلات</footer>
 
-<script src="portal-config.js?v=8.10.13"></script>
-<script src="portal-names.js?v=8.10.13"></script>
-<script src="etec-ref.js?v=8.10.13"></script>
+<script src="portal-config.js?v=8.11.0"></script>
+<script src="portal-names.js?v=8.11.0"></script>
+<script src="etec-ref.js?v=8.11.0"></script>
 <script>
 /* رابط تطبيق الويب لـ drive_check_script.gs بعد النشر (Deploy → Web app) */
 const STATUS_URL = window.ETEC_STATUS_URL || ""; /* يُضبط في portal-config.js */
@@ -320,9 +321,9 @@ const pct = (a,b) => b ? Math.round(a*100/b) : 0;
    الإحالة (ETEC_DOC_REFS): ملاحظة اختيارية لكل مؤشر تبيّن الجزء الذي يخصه من الوثيقة (صفحة أو عيّنة)، ولا تدخل في النسبة.
    النطاق: «للمدرسة كلها» افتراضاً، و«لكل مرحلة» لما يُدرج في ETEC_DOC_STAGE_SCOPED.
    تقدم الوثيقة = 1 إذا رُفع في مجلدها ملف صالح (غير فارغ وبامتداد مقبول) أياً كان اسمه، وإلا 0؛ وتُحسب في كل مؤشر مرتبط بها.
-   جاهزية الوثائق = متوسط تقدم وثائق المؤشر (أو وثائقه المطلوبة إن كان خارج تقرير السجلات).
+   تقدّم السجلات الرسمية للمؤشر = متوسط تقدم وثائقه، ويقتصر على المؤشرات ذات القوائم الرسمية (i.p).
    جاهزية تقرير الشواهد = (وجود تقرير صالح + الصور الصالحة المرفوعة ÷ 6 بحد أقصى 6) ÷ 2، وتُعدّ الصور من مجلد «صور» لا من اسم التقرير.
-   تقدم المؤشر = (جاهزية الوثائق + جاهزية تقرير الشواهد) ÷ 2، وهو «مكتمل الرفع» حين يبلغ الاثنان 100%.
+   جودة الشواهد عدّاد داخلي ولا تدخل في النسبة الرسمية؛ والمؤشر الرسمي «مكتمل الرفع» حين تبلغ وثائقه 100%.
    تقدم المعيار = متوسط مؤشراته. تقدم المجال = متوسط معاييره. تقدم المشروع = متوسط مجالاته الأربعة.
    التسمية ومراجعة المشرف علامتا جودة بجانب النسبة ولا تدخلان فيها. والفقرة تُشتق: «مغطاة» حين تكتمل وثائقها.
    العدّ المجمَّع (مجال/فريق/مشروع) يعدّ الوثيقة المشتركة مرة واحدة. */
@@ -360,11 +361,13 @@ const shortMsg=r=>`تنبيه: يحوي تقرير الشواهد ${r.n===0?"0 �
 function visInfo(i){ const L=(STATUS.reportsList[i.code]||[]), valid=L.filter(r=>r.valid!==false), n=valid.length, ph=STATUS.photos[i.code]||0, photos=Math.min(ph,6), declared=Math.max(0,...valid.map(r=>r.n||0));
   return {L,n,ph,photos,p:((n>0?1:0)+photos/6)/2,ok:(n>0&&ph>=6)?1:0,short:(n>0&&ph<6)?[{name:(valid[0]||{}).name||"",n:ph}]:[],renameN:L.filter(r=>r.valid!==false&&!r.ok).length,ver:valid.filter(r=>r.ver).length,declared,mism:(n>0&&declared>0&&declared!==ph)}; }
 const visProg=i=>visInfo(i).p;
-const overallProg=i=>(docProg(i)+visProg(i))/2;
-const critProg=(c,f)=>avg(DATA.filter(i=>i.c===c).map(f));
-function domProg(d,f){ const cs=[...new Set(DATA.filter(i=>i.d===d).map(i=>i.c))]; return avg(cs.map(c=>critProg(c,f))); }
-const projProg=f=>avg([1,2,3,4].map(d=>domProg(d,f)));
-const P100=x=>Math.round(x*100);
+const inS=i=>!!i.p;
+const overallProg=i=>inS(i)?docProg(i):(docProg(i)+visProg(i))/2;
+/* v8.11.0: التقدّم الرسمي = وثائق المؤشرات التي نشرت الهيئة لها قوائم سجلات (i.p) فقط. معيار أو مجال بلا مؤشرات في النطاق «غير مقاس» (null) ولا يُحسب 0%. جودة الشواهد (visProg) عدّاد داخلي على كل المؤشرات. */
+const critProg=(c,f)=>{ const a=DATA.filter(i=>i.c===c&&(f!==evProg||inS(i))).map(f); return a.length?avg(a):null; };
+function domProg(d,f){ const a=[...new Set(DATA.filter(i=>i.d===d).map(i=>i.c))].map(c=>critProg(c,f)).filter(x=>x!==null); return a.length?avg(a):null; }
+const projProg=f=>{ const a=[1,2,3,4].map(d=>domProg(d,f)).filter(x=>x!==null); return a.length?avg(a):0; };
+const P100=x=>x==null?0:Math.round(x*100);
 function paraCovered(i,p){ const ds=docsOf(i); let ok=0; p.regs.forEach(r=>{ const d=ds.find(x=>x.raws.includes(r)); if(d&&docStage(i,d).s1===1) ok++; }); return {ok,total:p.regs.length,done:ok===p.regs.length}; }
 function indStat(i){ const sn=snapOf(i); if(sn&&sn.req>0) return {ok:Math.min(sn.up,sn.req),total:sn.req,p:docProg(i)}; const ds=docsOf(i), ok=ds.filter(d=>docStage(i,d).s1===1).length; return {ok,total:ds.length,p:docProg(i)}; }
 function stateOf(ok,total){ return ok===0?"none":ok===total?"done":"partial"; }
@@ -383,17 +386,17 @@ const initials = n => { const w=n.replace(/^أ\.\s*/,"").trim().split(/\s+/); re
 const avatar = (n,c,sz) => `<span class="avatar" style="background:${c};width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.4)}px" aria-hidden="true">${initials(n)}</span>`;
 const ring = (p,c,sz) => { const r=26,C=2*Math.PI*r; return `<svg width="${sz}" height="${sz}" viewBox="0 0 64 64" role="img" aria-label="${p}%"><circle cx="32" cy="32" r="${r}" fill="none" stroke="#e2e8f0" stroke-width="7"/><circle cx="32" cy="32" r="${r}" fill="none" stroke="${c}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${C.toFixed(2)}" stroke-dashoffset="${(C*(1-p/100)).toFixed(2)}" transform="rotate(-90 32 32)"/><text x="32" y="37" text-anchor="middle" font-size="15" font-weight="800" fill="#0f172a" font-family="Cairo,sans-serif">${p}%</text></svg>`; };
 function statsFor(pred){
-  const seen=new Set(), s={rep:0,repOk:0,repShort:0,repPhotos:0,repPhotosAll:0,ind:0,recInd:0,toolInd:0,paras:0,parasDone:0,regs:0,regsOk:0,tools:0,toolsOk:0,guide:0,guideOk:0,indsDone:0,notStarted:0,units:0,up:0,nm:0,vf:0,rename:0,wait:0,evSum:0,visSum:0};
+  const seen=new Set(), s={rep:0,repOk:0,repShort:0,repPhotos:0,repPhotosAll:0,ind:0,recInd:0,toolInd:0,paras:0,parasDone:0,regs:0,regsOk:0,tools:0,toolsOk:0,guide:0,guideOk:0,indsDone:0,notStarted:0,units:0,up:0,nm:0,vf:0,rename:0,wait:0,evSum:0,evN:0,visSum:0};
   DATA.forEach(i=>{ if(!pred(i)) return; s.ind++; const v=visInfo(i);
     s.rep+=(v.n>0?1:0); s.repOk+=v.ok; s.repShort+=v.short.length; s.repPhotos+=v.photos; s.repPhotosAll+=6;
     s.rename+=v.renameN+Math.max(0,(STATUS.photos[i.code]||0)-(STATUS.photosNamed[i.code]||0)); s.wait+=v.L.filter(r=>r.valid!==false&&r.ok&&!r.ver).length;
-    s.evSum+=docProg(i); s.visSum+=v.p;
+    if(inS(i)){ s.evSum+=docProg(i); s.evN++; } s.visSum+=v.p;
     const ds=docsOf(i); let up=0;
     ds.forEach(d=>{ const st=docStage(i,d); if(st.s1===1) up++; if(seen.has(d.key)) return; seen.add(d.key); s.units++; if(st.s1===1) s.up++; if(st.s2===1) s.nm++; if(st.s3===1) s.vf++; s.rename+=Math.max(0,st.n*(1-st.s2)); s.wait+=Math.max(0,st.n*(st.s2-st.s3)); if(i.p){ s.regs++; if(st.s1===1) s.regsOk++; } else { s.tools++; if(st.s1===1) s.toolsOk++; } });
     if(i.p){ s.recInd++; s.paras+=i.p.length; i.p.forEach(p=>{ if(paraCovered(i,p).done) s.parasDone++; }); if(up===ds.length) s.indsDone++; if(up===0) s.notStarted++; }
     else { s.toolInd++; }
     if(i.g) i.g.forEach(d=>{ s.guide++; if(STATUS.guide["G|"+i.code+"|"+d.n]>0) s.guideOk++; }); });
-  s.evP=s.ind?s.evSum/s.ind:0; s.visP=s.ind?s.visSum/s.ind:0; return s; }
+  s.evP=s.evN?s.evSum/s.evN:0; s.visP=s.ind?s.visSum/s.ind:0; return s; }
 function ownerName(o){ const [t,d,x]=o.split("|"); return t==="A" ? TEAMS[d].sup : TEAMS[d].mem[+x]; }
 function ownerCounts(o){ const m=DATA.filter(i=>matchOwner(i,o)); return {tasks:m.length,records:m.filter(i=>i.p).length,shots:m.length,extra:m.filter(i=>!i.p).length}; }
 function setView(v){ view=v; document.querySelectorAll("[data-view]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.view===v)); }
@@ -469,8 +472,8 @@ function openTeam(d){
         <button type="button" id="tmClose" class="w-9 h-9 rounded-full bg-white/15 hover:bg-white/30 shrink-0" aria-label="إغلاق"><i class="fa-solid fa-xmark"></i></button></div></div>
     <div class="p-5 space-y-5">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-        ${tile("جاهزية الوثائق",evD+"%","سلسلة الفقرات ← المؤشرات ← المعايير",evD,c)}
-        ${tile("جاهزية تقرير الشواهد",vsD+"%","الصور الصالحة وملف التقرير",vsD,"#0369a1")}
+        ${tile("تقدّم السجلات الرسمية",evD+"%","المؤشرات ذات القوائم الرسمية فقط",evD,c)}
+        ${tile("جودة الشواهد (داخلي)",vsD+"%","الصور الصالحة وملف التقرير",vsD,"#0369a1")}
         ${tile("المؤشرات",s.ind,`${s.recInd} داخل تقرير السجلات · ${s.toolInd} خارجه`)}
         ${tile("الفقرات المكتملة",`${s.parasDone}/${s.paras}`,"جميع سجلات الفقرة مرفوعة",pct(s.parasDone,s.paras),c)}
         ${tile("السجلات المرفوعة",`${s.regsOk}/${s.regs}`,"من السجلات المطلوبة",pct(s.regsOk,s.regs),c)}
@@ -530,6 +533,7 @@ function nextAction(i){
   r=v.L.find(x=>x.valid!==false&&!x.ver); if(r) return {k:"verify",t:"مكتمل الرفع — بانتظار مراجعة المشرف من تقرير الشواهد"};
   return {k:"done",t:"مكتمل الرفع والمراجعة"}; }
 const readiness=i=>P100(overallProg(i));
+function offState(i){ const e=docProg(i); return e>=0.9999?"done":(e===0?"none":"prog"); }
 function indState(i){ const e=docProg(i), v=visProg(i); if(e>=0.9999&&v>=0.9999) return "done"; if(e===0&&v===0) return "none"; return "prog"; }
 const ST_LABEL={done:["مكتمل الرفع","background:#ecfdf5;color:#047857;border-color:#a7f3d0"],prog:["لم يكتمل","background:#fffbeb;color:#92400e;border-color:#fde68a"],none:["لم يبدأ","background:#f1f5f9;color:#475569;border-color:#e2e8f0"]};
 const stChip=s=>`<span class="chip" style="${ST_LABEL[s][1]}">${ST_LABEL[s][0]}</span>`;
@@ -556,9 +560,9 @@ function planInfo(){
   const W=(window.ETEC_PLAN_WEEKS&&window.ETEC_PLAN_WEEKS.length===5)?window.ETEC_PLAN_WEEKS:[1,2,5,2,1];
   const vd=new Date(V+"T00:00:00"); if(isNaN(vd)) return null;
   const T=W.reduce((a,b)=>a+b,0), start=new Date(vd); start.setDate(start.getDate()-T*7);
-  const t=new Date(); t.setHours(0,0,0,0); const wk=(t-start)/(7*864e5), a1=W[0], a2=a1+W[1], a3=a2+W[2], N=DATA.length;
+  const t=new Date(); t.setHours(0,0,0,0); const wk=(t-start)/(7*864e5), a1=W[0], a2=a1+W[1], a3=a2+W[2], SS=DATA.filter(inS), N=SS.length;
   const pe=wk<=a1?0:(wk<=a2?4*(wk-a1)/W[1]:(wk<=a3?4+(N-4)*(wk-a2)/W[2]:N));
-  const ae=DATA.reduce((s,i)=>s+overallProg(i),0);
+  const ae=SS.reduce((s,i)=>s+docProg(i),0);
   return {vd,start,wk,planned:Math.round(pe),actual:Math.round(ae*10)/10,days:Math.round((vd-t)/864e5)}; }
 function planHTML(){ const p=planInfo(); if(!p) return "";
   const fd=d=>d.toLocaleDateString("ar-SA-u-ca-gregory",{year:"numeric",month:"long",day:"numeric"});
@@ -739,7 +743,7 @@ function ringHTML(layers,tick,center,S){ S=S||150; let s=`<svg width="${S}" heig
   if(tick!=null){ const L=layers[0], a=(-90+tick*360)*Math.PI/180, r1=L.r-L.w/2-2, r2=L.r+L.w/2+2; s+=`<line x1="${(70+r1*Math.cos(a)).toFixed(1)}" y1="${(70+r1*Math.sin(a)).toFixed(1)}" x2="${(70+r2*Math.cos(a)).toFixed(1)}" y2="${(70+r2*Math.sin(a)).toFixed(1)}" stroke="#fff" stroke-width="2.5"/>`; }
   return s+`<text x="70" y="79" text-anchor="middle" font-size="27" font-weight="900" fill="#fff" font-family="Cairo,sans-serif">${center}</text></svg>`; }
 function renderHero(){
-  const ev=projProg(evProg), vs=projProg(visProg), all=(ev+vs)/2;
+  const ev=projProg(evProg), vs=projProg(visProg), all=ev, nS=DATA.filter(inS).length;
   document.getElementById("heroPct1").textContent=PH1.pct+"%";
   document.getElementById("heroCenter").href=CENTER_URL; document.getElementById("heroRef").href=REF_URL;
   heroP1.innerHTML=`<div class="text-white/50 text-[10.5px] font-bold tracking-wide">المرحلة السابقة</div>${ringHTML([{p:PH1.pct/100,c:"#fbbf24",r:56,w:11}],PH1.atClose/100,PH1.pct+"%")}
@@ -747,16 +751,16 @@ function renderHero(){
     <div class="text-[10.5px] text-white/60 leading-5 mt-0.5">${PH1.atClose}% عند إقفال 2025-2026 ← ${PH1.pct}% بعد استئناف العمل<br>بتاريخ ${dmy(PH1.date)} · الخط الأبيض يبيّن موضع ${PH1.atClose}%</div>${PH1.pending?`<div class="text-[10.5px] text-amber-300 mt-1 leading-5">${PH1.pending===2?"مؤشران":PH1.pending+" مؤشرات"} بانتظار مستندات${PH1.pendingNote?`: ${esc(PH1.pendingNote)}`:""}</div>`:""}`;
   heroP2.innerHTML=`<div class="text-accentgold text-[10.5px] font-bold tracking-wide">المرحلة الحالية</div>${ringHTML([{p:ev,c:"#2dd4bf",r:56,w:10},{p:vs,c:"#38bdf8",r:40,w:10}],null,P100(all)+"%")}
     <div class="text-[13px] font-black leading-6">ربط الشواهد بالسجلات</div>
-    <div class="text-[10.5px] leading-5 mt-0.5"><span class="text-teal-300 font-bold">● الوثائق ${P100(ev)}%</span> · <span class="text-sky-300 font-bold">● تقرير الشواهد ${P100(vs)}%</span></div>
-    <div class="text-[10.5px] text-white/60 leading-5">${all<0.0001?"تبدأ من الصفر، وتتحرك مع كل ملف يُرفع":"جاهزية الشواهد داخلياً (وثائق + تقرير بصري) — ليست نتيجة تقويم ولا اعتماد"}</div>`; }
+    <div class="text-[10.5px] leading-5 mt-0.5"><span class="text-teal-300 font-bold">● السجلات الرسمية ${P100(ev)}%</span> · <span class="text-sky-300 font-bold">● جودة الشواهد (داخلي) ${P100(vs)}%</span></div>
+    <div class="text-[10.5px] text-white/60 leading-5">${all<0.0001?"تبدأ من الصفر، وتتحرك مع كل ملف يُرفع":"تقدّم رفع السجلات الرسمية ("+nS+" مؤشراً) — ليس نتيجة تقويم ولا اعتماداً"}</div>`; }
 function renderOverview(){
-  const dm={}; let D=0,P=0,N=0;
+  const dm={}; let D=0,P=0,N=0,supN=0;
   const shortBy={}; let shortN=0;
-  DATA.forEach(i=>{ const s=indState(i); const o=dm[i.d]=dm[i.d]||{done:0,prog:0,none:0,mem:{},short:0}; o[s]++; const sh=visInfo(i).short.length; if(sh){ o.short+=sh; shortN+=sh; shortBy[rName(i)]=(shortBy[rName(i)]||0)+sh; } if(s==="done") D++; else if(s==="prog") P++; else N++; if(s==="none"){ const k=ownerIdx(i); o.mem[k]=(o.mem[k]||0)+1; } });
-  const tot=DATA.length, started=D+P>0; let worst=null;
+  DATA.forEach(i=>{ const o=dm[i.d]=dm[i.d]||{done:0,prog:0,none:0,mem:{},short:0}; const sh=visInfo(i).short.length; if(sh){ o.short+=sh; shortN+=sh; shortBy[rName(i)]=(shortBy[rName(i)]||0)+sh; } if(!inS(i)){ supN++; return; } const s=offState(i); o[s]++; if(s==="done") D++; else if(s==="prog") P++; else N++; if(s==="none"){ const k=ownerIdx(i); o.mem[k]=(o.mem[k]||0)+1; } });
+  const tot=D+P+N, started=D+P>0; let worst=null;
   if(started) Object.keys(dm).forEach(d=>{ const o=dm[d], sh=o.none/(o.done+o.prog+o.none); if(!worst||sh>worst.sh) worst={d,sh,n:o.none}; });
-  const sentence=!started?`لم يبدأ الرفع بعد في أي مؤشر من المؤشرات الـ${tot}.`:`اكتمل رفع ${D} من ${tot} مؤشراً (${pct(D,tot)}%)، و${P} لم يكتمل بعد (${pct(P,tot)}%)، و${N} لم يبدأ (${pct(N,tot)}%).`+(worst&&worst.n?` أكثر المجالات تأخراً: المجال ${worst.d} (${DOMAINS[worst.d]})، لم يبدأ منه ${worst.n}.`:"");
-  overviewSum.innerHTML=`<div class="bg-white border border-gray-100 rounded-xl px-4 py-3 text-[13.5px] font-bold text-slate-700 leading-7"><i class="fa-solid fa-circle-info text-etecteal-500"></i> ${sentence}${shortN?`<div class="mt-1 text-[12.5px] font-extrabold text-red-600"><i class="fa-solid fa-triangle-exclamation"></i> ${shortN} ${shortN===1?"تقرير الشواهد يحوي":"تقارير الشواهد تحوي"} أقل من 6 صور${": "+Object.entries(shortBy).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>k+" ("+v+")").join("، ")}</div>`:""}<div class="mt-1 text-[12.5px] font-semibold text-slate-500">جاهزية الوثائق في المشروع <b class="text-etecteal-700">${P100(projProg(evProg))}%</b> · جاهزية تقرير الشواهد <b class="text-sky-700">${P100(projProg(visProg))}%</b></div>${planHTML()}</div>`;
+  const sentence=!started?`لم يبدأ رفع السجلات الرسمية بعد في أي مؤشر من المؤشرات الـ${tot} ذات القوائم الرسمية.`:`اكتمل رفع سجلات ${D} من ${tot} مؤشراً رسمياً (${pct(D,tot)}%)، و${P} لم يكتمل بعد (${pct(P,tot)}%)، و${N} لم يبدأ (${pct(N,tot)}%).`+(worst&&worst.n?` أكثر المجالات تأخراً: المجال ${worst.d} (${DOMAINS[worst.d]})، لم يبدأ منه ${worst.n}.`:"");
+  overviewSum.innerHTML=`<div class="bg-white border border-gray-100 rounded-xl px-4 py-3 text-[13.5px] font-bold text-slate-700 leading-7"><i class="fa-solid fa-circle-info text-etecteal-500"></i> ${sentence}${shortN?`<div class="mt-1 text-[12.5px] font-extrabold text-red-600"><i class="fa-solid fa-triangle-exclamation"></i> ${shortN} ${shortN===1?"تقرير الشواهد يحوي":"تقارير الشواهد تحوي"} أقل من 6 صور${": "+Object.entries(shortBy).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>k+" ("+v+")").join("، ")}</div>`:""}<div class="mt-1 text-[12.5px] font-semibold text-slate-500">تقدّم رفع السجلات الرسمية <b class="text-etecteal-700">${P100(projProg(evProg))}%</b> · جودة الشواهد (داخلي) <b class="text-sky-700">${P100(projProg(visProg))}%</b>${supN?` · ${supN} مؤشراً يُقاس بأدوات أخرى، وسجلاته داعمة فقط ولا تدخل النسبة`:""}</div>${planHTML()}</div>`;
   overview.innerHTML=Object.keys(TEAMS).map(d=>{ const c=TEAM_COLOR[d], o=dm[d], n=o.done+o.prog+o.none, evD=P100(domProg(+d,evProg)), vsD=P100(domProg(+d,visProg));
     const late=started?Object.keys(o.mem).map(k=>({k:+k,n:o.mem[k]})).sort((a,b)=>b.n-a.n).slice(0,2).map(x=>`${esc(TEAMS[d].mem[x.k])} (${x.n})`).join("، "):"";
     return `<div class="ovw"><button type="button" class="ov" data-ov="${d}" style="--tc:${c}" aria-label="عرض فريق المجال ${d} - ${esc(DOMAINS[d])}">
@@ -788,8 +792,8 @@ function renderWorkspace(){
       <div class="flex flex-wrap gap-2">${mailBtns(d,true)}<a class="vbtn" href="hardcopy.html?d=${d}&m=${SEL.p}" target="_blank" rel="noopener"><i class="fa-solid fa-print"></i> تقرير استلام المهام (للطباعة)</a><button type="button" class="vbtn" data-openteam="${d}"><i class="fa-solid fa-chart-pie"></i> تفاصيل الفريق</button><button type="button" class="vbtn" data-copylink><i class="fa-regular fa-copy"></i> نسخ رابط مساحتي</button><button type="button" class="vbtn" data-clearsel><i class="fa-solid fa-xmark"></i> عرض كل المجالات</button></div></div>
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mt-4">
       ${tile("المؤشرات مكتملة الرفع",cn.done+" من "+sc.length,cn.prog+" لم يكتمل · "+cn.none+" لم يبدأ",pct(cn.done,sc.length),c)}
-      ${tile("جاهزية الوثائق",P100(evS)+"%","مرفوعة "+s.up+" من "+s.units+" وثيقة",P100(evS),c)}
-      ${tile("جاهزية تقرير الشواهد",P100(vsS)+"%","مكتمل "+s.repOk+" من "+s.ind+" · الصور "+s.repPhotos+" من "+s.repPhotosAll,P100(vsS),"#0369a1")}
+      ${tile("تقدّم السجلات الرسمية",(wholeDom||s.evN>0)?P100(evS)+"%":"—",(wholeDom||s.evN>0)?"مرفوعة "+s.regsOk+" من "+s.regs+" سجلاً رسمياً":"مؤشراتك بلا قوائم سجلات رسمية؛ سجلاتها داعمة",P100(evS),c)}
+      ${tile("جودة الشواهد (داخلي)",P100(vsS)+"%","مكتمل "+s.repOk+" من "+s.ind+" · الصور "+s.repPhotos+" من "+s.repPhotosAll,P100(vsS),"#0369a1")}
       ${tile("تقارير ناقصة الصور",`<span class="${s.repShort?"text-red-600":""}">${s.repShort}</span>`,"أقل من 6 صور في التقرير")}
       ${tile("ملفات تحتاج إعادة تسمية",Math.round(s.rename),"اسمها غير مطابق")}
       ${tile("بانتظار مراجعة المشرف",Math.round(s.wait),"ملفات مسمّاة لم تُفحص بعد")}
@@ -802,7 +806,7 @@ function copyLink(){ try{ const u=new URL(location.href); u.search=""; if(UT) u.
 
 function renderSummary(){
   const s=statsFor(()=>true), ev=P100(projProg(evProg)), vs=P100(projProg(visProg));
-  sumRegsPct.textContent=ev+"%"; sumRegsBar.style.width=ev+"%"; sumRegsTxt.textContent=`مرفوعة ${s.up} من ${s.units} وثيقة`;
+  sumRegsPct.textContent=ev+"%"; sumRegsBar.style.width=ev+"%"; sumRegsTxt.textContent=`مرفوعة ${s.regsOk} من ${s.regs} سجلاً رسمياً في ${s.recInd} مؤشراً`;
   sumParas.textContent=vs+"%"; sumParasBar.style.width=vs+"%"; sumParasTxt.textContent=`تقارير الشواهد المكتملة ${s.repOk} من ${s.ind}${s.repShort?` · ${s.repShort} ناقصة الصور`:""} · الصور ${s.repPhotos} من ${s.repPhotosAll}`;
   sumTools.textContent=Math.round(s.rename); sumToolsBar.style.width=pct(Math.round(s.rename),Math.max(1,Math.round(s.rename+s.wait)))+"%"; sumToolsTxt.textContent=`ملفات تحتاج إعادة تسمية · وبانتظار مراجعة المشرف ${Math.round(s.wait)} ملفاً`;
 }
@@ -1010,7 +1014,7 @@ const UTYPES={
  admin:{n:"مدير النظام",ic:"fa-user-shield",q:"هل المنظومة سليمة؟",see:"كل الأقسام والأدوات: حالة الاتصال، والأرقام الكلية، ومراسلة الفرق، ومولّد التقارير.",hide:"لا شيء مخفي."},
  sup:{n:"مشرف فريق السجلات والشواهد",ic:"fa-user-check",q:"ما الذي ينتظر مراجعتي؟",see:"لوحة المراجعة: الملفات بانتظار مراجعتك، وما يحتاج إعادة تسمية، والتقارير الناقصة الصور، مع نظرة الإدارة ومساحة الفريق.",hide:"لا شيء مخفي مما يخص الإشراف."},
  member:{n:"عضو فريق السجلات والشواهد",ic:"fa-user-pen",q:"ماذا أرفع الآن؟",see:"«مساحتي»: مؤشراتك ووثائقك الناقصة وروابط مجلداتها وتقدم فريقك.",hide:"نظرة الإدارة والأرقام الكلية وأدوات المراسلة."},
- self:{n:"مشرف / فريق التقويم الذاتي",ic:"fa-magnifying-glass-chart",q:"أين فجواتنا؟",see:"المعايير مرتبة من الأضعف، والمؤشرات التي لم تبدأ، والنِّسب، والمرجع الرسمي (مرجع الهيئة وتحليل الأدوات)، وقائمة المؤشرات والوثائق.",hide:"أدوات الرفع والمراسلة، وإرشادات التصوير والوثائق المقترحة. للعرض والمتابعة فقط، دون اعتماد أو موافقة."}
+ self:{n:"مشرف عمليات التقويم الذاتي",ic:"fa-magnifying-glass-chart",q:"أين فجواتنا؟",see:"المعايير مرتبة من الأضعف، والمؤشرات التي لم تبدأ، والنِّسب، والمرجع الرسمي (مرجع الهيئة وتحليل الأدوات)، وقائمة المؤشرات والوثائق.",hide:"أدوات الرفع والمراسلة، وإرشادات التصوير والوثائق المقترحة. للعرض والمتابعة فقط، دون اعتماد أو موافقة."}
 };
 const UT_KEY="etec.utype.v1";
 let UT="", CRIT="";
@@ -1088,21 +1092,12 @@ function panelSup(){
     :`<div class="text-[12px] ${s.up||s.rep?"text-emerald-700":"text-slate-500"} font-bold">${s.up||s.rep?'<i class="fa-solid fa-circle-check"></i> لا شيء ينتظر مراجعتك الآن.':"لم يبدأ الرفع بعد؛ ستظهر هنا الملفات بانتظار مراجعتك فور رفعها."}</div>`;
   return panelBox(panelHead("fa-user-check","لوحة المراجعة","ما يحتاج قرارك أو متابعتك")+kpiGrid(tile("بانتظار مراجعتك",Math.round(s.wait),"ملفات مسمّاة لم تُراجَع بعد")+tile("تحتاج إعادة تسمية",Math.round(s.rename),"اسمها غير مطابق")+tile("تقارير ناقصة الصور",`<span class="${s.repShort?"text-red-600":""}">${s.repShort}</span>`,"أقل من 6 صور")+tile("وثائق مرفوضة",`<span class="${rejN?"text-red-600":""}">${rejN}</span>`,"بانتظار البديل"))+`<div class="mt-4 text-[12px] font-black text-slate-700 mb-2"><i class="fa-solid fa-list-check text-etecteal-500"></i> الأحوج لمراجعتك</div>${list}`); }
 function panelSelf(){
-  const cm=new Map(); DATA.forEach(i=>{ let o=cm.get(i.c); if(!o){ o={c:i.c,cn:i.cn,d:i.d,n:0,sum:0,done:0,none:0}; cm.set(i.c,o); } o.n++; o.sum+=overallProg(i); const st=indState(i); if(st==="done") o.done++; if(st==="none") o.none++; });
-  const arr=[...cm.values()].sort((a,b)=>a.sum/a.n-b.sum/b.n||a.c.localeCompare(b.c));
-  const rows=arr.map(o=>{ const p=P100(o.sum/o.n), c=TEAM_COLOR[o.d]; return `<div class="flex flex-wrap items-center gap-3 border border-gray-100 rounded-lg px-3 py-2 mb-1.5 ${CRIT===o.c?"bg-teal-50 border-teal-200":""}"><span class="dot" style="background:${c}"></span><span class="flex-1 min-w-[200px] text-[12.5px] font-black text-slate-700">المعيار ${ltr(o.c)} · ${esc(o.cn)}<span class="block text-[10.5px] font-semibold text-gray-400">المجال ${o.d} · ${esc(DOMAINS[o.d])} · ${o.n} مؤشراً · ${o.done} مكتمل الرفع · ${o.none} لم يبدأ</span></span><span class="w-40"><span class="bar block"><span style="width:${p}%;background:${c}"></span></span></span><b class="w-10 text-left text-[12px] text-slate-700">${p}%</b><button type="button" class="vbtn" data-crit="${o.c}">${CRIT===o.c?"معروض أدناه":"عرض مؤشراته"}</button></div>`; }).join("");
+  const cm=new Map(); DATA.forEach(i=>{ let o=cm.get(i.c); if(!o){ o={c:i.c,cn:i.cn,d:i.d,n:0,nS:0,sum:0,done:0,none:0}; cm.set(i.c,o); } o.n++; if(inS(i)){ o.nS++; o.sum+=docProg(i); const st=offState(i); if(st==="done") o.done++; if(st==="none") o.none++; } });
+  const arr=[...cm.values()].sort((a,b)=>(a.nS?0:1)-(b.nS?0:1)||(a.nS&&b.nS?a.sum/a.nS-b.sum/b.nS:0)||a.c.localeCompare(b.c));
+  const rows=arr.map(o=>{ const c=TEAM_COLOR[o.d], has=o.nS>0, p=has?P100(o.sum/o.nS):0; return `<div class="flex flex-wrap items-center gap-3 border border-gray-100 rounded-lg px-3 py-2 mb-1.5 ${CRIT===o.c?"bg-teal-50 border-teal-200":""}"><span class="dot" style="background:${c}"></span><span class="flex-1 min-w-[200px] text-[12.5px] font-black text-slate-700">المعيار ${ltr(o.c)} · ${esc(o.cn)}<span class="block text-[10.5px] font-semibold text-gray-400">المجال ${o.d} · ${esc(DOMAINS[o.d])} · ${has?o.nS+" من "+o.n+" مؤشراً لها قوائم سجلات رسمية · "+o.done+" مكتمل الرفع · "+o.none+" لم يبدأ":"لا قوائم سجلات رسمية منشورة لمؤشراته — غير مقاس هنا"}</span></span><span class="w-40">${has?`<span class="bar block"><span style="width:${p}%;background:${c}"></span></span>`:""}</span><b class="w-10 text-left text-[12px] text-slate-700">${has?p+"%":"—"}</b><button type="button" class="vbtn" data-crit="${o.c}">${CRIT===o.c?"معروض أدناه":"عرض مؤشراته"}</button></div>`; }).join("");
   const flt=CRIT?`<div class="mb-2"><span class="chip R">تصفية القائمة أدناه: المعيار ${ltr(CRIT)}</span> <button type="button" class="vbtn" data-critclear>إلغاء التصفية</button></div>`:"";
-  return panelBox(panelHead("fa-magnifying-glass-chart","فجوات التقويم الذاتي","المعايير مرتبة من الأضعف")+flt+rows); }
-function panelEdu(){
-  const s=statsFor(()=>true), ev=projProg(evProg), vs=projProg(visProg), all=(ev+vs)/2, p=planInfo();
-  const tot=DATA.length; let none=0,done=0; DATA.forEach(i=>{ const st=indState(i); if(st==="none") none++; else if(st==="done") done++; });
-  const low=DATA.map(i=>({i,o:overallProg(i)})).sort((a,b)=>a.o-b.o||a.i.code.localeCompare(b.i.code)).slice(0,8);
-  const lowH=low.map(({i,o})=>`<div class="flex flex-wrap items-center gap-2 border border-gray-100 rounded-lg px-3 py-2 mb-1.5"><span class="dot" style="background:${TEAM_COLOR[i.d]}"></span><b class="text-[12px] w-16 shrink-0 text-slate-600" dir="ltr" style="unicode-bidi:isolate">${ltr(i.code)}</b><span class="flex-1 min-w-[180px] text-[12px] font-bold text-slate-700">${esc(i.st)}<span class="block text-[10.5px] font-semibold text-gray-400">المجال ${i.d} · ${esc(DOMAINS[i.d])}</span></span><b class="text-[12px] text-slate-700">${P100(o)}%</b></div>`).join("");
-  return panelBox(panelHead("fa-landmark","الملخص التنفيذي","هل نحن جاهزون للزيارة؟")+kpiGrid(tile("اكتمال المشروع",P100(all)+"%","",P100(all),"#0f766e")+tile("مكتمل الرفع",done+" من "+tot,"مؤشراً")+tile("لم يبدأ",none,"مؤشراً بعد")+tile("الأيام المتبقية للزيارة",p?p.days:"—",p?"يوماً":"لم يُحدَّد موعد الزيارة"))+planHTML()+`<div class="mt-4 text-[12px] font-black text-slate-700 mb-2"><i class="fa-solid fa-arrow-trend-down text-etecteal-500"></i> المؤشرات الأقل اكتمالاً</div>${lowH}<div class="text-[11px] text-gray-400 mt-2">أسفل هذه اللوحة تقدم المجالات الأربعة. لا تظهر هنا أسماء الأفراد ولا تفاصيل الوثائق.</div>`); }
-function panelExt(){
-  const s=statsFor(()=>true); let photos=0; DATA.forEach(i=>photos+=(STATUS.photos[i.code]||0));
-  return panelBox(panelHead("fa-clipboard-check","الشواهد المرفوعة","أعداد حسب الحالة الراهنة")+kpiGrid(tile("المؤشرات",s.ind,"مؤشراً")+tile("الوثائق المرفوعة",s.up+" من "+s.units,"وثيقة مختلفة")+tile("تقارير الشواهد",s.rep+" من "+s.ind,"تقريراً")+tile("الصور المرفوعة",photos,"صورة"))+`<div class="text-[12px] text-gray-500 mt-3 leading-7">تعرض القائمة أدناه الشواهد لكل مؤشر مع رابط مجلده. للبحث اكتب رمز المؤشر أو اسمه أو اسم وثيقة.</div>`); }
-function renderUTPanel(){ const p=document.getElementById("utPanel"), fn={sup:panelSup,self:panelSelf,edu:panelEdu,ext:panelExt}[UT];
+  return panelBox(panelHead("fa-magnifying-glass-chart","فجوات رفع السجلات الرسمية","المعايير مرتبة من الأضعف · النسبة = سجلات مرفوعة ÷ مطلوبة في المؤشرات الرسمية فقط")+flt+rows); }
+function renderUTPanel(){ const p=document.getElementById("utPanel"), fn={sup:panelSup,self:panelSelf}[UT];
   if(!fn){ p.classList.add("hidden"); p.innerHTML=""; return; } p.innerHTML=fn(); p.classList.remove("hidden"); }
 document.getElementById("utPanel").addEventListener("click",e=>{
   const o=e.target.closest("[data-openind]"); if(o){ fSearch.value=o.dataset.openind; setView("tasks"); render(); document.getElementById("controls").scrollIntoView({behavior:"smooth"}); return; }

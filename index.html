@@ -48,7 +48,8 @@
         .bl-locked * { pointer-events: none; }
         .bl-badge { position: absolute; top: 14px; left: 14px; background: #0f172a; color: #fde68a; font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 999px; filter: none; }
     </style>
-<script src="portal-meta.js?v=8.10.13"></script>
+<script src="portal-meta.js?v=8.11.0"></script>
+<script src="portal-role.js?v=8.11.0"></script>
 </head>
 <body class="text-gray-800 antialiased min-h-screen flex flex-col">
 
@@ -87,7 +88,7 @@
     <main class="flex-1 max-w-6xl mx-auto w-full px-4 py-12">
 
         <!-- Intro -->
-        <div class="relative bg-gradient-to-br from-emerald-950 via-etecteal-900 to-slate-900 rounded-2xl shadow-lg p-8 mb-10 overflow-hidden text-center">
+        <div data-roles="admin,sup,self" class="relative bg-gradient-to-br from-emerald-950 via-etecteal-900 to-slate-900 rounded-2xl shadow-lg p-8 mb-10 overflow-hidden text-center">
             <div class="absolute -left-10 -bottom-10 w-48 h-48 bg-white/5 rounded-full"></div>
             <div class="absolute left-24 top-6 w-24 h-24 bg-white/5 rounded-full"></div>
             <div class="relative">
@@ -102,6 +103,9 @@
                 </p>
             </div>
         </div>
+
+        <!-- مدخل الدور المباشر (v8.11.0): يملؤه portal-role.js -->
+        <div id="roleHome"></div>
 
         <!-- مشروع ربط الشواهد بالسجلات — البطاقة البارزة (v8.10.1) -->
         <a href="stages.html" class="gate-card neon-card group block bg-gradient-to-br from-slate-950 via-etecteal-900 to-slate-900 text-white rounded-2xl p-6 md:p-8 mb-8 overflow-hidden">
@@ -124,7 +128,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             <!-- 2025-2026 -->
-            <div data-lock="index-2025-2026.html" class="gate-card group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-xl hover:border-etecteal-300">
+            <div data-roles="admin" data-lock="index-2025-2026.html" class="gate-card group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-xl hover:border-etecteal-300">
                 <div class="flex items-center justify-between gap-3 mb-2">
                     <div class="flex items-center gap-3">
                         <div class="p-3 bg-gradient-to-br from-etecteal-500 to-slate-900 text-white rounded-xl shadow-sm">
@@ -164,7 +168,7 @@
             </div>
 
             <!-- 2026-2027 -->
-            <a href="2026-2027.html" data-lock="2026-2027.html" class="gate-card group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-xl hover:border-accentgold/60">
+            <a href="2026-2027.html" data-roles="admin,sup,self" data-lock="2026-2027.html" class="gate-card group bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-xl hover:border-accentgold/60">
                 <div class="flex items-center justify-between gap-3 mb-4">
                     <div class="flex items-center gap-3">
                         <div class="p-3 bg-gradient-to-br from-accentgold to-etecteal-700 text-white rounded-xl shadow-sm">
@@ -202,7 +206,7 @@
         </div>
 
         <!-- Comprehensive Gap Analysis Report card -->
-        <a href="all_summary.html" class="gate-card group mt-6 block bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-xl hover:border-slate-300">
+        <a href="all_summary.html" data-roles="admin,sup,self" class="gate-card group mt-6 block bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-xl hover:border-slate-300">
             <div class="flex items-center gap-4 flex-wrap">
                 <div class="p-3 bg-gradient-to-br from-slate-700 to-slate-900 text-white rounded-xl shadow-sm shrink-0">
                     <i class="fa-solid fa-diagram-project text-xl"></i>
@@ -218,7 +222,7 @@
         </a>
 
         <!-- Administrative Governance card -->
-        <a href="governance.html" class="gate-card group mt-4 block bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-xl hover:border-etecteal-300">
+        <a href="governance.html" data-roles="admin,sup,self" class="gate-card group mt-4 block bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-xl hover:border-etecteal-300">
             <div class="flex items-center gap-4 flex-wrap">
                 <div class="p-3 bg-gradient-to-br from-etecteal-600 to-slate-900 text-white rounded-xl shadow-sm shrink-0">
                     <i class="fa-solid fa-folder-tree text-xl"></i>
@@ -233,7 +237,7 @@
             </div>
         </a>
         <!-- تقرير مصادر السجلات (مرجع) — v8.10.1 -->
-        <a href="records-sources.html" class="gate-card group mt-4 block bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-xl hover:border-indigo-300">
+        <a href="records-sources.html" data-roles="admin,sup,self" class="gate-card group mt-4 block bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-xl hover:border-indigo-300">
             <div class="flex items-center gap-4 flex-wrap">
                 <div class="p-3 bg-gradient-to-br from-indigo-600 to-slate-900 text-white rounded-xl shadow-sm shrink-0">
                     <i class="fa-solid fa-book-open text-xl"></i>
@@ -248,7 +252,7 @@
             </div>
         </a>
         <!-- مرجع الهيئة: الإصدار الثاني 2026 — v8.10.11 -->
-        <a href="reference.html" class="gate-card group mt-4 block bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-xl hover:border-teal-300">
+        <a href="reference.html" data-roles="admin,sup,self" class="gate-card group mt-4 block bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-xl hover:border-teal-300">
             <div class="flex items-center gap-4 flex-wrap">
                 <div class="p-3 bg-gradient-to-br from-teal-700 to-slate-900 text-white rounded-xl shadow-sm shrink-0">
                     <i class="fa-solid fa-scale-balanced text-xl"></i>
