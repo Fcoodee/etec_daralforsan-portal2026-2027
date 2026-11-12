@@ -15,15 +15,15 @@
   var SKEY = "etec.utype.session"; /* احتياطي لتبويب العمل الحالي: portal-meta.js يمسح KEY عند غياب جلسة دخول صالحة */
   var ORDER = ["admin", "sup", "member", "self"];
   var ROLES = {
-    admin:  { n: "مدير النظام", ic: "fa-user-shield", hl: "لوحة التحكم", q: "هل المنظومة سليمة؟", home: "evidence-link.html?u=admin" },
-    sup:    { n: "مشرف فريق السجلات والشواهد", ic: "fa-user-check", hl: "لوحة المراجعة", q: "ما الذي ينتظر مراجعتي؟", home: "evidence-link.html?u=sup" },
-    member: { n: "عضو فريق السجلات والشواهد", ic: "fa-user-pen", hl: "مساحتي", q: "ماذا أرفع الآن؟", home: "evidence-link.html?u=member" },
-    self:   { n: "مشرف عمليات التقويم الذاتي", ic: "fa-magnifying-glass-chart", hl: "الفجوات والنسب", q: "أين فجواتنا؟", home: "evidence-link.html?u=self" }
+    admin:  { n: "مدير النظام", ic: "fa-user-shield", hl: "لوحة التحكم", q: "هل المنظومة سليمة؟", home: "home.html?u=admin" },
+    sup:    { n: "مشرف فريق السجلات والشواهد", ic: "fa-user-check", hl: "لوحة المراجعة", q: "ما الذي ينتظر مراجعتي؟", home: "home.html?u=sup" },
+    member: { n: "عضو فريق السجلات والشواهد", ic: "fa-user-pen", hl: "مساحتي", q: "ماذا أرفع الآن؟", home: "home.html?u=member" },
+    self:   { n: "مشرف عمليات التقويم الذاتي", ic: "fa-magnifying-glass-chart", hl: "الفجوات والنسب", q: "أين فجواتنا؟", home: "home.html?u=self" }
   };
   /* من يرى أي صفحة. الصفحة خارج نطاق الدور تُعرض مع تنبيه ولا تُحجب (تخصيص عرض لا حماية). */
   var ALL = ORDER.slice();
   var PAGES = {
-    "index.html": ALL, "stages.html": ALL, "login.html": ALL, "evidence-link.html": ALL,
+    "index.html": ALL, "stages.html": ALL, "login.html": ALL, "home.html": ALL, "indicators.html": ALL, "evidence-link.html": ["admin"],
     "indicator.html": ["admin", "sup", "member"],
     "output.html": ["admin", "sup", "member"],
     "hardcopy.html": ["admin", "sup"],
@@ -40,10 +40,10 @@
   };
   /* روابط ثانوية مباشرة في مدخل كل دور (لا تتجاوز ثلاثة) */
   var SECOND = {
-    admin:  [["approval-request.html", "fa-file-signature", "طلب رقمنة الزيارة"], ["governance.html", "fa-scale-balanced", "الحوكمة الإدارية"], ["reference.html", "fa-book-open", "مرجع الهيئة"]],
-    sup:    [["hardcopy.html", "fa-print", "تقرير استلام المهام"], ["output.html", "fa-file-image", "مولّد تقرير الشواهد"], ["status-report.html", "fa-clipboard-list", "تقرير الحالة"]],
-    member: [["output.html", "fa-file-image", "مولّد تقرير الشواهد"]],
-    self:   [["status-report.html", "fa-clipboard-list", "تقرير الحالة"], ["reference.html", "fa-book-open", "مرجع الهيئة"], ["records-sources.html", "fa-list-check", "مصادر السجلات"]]
+    admin:  [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["status-report.html", "fa-clipboard-list", "تقرير الحالة"], ["governance.html", "fa-scale-balanced", "الحوكمة الإدارية"]],
+    sup:    [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["output.html", "fa-file-image", "مولّد تقرير الشواهد"], ["status-report.html", "fa-clipboard-list", "تقرير الحالة"]],
+    member: [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["output.html", "fa-file-image", "مولّد تقرير الشواهد"]],
+    self:   [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["status-report.html", "fa-clipboard-list", "تقرير الحالة"], ["reference.html", "fa-book-open", "مرجع الهيئة"]]
   };
 
   function pageKey() {
@@ -136,11 +136,9 @@
     var h = document.getElementById("roleHome");
     if (!h) return;
     if (!role) {
-      h.innerHTML = '<section aria-label="اختيار الدور" class="mb-8 bg-white border border-teal-200 rounded-2xl p-5 shadow-sm">' +
-        '<h2 class="text-base font-black text-slate-800 mb-1">من أنت في المشروع؟</h2>' +
-        '<p class="text-[12px] text-slate-500 mb-4 leading-7">اختر دورك لتظهر لك مساحتك مباشرة، ويتذكّر هذا الجهاز اختيارك. الدور تخصيص عرض لا حماية للبيانات.</p>' +
-        '<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">' +
-        ORDER.map(function (k) { return '<button type="button" data-pickrole="' + k + '" class="text-right border border-gray-200 hover:border-teal-400 hover:bg-teal-50 rounded-xl p-4 transition"><i class="fa-solid ' + ROLES[k].ic + ' text-teal-700"></i> <b class="text-[13px] text-slate-800">' + esc(ROLES[k].n) + '</b><span class="block text-[11.5px] text-slate-500 mt-1">' + esc(ROLES[k].q) + "</span></button>"; }).join("") +
+      h.innerHTML = '<section aria-label="اختيار الدور" class="rh-box"><h2 class="rh-h">من أنت في المشروع؟</h2>' +
+        '<p class="rh-p">اختر دورك لتظهر لك مساحتك مباشرة، ويتذكّر هذا الجهاز اختيارك. الدور تخصيص عرض لا حماية للبيانات.</p><div class="rh-grid">' +
+        ORDER.map(function (k) { return '<button type="button" data-pickrole="' + k + '" class="rh-pick"><i class="fa-solid ' + ROLES[k].ic + '"></i><b>' + esc(ROLES[k].n) + "</b><small>" + esc(ROLES[k].q) + "</small></button>"; }).join("") +
         "</div></section>";
       h.addEventListener("click", function (e) {
         var t = e.target.closest("[data-pickrole]"); if (!t) return;
@@ -149,14 +147,9 @@
       return;
     }
     var r = ROLES[role];
-    var sec = (SECOND[role] || []).map(function (x) { return '<a href="' + x[0] + '" class="inline-flex items-center gap-1.5 text-[12px] font-bold text-teal-800 bg-teal-50 hover:bg-teal-100 border border-teal-200 rounded-full px-3 py-1.5"><i class="fa-solid ' + x[1] + '"></i> ' + esc(x[2]) + "</a>"; }).join("");
-    h.innerHTML = '<section aria-label="مدخلك المباشر" class="mb-8 bg-gradient-to-br from-teal-700 to-slate-900 text-white rounded-2xl p-6 shadow-lg">' +
-      '<div class="flex flex-wrap items-center gap-4">' +
-      '<div class="p-4 bg-white/10 rounded-2xl"><i class="fa-solid ' + r.ic + ' text-3xl text-cyan-200"></i></div>' +
-      '<div class="flex-1 min-w-[220px]"><div class="text-[11px] font-bold text-cyan-200">أهلاً بك · ' + esc(r.n) + "</div>" +
-      '<div class="text-lg font-black mt-0.5">' + esc(r.q) + "</div></div>" +
-      '<a href="' + r.home + '" class="inline-flex items-center gap-2 bg-cyan-300 hover:bg-white text-slate-950 text-sm font-black px-5 py-3 rounded-xl">افتح «' + esc(r.hl) + '» <i class="fa-solid fa-arrow-left"></i></a></div>' +
-      (sec ? '<div class="flex flex-wrap gap-2 mt-4">' + sec + "</div>" : "") + "</section>";
+    h.innerHTML = '<section aria-label="مدخلك المباشر" class="rh-go"><i class="fa-solid ' + r.ic + ' rh-ic"></i>' +
+      '<div class="rh-t"><small>أهلاً بك · ' + esc(r.n) + "</small><b>" + esc(r.q) + '</b></div>' +
+      '<a href="' + r.home + '" class="rh-btn">افتح «' + esc(r.hl) + '» <i class="fa-solid fa-arrow-left"></i></a></section>';
   }
 
   function run() { css(); applyData(); bar(); home(); }

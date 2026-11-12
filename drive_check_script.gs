@@ -47,7 +47,7 @@ var DOCS_FOLDER_IDS_NEW = { // مجلدات «الوثائق» المضافة ح
 var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word فقط (اضبطها عند تصميم refreshStatus الجديدة)
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v8.13.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.0.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5090,7 +5090,7 @@ function treeMatch_(fileName, code, rec) {
   return b === mm;
 }
 function treeScanIndicator_(code, ent, sizes, errors) {
-  var out = { req: ent.r.length, ready: 0, up: 0, ap: 0, docs: [], blank: [], missing: [], files: [], invalid: [], rep: { n: 0, photos: 0, files: [] } };
+  var out = { req: ent.r.length, ready: 0, st: {}, up: 0, ap: 0, docs: [], blank: [], missing: [], files: [], invalid: [], rep: { n: 0, photos: 0, files: [] } };
   var folder;
   try { folder = DriveApp.getFolderById(ent.f); } catch (e) { errors.push({ key: code, error: e.message }); out.error = true; return out; }
   var rv = treeChild_(folder, TREE_REVIEW), ap = treeChild_(folder, TREE_APPROVED), rp = treeChild_(folder, TREE_REPORT);
@@ -5109,6 +5109,7 @@ function treeScanIndicator_(code, ent, sizes, errors) {
     if (placed) out.ready++;
     if (filled) { out.up++; out.docs.push(rec.n); } else if (placed) out.blank.push(rec.n); else out.missing.push(rec.n);
     if (approved) out.ap++;
+    out.st[rec.n] = approved ? "approved" : filled ? "review" : placed ? "blank" : "missing";
   });
   rvFiles.concat(apFiles).forEach(function (x) { var known = ent.r.some(function (rec) { return treeMatch_(x.name, code, rec); }); if (!known) out.invalid.push(x.name); });
   if (rp) {

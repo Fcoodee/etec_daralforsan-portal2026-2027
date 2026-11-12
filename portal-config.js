@@ -46,7 +46,7 @@ window.ETEC_LEGAL_POLICY = { first: 3, highMinutes: 20, mediumMinutes: 1440, low
 window.ETEC_DOMAIN_RESULTS = null;
 window.ETEC_TOOLS_STATUS = { team: null, surveyTeacher: null, surveyLearner: null, surveyFamily: null, obsClass: null, obsEnv: null, interviews: null, docs: null };
 window.ETEC_STAGES = [
-  { id: "primary",      name: "الابتدائي", open: true,  url: "evidence-link.html" },
+  { id: "primary",      name: "الابتدائي", open: true,  url: "home.html" },
   { id: "intermediate", name: "المتوسط",   open: false, wipUrl: "stage-wip.html?s=intermediate" },
   { id: "secondary",    name: "الثانوي",   open: false, wipUrl: "stage-wip.html?s=secondary" }
 ];
