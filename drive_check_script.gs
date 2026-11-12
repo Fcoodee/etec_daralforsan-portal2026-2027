@@ -5098,9 +5098,12 @@ function treeScanIndicator_(code, ent, sizes, errors) {
   if (rv) { it = rv.getFiles(); while (it.hasNext()) { f = it.next(); rvFiles.push({ id: f.getId(), name: f.getName(), size: f.getSize() }); } } else errors.push({ key: code, error: "لا يوجد مجلد " + TREE_REVIEW });
   if (ap) { it = ap.getFiles(); while (it.hasNext()) { f = it.next(); apFiles.push({ id: f.getId(), name: f.getName(), size: f.getSize() }); } }
   ent.r.forEach(function (rec) {
+    /* السجل المشتق قالبه باسم «قالب_سجل متابعة المؤشر <الرمز>_v1.docx»؛ أما الرسمي فـ«قالب_<السجل>_v1.docx» */
     var tplSize = sizes[norm_("قالب_" + rec.m + "_v1.docx")];
+    if (tplSize == null) tplSize = sizes[norm_("قالب_" + rec.m + " " + code + "_v1.docx")];
+    if (tplSize == null) errors.push({ key: code, error: "لا يوجد قالب في 01_القوالب للسجل «" + rec.n + "» فلا يمكن التمييز بين الفارغ والمعبّأ" });
     var placed = false, filled = false, approved = false;
-    function isFilled(x) { var pr = splitName_(x.name); if (ACCEPT_DOC_EXT.indexOf(pr.ext) < 0) return false; if (x.size < MIN_BYTES.doc) return false; return tplSize == null ? true : x.size !== tplSize; }
+    function isFilled(x) { var pr = splitName_(x.name); if (ACCEPT_DOC_EXT.indexOf(pr.ext) < 0) return false; if (x.size < MIN_BYTES.doc) return false; return tplSize == null ? false : x.size !== tplSize; }
     rvFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) filled = true; } });
     apFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) { filled = true; approved = true; } } });
     if (placed) out.ready++;
