@@ -123,8 +123,7 @@
       ["home.html", "fa-house", role && roles[role] ? roles[role].hl : "مساحتي", "admin,sup,member,self"],
       ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "admin,sup,member,self"],
       ["status-report.html", "fa-clipboard-list", "تقرير الحالة", "admin,sup,self"],
-      ["output.html", "fa-file-image", "تقرير الشواهد", "admin,sup,member"],
-      ["reference.html", "fa-book-open", "مرجع الهيئة", "admin,sup,self"]
+      ["output.html", "fa-file-image", "تقرير الشواهد", "admin,sup,member"]
     ];
     var nav = items.filter(function (x) { return !role || x[3].split(",").indexOf(role) >= 0; }).map(function (x) {
       return '<a href="' + x[0] + '"' + (x[0] === active ? ' aria-current="page"' : "") + '><i class="fa-solid ' + x[1] + '"></i> ' + esc(x[2]) + "</a>"; }).join("");

@@ -6,41 +6,75 @@
 <meta name="robots" content="noindex,nofollow">
 <title>بوابة الاعتماد المدرسي والتميز — الدبلوما الأمريكية (بنين) — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=9.0.0">
+<link rel="stylesheet" href="phase.css?v=9.0.1">
 <style>
-.ix-hero{text-align:center;padding:22px 16px 6px}
-.ix-hero h1{font-size:24px;font-weight:900;color:var(--t7);margin:12px 0 4px}.ix-hero p{margin:0;font-size:13px;color:var(--mut)}
-.ix-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
-.ix-links a{display:flex;gap:12px;align-items:center;text-decoration:none;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
-.ix-links a:hover{border-color:#5eead4}.ix-links i{color:var(--t5);font-size:18px;width:24px;text-align:center}
-.ix-links b{display:block;font-size:13.5px}.ix-links small{color:var(--mut);font-size:11.5px}
+.ix-hero{text-align:center;padding:20px 16px 4px}
+.ix-hero h1{font-size:25px;font-weight:900;color:var(--t7);margin:10px 0 4px}.ix-hero p{margin:0;font-size:13px;color:var(--mut)}
+.ix-live{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:6px 0 4px}
+.ix-live .ph-stat .v{font-size:24px}
+.ix-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:6px}
+.ix-tile{display:flex;flex-direction:column;gap:4px;text-decoration:none;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;transition:border-color .15s,transform .15s}
+.ix-tile:hover{border-color:#2dd4bf;transform:translateY(-2px)}
+.ix-tile i{font-size:22px;color:var(--t5)}.ix-tile b{font-size:15px;font-weight:900}.ix-tile span{font-size:12.5px;color:var(--mut)}
+.ix-steps{counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;list-style:none;margin:6px 0;padding:0}
+.ix-steps li{counter-increment:s;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px 12px 14px;font-size:13px;position:relative;padding-right:46px}
+.ix-steps li:before{content:counter(s);position:absolute;right:12px;top:10px;width:26px;height:26px;border-radius:50%;background:var(--t7);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:13px}
+.ix-steps b{display:block}
 </style>
-<script src="portal-meta.js?v=9.0.0"></script>
-<script src="portal-role.js?v=9.0.0"></script>
+<script src="portal-meta.js?v=9.0.1"></script>
+<script src="portal-role.js?v=9.0.1"></script>
 </head>
 <body>
 <header class="ph-head" style="padding-top:18px">
   <div class="ph-logos"><img src="logo0.png" alt="Diploma 2026"><img src="logo1.png" alt="دار الفرسان"><img src="logo2.png" alt="ETEC"></div>
   <div class="ix-hero"><h1>بوابة الاعتماد المدرسي والتميز</h1><p>قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان · العام الدراسي 2026-2027</p></div>
 </header>
-<main class="ph-main" style="max-width:860px">
-  <!-- يملؤه portal-role.js: اختيار الدور أولاً، ثم مدخل مباشر إلى «مساحتي» -->
+<main class="ph-main" style="max-width:900px">
+  <!-- يملؤه portal-role.js: اختيار الدور أولاً، ثم زر مباشر إلى مساحتك -->
   <div id="roleHome"></div>
 
-
-  <h2 class="ph-h2">روابط سريعة</h2>
-  <div class="ix-links">
-    <a href="indicators.html"><i class="fa-solid fa-list-check"></i><span><b>المؤشرات والسجلات</b><small>كل المؤشرات وحالة كل سجل</small></span></a>
-    <a data-roles="admin,sup,member" href="output.html"><i class="fa-solid fa-file-image"></i><span><b>مولّد تقرير الشواهد</b><small>صور المؤشر في تقرير PDF</small></span></a>
-    <a data-roles="admin,sup,self" href="status-report.html"><i class="fa-solid fa-clipboard-list"></i><span><b>تقرير الحالة</b><small>أين نحن في جمع السجلات</small></span></a>
-    <a data-roles="admin,sup,self" href="reference.html"><i class="fa-solid fa-book-open"></i><span><b>مرجع الهيئة</b><small>المعايير وأدوات القياس</small></span></a>
-    <a data-roles="admin,sup,self" href="records-sources.html"><i class="fa-solid fa-clipboard-check"></i><span><b>مصادر السجلات</b><small>من أين يأتي كل سجل</small></span></a>
-    <a data-roles="admin,sup,self" href="governance.html"><i class="fa-solid fa-scale-balanced"></i><span><b>الحوكمة الإدارية</b><small>تنظيم السجلات الإدارية</small></span></a>
-    <a data-roles="admin,sup" href="hardcopy.html"><i class="fa-solid fa-print"></i><span><b>تقرير استلام المهام</b><small>نسخة مطبوعة للتوقيع</small></span></a>
+  <div class="ix-live" id="live" hidden>
+    <div class="ph-stat main"><div class="l">تقدّم رفع السجلات</div><div class="v" id="lp">—</div><div class="s" id="lps"></div></div>
+    <div class="ph-stat"><div class="l">قيد المراجعة</div><div class="v" id="lr">—</div><div class="s">سجلات بانتظار المشرف</div></div>
+    <div class="ph-stat"><div class="l">معتمدة</div><div class="v" id="la">—</div><div class="s">في «2_معتمد»</div></div>
+    <div class="ph-stat"><div class="l">تقارير الشواهد</div><div class="v" id="lt">—</div><div class="s">مكتملة (6 صور)</div></div>
   </div>
+
+  <h2 class="ph-h2">أين تريد أن تذهب؟</h2>
+  <div class="ix-tiles">
+    <a class="ix-tile" href="home.html"><i class="fa-solid fa-house-user"></i><b>مساحتي</b><span>مؤشراتك وسجلاتك وتقدّمك بحسب دورك</span></a>
+    <a class="ix-tile" href="indicators.html"><i class="fa-solid fa-list-check"></i><b>المؤشرات والسجلات</b><span>كل المؤشرات (52) وحالة كل سجل ومجلده</span></a>
+    <a class="ix-tile" data-roles="admin,sup,member" href="output.html"><i class="fa-solid fa-file-image"></i><b>تقرير الشواهد</b><span>أدرج صور المؤشر وأصدر التقرير PDF</span></a>
+    <a class="ix-tile" data-roles="admin,sup,self" href="status-report.html"><i class="fa-solid fa-clipboard-list"></i><b>تقرير الحالة</b><span>أين نحن في جمع السجلات</span></a>
+  </div>
+
+  <h2 class="ph-h2">كيف نعمل؟</h2>
+  <ol class="ix-steps">
+    <li><b>نزّل القالب</b>من مجلد المؤشر في Drive (1_قيد_المراجعة).</li>
+    <li><b>عبّئه وأعد رفعه</b>بالاسم نفسه فوق الأصل، فيُحتسب مرفوعاً.</li>
+    <li><b>أصدر تقرير الشواهد</b>وارفعه في 3_تقرير_الشواهد.</li>
+  </ol>
   <div class="ph-foot">منصة داخلية لمدارس دار الفرسان غير تابعة لهيئة تقويم التعليم والتدريب. الأرقام تقيس تقدّم رفع السجلات ولا تمثّل نتيجة تقويم أو اعتماداً.</div>
 </main>
-<script src="portal-config.js?v=9.0.0"></script>
+<script src="portal-config.js?v=9.0.1"></script>
+<script src="portal-names.js?v=9.0.1"></script>
+<script src="phase-data.js?v=9.0.1"></script>
+<script src="phase-core.js?v=9.0.1"></script>
+<script>
+(function () {
+  var P = window.PHC; if (!P) return;
+  P.onStatus(function (S) {
+    var t = P.totals(), live = document.getElementById("live");
+    document.getElementById("lp").textContent = P.pct(P.projP()) + "%";
+    document.getElementById("lps").textContent = t.up + " من " + t.req + " سجلاً" + (S.live && !S.failed ? "" : " · لقطة " + (S.asof || ""));
+    document.getElementById("lr").textContent = t.review;
+    document.getElementById("la").textContent = t.ap;
+    document.getElementById("lt").textContent = t.repDone + " / " + t.ind;
+    live.hidden = false;
+  });
+  P.load();
+})();
+</script>
 <script src="page-gate.js" data-lazy="1"></script>
 <script src="legal-notice.js"></script>
 <script src="content-protect.js"></script>
