@@ -25,7 +25,7 @@
    9) ETEC_SITE_BASE: العنوان الأساسي للموقع المنشور، تُبنى منه الروابط داخل رسائل البريد.
    8) ETEC_RIGHTS_OWNER: صاحب الحقوق الذي يظهر في مربع الحوار القانوني (مثل: «مدارس دار الفرسان الأهلية»). اتركه فارغاً حتى يُحدَّد قانونياً.
    7) ETEC_PROJECT_ORGANIZER: اسم منظّم المشروع (مهندس بيانات النظام) الذي يظهر في صفحة التسليم المطبوعة. */
-window.ETEC_STATUS_URL = "";
+window.ETEC_STATUS_URL = "https://script.google.com/macros/s/AKfycbwSbMOfVD2N0168mu9ETA00sPT1DgsY7gIKue2FoDmnamBV7aQoyKqE8t1JNiGNZYys1w/exec";
 window.ETEC_VISIT_DATE = "";
 window.ETEC_PLAN_WEEKS = [1, 2, 5, 2, 1];
 window.ETEC_PHASE1 = { pct: 99, atClose: 76, date: "2026-09-20", pending: 2, pendingNote: "1-4-1-1 (الموارد البشرية) و1-4-1-3 (الإدارة المالية)" };
