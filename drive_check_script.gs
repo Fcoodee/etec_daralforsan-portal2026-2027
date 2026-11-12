@@ -1,5 +1,5 @@
 /**
- * مشروع ربط الشواهد بالسجلات — evidence-link.html  (الإصدار v8.12.2 — آخر تحديث 10 نوفمبر 2026)
+ * مشروع ربط الشواهد بالسجلات — evidence-link.html  (الإصدار v8.13.0 — آخر تحديث 12 نوفمبر 2026)
  * مدارس دار الفرسان — قسم الدبلوما الأمريكية (بنين) — المرحلة الابتدائية — 2026-2027
  * الغاية: الاستعداد لزيارة لجنة هيئة تقويم التعليم والتدريب
  *
@@ -27,7 +27,7 @@
  * لم يُشغَّل هذا السكربت على Drive الحقيقي قبل التسليم؛ اختُبر منطقه فقط بمحاكاة DriveApp خارج Google. شغّل verifyIndex() ثم refreshStatus() بنفسك.
  */
 
-var ROOT_FOLDER_ID = "1IDVvAtEyYMA_FZhua_vLDmw_z1cjSBdQ"; // تسكين الشواهد في سجلات الوثائق_etec26
+var ROOT_FOLDER_ID = "1sSYgHcq4Fejp2V3Y6TtY0dMpP_2Osu0_"; // تسكين الشواهد في سجلات الوثائق_etec26
 var DEFAULT_SHEET_ID = "1iNVhbqfHZef9fqSjszGlA6TXjWMm0yqzOzuhc26u7zA"; // ورقة الفهرس الجاهزة؛ خاصية السكربت SHEET_ID (إن وُجدت) تتقدّم عليها
 var LIBRARY_FOLDER = "مكتبة الوثائق";
 
@@ -47,10 +47,846 @@ var DOCS_FOLDER_IDS_NEW = { // مجلدات «الوثائق» المضافة ح
 var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word فقط (اضبطها عند تصميم refreshStatus الجديدة)
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v8.12.2";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v8.13.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
+
+/* ========== شجرة Drive الجديدة «Diploma_ETEC2026» (v8.13.0 — مرحلة ما بعد تصحيح المسار) ==========
+ *   الجذر ← 02_المؤشرات ← المجال ← المعيار ← المؤشر ← { 1_قيد_المراجعة، 2_معتمد، 3_تقرير_الشواهد }
+ *   القوالب الفارغة في 01_القوالب بالاسم «قالب_<السجل>_v1.docx»، وتُنسخ إلى «1_قيد_المراجعة» باسم «<رمز المؤشر>_<السجل>_v1.docx».
+ *   قاعدة الاحتساب: السجل «مرفوع» حين يوجد له ملف docx غير فارغ في «1_قيد_المراجعة» أو «2_معتمد» يختلف حجمه عن حجم قالبه الفارغ
+ *   (أي عُبّئ وأُعيد رفعه)؛ والقالب الفارغ الذي وضعه مدير النظام لا يُحتسب. «معتمد» = مرفوع وله ملف في «2_معتمد».
+ *   تقرير الشواهد: ملف PDF في «3_تقرير_الشواهد» فيه عبارة «تقرير الشواهد» (ويُقبل «التقرير البصري» القديم مع تنبيه)، وعدد الصور من اسمه (مثل ..._6صور.pdf)
+ *   ويُكتب تلقائياً من مولّد تقرير الشواهد (output.html). التقرير نهائي ولا يمرّ بدورة اعتماد.
+ *   للقراءة والإحصاء فقط: لا ينشئ ولا ينقل ولا يحذف.
+ */
+var TREE_ROOT_ID = "1sSYgHcq4Fejp2V3Y6TtY0dMpP_2Osu0_"; // Diploma_ETEC2026
+var TREE_TEMPLATES = "01_القوالب", TREE_REVIEW = "1_قيد_المراجعة", TREE_APPROVED = "2_معتمد", TREE_REPORT = "3_تقرير_الشواهد";
+var TREE_MODE = true;               // true: doGet/refreshStatus يقرآن الشجرة الجديدة ويُخرجان schema:"tree-v2"
+var CACHE_KEY_TREE = "evidence_tree_v1";
+var TREE = {
+ "1-1-1-1": {
+  "f": "12TO0BJ_4oJn000v_Rt-vNOWvUc-2Y_n5",
+  "r": [
+   {
+    "n": "سجل الخطة التشغيلية",
+    "m": "سجل الخطة التشغيلية"
+   },
+   {
+    "n": "سجل برامج الخطة التشغيلية",
+    "m": "سجل برامج الخطة التشغيلية"
+   },
+   {
+    "n": "سجل اللجان المدرسية",
+    "m": "سجل اللجان المدرسية"
+   },
+   {
+    "n": "سجل التكليفات",
+    "m": "سجل التكليفات"
+   }
+  ]
+ },
+ "1-1-1-2": {
+  "f": "1mGbdzN95QSs2Evljp2C4lFD7meaXexAC",
+  "r": [
+   {
+    "n": "سجل برامج النشاط",
+    "m": "سجل برامج النشاط"
+   },
+   {
+    "n": "سجل الخطة التشغيلية (قسم المتابعة والتقويم)",
+    "m": "سجل الخطة التشغيلية (قسم المتابعة والتقويم)"
+   },
+   {
+    "n": "سجل برامج الإرشاد",
+    "m": "سجل برامج الإرشاد"
+   },
+   {
+    "n": "سجل توثيق البرامج",
+    "m": "سجل توثيق البرامج"
+   },
+   {
+    "n": "سجل اللجنة الإدارية",
+    "m": "سجل اللجنة الإدارية"
+   },
+   {
+    "n": "سجل تطوير وتحسين الخطة التشغيلية",
+    "m": "سجل تطوير وتحسين الخطة التشغيلية"
+   }
+  ]
+ },
+ "1-2-1-1": {
+  "f": "1SPCGq90yFmO3W3M5oHwJUhUEuj8oo0dp",
+  "r": [
+   {
+    "n": "سجل لجنة التوجيه والإرشاد",
+    "m": "سجل لجنة التوجيه والإرشاد"
+   },
+   {
+    "n": "سجل التوجيه والإرشاد",
+    "m": "سجل التوجيه والإرشاد"
+   },
+   {
+    "n": "سجل الأنشطة والبرامج",
+    "m": "سجل الأنشطة والبرامج"
+   }
+  ]
+ },
+ "1-2-1-2": {
+  "f": "1-Fx-6B_pdUb5bZhc8fFj4Sb0_LWybAE8",
+  "r": [
+   {
+    "n": "سجل الاجتماعات",
+    "m": "سجل الاجتماعات"
+   },
+   {
+    "n": "سجل التبليغات",
+    "m": "سجل التبليغات"
+   },
+   {
+    "n": "سجل البرامج والأنشطة",
+    "m": "سجل البرامج والأنشطة"
+   },
+   {
+    "n": "نشرات",
+    "m": "نشرات"
+   },
+   {
+    "n": "سجل التوجيه والإرشاد",
+    "m": "سجل التوجيه والإرشاد"
+   },
+   {
+    "n": "سجل التحفيز والتكريم",
+    "m": "سجل التحفيز والتكريم"
+   },
+   {
+    "n": "سجل حصر الغياب والتأخر",
+    "m": "سجل حصر الغياب والتأخر"
+   },
+   {
+    "n": "سجل استئذان الموظفين",
+    "m": "سجل استئذان الموظفين"
+   },
+   {
+    "n": "خطة متابعة السلوك الوظيفي",
+    "m": "خطة متابعة السلوك الوظيفي"
+   },
+   {
+    "n": "سجل المخالفات",
+    "m": "سجل المخالفات"
+   }
+  ]
+ },
+ "1-2-1-3": {
+  "f": "1L056IjW-0M-BkVAHtdpZwTIGP_5bvfYA",
+  "r": [
+   {
+    "n": "سجل التوجيه والإرشاد",
+    "m": "سجل التوجيه والإرشاد"
+   },
+   {
+    "n": "سجل الحالات الطارئة",
+    "m": "سجل الحالات الطارئة"
+   },
+   {
+    "n": "سجل المخالفات السلوكية",
+    "m": "سجل المخالفات السلوكية"
+   },
+   {
+    "n": "سجل البرامج الوقائية والعلاجية",
+    "m": "سجل البرامج الوقائية والعلاجية"
+   },
+   {
+    "n": "سجل الانضباط المدرسي",
+    "m": "سجل الانضباط المدرسي"
+   },
+   {
+    "n": "سجل التوقيع على قواعد السلوك والمواظبة",
+    "m": "سجل التوقيع على قواعد السلوك والمواظبة"
+   },
+   {
+    "n": "سجل تعزيز السلوك الإيجابي",
+    "m": "سجل تعزيز السلوك الإيجابي"
+   }
+  ]
+ },
+ "1-2-1-4": {
+  "f": "1EktDP0ElE7oo1qLYh4Q3_PmLg4UfoLDE",
+  "r": [
+   {
+    "n": "سجل لجنة التوجيه والإرشاد",
+    "m": "سجل لجنة التوجيه والإرشاد"
+   },
+   {
+    "n": "سجل التوجيه والإرشاد",
+    "m": "سجل التوجيه والإرشاد"
+   },
+   {
+    "n": "سجل المخالفات السلوكية",
+    "m": "سجل المخالفات السلوكية"
+   },
+   {
+    "n": "سجل تعزيز السلوك الإيجابي",
+    "m": "سجل تعزيز السلوك الإيجابي"
+   }
+  ]
+ },
+ "1-2-1-5": {
+  "f": "1WdBs8QTinr8ncyTCknYtbli52Voso-si",
+  "r": [
+   {
+    "n": "سجل الأنشطة الإثرائية",
+    "m": "سجل الأنشطة الإثرائية"
+   },
+   {
+    "n": "سجل لجنة التوجيه والإرشاد",
+    "m": "سجل لجنة التوجيه والإرشاد"
+   },
+   {
+    "n": "سجل الموهوبين",
+    "m": "سجل الموهوبين"
+   },
+   {
+    "n": "سجل المسابقات",
+    "m": "سجل المسابقات"
+   },
+   {
+    "n": "سجل الأنشطة والبرامج",
+    "m": "سجل الأنشطة والبرامج"
+   },
+   {
+    "n": "سجل لجنة التميز",
+    "m": "سجل لجنة التميز"
+   }
+  ]
+ },
+ "1-3-1-1": {
+  "f": "1rU_JClHTG9mZ8D4UQblDylonsVxrxCfh",
+  "r": [
+   {
+    "n": "سجل البرامج والأنشطة",
+    "m": "سجل البرامج والأنشطة"
+   },
+   {
+    "n": "سجل النمو المهني",
+    "m": "سجل النمو المهني"
+   },
+   {
+    "n": "سجل الخطة التشغيلية",
+    "m": "سجل الخطة التشغيلية"
+   }
+  ]
+ },
+ "1-3-1-2": {
+  "f": "1xiSWQwbPZ_rbY2tk-V9dBXXLeu0W4C4i",
+  "r": [
+   {
+    "n": "سجل استطلاع الرأي والاستبانات",
+    "m": "سجل استطلاع الرأي والاستبانات"
+   },
+   {
+    "n": "سجل التواصل مع أولياء الأمور",
+    "m": "سجل التواصل مع أولياء الأمور"
+   },
+   {
+    "n": "سجل التوجيه والإرشاد",
+    "m": "سجل التوجيه والإرشاد"
+   },
+   {
+    "n": "سجل الشراكة المجتمعية",
+    "m": "سجل الشراكة المجتمعية"
+   },
+   {
+    "n": "سجل ملف البرامج والأنشطة",
+    "m": "سجل ملف البرامج والأنشطة"
+   },
+   {
+    "n": "سجل مجالس أولياء الأمور",
+    "m": "سجل مجالس أولياء الأمور"
+   },
+   {
+    "n": "سجل التواصل مع الأسرة",
+    "m": "سجل التواصل مع الأسرة"
+   },
+   {
+    "n": "سجل الأنشطة والبرامج",
+    "m": "سجل الأنشطة والبرامج"
+   }
+  ]
+ },
+ "1-3-1-3": {
+  "f": "1H6OmvFO2RYFV65hbVfhU9FQHSIuvgl2J",
+  "r": [
+   {
+    "n": "سجل البرامج والأنشطة",
+    "m": "سجل البرامج والأنشطة"
+   },
+   {
+    "n": "سجل الشراكة المجتمعية",
+    "m": "سجل الشراكة المجتمعية"
+   },
+   {
+    "n": "سجل التوجيه والإرشاد",
+    "m": "سجل التوجيه والإرشاد"
+   },
+   {
+    "n": "سجل الخطة التشغيلية",
+    "m": "سجل الخطة التشغيلية"
+   }
+  ]
+ },
+ "1-4-1-1": {
+  "f": "10Iq-yHIQ9mB0zuUk85ErTq9UZ7u9irmU",
+  "r": [
+   {
+    "n": "سجل أحوال الموظفين",
+    "m": "سجل أحوال الموظفين"
+   },
+   {
+    "n": "سجل التكاليف",
+    "m": "سجل التكاليف"
+   },
+   {
+    "n": "سجل اللجنة الإدارية",
+    "m": "سجل اللجنة الإدارية"
+   },
+   {
+    "n": "سجل توزيع الأنصبة",
+    "m": "سجل توزيع الأنصبة"
+   },
+   {
+    "n": "الجدول المدرسي",
+    "m": "الجدول المدرسي"
+   },
+   {
+    "n": "بيانات الكادر التعليمي من نظام نور",
+    "m": "بيانات الكادر التعليمي من نظام نور"
+   },
+   {
+    "n": "توزيع الأنصبة",
+    "m": "توزيع الأنصبة"
+   }
+  ]
+ },
+ "1-4-1-2": {
+  "f": "1Qxz47wgZuO2KCczqVpNABg25reqJEqz5",
+  "r": [
+   {
+    "n": "سجل أحوال الموظفين",
+    "m": "سجل أحوال الموظفين"
+   },
+   {
+    "n": "سجل التكاليف",
+    "m": "سجل التكاليف"
+   },
+   {
+    "n": "سجل اللجنة الإدارية",
+    "m": "سجل اللجنة الإدارية"
+   },
+   {
+    "n": "بيانات الكادر الإداري من نظام نور",
+    "m": "بيانات الكادر الإداري من نظام نور"
+   },
+   {
+    "n": "سجل الوصف الوظيفي",
+    "m": "سجل الوصف الوظيفي"
+   }
+  ]
+ },
+ "1-4-1-3": {
+  "f": "1qE92qQSxc8O4rv5VCDFvbWUWd1oYoLFm",
+  "r": [
+   {
+    "n": "سجل السياسات المالية",
+    "m": "سجل السياسات المالية"
+   },
+   {
+    "n": "سجل الخطة المالية",
+    "m": "سجل الخطة المالية"
+   },
+   {
+    "n": "سجل فريق الصندوق المدرسي",
+    "m": "سجل فريق الصندوق المدرسي"
+   },
+   {
+    "n": "سجل الموازنة المالية",
+    "m": "سجل الموازنة المالية"
+   },
+   {
+    "n": "سجل تحصيل الرسوم",
+    "m": "سجل تحصيل الرسوم"
+   },
+   {
+    "n": "استمارة الرسوم الدراسية",
+    "m": "استمارة الرسوم الدراسية"
+   },
+   {
+    "n": "الموقع الإلكتروني للمدرسة",
+    "m": "الموقع الإلكتروني للمدرسة"
+   }
+  ]
+ },
+ "1-4-1-4": {
+  "f": "1KS0Z7kubdXZTrysHZMw5-I_rN6MRZ4yv",
+  "r": [
+   {
+    "n": "سجل النمو المهني",
+    "m": "سجل النمو المهني"
+   },
+   {
+    "n": "سجل الرخص المهنية",
+    "m": "سجل الرخص المهنية"
+   }
+  ]
+ },
+ "1-4-1-5": {
+  "f": "126x78Jci_J7_luKhgBgDBMKodwwufHjd",
+  "r": [
+   {
+    "n": "سجل النمو المهني",
+    "m": "سجل النمو المهني"
+   }
+  ]
+ },
+ "1-4-1-6": {
+  "f": "1RlmDM6ZOf67_na_wNfry5_L4CaWsRIcI",
+  "r": [
+   {
+    "n": "سجل لجنة التميز المدرسي",
+    "m": "سجل لجنة التميز المدرسي"
+   },
+   {
+    "n": "سجل التقويم الذاتي",
+    "m": "سجل التقويم الذاتي"
+   }
+  ]
+ },
+ "1-4-1-7": {
+  "f": "1KQ7eFPyqJCPkc_jW4R9IsT8fAVl29xyy",
+  "r": [
+   {
+    "n": "سجل تطوير وتحسين الخطة التشغيلية",
+    "m": "سجل تطوير وتحسين الخطة التشغيلية"
+   },
+   {
+    "n": "سجل اللجنة الإدارية",
+    "m": "سجل اللجنة الإدارية"
+   }
+  ]
+ },
+ "1-5-1-1": {
+  "f": "1YGqM5hlVAYYzjMOaGDjxO4HIWwAOJm0R",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 1-5-1-1",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "1-5-1-2": {
+  "f": "12rcxXeDHLMCbgqVb__A0daNirObcRUD7",
+  "r": [
+   {
+    "n": "سجل البرامج الوقائية والعلاجية",
+    "m": "سجل البرامج الوقائية والعلاجية"
+   },
+   {
+    "n": "سجل التوجيه والإرشاد",
+    "m": "سجل التوجيه والإرشاد"
+   },
+   {
+    "n": "سجل مجالس الحوار الطلابي",
+    "m": "سجل مجالس الحوار الطلابي"
+   },
+   {
+    "n": "سجل المخالفات السلوكية",
+    "m": "سجل المخالفات السلوكية"
+   },
+   {
+    "n": "سجل الحالات الطارئة",
+    "m": "سجل الحالات الطارئة"
+   }
+  ]
+ },
+ "2-1-1-1": {
+  "f": "1aPRPBaTj7FNnVevtA3nRagf38GO8D2ry",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 2-1-1-1",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "2-1-1-2": {
+  "f": "1JShZ1AQ4LY8Bmz7KvjP8LVoP2e8CaTmQ",
+  "r": [
+   {
+    "n": "عينة من ملفات إنجاز المعلمين",
+    "m": "عينة من ملفات إنجاز المعلمين"
+   },
+   {
+    "n": "عينة من الأنشطة الصفية",
+    "m": "عينة من الأنشطة الصفية"
+   },
+   {
+    "n": "عينة من خطة توزيع المنهج",
+    "m": "عينة من خطة توزيع المنهج"
+   },
+   {
+    "n": "ملف متابعة تنفيذ المنهج",
+    "m": "ملف متابعة تنفيذ المنهج"
+   }
+  ]
+ },
+ "2-1-1-3": {
+  "f": "1YU2z9huuE3_rc8KB9oQ36ckyZryP-KUX",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 2-1-1-3",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "2-1-1-4": {
+  "f": "19Ou9jlPjoPFWhlw4TjswuvyHhgy22B7n",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 2-1-1-4",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "2-1-1-5": {
+  "f": "14nI7AGWByuS0psNmxfsXthe3TE70rg5c",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 2-1-1-5",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "2-1-1-6": {
+  "f": "1Alvln2ELW-zJ4Rffmj6Vo0Re42VByG3C",
+  "r": [
+   {
+    "n": "سجل الأنشطة الإثرائية",
+    "m": "سجل الأنشطة الإثرائية"
+   },
+   {
+    "n": "سجل المسابقات",
+    "m": "سجل المسابقات"
+   },
+   {
+    "n": "سجل الأنشطة العلاجية",
+    "m": "سجل الأنشطة العلاجية"
+   },
+   {
+    "n": "نتائج الاختبارات الوطنية",
+    "m": "نتائج الاختبارات الوطنية"
+   },
+   {
+    "n": "سجل تحدي القراءة",
+    "m": "سجل تحدي القراءة"
+   },
+   {
+    "n": "سجل سد الفجوة (الرياضيات)",
+    "m": "سجل سد الفجوة (الرياضيات)"
+   }
+  ]
+ },
+ "2-1-1-7": {
+  "f": "188JoUbbph3QyMWfBCdL8kG49f-EfhLJP",
+  "r": [
+   {
+    "n": "عينة من الأنشطة الصفية الخاصة بالمتعلمين",
+    "m": "عينة من الأنشطة الصفية الخاصة بالمتعلمين"
+   }
+  ]
+ },
+ "2-1-1-8": {
+  "f": "1buf0-ffPe__sQpjLd_s9hEg1aWpAP-iC",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 2-1-1-8",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "2-1-1-9": {
+  "f": "1CTDAR5fWWsPpM3i1DgGOSp15M1vpZMvW",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 2-1-1-9",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "2-2-1-1": {
+  "f": "1eFlW1g9MpN_kACE1ej6JMdO2tqdIg1kE",
+  "r": [
+   {
+    "n": "سجل النمو المهني",
+    "m": "سجل النمو المهني"
+   },
+   {
+    "n": "عينة من الأنشطة الصفية الخاصة بالمتعلمين",
+    "m": "عينة من الأنشطة الصفية الخاصة بالمتعلمين"
+   },
+   {
+    "n": "سجل تحضير الدروس",
+    "m": "سجل تحضير الدروس"
+   }
+  ]
+ },
+ "2-2-1-2": {
+  "f": "1lWeG4D1QrVHKzVj6Amz06pQqXnLf8nA_",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 2-2-1-2",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "2-2-1-3": {
+  "f": "1P_IrLjAnepRuxbGdkFIfXxljV-Nst3dZ",
+  "r": [
+   {
+    "n": "سجل الأنشطة الإثرائية",
+    "m": "سجل الأنشطة الإثرائية"
+   },
+   {
+    "n": "سجل تحليل النتائج (لتخصصات مختلفة)",
+    "m": "سجل تحليل النتائج (لتخصصات مختلفة)"
+   },
+   {
+    "n": "سجل الأنشطة العلاجية",
+    "m": "سجل الأنشطة العلاجية"
+   },
+   {
+    "n": "سجل لجنة التحصيل الدراسي",
+    "m": "سجل لجنة التحصيل الدراسي"
+   }
+  ]
+ },
+ "2-2-1-4": {
+  "f": "1B0Bw1zrkIkTTNxCc5c6h6dbma6HYOGzz",
+  "r": [
+   {
+    "n": "سجل متابعة أداء المتعلمين",
+    "m": "سجل متابعة أداء المتعلمين"
+   },
+   {
+    "n": "سجل إنجاز المتعلمين / الكتب",
+    "m": "سجل إنجاز المتعلمين-الكتب"
+   }
+  ]
+ },
+ "3-1-1-1": {
+  "f": "17I1G7QCL6ZOvPBb-F_lkZSmgfNsV-0p_",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 3-1-1-1",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "3-1-1-2": {
+  "f": "1rqc5VQEWZ4BXejkA3c3tR1uhxIStE4ib",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 3-1-1-2",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "3-1-1-3": {
+  "f": "14zvk6J864_xhksTAlexR9NYZgH3kv3k3",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 3-1-1-3",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "3-1-1-4": {
+  "f": "1RvVhdCwJKZKYqQf5DvAsRxmrJYBT8oPl",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 3-1-1-4",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "3-1-1-5": {
+  "f": "1KZ4CIEdx5FiKWWATwLLKKAEcaEJKq5vw",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 3-1-1-5",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "3-1-1-6": {
+  "f": "15v0JaPcxEc55J_4Rv9VMFAdcl4z1s4Me",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 3-1-1-6",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "3-2-1-1": {
+  "f": "1NmfKKYWd3VgIkeOSfCo28MwLlULGfZmY",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 3-2-1-1",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "3-2-1-2": {
+  "f": "1_0T5ONfydEayT5uXCrH3iWa8tDkiIx26",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 3-2-1-2",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "3-2-1-3": {
+  "f": "17kJVGQU7G6izhT0p8b3gcA12vfqtgLkB",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 3-2-1-3",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "3-2-1-4": {
+  "f": "14-WHDwkw_pfh7pJuX5_vIQs4fTjj_c6V",
+  "r": [
+   {
+    "n": "سجل العمل التطوعي",
+    "m": "سجل العمل التطوعي"
+   },
+   {
+    "n": "سجل التوجيه والإرشاد",
+    "m": "سجل التوجيه والإرشاد"
+   }
+  ]
+ },
+ "3-2-1-5": {
+  "f": "1JoNMcdNU5uYJv2KWC2IjP0wZQ-V2WlA0",
+  "r": [
+   {
+    "n": "سجل المخالفات السلوكية",
+    "m": "سجل المخالفات السلوكية"
+   },
+   {
+    "n": "سجل التوجيه والإرشاد",
+    "m": "سجل التوجيه والإرشاد"
+   },
+   {
+    "n": "سجل الانضباط المدرسي",
+    "m": "سجل الانضباط المدرسي"
+   },
+   {
+    "n": "سجل التوجيه والإرشاد (التكريم)",
+    "m": "سجل التوجيه والإرشاد (التكريم)"
+   }
+  ]
+ },
+ "3-2-1-6": {
+  "f": "1efR0WUCiVw9g7WEK18xxoKuGi_CzhRjC",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 3-2-1-6",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "3-2-1-7": {
+  "f": "1Lf_iRS3I-i4TSIPsns8uQsezov_buj19",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 3-2-1-7",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "4-1-1-1": {
+  "f": "1P0tpkVHGUO_HHHnak8L6GzcmV3bzxOAH",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 4-1-1-1",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "4-1-1-2": {
+  "f": "17OHidURyfCrPQSvBmF4M-2OUThMtb1tl",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 4-1-1-2",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "4-1-1-3": {
+  "f": "13YC9ln9g8oHFFt6P8zg6FFqaH_LFwdJP",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 4-1-1-3",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "4-1-1-4": {
+  "f": "1alTt5zsDANpVn5n0-qoa4Oicmf5DE3hP",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 4-1-1-4",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ },
+ "4-2-1-1": {
+  "f": "1hP9pYDz8VM05vCCQP5zlFlmE7qlGeuDL",
+  "r": [
+   {
+    "n": "ملف لجنة الأمن والسلامة",
+    "m": "ملف لجنة الأمن والسلامة"
+   },
+   {
+    "n": "شهادة الأمن والسلامة من الدفاع المدني (سارية)",
+    "m": "شهادة الأمن والسلامة من الدفاع المدني (سارية)"
+   },
+   {
+    "n": "سجل الموجه الصحي",
+    "m": "سجل الموجه الصحي"
+   }
+  ]
+ },
+ "4-2-1-2": {
+  "f": "16psxMMbjLfUI96pN3imIZUswLTdyA61O",
+  "r": [
+   {
+    "n": "سجل الصيانة",
+    "m": "سجل الصيانة"
+   }
+  ]
+ },
+ "4-2-1-3": {
+  "f": "1cEZzpzaSxvZpTeP_PT3v8LLGm5An71oF",
+  "r": [
+   {
+    "n": "سجل متابعة المؤشر 4-2-1-3",
+    "m": "سجل متابعة المؤشر"
+   }
+  ]
+ }
+};
 
 /* ========== مفاتيح الأمان (اقرأها قبل أول تشغيل) ========== */
 var DRY_RUN = true;               // true: applyRenames تطبع ما ستفعله ولا تغيّر شيئاً. اجعلها false بقرارك.
@@ -103,7 +939,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1XO75B4DSxC3IrONIaSFunqXa1qNpJ1ER",
+  "f": "12TO0BJ_4oJn000v_Rt-vNOWvUc-2Y_n5",
   "gd": [
    {
     "k": "d",
@@ -198,7 +1034,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1MHWz39G03a-FSYUsKWLFKsPh73Pb_hRk",
+  "f": "1mGbdzN95QSs2Evljp2C4lFD7meaXexAC",
   "gd": [
    {
     "k": "d",
@@ -273,7 +1109,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1BwfZzeJVuOzZ3n0xTrXVC_TwPI7ABTpH",
+  "f": "1SPCGq90yFmO3W3M5oHwJUhUEuj8oo0dp",
   "gd": [
    {
     "k": "p",
@@ -362,7 +1198,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "14q8zzYUMj8o1rbooIDcli5zV_m-W3PkB",
+  "f": "1-Fx-6B_pdUb5bZhc8fFj4Sb0_LWybAE8",
   "gd": [
    {
     "k": "d",
@@ -440,7 +1276,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1lAPyG7mjghf2jGdGBbf22VhnGblHttw_",
+  "f": "1L056IjW-0M-BkVAHtdpZwTIGP_5bvfYA",
   "gd": [
    {
     "k": "d",
@@ -526,7 +1362,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1lSbCxWYM_5ncxelvWyZ5QiN3BhsII4FJ",
+  "f": "1EktDP0ElE7oo1qLYh4Q3_PmLg4UfoLDE",
   "gd": [
    {
     "k": "d",
@@ -630,7 +1466,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1ahWS3_o6EGE7gzJfLIOGOrkmL1TlxVFK",
+  "f": "1WdBs8QTinr8ncyTCknYtbli52Voso-si",
   "gd": [
    {
     "k": "d",
@@ -704,7 +1540,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1ZcF9X8E3DEQOI3zYY5pVomitZCT_p6FV",
+  "f": "1rU_JClHTG9mZ8D4UQblDylonsVxrxCfh",
   "gd": [
    {
     "k": "d",
@@ -786,7 +1622,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1C30C_gvIXhiWI8L8kvAJBIzpER-_TGBF",
+  "f": "1xiSWQwbPZ_rbY2tk-V9dBXXLeu0W4C4i",
   "gd": [
    {
     "k": "p",
@@ -882,7 +1718,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1UA3FfmKMjsRzClIim-QZk3NxyS7JEkH-",
+  "f": "1H6OmvFO2RYFV65hbVfhU9FQHSIuvgl2J",
   "gd": [
    {
     "k": "p",
@@ -968,7 +1804,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1NRt4PNDfr2SSJq3OUguivXX-jByigkgV",
+  "f": "10Iq-yHIQ9mB0zuUk85ErTq9UZ7u9irmU",
   "gd": [
    {
     "k": "d",
@@ -1042,7 +1878,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1g2KHBgd6zHdzXO08H7W_vS2kIEVaxTPu",
+  "f": "1Qxz47wgZuO2KCczqVpNABg25reqJEqz5",
   "gd": [
    {
     "k": "d",
@@ -1141,7 +1977,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1MEcPrYY5gZiJLW-KNvv8WjhKvsP1hUrM",
+  "f": "1qE92qQSxc8O4rv5VCDFvbWUWd1oYoLFm",
   "gd": [
    {
     "k": "d",
@@ -1206,7 +2042,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1xU1zCZeBl8nobW4E96nk9mCARJaYWJFa",
+  "f": "1KS0Z7kubdXZTrysHZMw5-I_rN6MRZ4yv",
   "gd": [
    {
     "k": "d",
@@ -1278,7 +2114,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1yhxgdUNFmITj2cJbFrbuDdgyk7Q-p5wL",
+  "f": "126x78Jci_J7_luKhgBgDBMKodwwufHjd",
   "gd": [
    {
     "k": "d",
@@ -1360,7 +2196,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1VFhtmBtbErzZvtsaXVs50oRmUT2iKXiF",
+  "f": "1RlmDM6ZOf67_na_wNfry5_L4CaWsRIcI",
   "gd": [
    {
     "k": "p",
@@ -1442,7 +2278,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "10UlMDalxVrjAnMAM4140zFrjxgFcENHv",
+  "f": "1KQ7eFPyqJCPkc_jW4R9IsT8fAVl29xyy",
   "gd": [
    {
     "k": "d",
@@ -1533,7 +2369,7 @@ var DATA = [
   ],
   "gsrc": "الموجه الطلابي",
   "gnote": "الحالات الفردية سرّية: لا تُرفع ملفاتها إلى Drive المشترك؛ يُرفع فقط السياسات والنماذج الفارغة والتقارير المجمّعة بلا أسماء.",
-  "f": "1BlNTZo6H3ws8Ft3qbjRrnhIzKw0Vt0hz",
+  "f": "1YGqM5hlVAYYzjMOaGDjxO4HIWwAOJm0R",
   "gd": [
    {
     "k": "d",
@@ -1622,7 +2458,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1YqD8H09hM6pCLQxPlm9oNfjeqwQk0zPB",
+  "f": "12rcxXeDHLMCbgqVb__A0daNirObcRUD7",
   "gd": [
    {
     "k": "p",
@@ -1686,7 +2522,7 @@ var DATA = [
   "text": "توفر المدرسة فرصًا متكافئة للتعلم تلبي احتياجات المتعلمين، ومنهم ذوو الإعاقة والموهوبون.",
   "tool": "الملاحظة الصفية",
   "proposed": false,
-  "f": "1lBC8zR84wS9ccy4ldRFVsY9PAYFd_Qza",
+  "f": "1aPRPBaTj7FNnVevtA3nRagf38GO8D2ry",
   "gd": [
    {
     "k": "p",
@@ -1764,7 +2600,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1ln4mgodcd6SlSOVWY1hkD6hFGJHsMA4G",
+  "f": "1JShZ1AQ4LY8Bmz7KvjP8LVoP2e8CaTmQ",
   "gd": [
    {
     "k": "d",
@@ -1827,7 +2663,7 @@ var DATA = [
   "text": "تنوع المدرسة في إستراتيجيات التعليم والتعلم لتلبية احتياجات المتعلمين، ودعم تعلمهم.",
   "tool": "الملاحظة الصفية",
   "proposed": false,
-  "f": "160pd7gN2fTjdbfFWMyrFMr8NMOcHn5mN",
+  "f": "1YU2z9huuE3_rc8KB9oQ36ckyZryP-KUX",
   "gd": [
    {
     "k": "d",
@@ -1895,7 +2731,7 @@ var DATA = [
   "text": "تفعّل المدرسة التقنية الرقمية لدعم تعلم المتعلمين وتلبية احتياجاتهم.",
   "tool": "الملاحظة الصفية",
   "proposed": false,
-  "f": "1BzOLVBEYztRf7i-aJYdsbSW5zW87Kp_6",
+  "f": "19Ou9jlPjoPFWhlw4TjswuvyHhgy22B7n",
   "gd": [
    {
     "k": "p",
@@ -1970,7 +2806,7 @@ var DATA = [
   "text": "تنفذ المدرسة أنشطة تعلم تطبيقية ترتبط بحياة المتعلمين.",
   "tool": "الملاحظة الصفية",
   "proposed": false,
-  "f": "1VdAQzeZnXsiljYXF4hSEGaj-itFuAVMm",
+  "f": "14nI7AGWByuS0psNmxfsXthe3TE70rg5c",
   "gd": [
    {
     "k": "p",
@@ -2052,7 +2888,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1qypGaQPlWNqpfoHWKCv_RbiokD1yqrvZ",
+  "f": "1Alvln2ELW-zJ4Rffmj6Vo0Re42VByG3C",
   "gd": [
    {
     "k": "p",
@@ -2124,7 +2960,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1Rc4zapEmfW2Pcz9em4J5qsYTOO1oppdn",
+  "f": "188JoUbbph3QyMWfBCdL8kG49f-EfhLJP",
   "gd": [
    {
     "k": "p",
@@ -2194,7 +3030,7 @@ var DATA = [
   "text": "تنمي المدرسة المهارات العاطفية والاجتماعية لدى المتعلمين.",
   "tool": "الملاحظة الصفية",
   "proposed": false,
-  "f": "1sqMKGuWO6WEeAE0Mc3QdRQOtYd4AKnuj",
+  "f": "1buf0-ffPe__sQpjLd_s9hEg1aWpAP-iC",
   "gd": [
    {
     "k": "p",
@@ -2262,7 +3098,7 @@ var DATA = [
   "text": "تعزز المدرسة دافعية المتعلمين للتعلم، والاستمتاع به.",
   "tool": "الملاحظة الصفية",
   "proposed": false,
-  "f": "13VuNADWUIuXCtUqr5eNHNcl3sTql4Yhe",
+  "f": "1CTDAR5fWWsPpM3i1DgGOSp15M1vpZMvW",
   "gd": [
    {
     "k": "p",
@@ -2348,7 +3184,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1HF1GOTF8TXy28oFdXUBX3VIEBQFc0aKm",
+  "f": "1eFlW1g9MpN_kACE1ej6JMdO2tqdIg1kE",
   "gd": [
    {
     "k": "d",
@@ -2429,7 +3265,7 @@ var DATA = [
   ],
   "gsrc": "وكيل الشؤون التعليمية",
   "gnote": "",
-  "f": "1WrKg3_mZX520gS_JyEdN4gYg3D7jIhXZ",
+  "f": "1lWeG4D1QrVHKzVj6Amz06pQqXnLf8nA_",
   "gd": [
    {
     "k": "d",
@@ -2516,7 +3352,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1Q8PI3eBPxqorkyqm80kUpq0UqiRTrmeX",
+  "f": "1P_IrLjAnepRuxbGdkFIfXxljV-Nst3dZ",
   "gd": [
    {
     "k": "d",
@@ -2596,7 +3432,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1iZG64jdPHE8TIEcOJ5WSk_JuDo_Xz79Q",
+  "f": "1B0Bw1zrkIkTTNxCc5c6h6dbma6HYOGzz",
   "gd": [
    {
     "k": "p",
@@ -2659,7 +3495,7 @@ var DATA = [
   "text": "يحقق المتعلمون نتائج مرتفعة في مجال القراءة وفقًا للاختبارات الوطنية.",
   "tool": "الاختبارات الوطنية (نافس)",
   "proposed": false,
-  "f": "1182QbEDDMx3MgP445fs_ucps_8gyrjvz",
+  "f": "17I1G7QCL6ZOvPBb-F_lkZSmgfNsV-0p_",
   "gd": [
    {
     "k": "d",
@@ -2721,7 +3557,7 @@ var DATA = [
   "text": "يحقق المتعلمون نتائج مرتفعة في مجال الرياضيات وفقًا للاختبارات الوطنية.",
   "tool": "الاختبارات الوطنية (نافس)",
   "proposed": false,
-  "f": "1oxMGiU1ceEP_b2C6jBXtdkivN3eoJxcB",
+  "f": "1rqc5VQEWZ4BXejkA3c3tR1uhxIStE4ib",
   "gd": [
    {
     "k": "d",
@@ -2783,7 +3619,7 @@ var DATA = [
   "text": "يحقق المتعلمون نتائج مرتفعة في مجال العلوم وفقًا للاختبارات الوطنية.",
   "tool": "الاختبارات الوطنية (نافس)",
   "proposed": false,
-  "f": "1K9CfA4G1Ksl9H9TVcuQ3n7etsk7cXAn8",
+  "f": "14zvk6J864_xhksTAlexR9NYZgH3kv3k3",
   "gd": [
    {
     "k": "d",
@@ -2845,7 +3681,7 @@ var DATA = [
   "text": "يحقق المتعلمون تقدمًا في مجال القراءة قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية.",
   "tool": "الاختبارات الوطنية (نافس)",
   "proposed": false,
-  "f": "14Qex2CRu8uGYx6vDobR5YgklRm3iF86E",
+  "f": "1RvVhdCwJKZKYqQf5DvAsRxmrJYBT8oPl",
   "gd": [
    {
     "k": "d",
@@ -2907,7 +3743,7 @@ var DATA = [
   "text": "يحقق المتعلمون تقدمًا في مجال الرياضيات قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية.",
   "tool": "الاختبارات الوطنية (نافس)",
   "proposed": false,
-  "f": "1JgPmctwu2sJCHXmeX0bveFNAZJKItYZW",
+  "f": "1KZ4CIEdx5FiKWWATwLLKKAEcaEJKq5vw",
   "gd": [
    {
     "k": "d",
@@ -2969,7 +3805,7 @@ var DATA = [
   "text": "يحقق المتعلمون تقدمًا في مجال العلوم قياسًا على مستوى أداء المدرسة السابق في الاختبارات الوطنية.",
   "tool": "الاختبارات الوطنية (نافس)",
   "proposed": false,
-  "f": "1e-6vSAZ_NFr0yCcQPycqgzUf6jksOPDp",
+  "f": "15v0JaPcxEc55J_4Rv9VMFAdcl4z1s4Me",
   "gd": [
    {
     "k": "d",
@@ -3031,7 +3867,7 @@ var DATA = [
   "text": "يظهر المتعلمون الاعتزاز بالقيم والهوية الوطنية.",
   "tool": "استبانات المتعلم والأسرة",
   "proposed": false,
-  "f": "1j-nCJw6vzG7Kqjp3aukutM4nIN2-3Q-l",
+  "f": "1NmfKKYWd3VgIkeOSfCo28MwLlULGfZmY",
   "gd": [
    {
     "k": "d",
@@ -3099,7 +3935,7 @@ var DATA = [
   "text": "يظهر المتعلمون اتجاهات إيجابية نحو ذواتهم والآخرين.",
   "tool": "استبانات المتعلم والأسرة",
   "proposed": false,
-  "f": "13gOGWh-kcxVR93HcOsXwA0ixLxr2j4km",
+  "f": "1_0T5ONfydEayT5uXCrH3iWa8tDkiIx26",
   "gd": [
    {
     "k": "d",
@@ -3167,7 +4003,7 @@ var DATA = [
   "text": "يظهر المتعلمون التزامًا بالممارسات الصحية السليمة.",
   "tool": "استبانات المتعلم والأسرة",
   "proposed": false,
-  "f": "1oDqxz8haEm89TTtG07I2WrVgnBogDvIQ",
+  "f": "17kJVGQU7G6izhT0p8b3gcA12vfqtgLkB",
   "gd": [
    {
     "k": "p",
@@ -3245,7 +4081,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1QbngawRJX0_sXVR2ss7C-sJpFm4_GCX_",
+  "f": "14-WHDwkw_pfh7pJuX5_vIQs4fTjj_c6V",
   "gd": [
    {
     "k": "d",
@@ -3327,7 +4163,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1c5CZNHR65p8i68GzOszjoLD8LsvTKxfb",
+  "f": "1JoNMcdNU5uYJv2KWC2IjP0wZQ-V2WlA0",
   "gd": [
    {
     "k": "p",
@@ -3390,7 +4226,7 @@ var DATA = [
   "text": "يظهر المتعلمون الاستقلالية والقدرة على التعلم الذاتي.",
   "tool": "استبانات المتعلم والأسرة",
   "proposed": false,
-  "f": "1HZHHB5Dy5ivB4ojgoQ811dI44jfmnzZ3",
+  "f": "1efR0WUCiVw9g7WEK18xxoKuGi_CzhRjC",
   "gd": [
    {
     "k": "d",
@@ -3458,7 +4294,7 @@ var DATA = [
   "text": "يظهر المتعلمون اعتزازًا بثقافتهم واحترامًا للتنوع الثقافي في المجتمع.",
   "tool": "استبانات المتعلم والأسرة",
   "proposed": false,
-  "f": "1ckznnqfczFC4NjTJI0Rg_9_k-X3blbXf",
+  "f": "1Lf_iRS3I-i4TSIPsns8uQsezov_buj19",
   "gd": [
    {
     "k": "p",
@@ -3546,7 +4382,7 @@ var DATA = [
   ],
   "gsrc": "وكيل الشؤون المدرسية",
   "gnote": "",
-  "f": "1OpO1IZooRGgsgeKlNqC1bS1ZvkWTWKL1",
+  "f": "1P0tpkVHGUO_HHHnak8L6GzcmV3bzxOAH",
   "gd": [
    {
     "k": "d",
@@ -3613,7 +4449,7 @@ var DATA = [
   "text": "تنظيم مبنى المدرسة ملائم لعدد المتعلمين وخصائص المرحلة العمرية، ومنهم ذوو الإعاقة.",
   "tool": "المعاينة الميدانية",
   "proposed": false,
-  "f": "1pbOye9Jt6SBKD_pX2qnMITz-_66F3TEu",
+  "f": "17OHidURyfCrPQSvBmF4M-2OUThMtb1tl",
   "gd": [
    {
     "k": "d",
@@ -3681,7 +4517,7 @@ var DATA = [
   "text": "تتوافر فصول ومعامل ملائمة للعملية التعليمية تلبي احتياجات المتعلمين، ومنهم ذوو الإعاقة.",
   "tool": "المعاينة الميدانية",
   "proposed": false,
-  "f": "13U2I3P1flOPuMpGDuRITKjaK-iTUiGjn",
+  "f": "13YC9ln9g8oHFFt6P8zg6FFqaH_LFwdJP",
   "gd": [
    {
     "k": "d",
@@ -3749,7 +4585,7 @@ var DATA = [
   "text": "تلبي المرافق والتجهيزات والخدمات المساندة احتياجات المتعلمين، ومنهم ذوو الإعاقة.",
   "tool": "المعاينة الميدانية",
   "proposed": false,
-  "f": "1lZRiGUnFCDuDbOgOV-Ii07E44zyYmBU7",
+  "f": "1alTt5zsDANpVn5n0-qoa4Oicmf5DE3hP",
   "gd": [
    {
     "k": "p",
@@ -3835,7 +4671,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1a8-fRyVXkior9lqdzmJJ4derp-HzQ5fJ",
+  "f": "1hP9pYDz8VM05vCCQP5zlFlmE7qlGeuDL",
   "gd": [
    {
     "k": "d",
@@ -3908,7 +4744,7 @@ var DATA = [
     ]
    }
   ],
-  "f": "1PXWzq5io-BT_WyTTrNWQWxvUyt7hLBCE",
+  "f": "16psxMMbjLfUI96pN3imIZUswLTdyA61O",
   "gd": [
    {
     "k": "d",
@@ -3978,7 +4814,7 @@ var DATA = [
   "text": "تتابع المدرسة نظافة المبنى المدرسي وجميع مرافقه بشكل مستمر.",
   "tool": "المعاينة الميدانية",
   "proposed": false,
-  "f": "1WQSe2W-jvmdfazpHMF0gCajTUS4eccGZ",
+  "f": "1cEZzpzaSxvZpTeP_PT3v8LLGm5An71oF",
   "gd": [
    {
     "k": "p",
@@ -4233,11 +5069,85 @@ function verifyIndex() {
   return { total: keys.length, ok: ok, problems: bad, counts: cnt };
 }
 
+
+/* ========== 2-ب) قراءة الشجرة الجديدة (v8.13.0) ========== */
+function treeSan_(r) { return String(r).replace(/\s*\/\s*/g, "-"); }
+function treeChild_(folder, name) { var it = folder.getFoldersByName(name); return it.hasNext() ? it.next() : null; }
+function treeTemplateSizes_() {
+  var map = {}, root = DriveApp.getFolderById(TREE_ROOT_ID), tf = treeChild_(root, TREE_TEMPLATES);
+  if (!tf) return map;
+  var it = tf.getFiles();
+  while (it.hasNext()) { var f = it.next(); map[norm_(f.getName())] = f.getSize(); }
+  return map;
+}
+/* يطابق ملفاً باسم سجل: «<رمز>_<السجل>_vN.ext» — بعد توحيد الشرطة المائلة والمسافات */
+function treeMatch_(fileName, code, rec) {
+  var b = splitName_(fileName).base;
+  b = norm_(treeSan_(b));
+  var pre = norm_(code) + "_", mm = norm_(rec.m);
+  if (b.indexOf(pre) !== 0) return false;
+  b = b.substring(pre.length).replace(/_v\d+$/i, "");
+  return b === mm;
+}
+function treeScanIndicator_(code, ent, sizes, errors) {
+  var out = { req: ent.r.length, ready: 0, up: 0, ap: 0, docs: [], blank: [], missing: [], files: [], invalid: [], rep: { n: 0, photos: 0, files: [] } };
+  var folder;
+  try { folder = DriveApp.getFolderById(ent.f); } catch (e) { errors.push({ key: code, error: e.message }); out.error = true; return out; }
+  var rv = treeChild_(folder, TREE_REVIEW), ap = treeChild_(folder, TREE_APPROVED), rp = treeChild_(folder, TREE_REPORT);
+  var rvFiles = [], apFiles = [], f, it;
+  if (rv) { it = rv.getFiles(); while (it.hasNext()) { f = it.next(); rvFiles.push({ id: f.getId(), name: f.getName(), size: f.getSize() }); } } else errors.push({ key: code, error: "لا يوجد مجلد " + TREE_REVIEW });
+  if (ap) { it = ap.getFiles(); while (it.hasNext()) { f = it.next(); apFiles.push({ id: f.getId(), name: f.getName(), size: f.getSize() }); } }
+  ent.r.forEach(function (rec) {
+    var tplSize = sizes[norm_("قالب_" + rec.m + "_v1.docx")];
+    var placed = false, filled = false, approved = false;
+    function isFilled(x) { var pr = splitName_(x.name); if (ACCEPT_DOC_EXT.indexOf(pr.ext) < 0) return false; if (x.size < MIN_BYTES.doc) return false; return tplSize == null ? true : x.size !== tplSize; }
+    rvFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) filled = true; } });
+    apFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) { filled = true; approved = true; } } });
+    if (placed) out.ready++;
+    if (filled) { out.up++; out.docs.push(rec.n); } else if (placed) out.blank.push(rec.n); else out.missing.push(rec.n);
+    if (approved) out.ap++;
+  });
+  rvFiles.concat(apFiles).forEach(function (x) { var known = ent.r.some(function (rec) { return treeMatch_(x.name, code, rec); }); if (!known) out.invalid.push(x.name); });
+  if (rp) {
+    it = rp.getFiles();
+    while (it.hasNext()) {
+      f = it.next(); var nm = f.getName(), size = f.getSize(), pr = splitName_(nm);
+      var okExt = REPORT_EXT.indexOf(pr.ext) >= 0, okSize = size >= MIN_BYTES.report, hasName = strip_(nm).indexOf(strip_("تقرير الشواهد")) >= 0, legacy = !hasName && strip_(nm).indexOf(strip_("التقرير البصري")) >= 0;
+      var n = reportPhotos_(nm), valid = okExt && okSize;
+      var chk = nameCheck_(nm, { kind: "report", code: code, label: "" }, size);
+      out.rep.files.push({ id: f.getId(), name: nm, ok: chk.ok && !legacy, n: n, valid: valid, legacy: legacy });
+      if (valid) { out.rep.n++; if (n !== null && n > out.rep.photos) out.rep.photos = n; }
+    }
+  }
+  return out;
+}
+function refreshTree_() {
+  var t0 = Date.now(), sizes = treeTemplateSizes_(), errors = [], ind = {}, req = 0, up = 0, ready = 0, ap = 0, partial = false;
+  var codes = Object.keys(TREE).sort();
+  for (var k = 0; k < codes.length; k++) {
+    if (Date.now() - t0 > TIME_LIMIT_MS) { partial = true; break; }
+    var c = codes[k], r = treeScanIndicator_(c, TREE[c], sizes, errors);
+    ind[c] = r; req += r.req; up += r.up; ready += r.ready; ap += r.ap;
+  }
+  var out = { schema: "tree-v2", version: SCRIPT_VERSION, generatedAt: new Date().toISOString(), asof: new Date().toISOString().slice(0, 10), required: req, uploaded: up, ready: ready, approved: ap, ind: ind, errors: errors, partial: partial,
+    basis: "السجل المرفوع = ملف docx معبّأ وغير فارغ يختلف عن قالبه الفارغ؛ القالب الفارغ لا يُحتسب" };
+  var json = JSON.stringify(out);
+  try { CacheService.getScriptCache().put(CACHE_KEY_TREE, json, CACHE_SECONDS); } catch (e) {}
+  return json;
+}
+/* تشغيل يدوي لفحص الشجرة: يطبع الملخص في السجل ولا يغيّر شيئاً */
+function verifyTree() {
+  var o = JSON.parse(refreshTree_()), bad = [];
+  Object.keys(o.ind).forEach(function (c) { var r = o.ind[c]; if (r.error) bad.push(c + " ← تعذّر فتح المجلد"); if (r.missing.length) bad.push(c + " ← قوالب ناقصة: " + r.missing.join("، ")); if (r.invalid.length) bad.push(c + " ← ملفات لا تطابق أي سجل: " + r.invalid.join("، ")); });
+  Logger.log("المطلوب " + o.required + " — قوالب جاهزة " + o.ready + " — مرفوعة (معبّأة) " + o.uploaded + " — معتمدة " + o.approved + (bad.length ? "\n" + bad.join("\n") : "\nلا مشكلات."));
+  return o;
+}
+
 /* ========== 2) تحديث الحالة ========== */
 function refreshStatus() {
   var lock = LockService.getScriptLock();
   if (!lock.tryLock(30000)) throw new Error("تحديث آخر قيد التنفيذ؛ أعد المحاولة بعد قليل.");
-  try { return refresh_(); } finally { lock.releaseLock(); }
+  try { return TREE_MODE ? refreshTree_() : refresh_(); } finally { lock.releaseLock(); }
 }
 function refresh_() {
   var t0 = Date.now(), ss = sheet_(), idx = readIndex_(ss), ver = readVer_(ss), cat = catalog_();
@@ -4318,7 +5228,7 @@ function installTrigger() {
 /* ========== 4) واجهة الويب ========== */
 function doGet(e) {
   var p = (e && e.parameter) || {}, json = null;
-  if (p.refresh !== "1") json = CacheService.getScriptCache().get(CACHE_KEY);
+  if (p.refresh !== "1") json = CacheService.getScriptCache().get(TREE_MODE ? CACHE_KEY_TREE : CACHE_KEY);
   if (!json) {
     try { json = refreshStatus(); }
     catch (err) { json = JSON.stringify({ generatedAt: new Date().toISOString(), errors: [{ key: "refresh", error: err.message }], partial: true }); }

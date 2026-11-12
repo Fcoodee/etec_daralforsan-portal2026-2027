@@ -1,0 +1,434 @@
+{
+ "asof": "2026-11-12",
+ "basis": "new Drive Diploma_ETEC2026: a required record counts as uploaded only after the team fills the template and re-uploads it; blank templates placed by the system admin are not counted",
+ "required": 140,
+ "uploaded": 0,
+ "pct": 0.0,
+ "ready": 140,
+ "official_slots": 116,
+ "derived_slots": 24,
+ "domains": {
+  "1": 0.0,
+  "2": 0.0,
+  "3": 0.0,
+  "4": 0.0
+ },
+ "ind": {
+  "1-1-1-1": {
+   "req": 4,
+   "up": 0,
+   "ready": 4,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-1-1-2": {
+   "req": 6,
+   "up": 0,
+   "ready": 6,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-2-1-1": {
+   "req": 3,
+   "up": 0,
+   "ready": 3,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-2-1-2": {
+   "req": 10,
+   "up": 0,
+   "ready": 10,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-2-1-3": {
+   "req": 7,
+   "up": 0,
+   "ready": 7,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-2-1-4": {
+   "req": 4,
+   "up": 0,
+   "ready": 4,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-2-1-5": {
+   "req": 6,
+   "up": 0,
+   "ready": 6,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-3-1-1": {
+   "req": 3,
+   "up": 0,
+   "ready": 3,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-3-1-2": {
+   "req": 8,
+   "up": 0,
+   "ready": 8,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-3-1-3": {
+   "req": 4,
+   "up": 0,
+   "ready": 4,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-4-1-1": {
+   "req": 7,
+   "up": 0,
+   "ready": 7,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-4-1-2": {
+   "req": 5,
+   "up": 0,
+   "ready": 5,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-4-1-3": {
+   "req": 7,
+   "up": 0,
+   "ready": 7,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-4-1-4": {
+   "req": 2,
+   "up": 0,
+   "ready": 2,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-4-1-5": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-4-1-6": {
+   "req": 2,
+   "up": 0,
+   "ready": 2,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-4-1-7": {
+   "req": 2,
+   "up": 0,
+   "ready": 2,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "1-5-1-1": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "1-5-1-2": {
+   "req": 5,
+   "up": 0,
+   "ready": 5,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "2-1-1-1": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "2-1-1-2": {
+   "req": 4,
+   "up": 0,
+   "ready": 4,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "2-1-1-3": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "2-1-1-4": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "2-1-1-5": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "2-1-1-6": {
+   "req": 6,
+   "up": 0,
+   "ready": 6,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "2-1-1-7": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "2-1-1-8": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "2-1-1-9": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "2-2-1-1": {
+   "req": 3,
+   "up": 0,
+   "ready": 3,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "2-2-1-2": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "2-2-1-3": {
+   "req": 4,
+   "up": 0,
+   "ready": 4,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "2-2-1-4": {
+   "req": 2,
+   "up": 0,
+   "ready": 2,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "3-1-1-1": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "3-1-1-2": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "3-1-1-3": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "3-1-1-4": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "3-1-1-5": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "3-1-1-6": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "3-2-1-1": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "3-2-1-2": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "3-2-1-3": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "3-2-1-4": {
+   "req": 2,
+   "up": 0,
+   "ready": 2,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "3-2-1-5": {
+   "req": 4,
+   "up": 0,
+   "ready": 4,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "3-2-1-6": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "3-2-1-7": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "4-1-1-1": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "4-1-1-2": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "4-1-1-3": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "4-1-1-4": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  },
+  "4-2-1-1": {
+   "req": 3,
+   "up": 0,
+   "ready": 3,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "4-2-1-2": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "official"
+  },
+  "4-2-1-3": {
+   "req": 1,
+   "up": 0,
+   "ready": 1,
+   "docs": [],
+   "files": [],
+   "kind": "derived"
+  }
+ }
+}

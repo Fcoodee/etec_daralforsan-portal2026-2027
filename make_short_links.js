@@ -13,7 +13,7 @@ let cfg = fs.readFileSync(cfgPath, 'utf8');
 const pick = (name, d) => { const m = new RegExp('window\\.' + name + '\\s*=\\s*"([^"]*)"').exec(cfg); return m ? m[1] : d; };
 const SITE = pick('ETEC_SITE_BASE', 'https://fcoodee.github.io/etec_daralforsan-portal2026-2027/').replace(/\/?$/, '/');
 const REF = pick('ETEC_EVIDENCE_REF_URL', 'https://drive.google.com/drive/folders/19eBfs6wK7rZvje81ANWFTl_ORLAqK3v6?usp=sharing');
-const PROJ = 'https://drive.google.com/drive/folders/1IDVvAtEyYMA_FZhua_vLDmw_z1cjSBdQ';
+const PROJ = 'https://drive.google.com/drive/folders/1sSYgHcq4Fejp2V3Y6TtY0dMpP_2Osu0_';
 const urls = [1, 2, 3, 4].map(d => SITE + 'evidence-link.html?team=' + d).concat([SITE + 'records-sources.html', REF, PROJ]);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 async function shorten(u) {

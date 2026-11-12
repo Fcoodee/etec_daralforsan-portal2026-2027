@@ -41,8 +41,8 @@
   /* روابط ثانوية مباشرة في مدخل كل دور (لا تتجاوز ثلاثة) */
   var SECOND = {
     admin:  [["approval-request.html", "fa-file-signature", "طلب رقمنة الزيارة"], ["governance.html", "fa-scale-balanced", "الحوكمة الإدارية"], ["reference.html", "fa-book-open", "مرجع الهيئة"]],
-    sup:    [["hardcopy.html", "fa-print", "تقرير استلام المهام"], ["output.html", "fa-file-image", "مولّد التقرير البصري"], ["status-report.html", "fa-clipboard-list", "تقرير الحالة"]],
-    member: [["output.html", "fa-file-image", "مولّد التقرير البصري"]],
+    sup:    [["hardcopy.html", "fa-print", "تقرير استلام المهام"], ["output.html", "fa-file-image", "مولّد تقرير الشواهد"], ["status-report.html", "fa-clipboard-list", "تقرير الحالة"]],
+    member: [["output.html", "fa-file-image", "مولّد تقرير الشواهد"]],
     self:   [["status-report.html", "fa-clipboard-list", "تقرير الحالة"], ["reference.html", "fa-book-open", "مرجع الهيئة"], ["records-sources.html", "fa-list-check", "مصادر السجلات"]]
   };
 
