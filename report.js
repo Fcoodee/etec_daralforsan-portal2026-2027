@@ -106,8 +106,8 @@
     info(); $("addSlot").disabled = slots.length >= MAXS;
   }
   function info() {
-    var tg = P.target(), n = count();
-    $("slotInfo").textContent = n + " صور · الهدف لاعتبار التقرير «مربوطاً»: " + tg + (n >= tg ? " ✔" : "");
+    var n = count();
+    $("slotInfo").textContent = n + " صور";
     $("fname").textContent = fname();
     $("btnPrint").disabled = n < 1;
     var f = document.querySelector(".sh-foot b"); if (f) f.textContent = n;

@@ -19,7 +19,7 @@
     <input id="q" type="search" placeholder="ابحث بالرمز أو الاسم أو السجل…" aria-label="بحث">
     <select id="fd" aria-label="المجال"><option value="">كل المجالات</option></select>
     <select id="fs" aria-label="حالة السجلات"><option value="">السجلات: الكل</option><option value="none">لم تبدأ التعبئة</option><option value="review">فيها سجلات قيد المراجعة</option><option value="approved">فيها سجلات مرفوعة</option><option value="done">كل سجلاتها مرفوعة</option></select>
-    <select id="fr" aria-label="حالة التقرير"><option value="">التقرير: الكل</option><option value="norep">غير منشأ</option><option value="shell">بانتظار الربط</option><option value="part">قيد الربط</option><option value="linked">مربوط</option></select>
+    <select id="fr" aria-label="حالة التقرير"><option value="">التقرير: الكل</option><option value="norep">لم يُرفع</option><option value="linked">مرفوع</option></select>
     <select id="fo" aria-label="المسؤول"><option value="">كل المسؤولين</option></select>
     <button type="button" class="ph-pill" id="mine" aria-pressed="false" hidden>مؤشراتي فقط</button>
   </div>
@@ -58,8 +58,6 @@
     }
     switch (fr.value) {
       case "norep": if (s.repState !== "none") return false; break;
-      case "shell": if (s.repState !== "shell") return false; break;
-      case "part": if (s.repState !== "part") return false; break;
       case "linked": if (s.repState !== "done") return false; break;
     }
     return true;

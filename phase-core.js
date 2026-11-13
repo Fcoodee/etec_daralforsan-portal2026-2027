@@ -48,8 +48,8 @@
     out.p = basis() === "uploaded" ? out.pu : out.pc;
     out.review = 0; i.recs.forEach(function (n) { if (st[n] === "review") out.review++; });
     var ph = out.rep.photos || 0;
-    /* تقرير الشواهد: none غير منشأ · shell منشأ (هيكل بلا صور) · part قيد ربط الشواهد · done مربوط */
-    out.repState = out.rep.n > 0 ? (ph >= tg ? "done" : ph > 0 ? "part" : "shell") : "none";
+    /* تقرير الشواهد: حالتان فقط — none لم يُرفع (لا ملف أو قالب فارغ) · done مرفوع (تقرير فيه صور) */
+    out.repState = ph > 0 ? "done" : "none";
     return out;
   }
   /* المعادلة نفسها المعتمدة في لوحة المتابعة: المؤشر = المرفوع/المطلوب، المعيار = متوسط مؤشراته، المجال = متوسط معاييره، المشروع = متوسط المؤشرات */
@@ -59,13 +59,12 @@
   function domP(d, b) { return avg(critList(d).map(function (x) { return critP(x.c, b); })); }
   function projP(b) { return avg(PH.inds.map(function (i) { return pv(sOf(i), b); })); }
   function totals(list) {
-    var t = { req: 0, up: 0, ap: 0, cr: 0, review: 0, ready: 0, blank: 0, ind: 0, started: 0, repNone: 0, repShell: 0, repPart: 0, repDone: 0, repCreated: 0 };
+    var t = { req: 0, up: 0, ap: 0, cr: 0, review: 0, ready: 0, blank: 0, ind: 0, started: 0, repNone: 0, repDone: 0 };
     (list || PH.inds).forEach(function (i) {
       var s = sOf(i); t.ind++; t.req += s.req; t.up += s.up; t.ap += s.ap; t.cr += s.cr; t.review += s.review; t.ready += s.ready;
       i.recs.forEach(function (n) { if (s.st[n] === "blank") t.blank++; });
       if (s.up > 0 || s.ap > 0) t.started++;
-      if (s.repState === "done") t.repDone++; else if (s.repState === "part") t.repPart++; else if (s.repState === "shell") t.repShell++; else t.repNone++;
-      if (s.repState !== "none") t.repCreated++;
+      if (s.repState === "done") t.repDone++; else t.repNone++;
     });
     t.pc = t.req ? t.cr / t.req : 0; t.pu = t.req ? t.ap / t.req : 0; t.p = basis() === "uploaded" ? t.pu : t.pc; return t;
   }
@@ -104,11 +103,8 @@
   function bar2(pu, pc) { return '<span class="ph-bar ph-bar2" role="img" aria-label="منشأة ' + pct(pc) + '٪ · مرفوعة ' + pct(pu) + '٪"><i class="c" style="width:' + pct(pc) + '%"></i><i class="u" style="width:' + pct(pu) + '%"></i></span>'; }
   function chip(state, label) { var m = STATE[state] || STATE.blank; return '<span class="ph-chip ' + m.c + '" title="' + esc(m.tip) + '">' + esc(label || m.t) + "</span>"; }
   function repLine(s) {
-    var tg = target();
-    if (s.repState === "done") return '<span class="ph-chip ok">تقرير الشواهد: مربوط (' + s.rep.photos + " صور)</span>";
-    if (s.repState === "part") return '<span class="ph-chip wip">تقرير الشواهد: قيد ربط الشواهد (' + s.rep.photos + " من " + tg + " صور)</span>";
-    if (s.repState === "shell") return '<span class="ph-chip idle" title="أصدر التقرير من صفحة «تقرير الشواهد» وارفعه.">تقرير الشواهد: منشأ · بانتظار الربط</span>';
-    return '<span class="ph-chip bad">تقرير الشواهد: غير منشأ</span>';
+    if (s.repState === "done") return '<span class="ph-chip ok">التقرير: مرفوع (' + s.rep.photos + " صور)</span>";
+    return '<span class="ph-chip idle" title="أصدر التقرير من صفحة «تقرير الشواهد» وارفعه.">التقرير: لم يُرفع</span>';
   }
   /* بطاقة مؤشر: العنوان والتقدّم وحالة كل سجل وروابط المجلد والتقرير */
   function card(i, o) {
