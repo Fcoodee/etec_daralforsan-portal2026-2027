@@ -190,3 +190,5 @@ v9.3.2 — Highlights batch 3: criterion 2-1 completed (9 indicators; 28 of 52 t
 v9.3.3 — Highlights batch 4: criterion 2-2 completed (4 indicators; domain 2 done; 32 of 52 total). 2-2-1-2 item 2 / 2-2-1-1 item 2 verified against OCR (raw text truncated).
 
 v9.3.4 — Highlights batch 5: domain 3 completed (13 indicators; 45 of 52 total). 3-1-1-1..6 share the same 8 highlights (the PDF gives one common list titled 'toward improving the indicators' for the whole criterion). 3-2-1-5 item 1 reproduced as printed in the PDF ('Leading the Educational Process' criterion).
+
+v9.4.0 — Highlights complete: batch 6 added domain 4 (7 indicators). All 52 indicators now carry bilingual highlights (ETEC_HL_DONE = 52). English is an unofficial proposed translation pending review.
