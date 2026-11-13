@@ -177,7 +177,7 @@
     var items = [
       ["home.html", "fa-house", role && roles[role] ? roles[role].hl : "مساحتي", "admin,sup,member,self"],
       ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "admin,sup,member,self"],
-      ["progress.html", "fa-chart-pie", "قراءة التقدّم", "admin,sup,member,self"],
+      ["progress.html", "fa-chart-pie", "قراءة التقدّم", "admin,self"],
       ["report.html", "fa-file-image", "تقرير الشواهد", "admin,sup,member"]
     ];
     var nav = items.filter(function (x) { return !role || x[3].split(",").indexOf(role) >= 0; }).map(function (x) {

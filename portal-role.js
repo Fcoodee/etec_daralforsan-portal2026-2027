@@ -24,17 +24,17 @@
   var ALL = ORDER.slice();
   var PAGES = {
     /* صفحات مرحلة ما بعد تصحيح المسار (المبنية من جديد): مفتوحة بحسب الدور بلا دخول */
-    "index.html": ALL, "home.html": ALL, "indicators.html": ALL, "progress.html": ALL,
+    "index.html": ALL, "home.html": ALL, "indicators.html": ALL, "progress.html": ["admin", "self"],
     "report.html": ["admin", "sup", "member"]
     /* كل ما عداها قديم: لمدير النظام وحده (يُعدّ admin افتراضاً لأي صفحة غير مدرجة أعلاه) */
   };
 
   /* روابط ثانوية مباشرة في مدخل كل دور (لا تتجاوز ثلاثة) */
   var SECOND = {
-    admin:  [["indicators.html", "fa-list-check", "المؤشرات والسجلات"]],
+    admin:  [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["progress.html", "fa-chart-pie", "قراءة التقدّم"]],
     sup:    [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["report.html", "fa-file-image", "تقرير الشواهد"]],
     member: [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["report.html", "fa-file-image", "تقرير الشواهد"]],
-    self:   [["indicators.html", "fa-list-check", "المؤشرات والسجلات"]]
+    self:   [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["progress.html", "fa-chart-pie", "قراءة التقدّم"]]
   };
 
 
