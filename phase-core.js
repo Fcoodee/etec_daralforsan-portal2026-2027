@@ -105,6 +105,22 @@
   /* شريط بلونين: داكن = مرفوعة (بعد المراجعة)، فاتح = منشأة */
   function bar2(pu, pc) { return '<span class="ph-bar ph-bar2" role="img" aria-label="منشأة ' + pct(pc) + '٪ · مرفوعة ' + pct(pu) + '٪"><i class="c" style="width:' + pct(pc) + '%"></i><i class="u" style="width:' + pct(pu) + '%"></i></span>'; }
   function chip(state, label) { var m = STATE[state] || STATE.blank; return '<span class="ph-chip ' + m.c + '" title="' + esc(m.tip) + '">' + esc(label || m.t) + "</span>"; }
+  /* معاينة/تنزيل التقرير المرفوع (ملف فيه صور) — لكل الأدوار */
+  function repView(s) {
+    var fs = (s.rep.files || []).filter(function (f) { return f.valid && f.n > 0 && f.id; });
+    return fs.map(function (f) {
+      return '<a class="ph-btn pri" href="' + fileView(f.id) + '" target="_blank" rel="noopener" title="' + esc(f.name) + '"><i class="fa-solid fa-eye"></i> معاينة التقرير</a><a class="ph-btn" href="' + fileDl(f.id) + '" target="_blank" rel="noopener"><i class="fa-solid fa-download"></i> تنزيل التقرير</a>';
+    }).join("");
+  }
+  /* معاينة/تنزيل التقرير المرفوع (أعلى ملف صالح عدداً للصور) */
+  function repFile(s) {
+    var best = null; ((s.rep && s.rep.files) || []).forEach(function (f) { if (f && f.id && f.valid && f.n > 0 && (!best || f.n > best.n)) best = f; });
+    return best;
+  }
+  function repLinks(s) {
+    var f = s.repState === "done" ? repFile(s) : null; if (!f) return "";
+    return '<a class="ph-btn sm" href="' + fileView(f.id) + '" target="_blank" rel="noopener" title="معاينة التقرير المرفوع في Drive"><i class="fa-solid fa-eye"></i> معاينة التقرير</a><a class="ph-btn sm" href="' + fileDl(f.id) + '" target="_blank" rel="noopener" title="تنزيل التقرير المرفوع"><i class="fa-solid fa-download"></i></a>';
+  }
   function repLine(s) {
     if (s.repState === "done") return '<span class="ph-chip ok">التقرير: مرفوع (' + s.rep.photos + " صور)</span>";
     return '<span class="ph-chip idle" title="أصدر التقرير من صفحة «تقرير الشواهد» وارفعه.">التقرير: لم يُرفع</span>';
@@ -126,8 +142,8 @@
       '<div class="ph-card-b"' + (open ? "" : " hidden") + ">" +
       '<p class="ph-stmt">' + esc(i.text) + "</p>" +
       '<ul class="ph-recs">' + recs + "</ul>" +
-      '<div class="ph-row"><span class="ph-chip idle">منشأة ' + s.cr + "/" + s.req + '</span><span class="ph-chip ' + (s.ap ? "ok" : "idle") + '">مرفوعة (بعد المراجعة) ' + s.ap + "/" + s.req + "</span>" + repLine(s) + (s.review ? '<span class="ph-chip wip">معبّأة قيد المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
-      '<div class="ph-actions"><a class="ph-btn pri" href="' + folderUrl(i) + '" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> مجلد المؤشر في Drive</a>' +
+      '<div class="ph-row"><span class="ph-chip idle">منشأة ' + s.cr + "/" + s.req + '</span><span class="ph-chip ' + (s.ap ? "ok" : "idle") + '">مرفوعة (بعد المراجعة) ' + s.ap + "/" + s.req + "</span>" + repLine(s) + repLinks(s) + (s.review ? '<span class="ph-chip wip">معبّأة قيد المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
+      '<div class="ph-actions">' + repView(s) + '<a class="ph-btn pri" href="' + folderUrl(i) + '" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> مجلد المؤشر في Drive</a>' +
       (s.fo.rv ? '<a class="ph-btn" href="' + subUrl(s.fo.rv) + '" target="_blank" rel="noopener" title="ارفع النسخة المعبّأة بالاسم نفسه"><i class="fa-solid fa-cloud-arrow-up"></i> رفع السجل المعبّأ</a>' : "") +
       '<a class="ph-btn" data-roles="admin,sup,member" href="report.html?code=' + esc(i.code) + '"><i class="fa-solid fa-file-image"></i> تقرير الشواهد</a>' +
       '<a class="ph-btn" href="indicators.html?code=' + esc(i.code) + '"><i class="fa-solid fa-link"></i> رابط المؤشر</a></div>' +
