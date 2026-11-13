@@ -30,7 +30,7 @@
 
   /* روابط ثانوية مباشرة في مدخل كل دور (لا تتجاوز ثلاثة) */
   var SECOND = {
-    admin:  [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["status-report.html", "fa-clipboard-list", "تقرير الحالة"], ["governance.html", "fa-scale-balanced", "الحوكمة الإدارية"]],
+    admin:  [["indicators.html", "fa-list-check", "المؤشرات والسجلات"]],
     sup:    [["indicators.html", "fa-list-check", "المؤشرات والسجلات"]],
     member: [["indicators.html", "fa-list-check", "المؤشرات والسجلات"]],
     self:   [["indicators.html", "fa-list-check", "المؤشرات والسجلات"]]
