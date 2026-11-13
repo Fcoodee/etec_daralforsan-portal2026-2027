@@ -8,19 +8,24 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="phase.css?v=9.1.1">
 <style>
-body{min-height:100vh}.ph-main{padding-top:8px}.rh-box{margin-top:14px}.rh-h{font-size:21px;text-align:center}.rh-p{text-align:center}.rh-grid{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))!important;gap:14px!important}.rh-pick{padding:18px 16px!important}
-.ix-hero{text-align:center;padding:20px 16px 4px}
-.ix-hero h1{font-size:25px;font-weight:900;color:var(--t7);margin:10px 0 4px}.ix-hero p{margin:0;font-size:13px;color:var(--mut)}
-.ix-live{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:6px 0 4px}
-.ix-live .ph-stat .v{font-size:24px}
-.ix-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:6px}
-.ix-tile{display:flex;flex-direction:column;gap:4px;text-decoration:none;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;transition:border-color .15s,transform .15s}
-.ix-tile:hover{border-color:#2dd4bf;transform:translateY(-2px)}
-.ix-tile i{font-size:22px;color:var(--t5)}.ix-tile b{font-size:15px;font-weight:900}.ix-tile span{font-size:12.5px;color:var(--mut)}
-.ix-steps{counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;list-style:none;margin:6px 0;padding:0}
-.ix-steps li{counter-increment:s;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px 12px 14px;font-size:13px;position:relative;padding-right:46px}
-.ix-steps li:before{content:counter(s);position:absolute;right:12px;top:10px;width:26px;height:26px;border-radius:50%;background:var(--t7);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:13px}
-.ix-steps b{display:block}
+.wl{max-width:880px;margin:0 auto;padding:0 16px 40px}
+.wl-hero{text-align:center;padding:26px 8px 8px}
+.wl-hero h1{font-size:28px;font-weight:900;color:var(--t7);margin:12px 0 6px;line-height:1.5}
+.wl-hero .sub{font-size:13.5px;color:var(--mut);margin:0}
+.wl-about{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin-top:16px;font-size:14px;line-height:2}
+.wl-about b{color:var(--t7)}
+.wl-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:12px}
+.wl-facts div{background:var(--t1);border-radius:12px;padding:10px;text-align:center}.wl-facts strong{display:block;font-size:22px;color:var(--t7)}.wl-facts span{font-size:11.5px;color:var(--mut)}
+.wl-pick{background:#fff;border:2px solid var(--t5);border-radius:18px;padding:18px 20px;margin-top:16px}
+.wl-pick h2{margin:0 0 4px;font-size:17px;font-weight:900}.wl-pick p{margin:0 0 12px;font-size:12.5px;color:var(--mut)}
+.wl-pick select{width:100%;font:700 15px Cairo,Tahoma,sans-serif;padding:13px 12px;border:1px solid #94a3b8;border-radius:12px;background:#fff;color:#0f172a}
+.wl-role{display:none;margin-top:14px}.wl-role.on{display:block}
+.wl-role .q{font-size:13px;color:var(--mut);margin:0 0 10px}
+.wl-go{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.wl-go a{display:flex;flex-direction:column;gap:3px;text-decoration:none;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;color:inherit;transition:border-color .15s,transform .15s}
+.wl-go a:hover{border-color:#2dd4bf;transform:translateY(-2px)}.wl-go a.main{background:var(--t7);color:#fff;border-color:var(--t7)}.wl-go a.main span{color:#cbd5e1}
+.wl-go i{font-size:20px;color:var(--t5)}.wl-go a.main i{color:#fff}.wl-go b{font-size:14.5px;font-weight:900}.wl-go span{font-size:12px;color:var(--mut)}
+.wl-note{font-size:11.5px;color:var(--mut);margin-top:10px;text-align:center}
 </style>
 <script src="portal-meta.js?v=9.1.1"></script>
 <script src="portal-role.js?v=9.1.1"></script>
@@ -28,14 +33,50 @@ body{min-height:100vh}.ph-main{padding-top:8px}.rh-box{margin-top:14px}.rh-h{fon
 <body>
 <header class="ph-head" style="padding-top:18px">
   <div class="ph-logos"><img src="logo0.png" alt="Diploma 2026"><img src="logo1.png" alt="دار الفرسان"><img src="logo2.png" alt="ETEC"></div>
-  <div class="ix-hero"><h1>بوابة الاعتماد المدرسي والتميز</h1><p>قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان · العام الدراسي 2026-2027</p></div>
 </header>
-<main class="ph-main" style="max-width:900px">
-  <!-- يملؤه portal-role.js: اختيار الدور أولاً، ثم زر مباشر إلى مساحتك -->
-  <div id="roleHome"></div>
-
-  <div class="ph-foot">منصة داخلية لمدارس دار الفرسان غير تابعة لهيئة تقويم التعليم والتدريب. النسبة الرسمية الآن على أساس «السجلات المنشأة»، وتتحول لاحقاً إلى «المرفوعة بعد المراجعة»؛ وهي لا تمثّل نتيجة تقويم أو اعتماداً.</div>
+<main class="wl">
+  <section class="wl-hero">
+    <h1>مرحباً بك في بوابة الاعتماد المدرسي والتميز</h1>
+    <p class="sub">قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان · العام الدراسي 2026-2027</p>
+  </section>
+  <section class="wl-about" aria-label="عن المشروع">
+    <b>ما هذا المشروع؟</b> منصة داخلية تنظّم عمل القسم على متطلبات التقويم والاعتماد المدرسي: لكل مؤشر سجلاته ومجلده وتقرير شواهده، ويتابع كل مستخدم ما يخصّه ويرى تقدّمه بوضوح. الأساس هو معايير التقويم والاعتماد المدرسي لمدارس التعليم العام (الإصدار الثاني) الصادرة عن هيئة تقويم التعليم والتدريب.
+    <div class="wl-facts"><div><strong>4</strong><span>مجالات</span></div><div><strong>11</strong><span>معياراً</span></div><div><strong>52</strong><span>مؤشراً</span></div><div><strong>140</strong><span>سجلاً</span></div></div>
+  </section>
+  <section class="wl-pick" aria-label="اختيار الدور">
+    <h2>اختر دورك في المشروع</h2>
+    <p>تُفتح لك الصفحات المناسبة لدورك. مدير النظام وحده يحتاج رمزاً وكلمة مرور.</p>
+    <select id="roleSel" aria-label="دور المستخدم"><option value="" selected>— اختر دورك من القائمة —</option></select>
+    <div class="wl-role" id="roleOut" aria-live="polite"></div>
+  </section>
+  <div class="ph-foot">منصة داخلية لمدارس دار الفرسان غير تابعة لهيئة تقويم التعليم والتدريب، ولا تعرض نتيجة تقويم أو اعتماد رسمية.</div>
 </main>
+<script>
+(function () {
+  var R = window.PortalRole; if (!R) return;
+  var PAGES = {
+    admin:  [["home.html", "fa-user-shield", "لوحة مدير النظام", "صحة المنظومة وأين نقف", 1], ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "كل المؤشرات وحالة كل سجل ومجلده"], ["status-report.html", "fa-clipboard-list", "تقرير الحالة", "أين نحن في جمع السجلات"], ["output.html", "fa-file-image", "تقرير الشواهد", "إصدار تقرير المؤشر"], ["governance.html", "fa-scale-balanced", "الحوكمة الإدارية", "السجلات الإدارية ومواءمتها"]],
+    sup:    [["home.html", "fa-user-check", "لوحة المراجعة", "ما ينتظر مراجعتك وتقدّم فريقك", 1], ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "مؤشرات فريقك وحالة سجلاتها"]],
+    member: [["home.html", "fa-user-pen", "مساحتي", "مؤشراتك وسجلاتك وتقدّمك", 1], ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "مجلد كل مؤشر يخصّك وحالة سجلاته"]],
+    self:   [["home.html", "fa-magnifying-glass-chart", "الفجوات والنسب", "أين فجواتنا وما نسبة كل مجال", 1], ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "كل المؤشرات وحالة كل سجل"]]
+  };
+  var sel = document.getElementById("roleSel"), out = document.getElementById("roleOut");
+  R.order.forEach(function (k) { var o = document.createElement("option"); o.value = k; o.textContent = R.roles[k].n + (k === "admin" ? " (يتطلب دخولاً)" : ""); sel.appendChild(o); });
+  function show(k) {
+    if (!k) { out.className = "wl-role"; out.innerHTML = ""; return; }
+    var r = R.roles[k];
+    out.innerHTML = '<p class="q"><b>' + r.n + "</b> · " + r.q + '</p><div class="wl-go">' + PAGES[k].map(function (p) {
+      return '<a class="' + (p[4] ? "main" : "") + '" href="' + p[0] + "?u=" + k + '"><i class="fa-solid ' + p[1] + '"></i><b>' + p[2] + "</b><span>" + p[3] + "</span></a>"; }).join("") + "</div>";
+    out.className = "wl-role on";
+  }
+  sel.addEventListener("change", function () {
+    var k = sel.value; show("");
+    if (!k) return;
+    R.choose(k, function () { show(k); }); /* الأدوار الثلاثة فورية؛ المدير بعد نافذة الدخول */
+    if (k === "admin") setTimeout(function () { if (!R.get()) sel.value = ""; }, 0);
+  });
+})();
+</script>
 <script src="page-gate.js" data-lazy="1"></script>
 <script src="legal-notice.js"></script>
 <script src="content-protect.js"></script>
