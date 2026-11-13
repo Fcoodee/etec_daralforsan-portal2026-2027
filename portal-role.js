@@ -105,6 +105,15 @@
       verify(false);
     });
   }
+  /* قاعدة التبديل من شريط الدور (قرار مدير المشروع): الانتقال نحو دور أدنى أو مماثل فقط.
+     عضو < مشرف فريق < مشرف عمليات < مدير نظام. مدير النظام (وجلسته المصادَقة) يبدّل إلى أي دور.
+     هذا تنظيم للعرض لا حماية خادم: الدور اختيار عرض، والحماية الفعلية لدخول المدير وحده. */
+  var RANK = { member: 1, sup: 2, self: 3, admin: 4 };
+  function canSwitch(from, to) {
+    if (!valid(to)) return false;
+    if (!from || from === "admin" || adminOk()) return true;
+    return (RANK[to] || 99) <= (RANK[from] || 0);
+  }
   function allowed(page, role) {
     var list = PAGES[page || pageKey()] || ["admin"];
     return !role || list.indexOf(role) >= 0;
@@ -146,7 +155,7 @@
     var old = document.getElementById("prBar"); if (old) old.remove();
     var b = document.createElement("div");
     b.id = "prBar";
-    var opts = ORDER.map(function (k) { return '<option value="' + k + '"' + (k === role ? " selected" : "") + ">" + esc(ROLES[k].n) + "</option>"; }).join("");
+    var opts = ORDER.filter(function (k) { return k === role || canSwitch(role, k); }).map(function (k) { return '<option value="' + k + '"' + (k === role ? " selected" : "") + ">" + esc(ROLES[k].n) + "</option>"; }).join("");
     var sel = '<label>الدور: <select id="prSel" aria-label="اختيار الدور">' + (role ? "" : '<option value="" selected>اختر دورك…</option>') + opts + "</select></label>";
     if (!role) {
       b.className = "none";
@@ -162,9 +171,9 @@
     if (s) s.addEventListener("change", function () {
       if (!valid(s.value)) return;
       var v = s.value;
-      choose(v, function () {
-        try { var u = new URL(location.href); u.searchParams.set("u", v); location.href = u.toString(); } catch (e) { location.reload(); }
-      });
+      if (!canSwitch(role, v)) { s.value = role || ""; return; }
+      /* الانتقال إلى مساحة الدور الجديد مباشرة (عضو ← صفحة العضو وسجلاته، وهكذا) */
+      choose(v, function () { location.href = ROLES[v].home; });
       s.value = role || "";
     });
   }
@@ -203,7 +212,7 @@
     if (go) go.addEventListener("click", function () { choose("admin", function () { try { var u = new URL(location.href); u.searchParams.set("u", "admin"); location.href = u.toString(); } catch (e) { location.reload(); } }); });
   }
   function run() { css(); applyData(); bar(); home(); adminOnlyGate(); }
-  window.PortalRole = { get: function () { return role; }, set: set, choose: choose, roles: ROLES, order: ORDER, pages: PAGES, allowed: allowed, valid: valid, refresh: function () { role = get(); run(); } };
+  window.PortalRole = { canSwitch: canSwitch, get: function () { return role; }, set: set, choose: choose, roles: ROLES, order: ORDER, pages: PAGES, allowed: allowed, valid: valid, refresh: function () { role = get(); run(); } };
   window.addEventListener("etec:utchange", function () { role = get(); if (role === "admin") { var g = document.getElementById("rolGate"); if (g) g.remove(); document.documentElement.classList.remove("rol-lock"); } try { document.documentElement.setAttribute("data-role", role); } catch (e) {} applyData(); });
   window.addEventListener("etec:logout", function () { if (role === "admin") { try { sessionStorage.removeItem(SKEY); sessionStorage.removeItem(ADMK); } catch (e) {} role = ""; try { document.documentElement.setAttribute("data-role", ""); } catch (e) {} applyData(); } });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run); else run();
