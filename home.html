@@ -53,7 +53,7 @@
         '<div id="cards">' + (list.length ? list.map(function (i) { return P.card(i, { owner: false }); }).join("") : '<div class="ph-empty">لا توجد مؤشرات مسندة لك في هذه القائمة.</div>') + "</div>";
       P.bindCards(main);
       main.querySelector("[data-only]").addEventListener("click", function () { only = !only; draw(); });
-      main.querySelector("[data-change]").addEventListener("click", function (e) { e.preventDefault(); P.me.set({ d: me.d, idx: -1 }); viewMember(); });
+      main.querySelector("[data-change]").setAttribute("href", "index.html");
       applyRoles();
     }
     main.onclick = null; draw();
@@ -74,7 +74,7 @@
       (wait.length ? '<div class="ph-box"><ul class="ph-recs">' + wait.map(function (w) { return '<li class="ph-rec"><span class="ph-recn"><a href="indicators.html?code=' + E(w.i.code) + '"><b dir="ltr">' + E(w.i.code) + "</b></a> · " + E(w.n) + ' <small>(' + E(P.ownerName(w.i)) + ')</small></span><a class="ph-btn" target="_blank" rel="noopener" href="' + P.folderUrl(w.i) + '">افتح المجلد</a></li>'; }).join("") + "</ul></div>" : '<div class="ph-empty">لا توجد سجلات بانتظار المراجعة الآن.</div>') +
       '<h2 class="ph-h2">مؤشرات الفريق</h2><div id="cards">' + team.map(function (i) { return P.card(i); }).join("") + "</div>";
     P.bindCards(main); applyRoles();
-    main.onclick = function (e) { if (e.target.closest("[data-change]")) { e.preventDefault(); P.me.clear(); viewSup(); } };
+    main.onclick = function (e) { if (e.target.closest("[data-change]")) { e.preventDefault(); location.href = "index.html"; } };
   }
 
   /* ===== مدير النظام ومشرف التقويم الذاتي: الصورة الكاملة ===== */

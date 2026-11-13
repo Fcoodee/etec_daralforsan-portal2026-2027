@@ -19,6 +19,8 @@
 .wl-pick{background:#fff;border:2px solid var(--t5);border-radius:18px;padding:18px 20px;margin-top:16px}
 .wl-pick h2{margin:0 0 4px;font-size:17px;font-weight:900}.wl-pick p{margin:0 0 12px;font-size:12.5px;color:var(--mut)}
 .wl-pick select{width:100%;font:700 15px Cairo,Tahoma,sans-serif;padding:13px 12px;border:1px solid #94a3b8;border-radius:12px;background:#fff;color:#0f172a}
+#idBox select{width:100%;margin-top:4px}
+#idBox{display:grid;gap:10px;margin-top:12px}#idBox[hidden]{display:none}
 .wl-role{display:none;margin-top:14px}.wl-role.on{display:block}
 .wl-role .q{font-size:13px;color:var(--mut);margin:0 0 10px}
 .wl-go{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
@@ -47,34 +49,70 @@
     <h2>اختر دورك في المشروع</h2>
     <p>تُفتح لك الصفحات المناسبة لدورك. مدير النظام وحده يحتاج رمزاً وكلمة مرور.</p>
     <select id="roleSel" aria-label="دور المستخدم"><option value="" selected>— اختر دورك من القائمة —</option></select>
+    <div id="idBox" hidden>
+      <label style="font-size:12.5px;font-weight:800">المجال<select id="domSel" aria-label="المجال"><option value="">— اختر المجال —</option></select></label>
+      <label style="font-size:12.5px;font-weight:800" id="nameLbl"><span id="nameT">الاسم</span><select id="nameSel" aria-label="الاسم" disabled><option value="">— اختر الاسم —</option></select></label>
+    </div>
     <div class="wl-role" id="roleOut" aria-live="polite"></div>
   </section>
   <div class="ph-foot">منصة داخلية لمدارس دار الفرسان غير تابعة لهيئة تقويم التعليم والتدريب، ولا تعرض نتيجة تقويم أو اعتماد رسمية.</div>
 </main>
+<script src="phase-data.js?v=9.2.0"></script>
 <script>
 (function () {
-  var R = window.PortalRole; if (!R) return;
+  var R = window.PortalRole, PH = window.ETEC_PH; if (!R || !PH) return;
+  var ME = "etec.me.v1", DN = { 1: "الإدارة المدرسية", 2: "التعليم والتعلم", 3: "نواتج التعلم", 4: "البيئة المدرسية" };
   var PAGES = {
     admin:  [["home.html", "fa-user-shield", "لوحة مدير النظام", "صحة المنظومة وأين نقف", 1], ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "كل المؤشرات وحالة كل سجل ومجلده"], ["report.html", "fa-file-image", "تقرير الشواهد", "قالب التقرير: صور وأوصاف وإصدار PDF"]],
     sup:    [["home.html", "fa-user-check", "لوحة المراجعة", "ما ينتظر مراجعتك وتقدّم فريقك", 1], ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "مؤشرات فريقك وحالة سجلاتها"], ["report.html", "fa-file-image", "تقرير الشواهد", "قالب التقرير: صور وأوصاف وإصدار PDF"]],
     member: [["home.html", "fa-user-pen", "مساحتي", "مؤشراتك وسجلاتك وتقدّمك", 1], ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "مجلد كل مؤشر يخصّك وحالة سجلاته"], ["report.html", "fa-file-image", "تقرير الشواهد", "اعمل على قالب التقرير وارفع الصور"]],
     self:   [["home.html", "fa-magnifying-glass-chart", "الفجوات والنسب", "أين فجواتنا وما نسبة كل مجال", 1], ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "كل المؤشرات وحالة كل سجل"]]
   };
-  var sel = document.getElementById("roleSel"), out = document.getElementById("roleOut");
+  var sel = document.getElementById("roleSel"), out = document.getElementById("roleOut"), box = document.getElementById("idBox"), dom = document.getElementById("domSel"), nm = document.getElementById("nameSel"), nt = document.getElementById("nameT");
+  var saved = null; try { saved = JSON.parse(localStorage.getItem(ME) || "null"); } catch (e) {}
   R.order.forEach(function (k) { var o = document.createElement("option"); o.value = k; o.textContent = R.roles[k].n + (k === "admin" ? " (يتطلب دخولاً)" : ""); sel.appendChild(o); });
+  [1, 2, 3, 4].forEach(function (d) { var o = document.createElement("option"); o.value = d; o.textContent = DN[d]; dom.appendChild(o); });
+  function clearOut() { out.className = "wl-role"; out.innerHTML = ""; }
+  function q(k) {
+    var d = +dom.value, m = nm.value;
+    return "?u=" + k + (k === "member" || k === "sup" ? "&d=" + d + (k === "member" ? "&m=" + m : "") : "");
+  }
   function show(k) {
-    if (!k) { out.className = "wl-role"; out.innerHTML = ""; return; }
-    var r = R.roles[k];
-    out.innerHTML = '<p class="q"><b>' + r.n + "</b> · " + r.q + '</p><div class="wl-go">' + PAGES[k].map(function (p) {
-      return '<a class="' + (p[4] ? "main" : "") + '" href="' + p[0] + "?u=" + k + '"><i class="fa-solid ' + p[1] + '"></i><b>' + p[2] + "</b><span>" + p[3] + "</span></a>"; }).join("") + "</div>";
+    var r = R.roles[k], who = "";
+    if (k === "member" && dom.value && nm.value !== "") who = PH.teams[dom.value].mem[+nm.value] + " · " + DN[dom.value];
+    if (k === "sup" && dom.value) who = PH.teams[dom.value].sup + " · " + DN[dom.value];
+    out.innerHTML = '<p class="q"><b>' + r.n + "</b>" + (who ? " — " + who : "") + " · " + r.q + '</p><div class="wl-go">' + PAGES[k].map(function (p) {
+      return '<a class="' + (p[4] ? "main" : "") + '" href="' + p[0] + q(k) + '"><i class="fa-solid ' + p[1] + '"></i><b>' + p[2] + "</b><span>" + p[3] + "</span></a>"; }).join("") + "</div>";
     out.className = "wl-role on";
   }
-  sel.addEventListener("change", function () {
-    var k = sel.value; show("");
+  function fillNames(k) {
+    nm.innerHTML = '<option value="">— اختر ' + (k === "sup" ? "اسم المشرف" : "الاسم") + " —</option>"; nm.disabled = true;
+    var T = PH.teams[dom.value]; if (!T) return;
+    (k === "sup" ? [T.sup] : T.mem).forEach(function (n, i) { var o = document.createElement("option"); o.value = i; o.textContent = n; nm.appendChild(o); });
+    nm.disabled = false;
+    if (k === "sup") nm.value = "0";
+  }
+  function step() {
+    var k = sel.value; clearOut(); box.hidden = !(k === "member" || k === "sup");
     if (!k) return;
-    R.choose(k, function () { show(k); }); /* الأدوار الثلاثة فورية؛ المدير بعد نافذة الدخول */
-    if (k === "admin") setTimeout(function () { if (!R.get()) sel.value = ""; }, 0);
+    if (k === "member" || k === "sup") {
+      nt.textContent = k === "sup" ? "اسم المشرف" : "اسم العضو";
+      if (!dom.value || nm.value === "") return;
+      try { localStorage.setItem(ME, JSON.stringify({ d: +dom.value, idx: k === "member" ? +nm.value : -1 })); } catch (e) {}
+      R.choose(k, function () { show(k); });
+    } else R.choose(k, function () { show(k); });
+  }
+  sel.addEventListener("change", function () {
+    var k = sel.value; clearOut();
+    if (k === "member" || k === "sup") {
+      box.hidden = false; nt.textContent = k === "sup" ? "اسم المشرف" : "اسم العضو";
+      if (saved && PH.teams[saved.d]) { dom.value = saved.d; fillNames(k); if (k === "member" && saved.idx >= 0) nm.value = saved.idx; }
+      else { dom.value = ""; fillNames(k); }
+      step();
+    } else { box.hidden = true; if (k) { R.choose(k, function () { show(k); }); if (k === "admin") setTimeout(function () { if (!R.get()) sel.value = ""; }, 0); } }
   });
+  dom.addEventListener("change", function () { fillNames(sel.value); step(); });
+  nm.addEventListener("change", step);
 })();
 </script>
 <script src="page-gate.js" data-lazy="1"></script>
