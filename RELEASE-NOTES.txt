@@ -206,3 +206,5 @@ v9.4.5 — Declutter (no logic change): welcome title/intro/footer shortened and
 v9.4.6 — Indicators page: the single 8-option status list split into two small lists (records: none/review/uploaded/all uploaded; report: not created/awaiting link/linking/linked). Supervisor home: only 'awaiting your review' in front; member progress table (one column removed) and team indicators moved under two collapsed sections; the four stat tiles removed.
 
 v9.4.7 — Report page: direct upload box is now visible (no longer under advanced options); drafts stay collapsed. Requires deploying drive_check_script.gs v9.2.0 as a new version and setting UPLOAD_TOKEN. Approval rule recorded: a record is moved to 2_معتمد by the domain supervisor, the self-evaluation operations supervisor, or the system admin.
+
+v9.4.8 / script v9.2.1 — Direct upload without a token (trusted-team model): UPLOAD_TOKEN is now optional (if set it is still enforced); the report page no longer shows token/name fields and checks the script connection automatically. Deploy script v9.2.1 as a new version.

@@ -95,8 +95,7 @@
         <div class="btns"><button type="button" class="pri" id="btnPrint"><i class="fa-solid fa-file-pdf"></i> إصدار PDF</button><button type="button" id="btnCopy">نسخ الاسم</button></div>
         <p style="margin:8px 0 0;color:#475569">في نافذة الطباعة اختر «حفظ بصيغة PDF»، ثم ارفع الملف في مجلد المؤشر.</p></div>
       <div class="rp-box"><h3>رفع التقرير <span class="ph-chip idle" id="upState">غير مفعّل</span></h3>
-        <label>رمز الرفع:<input type="password" id="tok" autocomplete="off" placeholder="الرمز"></label>
-        <label style="display:block;margin-top:6px">الاسم:<input type="text" id="who" placeholder="اسمك"></label>
+        <input type="hidden" id="who"><input type="hidden" id="tok">
         <div class="btns"><input type="file" id="pdfIn" accept="application/pdf" hidden><button type="button" class="pri" id="btnUp" disabled><i class="fa-solid fa-cloud-arrow-up"></i> رفع ملف PDF</button>
           <a id="lnkRp" href="#" target="_blank" rel="noopener" hidden>مجلد التقرير</a></div>
         <div class="rp-msg" id="upMsg" role="status"></div></div>

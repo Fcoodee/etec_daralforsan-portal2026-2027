@@ -197,12 +197,11 @@
   function ping() {
     upOK = false; upEnable(false);
     if (!url()) { chip("غير مفعّل", "idle"); msg("upMsg", "رابط السكربت غير مضبوط.", "bad"); return; }
-    if (tok().length < 8) { chip("أدخل الرمز", "idle"); msg("upMsg", ""); return; }
     chip("يتحقق…", "wip");
     post("ping").then(function (r) {
       if (r && r.ok) { upOK = true; upEnable(true); chip("جاهز", "ok"); msg("upMsg", "متصل بالسكربت " + (r.v || ""), "ok"); try { localStorage.setItem(TK, tok()); localStorage.setItem(WK, $("who").value.trim()); } catch (e) {} }
       else { chip("غير جاهز", "bad"); msg("upMsg", (r && r.error) || "تعذّر التحقق.", "bad"); }
-    }).catch(function () { chip("غير متاح", "bad"); msg("upMsg", "تعذّر الاتصال: انشر السكربت v9.2.0 (إصدار جديد) وتأكد من الرابط.", "bad"); });
+    }).catch(function () { chip("غير متاح", "bad"); msg("upMsg", "تعذّر الاتصال بالسكربت.", "bad"); });
   }
   $("tok").addEventListener("change", ping); $("who").addEventListener("change", function () { try { localStorage.setItem(WK, this.value.trim()); } catch (e) {} });
   $("btnUp").addEventListener("click", function () { if (upOK) $("pdfIn").click(); });
@@ -250,7 +249,7 @@
     sel.innerHTML = html; sel.addEventListener("change", function () { open(sel.value); });
     try { $("tok").value = localStorage.getItem(TK) || ""; $("who").value = localStorage.getItem(WK) || (me && me.idx >= 0 ? P.PH.teams[me.d].mem[me.idx] : ""); } catch (e) {}
     var first = P.byCode(q) ? q : (mine[0] ? mine[0].code : P.PH.inds[0].code);
-    openDb().then(function () { return open(first); });
+    openDb().then(function () { return open(first); }).then(function () { ping(); });
     P.onStatus(function () { if (ready) rpLink(); });
     P.load();
   }

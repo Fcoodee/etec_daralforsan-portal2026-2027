@@ -47,7 +47,7 @@ var DOCS_FOLDER_IDS_NEW = { // مجلدات «الوثائق» المضافة ح
 var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word فقط (اضبطها عند تصميم refreshStatus الجديدة)
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.2.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.2.1";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5251,7 +5251,7 @@ function doGet(e) {
 }
 
 /* ========== 3) الرفع الآلي والمسودة المركزية (v9.2.0) ==========
-   - مفعّل فقط إن ضُبطت خاصية السكربت UPLOAD_TOKEN (إعدادات المشروع ← خصائص السكربت). يوزّع مدير النظام الرمز على الفريق سرّاً.
+   - v9.2.1: يعمل بلا رمز (فريق موثوق). الرمز اختياري: إن ضُبطت خاصية السكربت UPLOAD_TOKEN صار مطلوباً.
    - تُرسل الصفحة طلب POST بنوع text/plain (بلا preflight). كل الإجراءات تتحقق من الرمز ثم من رمز المؤشر ومن اسم الملف وحجمه.
    - لا يُحذف شيء نهائياً: الهيكل الفارغ والنسخة المستبدلة تذهبان إلى سلة Drive (قابلة للاسترجاع).
    - التقييد: رابط التطبيق عام، فالحماية هي الرمز وحده؛ غيّر UPLOAD_TOKEN متى انكشف. */
@@ -5259,7 +5259,7 @@ var UP_MAX_PDF_BYTES = 20 * 1024 * 1024, UP_MAX_DRAFT_CHARS = 9 * 1024 * 1024, U
 function upJson_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 function upTokenOk_(t) {
   var real = PropertiesService.getScriptProperties().getProperty("UPLOAD_TOKEN");
-  if (!real || real.length < 8) return "off";
+  if (!real || real.length < 8) return "ok"; /* بلا رمز: فريق موثوق (v9.2.1)؛ إن ضُبط UPLOAD_TOKEN صار مطلوباً */
   t = String(t || ""); if (t.length !== real.length) return "bad";
   var d = 0; for (var i = 0; i < t.length; i++) d |= t.charCodeAt(i) ^ real.charCodeAt(i);
   return d === 0 ? "ok" : "bad";
