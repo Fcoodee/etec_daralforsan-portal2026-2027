@@ -94,15 +94,15 @@
         اسم الملف:<div class="rp-name" id="fname"></div>
         <div class="btns"><button type="button" class="pri" id="btnPrint"><i class="fa-solid fa-file-pdf"></i> إصدار PDF</button><button type="button" id="btnCopy">نسخ الاسم</button></div>
         <p style="margin:8px 0 0;color:#475569">في نافذة الطباعة اختر «حفظ بصيغة PDF»، ثم ارفع الملف في مجلد المؤشر.</p></div>
-      <details class="rp-box"><summary style="cursor:pointer;font-weight:800">خيارات متقدمة <span class="ph-chip idle" id="upState">غير مفعّل</span></summary>
-        <label>رمز الرفع (يسلّمه لك مدير النظام):<input type="password" id="tok" autocomplete="off" placeholder="الرمز"></label>
-        <label style="display:block;margin-top:6px">الاسم (للتوثيق):<input type="text" id="who" placeholder="اسمك"></label>
+      <div class="rp-box"><h3>رفع التقرير <span class="ph-chip idle" id="upState">غير مفعّل</span></h3>
+        <label>رمز الرفع:<input type="password" id="tok" autocomplete="off" placeholder="الرمز"></label>
+        <label style="display:block;margin-top:6px">الاسم:<input type="text" id="who" placeholder="اسمك"></label>
         <div class="btns"><input type="file" id="pdfIn" accept="application/pdf" hidden><button type="button" class="pri" id="btnUp" disabled><i class="fa-solid fa-cloud-arrow-up"></i> رفع ملف PDF</button>
-          <button type="button" id="btnSaveC" disabled>حفظ المسودة مركزياً</button><button type="button" id="btnLoadC" disabled>استرجاع المسودة</button>
           <a id="lnkRp" href="#" target="_blank" rel="noopener" hidden>مجلد التقرير</a></div>
-        <div class="rp-msg" id="upMsg" role="status"></div>
-      <h3 style="margin-top:12px">المسودة</h3>تُحفظ تلقائياً على هذا الجهاز.
-        <div class="btns"><button type="button" id="btnExp">تصدير مسودة</button><input type="file" id="impIn" accept=".json,application/json" hidden><button type="button" id="btnImp">استيراد مسودة</button><button type="button" id="btnClear">مسح الخانات</button></div></details>
+        <div class="rp-msg" id="upMsg" role="status"></div></div>
+      <details class="rp-box"><summary style="cursor:pointer;font-weight:800">المسودة</summary>
+        <p style="margin:8px 0">تُحفظ تلقائياً على هذا الجهاز.</p>
+        <div class="btns"><button type="button" id="btnSaveC" disabled>حفظ مركزياً</button><button type="button" id="btnLoadC" disabled>استرجاع</button><button type="button" id="btnExp">تصدير</button><input type="file" id="impIn" accept=".json,application/json" hidden><button type="button" id="btnImp">استيراد</button><button type="button" id="btnClear">مسح الخانات</button></div></details>
     </aside>
   </div>
 </main>
