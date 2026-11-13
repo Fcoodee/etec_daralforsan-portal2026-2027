@@ -47,7 +47,7 @@ var DOCS_FOLDER_IDS_NEW = { // مجلدات «الوثائق» المضافة ح
 var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word فقط (اضبطها عند تصميم refreshStatus الجديدة)
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.2.1";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.2.2";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5321,4 +5321,23 @@ function upLoadDraft_(folder, req) {
   var it = folder.getFilesByName(upDraftName_(req.code));
   if (!it.hasNext()) return { ok: true, draft: null };
   var f = it.next(); return { ok: true, draft: f.getBlob().getDataAsString(), saved: f.getLastUpdated().toISOString() };
+}
+
+/* ========== 4) توزيع هياكل تقارير الشواهد (مرة واحدة) — v9.2.2 ==========
+   ارفع ملفات الهياكل الـ52 دفعة واحدة إلى مجلد باسم «_shells» داخل جذر Diploma_ETEC2026، ثم شغّل placeShells() يدوياً:
+   تنقل كل ملف يبدأ برمز المؤشر إلى «3_تقرير_الشواهد» الخاص بمؤشره، ولا تستبدل ملفاً موجوداً بالاسم نفسه. */
+function placeShells() {
+  var root = DriveApp.getFolderById(TREE_ROOT_ID), it = root.getFoldersByName("_shells");
+  if (!it.hasNext()) { Logger.log("لا يوجد مجلد «_shells» في الجذر."); return; }
+  var src = it.next(), files = src.getFiles(), moved = 0, skipped = [], miss = [];
+  while (files.hasNext()) {
+    var f = files.next(), m = /^(\d-\d-\d-\d)_/.exec(f.getName());
+    if (!m || !TREE[m[1]]) { miss.push(f.getName()); continue; }
+    var ind = DriveApp.getFolderById(TREE[m[1]].f), rp = treeChild_(ind, TREE_REPORT);
+    if (!rp) { miss.push(f.getName() + " ← لا مجلد تقرير"); continue; }
+    if (rp.getFilesByName(f.getName()).hasNext()) { skipped.push(f.getName()); continue; }
+    f.moveTo(rp); moved++;
+  }
+  try { CacheService.getScriptCache().remove(CACHE_KEY_TREE); } catch (e) {}
+  Logger.log("نُقل " + moved + " — موجود مسبقاً " + skipped.length + " — بلا مطابقة " + miss.length + (miss.length ? "\n" + miss.join("\n") : ""));
 }
