@@ -53,7 +53,25 @@
   function valid(r) { return !!r && Object.prototype.hasOwnProperty.call(ROLES, r); }
   function esc(x) { return String(x).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
 
+  /* مدير النظام وحده يحتاج رمزاً وكلمة مرور: الدور «admin» لا يُقبل إلا مع جلسة df_auth_v1 سارية وعلامة تحقق من الصلاحية (ADMK) تطابق المستخدم */
+  var ADMK = "etec.admin.ok";
+  function adminOk() {
+    try {
+      var a = JSON.parse(localStorage.getItem("df_auth_v1") || "null");
+      if (!a || !(a.exp > Date.now())) return false;
+      return sessionStorage.getItem(ADMK) === String(a.u || "");
+    } catch (e) { return false; }
+  }
   function get() {
+    var r = get0();
+    if (r === "admin" && !adminOk()) {
+      try { if (localStorage.getItem(KEY) === "admin") localStorage.removeItem(KEY); } catch (e) {}
+      try { if (sessionStorage.getItem(SKEY) === "admin") sessionStorage.removeItem(SKEY); } catch (e) {}
+      return "";
+    }
+    return r;
+  }
+  function get0() {
     var q = "";
     try { q = new URLSearchParams(location.search).get("u") || ""; } catch (e) {}
     if (valid(q)) { try { localStorage.setItem(KEY, q); } catch (e) {} try { sessionStorage.setItem(SKEY, q); } catch (e) {} return q; }
@@ -66,9 +84,34 @@
   }
   function set(r) {
     if (!valid(r)) return;
+    if (r === "admin" && !adminOk() && !(window.DFGate && DFGate.isAuth())) return;
     try { localStorage.setItem(KEY, r); } catch (e) {}
     try { sessionStorage.setItem(SKEY, r); } catch (e) {}
     try { window.dispatchEvent(new CustomEvent("etec:utchange")); } catch (e) {}
+  }
+  function withGate(cb) {
+    if (window.DFGate) { cb(); return; }
+    var sc = document.createElement("script"); sc.src = "page-gate.js"; sc.dataset.lazy = "1";
+    sc.onload = cb; sc.onerror = function () { alert("تعذّر تحميل نافذة الدخول؛ أعد تحميل الصفحة."); };
+    document.head.appendChild(sc);
+  }
+  /* اختيار دور: الأدوار الثلاثة غير الإدارية فورية بلا رمز؛ مدير النظام يمرّ بنافذة الدخول ثم يُتحقَّق من صلاحيته في access.txt */
+  function choose(k, done, o) {
+    if (!valid(k)) return;
+    if (k !== "admin") { set(k); if (done) done(k); return; }
+    withGate(function () {
+      function verify(force) {
+        var run = function () {
+          DFGate.isAdmin().then(function (ok) {
+            if (ok) { try { sessionStorage.setItem(ADMK, DFGate.user()); } catch (e) {} set("admin"); if (done) done("admin"); }
+            else { DFGate.logout(); verify(true); }
+          });
+        };
+        if (DFGate.isAuth() && !force) run();
+        else DFGate.require(run, { force: !!force, title: force ? "هذا الحساب ليس مدير النظام" : "دخول مدير النظام", msg: force ? "الحساب المُدخَل لا يملك صلاحية مدير النظام. أدخل رمز المدير وكلمة مروره، أو اختر دوراً آخر." : "مدير النظام وحده يحتاج رمز مستخدم وكلمة مرور. بقية الأدوار تُفتح بلا دخول." });
+      }
+      verify(false);
+    });
   }
   function allowed(page, role) {
     var list = PAGES[page || pageKey()];
@@ -127,34 +170,45 @@
     var s = document.getElementById("prSel");
     if (s) s.addEventListener("change", function () {
       if (!valid(s.value)) return;
-      set(s.value);
-      try { var u = new URL(location.href); u.searchParams.set("u", s.value); location.href = u.toString(); } catch (e) { location.reload(); }
+      var v = s.value;
+      choose(v, function () {
+        try { var u = new URL(location.href); u.searchParams.set("u", v); location.href = u.toString(); } catch (e) { location.reload(); }
+      });
+      s.value = role || "";
     });
   }
 
   function home() {
     var h = document.getElementById("roleHome");
     if (!h) return;
-    if (!role) {
-      h.innerHTML = '<section aria-label="اختيار الدور" class="rh-box"><h2 class="rh-h">من أنت في المشروع؟</h2>' +
-        '<p class="rh-p">اختر دورك لتظهر لك مساحتك مباشرة، ويتذكّر هذا الجهاز اختيارك. الدور تخصيص عرض لا حماية للبيانات.</p><div class="rh-grid">' +
-        ORDER.map(function (k) { return '<button type="button" data-pickrole="' + k + '" class="rh-pick"><i class="fa-solid ' + ROLES[k].ic + '"></i><b>' + esc(ROLES[k].n) + "</b><small>" + esc(ROLES[k].q) + "</small></button>"; }).join("") +
-        "</div></section>";
-      h.addEventListener("click", function (e) {
-        var t = e.target.closest("[data-pickrole]"); if (!t) return;
-        set(t.getAttribute("data-pickrole")); location.href = "index.html?u=" + t.getAttribute("data-pickrole");
-      });
-      return;
-    }
-    var r = ROLES[role];
-    h.innerHTML = '<section aria-label="مدخلك المباشر" class="rh-go"><i class="fa-solid ' + r.ic + ' rh-ic"></i>' +
-      '<div class="rh-t"><small>أهلاً بك · ' + esc(r.n) + "</small><b>" + esc(r.q) + '</b></div>' +
-      '<a href="' + r.home + '" class="rh-btn">افتح «' + esc(r.hl) + '» <i class="fa-solid fa-arrow-left"></i></a></section>';
+    var last = role;
+    h.innerHTML = '<section aria-label="اختيار الدور" class="rh-box"><h2 class="rh-h">من أنت في المشروع؟</h2>' +
+      '<p class="rh-p">اختر دورك لتفتح مساحتك مباشرة. مدير النظام وحده يحتاج رمزاً وكلمة مرور؛ بقية الأدوار تُفتح بلا دخول. الدور تخصيص عرض لا حماية للبيانات.</p><div class="rh-grid">' +
+      ORDER.map(function (k) { return '<button type="button" data-pickrole="' + k + '" class="rh-pick"><i class="fa-solid ' + ROLES[k].ic + '"></i><b>' + esc(ROLES[k].n) + "</b><small>" + esc(ROLES[k].q) + "</small>" +
+        (k === "admin" ? '<small><i class="fa-solid fa-lock"></i> يتطلب دخولاً</small>' : (k === last ? "<small>آخر اختيار لك</small>" : "")) + "</button>"; }).join("") +
+      '</div><div id="rhMsg" class="rh-p" role="status"></div></section>';
+    h.addEventListener("click", function (e) {
+      var t = e.target.closest("[data-pickrole]"); if (!t) return;
+      var k = t.getAttribute("data-pickrole");
+      choose(k, function () { location.href = ROLES[k].home; });
+    });
   }
 
-  function run() { css(); applyData(); bar(); home(); }
-  window.PortalRole = { get: function () { return role; }, set: set, roles: ROLES, order: ORDER, pages: PAGES, allowed: allowed, valid: valid, refresh: function () { role = get(); run(); } };
+  /* صفحة لمدير النظام وحده: تُغطّى بنافذة دخول حتى يدخل المدير (تخصيص عرض لا حماية خادم) */
+  function adminOnlyGate() {
+    var list = PAGES[pageKey()];
+    if (!list || list.length !== 1 || list[0] !== "admin" || role === "admin" || document.getElementById("rolGate")) return;
+    var d = document.createElement("div"); d.id = "rolGate";
+    d.style.cssText = "position:fixed;inset:0;z-index:2147482500;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;font-family:Cairo,Tahoma,sans-serif;background:linear-gradient(160deg,#002a2a,#0f172a)";
+    d.innerHTML = '<div style="background:#fff;border-radius:20px;max-width:420px;width:100%;padding:26px;text-align:right;border-top:6px solid #c29b38"><h2 style="margin:0 0 8px;font-size:17px;font-weight:900;color:#003d3d">هذه الصفحة لمدير النظام</h2><p style="margin:0 0 14px;font-size:13px;line-height:1.9;color:#475569">يحتاج مدير النظام وحده إلى رمز مستخدم وكلمة مرور.</p>' +
+      '<button id="rolGo" type="button" style="width:100%;border:0;border-radius:12px;background:#006666;color:#fff;font:800 14px Cairo,Tahoma,sans-serif;padding:12px;cursor:pointer">دخول مدير النظام</button>' +
+      '<a href="index.html" style="display:block;text-align:center;margin-top:12px;font-size:12px;color:#006666">العودة إلى اختيار الدور</a></div>';
+    document.body.appendChild(d);
+    document.getElementById("rolGo").addEventListener("click", function () { choose("admin", function () { try { var u = new URL(location.href); u.searchParams.set("u", "admin"); location.href = u.toString(); } catch (e) { location.reload(); } }); });
+  }
+  function run() { css(); applyData(); bar(); home(); adminOnlyGate(); }
+  window.PortalRole = { get: function () { return role; }, set: set, choose: choose, roles: ROLES, order: ORDER, pages: PAGES, allowed: allowed, valid: valid, refresh: function () { role = get(); run(); } };
   window.addEventListener("etec:utchange", function () { role = get(); try { document.documentElement.setAttribute("data-role", role); } catch (e) {} applyData(); });
-  window.addEventListener("etec:logout", function () { try { sessionStorage.removeItem(SKEY); } catch (e) {} role = ""; });
+  window.addEventListener("etec:logout", function () { if (role === "admin") { try { sessionStorage.removeItem(SKEY); sessionStorage.removeItem(ADMK); } catch (e) {} role = ""; try { document.documentElement.setAttribute("data-role", ""); } catch (e) {} applyData(); } });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run); else run();
 })();

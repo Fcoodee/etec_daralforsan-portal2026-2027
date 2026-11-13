@@ -8,7 +8,7 @@
   if (window.ETEC_META) return;
   /* showEtecLogo: false لإخفاء شعار هيئة تقويم التعليم والتدريب من ترويسات الصفحات.
      السياسات (1445هـ، ص26) تمنع المدرسة المعتمدة من استخدام شعار الهيئة أو المركز في منشوراتها؛ والافتراضي true إلى أن تقرّر إدارة المدرسة وضعها من الاعتماد. */
-  var META = { version: 'v9.1.0', updated: '2026-11-12T22:00:00+03:00', updatedText: '12 نوفمبر 2026', showEtecLogo: true };
+  var META = { version: 'v9.1.1', updated: '2026-11-13T18:00:00+03:00', updatedText: '13 نوفمبر 2026', showEtecLogo: true };
   window.ETEC_META = META;
   var UK = 'etec.utype.v1', AK = 'df_auth_v1';
   var NAMES = { admin: 'مدير النظام', sup: 'مشرف فريق السجلات والشواهد', member: 'عضو فريق السجلات والشواهد', self: 'مشرف عمليات التقويم الذاتي' };
@@ -45,15 +45,15 @@
   var lastAuth = null;
   function tick() {
     var a = auth();
-    if (lastAuth === true && !a) { ls(UK, null, true); try { window.dispatchEvent(new CustomEvent('etec:logout')); } catch (e) {} }
-    if (!a && ls(UK)) ls(UK, null, true); /* جلسة منتهية: لا يبقى نوع مستخدم قديم */
+    if (lastAuth === true && !a) { if (ls(UK) === 'admin') ls(UK, null, true); try { window.dispatchEvent(new CustomEvent('etec:logout')); } catch (e) {} }
+    if (!a && ls(UK) === 'admin') ls(UK, null, true); /* انتهاء الجلسة يُسقط دور المدير وحده؛ بقية الأدوار لا تحتاج دخولاً */
     lastAuth = !!a;
     box.className = a ? 'auth' : ''; /* في الجلسة المصرح بها يظهر شريطها أسفل الصفحة، فنرتفع فوقه */
-    var t = a ? (curType() || urlType()) : '';
-    if (!a || HAS_OWN_BAR) { if (usr) { usr.remove(); usr = null; } return; }
-    var txt = t ? 'نوع المستخدم: ' + NAMES[t] : 'المستخدم: ' + (a.u || '');
+    var t = curType() || urlType(); if (t === 'admin' && !a) t = '';
+    if (HAS_OWN_BAR || (!a && !t)) { if (usr) { usr.remove(); usr = null; } return; }
+    var txt = t ? 'نوع المستخدم: ' + NAMES[t] : 'المستخدم: ' + ((a && a.u) || '');
     if (!usr) { usr = document.createElement('div'); usr.id = 'etecMetaUser'; usr.setAttribute('role', 'status'); box.insertBefore(usr, ver); }
-    usr.textContent = txt; usr.title = a.u ? 'جلسة الدخول: ' + a.u : '';
+    usr.textContent = txt; usr.title = a && a.u ? 'جلسة الدخول: ' + a.u : '';
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
   setInterval(function () { if (box) tick(); }, 2000);
