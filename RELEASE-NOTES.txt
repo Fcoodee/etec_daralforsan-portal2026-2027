@@ -196,3 +196,5 @@ v9.4.0 — Highlights complete: batch 6 added domain 4 (7 indicators). All 52 in
 v9.4.1 — Print/PDF: removed the browser-added header (date/time + page title) and footer (platform URL) from exported evidence reports: @page margin set to 0 with inner 11mm spacing, so the browser has no margin area to print them in. Verified: sample stays at 2 pages.
 
 v9.4.2 — Report page: per-indicator evidence folder link. data/evidence_refs.json now accepts either a single URL string per indicator code or a list of {u,t} links; the report page shows a prominent 'open the evidence folder' button (download photos, then upload them to the report slots). Link list pending from FD.
+
+v9.4.3 — evidence_refs.json now holds the supplied evidence root and the four domain folders (_all, _domain). The report page falls back to the domain folder button when an indicator has no specific link; indicator-specific links still override.
