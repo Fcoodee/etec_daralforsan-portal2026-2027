@@ -43,13 +43,16 @@
     }
     /* منشأة = ملف السجل موجود؛ مرفوعة = معبّأ ومراجَع في 2_معتمد. */
     out.cr = out.ready;
-    out.pc = out.req ? Math.min(out.cr, out.req) / out.req : 0;
-    out.pu = out.req ? Math.min(out.ap, out.req) / out.req : 0;
-    out.p = basis() === "uploaded" ? out.pu : out.pc;
+    out.rpc = out.req ? Math.min(out.cr, out.req) / out.req : 0;
+    out.rpu = out.req ? Math.min(out.ap, out.req) / out.req : 0;
     out.review = 0; i.recs.forEach(function (n) { if (st[n] === "review") out.review++; });
     var ph = out.rep.photos || 0;
     /* تقرير الشواهد: حالتان فقط — none لم يُرفع (لا ملف أو قالب فارغ) · done مرفوع (تقرير فيه صور) */
     out.repState = ph > 0 ? "done" : "none";
+    /* اكتمال المؤشر = 50% سجلاته ووثائقه + 50% تقرير الشواهد (قرار مدير المشروع). rpc/rpu للسجلات وحدها. */
+    var r = out.repState === "done" ? 1 : 0;
+    out.pc = (out.rpc + r) / 2; out.pu = (out.rpu + r) / 2;
+    out.p = basis() === "uploaded" ? out.pu : out.pc;
     return out;
   }
   /* المعادلة نفسها المعتمدة في لوحة المتابعة: المؤشر = المرفوع/المطلوب، المعيار = متوسط مؤشراته، المجال = متوسط معاييره، المشروع = متوسط المؤشرات */
@@ -66,7 +69,7 @@
       if (s.up > 0 || s.ap > 0) t.started++;
       if (s.repState === "done") t.repDone++; else t.repNone++;
     });
-    t.pc = t.req ? t.cr / t.req : 0; t.pu = t.req ? t.ap / t.req : 0; t.p = basis() === "uploaded" ? t.pu : t.pc; return t;
+    t.pc = t.req ? t.cr / t.req : 0; t.pu = t.req ? t.ap / t.req : 0; t.p = avg((list || PH.inds).map(function (i) { return sOf(i).p; })); return t;
   }
   function ownerName(i) { var T = PH.teams[i.d]; return T ? T.mem[i.own] : ""; }
 
@@ -118,7 +121,7 @@
       '<button type="button" class="ph-card-h" aria-expanded="' + open + '" data-toggle>' +
       '<span class="ph-code" dir="ltr">' + esc(i.code) + "</span>" +
       '<span class="ph-card-t"><b>' + esc(i.st) + "</b><small>" + esc(DN[i.d]) + " · " + esc(i.cn) + (o.owner === false ? "" : " · " + esc(me)) + "</small></span>" + tag +
-      '<span class="ph-card-p" title="مرفوعة بعد المراجعة / المطلوب · الفاتح = منشأة"><b dir="ltr">' + s.ap + "/" + s.req + "</b>" + bar2(s.pu, s.pc) + "</span></button>" +
+      '<span class="ph-card-p" title="اكتمال المؤشر = 50% سجلات + 50% تقرير الشواهد · الرقم: سجلات مرفوعة / مطلوبة · الفاتح = منشأة"><b dir="ltr">' + s.ap + "/" + s.req + "</b>" + bar2(s.pu, s.pc) + "</span></button>" +
       '<div class="ph-card-b"' + (open ? "" : " hidden") + ">" +
       '<p class="ph-stmt">' + esc(i.text) + "</p>" +
       '<ul class="ph-recs">' + recs + "</ul>" +
