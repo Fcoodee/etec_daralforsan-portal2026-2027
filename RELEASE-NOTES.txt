@@ -200,3 +200,5 @@ v9.4.2 — Report page: per-indicator evidence folder link. data/evidence_refs.j
 v9.4.3 — evidence_refs.json now holds the supplied evidence root and the four domain folders (_all, _domain). The report page falls back to the domain folder button when an indicator has no specific link; indicator-specific links still override.
 
 v9.4.4 — evidence_refs.json: added _criterion (11 criterion folders, 1.1-4.2, matched to the 2nd-edition numbering). Report page now opens the criterion folder first, then domain, then the root; indicator-specific links still override.
+
+v9.4.5 — Declutter (no logic change): welcome title/intro/footer shortened and renamed 'Evidence-to-Records Linking Portal'; role question removed from the role bar and role panel (name only); indicators page lead shortened and its definitions footnote removed; status tooltips shortened; report page: privacy note, evidence box title, print note shortened and upload/draft tools collapsed under 'advanced options'; duplicate floating 'user type' label and floating disclaimer note removed.

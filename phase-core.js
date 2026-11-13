@@ -7,10 +7,10 @@
   var PH = window.ETEC_PH || { inds: [], teams: {} };
   var DN = { 1: "الإدارة المدرسية", 2: "التعليم والتعلم", 3: "نواتج التعلم", 4: "البيئة المدرسية" };
   var STATE = {
-    missing:  { t: "غير منشأ",                c: "bad",  tip: "لا يوجد ملف هذا السجل في مجلد المؤشر؛ يُبلَّغ مدير النظام." },
-    blank:    { t: "منشأ · بانتظار التعبئة",   c: "idle", tip: "القالب الفارغ موجود في «1_قيد_المراجعة»: نزّله وعبّئه وأعد رفعه بالاسم نفسه." },
-    review:   { t: "معبّأ · قيد المراجعة",     c: "wip",  tip: "رُفع معبّأً في «1_قيد_المراجعة» وينتظر مراجعة المشرف؛ لا يُحتسب مرفوعاً قبل نقله إلى «2_معتمد»." },
-    approved: { t: "مرفوع (بعد المراجعة)",     c: "ok",   tip: "ملف معبّأ ومراجَع موجود في «2_معتمد»." }
+    missing:  { t: "غير منشأ",                c: "bad",  tip: "لا يوجد ملف لهذا السجل؛ أبلغ مدير النظام." },
+    blank:    { t: "منشأ · بانتظار التعبئة",   c: "idle", tip: "نزّل القالب وعبّئه وأعد رفعه بالاسم نفسه." },
+    review:   { t: "معبّأ · قيد المراجعة",     c: "wip",  tip: "بانتظار مراجعة المشرف." },
+    approved: { t: "مرفوع (بعد المراجعة)",     c: "ok",   tip: "راجعه المشرف وأقرّه." }
   };
   /* أساس النسبة الرسمية: created (المنشأة) أو uploaded (المرفوعة بعد المراجعة) — إعداد ETEC_PROGRESS_BASIS في portal-config.js */
   function basis() { return window.ETEC_PROGRESS_BASIS === "uploaded" ? "uploaded" : "created"; }
@@ -107,7 +107,7 @@
     var tg = target();
     if (s.repState === "done") return '<span class="ph-chip ok">تقرير الشواهد: مربوط (' + s.rep.photos + " صور)</span>";
     if (s.repState === "part") return '<span class="ph-chip wip">تقرير الشواهد: قيد ربط الشواهد (' + s.rep.photos + " من " + tg + " صور)</span>";
-    if (s.repState === "shell") return '<span class="ph-chip idle" title="هيكل فارغ في «3_تقرير_الشواهد»: أصدر التقرير من صفحة «تقرير الشواهد» وارفعه ثم احذف الهيكل.">تقرير الشواهد: منشأ · بانتظار الربط</span>';
+    if (s.repState === "shell") return '<span class="ph-chip idle" title="أصدر التقرير من صفحة «تقرير الشواهد» وارفعه.">تقرير الشواهد: منشأ · بانتظار الربط</span>';
     return '<span class="ph-chip bad">تقرير الشواهد: غير منشأ</span>';
   }
   /* بطاقة مؤشر: العنوان والتقدّم وحالة كل سجل وروابط المجلد والتقرير */
@@ -128,7 +128,7 @@
       '<ul class="ph-recs">' + recs + "</ul>" +
       '<div class="ph-row"><span class="ph-chip idle">منشأة ' + s.cr + "/" + s.req + '</span><span class="ph-chip ' + (s.ap ? "ok" : "idle") + '">مرفوعة (بعد المراجعة) ' + s.ap + "/" + s.req + "</span>" + repLine(s) + (s.review ? '<span class="ph-chip wip">معبّأة قيد المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
       '<div class="ph-actions"><a class="ph-btn pri" href="' + folderUrl(i) + '" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> مجلد المؤشر في Drive</a>' +
-      (s.fo.rv ? '<a class="ph-btn" href="' + subUrl(s.fo.rv) + '" target="_blank" rel="noopener" title="ارفع هنا النسخة المعبّأة بالاسم نفسه فوق الأصل"><i class="fa-solid fa-cloud-arrow-up"></i> رفع السجل المعبّأ</a>' : "") +
+      (s.fo.rv ? '<a class="ph-btn" href="' + subUrl(s.fo.rv) + '" target="_blank" rel="noopener" title="ارفع النسخة المعبّأة بالاسم نفسه"><i class="fa-solid fa-cloud-arrow-up"></i> رفع السجل المعبّأ</a>' : "") +
       '<a class="ph-btn" data-roles="admin,sup,member" href="report.html?code=' + esc(i.code) + '"><i class="fa-solid fa-file-image"></i> تقرير الشواهد</a>' +
       '<a class="ph-btn" href="indicators.html?code=' + esc(i.code) + '"><i class="fa-solid fa-link"></i> رابط المؤشر</a></div>' +
       "</div></article>";

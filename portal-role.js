@@ -155,7 +155,7 @@
       b.className = "warn";
       b.innerHTML = "<span><b>هذه الصفحة خارج مساحة دورك</b> (" + esc(ROLES[role].n) + ")؛ تُعرض للاطلاع فقط.</span>" + sel + '<span class="sp"></span><a href="' + ROLES[role].home + '">العودة إلى «' + esc(ROLES[role].hl) + "»</a>";
     } else {
-      b.innerHTML = '<span><b>' + esc(ROLES[role].n) + "</b> · " + esc(ROLES[role].q) + "</span>" + sel + '<span class="sp"></span><a href="' + ROLES[role].home + '">«' + esc(ROLES[role].hl) + "»</a>";
+      b.innerHTML = '<span><b>' + esc(ROLES[role].n) + "</b></span>" + sel + '<span class="sp"></span><a href="' + ROLES[role].home + '">«' + esc(ROLES[role].hl) + "»</a>";
     }
     document.body.insertBefore(b, document.body.firstChild);
     var s = document.getElementById("prSel");

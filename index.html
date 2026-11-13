@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>بوابة الاعتماد المدرسي والتميز — الدبلوما الأمريكية (بنين) — مدارس دار الفرسان</title>
+<title>بوابة ربط الشواهد بالسجلات — الدبلوما الأمريكية (بنين) — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="phase.css?v=9.2.0">
 <style>
@@ -38,16 +38,16 @@
 </header>
 <main class="wl">
   <section class="wl-hero">
-    <h1>مرحباً بك في بوابة الاعتماد المدرسي والتميز</h1>
+    <h1>بوابة ربط الشواهد بالسجلات</h1>
     <p class="sub">قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان · العام الدراسي 2026-2027</p>
   </section>
   <section class="wl-about" aria-label="عن المشروع">
-    <b>ما هذا المشروع؟</b> منصة داخلية تنظّم عمل القسم على متطلبات التقويم والاعتماد المدرسي: لكل مؤشر سجلاته ومجلده وتقرير شواهده، ويتابع كل مستخدم ما يخصّه ويرى تقدّمه بوضوح. الأساس هو معايير التقويم والاعتماد المدرسي لمدارس التعليم العام (الإصدار الثاني) الصادرة عن هيئة تقويم التعليم والتدريب.
+    <b>ما هذا المشروع؟</b> لكل مؤشر سجلاته ومجلده وتقرير شواهده، ويتابع كل مستخدم ما يخصّه. الأساس: معايير التقويم والاعتماد المدرسي (الإصدار الثاني) لهيئة تقويم التعليم والتدريب.
     <div class="wl-facts"><div><strong>4</strong><span>مجالات</span></div><div><strong>11</strong><span>معياراً</span></div><div><strong>52</strong><span>مؤشراً</span></div><div><strong>140</strong><span>سجلاً</span></div></div>
   </section>
   <section class="wl-pick" aria-label="اختيار الدور">
     <h2>اختر دورك في المشروع</h2>
-    <p>تُفتح لك الصفحات المناسبة لدورك. مدير النظام وحده يحتاج رمزاً وكلمة مرور.</p>
+    <p>اختر دورك لتفتح لك صفحاته.</p>
     <select id="roleSel" aria-label="دور المستخدم"><option value="" selected>— اختر دورك من القائمة —</option></select>
     <div id="idBox" hidden>
       <label style="font-size:12.5px;font-weight:800">المجال<select id="domSel" aria-label="المجال"><option value="">— اختر المجال —</option></select></label>
@@ -55,7 +55,7 @@
     </div>
     <div class="wl-role" id="roleOut" aria-live="polite"></div>
   </section>
-  <div class="ph-foot">منصة داخلية لمدارس دار الفرسان غير تابعة لهيئة تقويم التعليم والتدريب، ولا تعرض نتيجة تقويم أو اعتماد رسمية.</div>
+  <div class="ph-foot">منصة داخلية غير تابعة لهيئة تقويم التعليم والتدريب.</div>
 </main>
 <script src="phase-data.js?v=9.2.0"></script>
 <script>
@@ -81,7 +81,7 @@
     var r = R.roles[k], who = "";
     if (k === "member" && dom.value && nm.value !== "") who = PH.teams[dom.value].mem[+nm.value] + " · " + DN[dom.value];
     if (k === "sup" && dom.value) who = PH.teams[dom.value].sup + " · " + DN[dom.value];
-    out.innerHTML = '<p class="q"><b>' + r.n + "</b>" + (who ? " — " + who : "") + " · " + r.q + '</p><div class="wl-go">' + PAGES[k].map(function (p) {
+    out.innerHTML = '<p class="q"><b>' + r.n + "</b>" + (who ? " — " + who : "") + '</p><div class="wl-go">' + PAGES[k].map(function (p) {
       return '<a class="' + (p[4] ? "main" : "") + '" href="' + p[0] + q(k) + '"><i class="fa-solid ' + p[1] + '"></i><b>' + p[2] + "</b><span>" + p[3] + "</span></a>"; }).join("") + "</div>";
     out.className = "wl-role on";
   }
