@@ -18,9 +18,8 @@
   <div class="ph-filters" role="search">
     <input id="q" type="search" placeholder="ابحث بالرمز أو الاسم أو السجل…" aria-label="بحث">
     <select id="fd" aria-label="المجال"><option value="">كل المجالات</option></select>
-    <select id="fs" aria-label="الحالة">
-      <option value="">كل الحالات</option><option value="none">لم تبدأ التعبئة</option><option value="review">فيها سجلات معبّأة قيد المراجعة</option><option value="approved">فيها سجلات مرفوعة (بعد المراجعة)</option><option value="done">كل سجلاتها مرفوعة</option><option value="norep">تقرير الشواهد غير منشأ</option><option value="shell">تقرير الشواهد بانتظار الربط</option><option value="part">تقرير الشواهد قيد الربط</option><option value="linked">تقرير الشواهد مربوط</option>
-    </select>
+    <select id="fs" aria-label="حالة السجلات"><option value="">السجلات: الكل</option><option value="none">لم تبدأ التعبئة</option><option value="review">فيها سجلات قيد المراجعة</option><option value="approved">فيها سجلات مرفوعة</option><option value="done">كل سجلاتها مرفوعة</option></select>
+    <select id="fr" aria-label="حالة التقرير"><option value="">التقرير: الكل</option><option value="norep">غير منشأ</option><option value="shell">بانتظار الربط</option><option value="part">قيد الربط</option><option value="linked">مربوط</option></select>
     <select id="fo" aria-label="المسؤول"><option value="">كل المسؤولين</option></select>
     <button type="button" class="ph-pill" id="mine" aria-pressed="false" hidden>مؤشراتي فقط</button>
   </div>
@@ -37,7 +36,7 @@
   "use strict";
   var P = window.PHC, E = P.esc, role = window.PortalRole ? PortalRole.get() : "";
   P.chrome("indicators.html");
-  var q = document.getElementById("q"), fd = document.getElementById("fd"), fs = document.getElementById("fs"), fo = document.getElementById("fo"), mine = document.getElementById("mine"), list = document.getElementById("list"), sum = document.getElementById("sum");
+  var q = document.getElementById("q"), fd = document.getElementById("fd"), fs = document.getElementById("fs"), fr = document.getElementById("fr"), fo = document.getElementById("fo"), mine = document.getElementById("mine"), list = document.getElementById("list"), sum = document.getElementById("sum");
   var url = new URLSearchParams(location.search), focus = url.get("code") || "", me = P.me.get(), onlyMine = false, first = true;
   [1, 2, 3, 4].forEach(function (d) { fd.insertAdjacentHTML("beforeend", '<option value="' + d + '">' + E(P.DN[d]) + "</option>"); });
   [1, 2, 3, 4].forEach(function (d) { var T = P.PH.teams[d]; fo.insertAdjacentHTML("beforeend", '<optgroup label="' + E(P.DN[d]) + '">' + T.mem.map(function (n, x) { return '<option value="' + d + "|" + x + '">' + E(n) + "</option>"; }).join("") + "</optgroup>"); });
@@ -53,13 +52,15 @@
     if (t && (i.code + " " + i.st + " " + i.cn + " " + i.text + " " + i.recs.join(" ")).toLowerCase().indexOf(t) < 0) return false;
     switch (fs.value) {
       case "none": if (s.up > 0 || s.ap > 0) return false; break;
-      case "part": if (s.repState !== "part") return false; break;
-      case "shell": if (s.repState !== "shell") return false; break;
-      case "linked": if (s.repState !== "done") return false; break;
       case "review": if (!s.review) return false; break;
       case "approved": if (!s.ap) return false; break;
       case "done": if (s.ap < s.req) return false; break;
+    }
+    switch (fr.value) {
       case "norep": if (s.repState !== "none") return false; break;
+      case "shell": if (s.repState !== "shell") return false; break;
+      case "part": if (s.repState !== "part") return false; break;
+      case "linked": if (s.repState !== "done") return false; break;
     }
     return true;
   }
@@ -72,7 +73,7 @@
     first = false;
   }
   P.bindCards(list);
-  [q, fd, fs, fo].forEach(function (c) { c.addEventListener(c === q ? "input" : "change", function () { focus = ""; draw(); }); });
+  [q, fd, fs, fr, fo].forEach(function (c) { c.addEventListener(c === q ? "input" : "change", function () { focus = ""; draw(); }); });
   mine.addEventListener("click", function () { onlyMine = !onlyMine; mine.setAttribute("aria-pressed", String(onlyMine)); draw(); });
   P.onStatus(draw);
   P.load();
