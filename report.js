@@ -176,7 +176,9 @@
     $("refs").textContent = "…";
     fetch("data/evidence_refs.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }).then(function (o) {
       var l = (o && o[code]) || [];
-      $("refs").innerHTML = l.length ? "<ul style='list-style:none;margin:0;padding:0'>" + l.map(function (x, k) { return "<li><a href='" + E(x.u) + "' target='_blank' rel='noopener'>" + E(x.t || x.u) + "</a><button type='button' class='ph-btn sm' data-ins='" + k + "'>إدراج</button></li>"; }).join("") + "</ul>" : "لم تُزوَّد روابط لهذا المؤشر بعد. يضيفها مدير النظام في <code>data/evidence_refs.json</code>.";
+      if (typeof l === "string") l = [{ u: l, t: "مجلد الشواهد" }];
+      var main = l.length ? "<a class='ph-btn' style='display:block;text-align:center;margin-bottom:8px' href='" + E(l[0].u) + "' target='_blank' rel='noopener'>فتح مجلد الشواهد لهذا المؤشر</a><div style='font-size:12px;line-height:1.8;margin-bottom:6px'>نزّل الصور منه، ثم ارفعها في خانات التقرير.</div>" : "";
+      $("refs").innerHTML = l.length ? main + "<ul style='list-style:none;margin:0;padding:0'>" + l.map(function (x, k) { return "<li><a href='" + E(x.u) + "' target='_blank' rel='noopener'>" + E(x.t || x.u) + "</a><button type='button' class='ph-btn sm' data-ins='" + k + "'>إدراج</button></li>"; }).join("") + "</ul>" : "لم يُضَف رابط الشواهد لهذا المؤشر بعد. سيصلك من منسق المشروع.";
       $("refs").onclick = function (e) { var b = e.target.closest("[data-ins]"); if (!b) return; var x = l[+b.dataset.ins], j = slots.findIndex(function (s) { return !has(s); }); if (j < 0) { if (slots.length >= MAXS) { msg("saveMsg", "لا توجد خانة فارغة.", "bad"); return; } slots.push(blank()); j = slots.length - 1; } slots[j].link = x.u; slots[j].cap = slots[j].cap || x.t || ""; render(); save(); };
     });
   }
