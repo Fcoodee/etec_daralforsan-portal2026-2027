@@ -47,7 +47,7 @@ var DOCS_FOLDER_IDS_NEW = { // مجلدات «الوثائق» المضافة ح
 var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word فقط (اضبطها عند تصميم refreshStatus الجديدة)
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.3.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.3.1";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5107,7 +5107,7 @@ function treeScanIndicator_(code, ent, sizes, errors) {
     if (tplSize == null) tplSize = sizes[norm_("قالب_" + rec.m + " " + code + "_v1.docx")];
     if (tplSize == null) errors.push({ key: code, error: "لا يوجد قالب في 01_القوالب للسجل «" + rec.n + "» فلا يمكن التمييز بين الفارغ والمعبّأ" });
     var placed = false, filled = false, approved = false;
-    function isFilled(x) { var pr = splitName_(x.name); if (ACCEPT_DOC_EXT.indexOf(pr.ext) < 0) return false; if (x.size < MIN_BYTES.doc) return false; return tplSize == null ? false : x.size !== tplSize; }
+    function isFilled(x) { var pr = splitName_(x.name); if (ACCEPT_DOC_EXT.indexOf(pr.ext) < 0) return false; if (x.size < MIN_BYTES.doc) return false; if (SUBMITTED_[x.id]) return true; /* مرفوع من البطاقة = قُدّم للمراجعة (v9.3.1) */ return tplSize == null ? false : x.size !== tplSize; }
     var pick = null;
     rvFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) filled = true; if (!pick || (filled && !pick[0])) pick = [isFilled(x) ? 1 : 0, "rv", x.id]; } });
     apFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) { filled = true; approved = true; } if (!pick || isFilled(x) || pick[1] === "rv") pick = [isFilled(x) ? 1 : 0, "ap", x.id]; } });
@@ -5131,7 +5131,13 @@ function treeScanIndicator_(code, ent, sizes, errors) {
   }
   return out;
 }
+var SUBMITTED_ = {};
+function loadSubmitted_() {
+  SUBMITTED_ = {};
+  try { var all = PropertiesService.getScriptProperties().getProperties(); Object.keys(all).forEach(function (k) { if (k.indexOf("S_") === 0) SUBMITTED_[k.substring(2)] = all[k]; }); } catch (e) {}
+}
 function refreshTree_() {
+  loadSubmitted_();
   var t0 = Date.now(), sizes = treeTemplateSizes_(), errors = [], ind = {}, req = 0, up = 0, ready = 0, ap = 0, repC = 0, repL = 0, partial = false;
   var codes = Object.keys(TREE).sort();
   for (var k = 0; k < codes.length; k++) {
@@ -5332,6 +5338,8 @@ function upRecord_(folder, req) {
   old.forEach(function (x) { x.setTrashed(true); });
   var file = rv.createFile(Utilities.newBlob(bytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", name));
   try { file.setDescription("رُفع عبر البوابة بواسطة: " + String(req.who || "غير محدد").slice(0, 60) + " — " + new Date().toISOString()); } catch (x) {}
+  /* علامة «قُدّم للمراجعة»: يرثها الملف حين ينقله المشرف إلى 2_معتمد (المعرّف نفسه) */
+  try { PropertiesService.getScriptProperties().setProperty("S_" + file.getId(), new Date().toISOString()); } catch (x) {}
   try { CacheService.getScriptCache().remove(CACHE_KEY_TREE); } catch (x) {}
   return { ok: true, id: file.getId(), name: name, replaced: old.length };
 }
