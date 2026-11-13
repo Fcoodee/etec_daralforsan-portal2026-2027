@@ -24,6 +24,9 @@
   function pct(x) { return Math.round((x || 0) * 100); }
   function avg(a) { return a.length ? a.reduce(function (s, x) { return s + x; }, 0) / a.length : 0; }
   function byCode(c) { for (var k = 0; k < PH.inds.length; k++) if (PH.inds[k].code === c) return PH.inds[k]; return null; }
+  function fileDl(id) { return "https://drive.google.com/uc?export=download&id=" + id; }
+  function fileView(id) { return "https://drive.google.com/file/d/" + id + "/view"; }
+  function subUrl(id) { return "https://drive.google.com/drive/folders/" + id; }
   function folderUrl(i) { return "https://drive.google.com/drive/folders/" + i.f; }
   function rootUrl() { return "https://drive.google.com/drive/folders/" + PH.root; }
 
@@ -32,11 +35,11 @@
     var raw = ST.ind[i.code], snap = (window.ETEC_SNAPSHOT && ETEC_SNAPSHOT.ind && ETEC_SNAPSHOT.ind[i.code]) || null, st = {}, out, tg = target();
     if (raw) {
       i.recs.forEach(function (n) { st[n] = (raw.st && raw.st[n]) || ((raw.docs || []).indexOf(n) >= 0 ? "review" : ((raw.missing || []).indexOf(n) >= 0 ? "missing" : "blank")); });
-      out = { req: raw.req || i.recs.length, up: raw.up || 0, ap: raw.ap || 0, ready: raw.ready || 0, st: st, rep: raw.rep || { n: 0, photos: 0, files: [] }, invalid: raw.invalid || [], live: true };
+      out = { req: raw.req || i.recs.length, up: raw.up || 0, ap: raw.ap || 0, ready: raw.ready || 0, st: st, rep: raw.rep || { n: 0, photos: 0, files: [] }, invalid: raw.invalid || [], fl: raw.fl || {}, fo: raw.fo || {}, live: true };
     } else {
       i.recs.forEach(function (n) { st[n] = snap && (snap.docs || []).indexOf(n) >= 0 ? "review" : "blank"; });
       var shell = !!(window.ETEC_SNAPSHOT && ETEC_SNAPSHOT.repShell);
-      out = { req: i.recs.length, up: snap ? snap.up || 0 : 0, ap: 0, ready: snap ? snap.ready || 0 : 0, st: st, rep: { n: shell ? 1 : 0, photos: 0, files: [] }, invalid: [], live: false };
+      out = { req: i.recs.length, up: snap ? snap.up || 0 : 0, ap: 0, ready: snap ? snap.ready || 0 : 0, st: st, rep: { n: shell ? 1 : 0, photos: 0, files: [] }, invalid: [], fl: {}, fo: {}, live: false };
     }
     /* منشأة = ملف السجل موجود؛ مرفوعة = معبّأ ومراجَع في 2_معتمد. */
     out.cr = out.ready;
@@ -110,7 +113,10 @@
   /* بطاقة مؤشر: العنوان والتقدّم وحالة كل سجل وروابط المجلد والتقرير */
   function card(i, o) {
     o = o || {}; var s = sOf(i), open = !!o.open, me = ownerName(i);
-    var recs = i.recs.map(function (n) { var k = s.st[n] || "blank"; return '<li class="ph-rec"><span class="ph-recn">' + esc(n) + "</span>" + chip(k) + "</li>"; }).join("");
+    var recs = i.recs.map(function (n) {
+      var k = s.st[n] || "blank", f = s.fl[n], links = "";
+      if (f && f[2]) links = '<span class="ph-rl"><a class="ph-btn sm" href="' + fileDl(f[2]) + '" target="_blank" rel="noopener" title="تنزيل ملف السجل مباشرة"><i class="fa-solid fa-download"></i> تنزيل</a><a class="ph-btn sm" href="' + fileView(f[2]) + '" target="_blank" rel="noopener" title="معاينة في Drive"><i class="fa-solid fa-eye"></i></a></span>';
+      return '<li class="ph-rec"><span class="ph-recn">' + esc(n) + "</span>" + links + chip(k) + "</li>"; }).join("");
     var tag = i.dv ? '<span class="ph-tag" title="سجل متابعة مشتق من «إضاءات نحو تحقيق المؤشر» ويدخل في النسبة">سجل متابعة</span>' : "";
     return '<article class="ph-card" id="i-' + esc(i.code) + '" data-code="' + esc(i.code) + '">' +
       '<button type="button" class="ph-card-h" aria-expanded="' + open + '" data-toggle>' +
@@ -122,7 +128,8 @@
       '<ul class="ph-recs">' + recs + "</ul>" +
       '<div class="ph-row"><span class="ph-chip idle">منشأة ' + s.cr + "/" + s.req + '</span><span class="ph-chip ' + (s.ap ? "ok" : "idle") + '">مرفوعة (بعد المراجعة) ' + s.ap + "/" + s.req + "</span>" + repLine(s) + (s.review ? '<span class="ph-chip wip">معبّأة قيد المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
       '<div class="ph-actions"><a class="ph-btn pri" href="' + folderUrl(i) + '" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> مجلد المؤشر في Drive</a>' +
-      '' +
+      (s.fo.rv ? '<a class="ph-btn" href="' + subUrl(s.fo.rv) + '" target="_blank" rel="noopener" title="ارفع هنا النسخة المعبّأة بالاسم نفسه فوق الأصل"><i class="fa-solid fa-cloud-arrow-up"></i> رفع السجل المعبّأ</a>' : "") +
+      '<a class="ph-btn" data-roles="admin,sup,member" href="report.html?code=' + esc(i.code) + '"><i class="fa-solid fa-file-image"></i> تقرير الشواهد</a>' +
       '<a class="ph-btn" href="indicators.html?code=' + esc(i.code) + '"><i class="fa-solid fa-link"></i> رابط المؤشر</a></div>' +
       "</div></article>";
   }
@@ -140,7 +147,8 @@
     var R = window.PortalRole, role = R ? R.get() : "", roles = R ? R.roles : {};
     var items = [
       ["home.html", "fa-house", role && roles[role] ? roles[role].hl : "مساحتي", "admin,sup,member,self"],
-      ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "admin,sup,member,self"]
+      ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "admin,sup,member,self"],
+      ["report.html", "fa-file-image", "تقرير الشواهد", "admin,sup,member"]
     ];
     var nav = items.filter(function (x) { return !role || x[3].split(",").indexOf(role) >= 0; }).map(function (x) {
       return '<a href="' + x[0] + '"' + (x[0] === active ? ' aria-current="page"' : "") + '><i class="fa-solid ' + x[1] + '"></i> ' + esc(x[2]) + "</a>"; }).join("");
@@ -159,6 +167,6 @@
     document.getElementById("phRef").addEventListener("click", function () { load(true); });
   }
 
-  window.PHC = { PH: PH, DN: DN, STATE: STATE, ST: ST, esc: esc, pct: pct, avg: avg, byCode: byCode, folderUrl: folderUrl, rootUrl: rootUrl, sOf: sOf, critP: critP, critList: critList, domP: domP, projP: projP, totals: totals, ownerName: ownerName,
+  window.PHC = { PH: PH, DN: DN, STATE: STATE, ST: ST, esc: esc, pct: pct, avg: avg, byCode: byCode, folderUrl: folderUrl, fileDl: fileDl, fileView: fileView, subUrl: subUrl, rootUrl: rootUrl, sOf: sOf, critP: critP, critList: critList, domP: domP, projP: projP, totals: totals, ownerName: ownerName,
     bar2: bar2, basis: basis, basisTxt: basisTxt, target: target, me: { get: meGet, set: meSet, clear: meClear }, load: load, onStatus: onStatus, bar: bar, chip: chip, card: card, bindCards: bindCards, chrome: chrome, fmtT: fmtT };
 })();

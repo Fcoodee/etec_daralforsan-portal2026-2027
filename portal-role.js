@@ -24,15 +24,16 @@
   var ALL = ORDER.slice();
   var PAGES = {
     /* صفحات مرحلة ما بعد تصحيح المسار (المبنية من جديد): مفتوحة بحسب الدور بلا دخول */
-    "index.html": ALL, "home.html": ALL, "indicators.html": ALL
+    "index.html": ALL, "home.html": ALL, "indicators.html": ALL,
+    "report.html": ["admin", "sup", "member"]
     /* كل ما عداها قديم: لمدير النظام وحده (يُعدّ admin افتراضاً لأي صفحة غير مدرجة أعلاه) */
   };
 
   /* روابط ثانوية مباشرة في مدخل كل دور (لا تتجاوز ثلاثة) */
   var SECOND = {
     admin:  [["indicators.html", "fa-list-check", "المؤشرات والسجلات"]],
-    sup:    [["indicators.html", "fa-list-check", "المؤشرات والسجلات"]],
-    member: [["indicators.html", "fa-list-check", "المؤشرات والسجلات"]],
+    sup:    [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["report.html", "fa-file-image", "تقرير الشواهد"]],
+    member: [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["report.html", "fa-file-image", "تقرير الشواهد"]],
     self:   [["indicators.html", "fa-list-check", "المؤشرات والسجلات"]]
   };
 
@@ -187,16 +188,19 @@
   /* صفحة لمدير النظام وحده: تُغطّى بنافذة دخول حتى يدخل المدير (تخصيص عرض لا حماية خادم) */
   function adminOnlyGate() {
     var list = PAGES[pageKey()] || ["admin"];
-    if (list.length !== 1 || list[0] !== "admin" || role === "admin" || document.getElementById("rolGate")) return;
+    if (list.length >= ORDER.length || (role && list.indexOf(role) >= 0) || document.getElementById("rolGate")) return;
+    var adminOnly = list.length === 1 && list[0] === "admin";
     var hs = document.createElement("style"); hs.id = "rolGateCss"; hs.textContent = "html.rol-lock body>*:not(#rolGate):not(#pg-overlay){display:none!important}"; document.head.appendChild(hs);
     document.documentElement.classList.add("rol-lock");
     var d = document.createElement("div"); d.id = "rolGate";
     d.style.cssText = "position:fixed;inset:0;z-index:2147483100;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;font-family:Cairo,Tahoma,sans-serif;background:linear-gradient(160deg,#002a2a,#0f172a)";
-    d.innerHTML = '<div style="background:#fff;border-radius:20px;max-width:420px;width:100%;padding:26px;text-align:right;border-top:6px solid #c29b38"><h2 style="margin:0 0 8px;font-size:17px;font-weight:900;color:#003d3d">هذه الصفحة لمدير النظام</h2><p style="margin:0 0 14px;font-size:13px;line-height:1.9;color:#475569">يحتاج مدير النظام وحده إلى رمز مستخدم وكلمة مرور.</p>' +
-      '<button id="rolGo" type="button" style="width:100%;border:0;border-radius:12px;background:#006666;color:#fff;font:800 14px Cairo,Tahoma,sans-serif;padding:12px;cursor:pointer">دخول مدير النظام</button>' +
+    var names = list.map(function (k) { return ROLES[k].n; }).join("، ");
+    d.innerHTML = '<div style="background:#fff;border-radius:20px;max-width:420px;width:100%;padding:26px;text-align:right;border-top:6px solid #c29b38"><h2 style="margin:0 0 8px;font-size:17px;font-weight:900;color:#003d3d">' + (adminOnly ? "هذه الصفحة لمدير النظام" : "هذه الصفحة خارج مساحة دورك") + '</h2><p style="margin:0 0 14px;font-size:13px;line-height:1.9;color:#475569">' + (adminOnly ? "يحتاج مدير النظام وحده إلى رمز مستخدم وكلمة مرور." : "تُفتح لهذه الأدوار: " + esc(names) + ".") + '</p>' +
+      (adminOnly ? '<button id="rolGo" type="button" style="width:100%;border:0;border-radius:12px;background:#006666;color:#fff;font:800 14px Cairo,Tahoma,sans-serif;padding:12px;cursor:pointer">دخول مدير النظام</button>' : "") +
       '<a href="index.html" style="display:block;text-align:center;margin-top:12px;font-size:12px;color:#006666">العودة إلى اختيار الدور</a></div>';
     document.body.appendChild(d);
-    document.getElementById("rolGo").addEventListener("click", function () { choose("admin", function () { try { var u = new URL(location.href); u.searchParams.set("u", "admin"); location.href = u.toString(); } catch (e) { location.reload(); } }); });
+    var go = document.getElementById("rolGo");
+    if (go) go.addEventListener("click", function () { choose("admin", function () { try { var u = new URL(location.href); u.searchParams.set("u", "admin"); location.href = u.toString(); } catch (e) { location.reload(); } }); });
   }
   function run() { css(); applyData(); bar(); home(); adminOnlyGate(); }
   window.PortalRole = { get: function () { return role; }, set: set, choose: choose, roles: ROLES, order: ORDER, pages: PAGES, allowed: allowed, valid: valid, refresh: function () { role = get(); run(); } };

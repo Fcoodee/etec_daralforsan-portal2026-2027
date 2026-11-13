@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" style="color-scheme:light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>تقرير الشواهد — بوابة الاعتماد المدرسي والتميز</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="phase.css?v=9.2.0">
+<style>
+.rp-wrap{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px;align-items:start}
+@media(max-width:980px){.rp-wrap{grid-template-columns:1fr}}
+.rp-side{display:grid;gap:12px;position:sticky;top:8px}
+@media(max-width:980px){.rp-side{position:static}}
+.rp-box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:12.5px;line-height:1.9}
+.rp-box h3{margin:0 0 6px;font-size:13.5px;font-weight:900;color:var(--t7)}
+.rp-box select,.rp-box input[type=text],.rp-box input[type=password]{width:100%;font:600 12.5px Cairo,Tahoma,sans-serif;padding:8px 10px;border:1px solid #cbd5e1;border-radius:9px;background:#fff;color:#0f172a;box-sizing:border-box}
+.rp-box .btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.rp-box .btns button,.rp-box .btns a{font:800 12px Cairo,Tahoma,sans-serif;border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;cursor:pointer;text-decoration:none;color:inherit}
+.rp-box .btns .pri{background:var(--t7);color:#fff;border-color:var(--t7)}
+.rp-box .btns button:disabled{opacity:.5;cursor:not-allowed}
+.rp-name{direction:ltr;text-align:left;font:600 11.5px monospace;background:#f1f5f9;border-radius:8px;padding:6px 8px;word-break:break-all;margin-top:6px}
+.rp-warn{background:#fffbeb;border-color:#fcd34d;color:#78350f}
+.rp-msg{min-height:18px;font-size:12px;margin-top:6px}.rp-msg.ok{color:#047857}.rp-msg.bad{color:#b91c1c}
+.rp-refs a{display:block;word-break:break-all;font-size:12px}
+.rp-refs li{margin-bottom:4px;display:flex;gap:6px;justify-content:space-between;align-items:flex-start}
+.sheet{background:#fff;border:1px solid var(--line);border-radius:6px;padding:22px 24px;box-shadow:0 2px 10px rgba(0,0,0,.06);max-width:794px;margin:0 auto}
+.sh-head{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:3px solid #006666;padding-bottom:10px}
+.sh-head img{height:48px}.sh-head .tt{text-align:center;flex:1}.sh-head .tt b{display:block;font-size:19px;color:#003d3d}.sh-head .tt small{color:#475569;font-size:11.5px}
+.sh-ind{margin:12px 0;padding:10px 12px;background:#f0fdfa;border:1px solid #99f6e4;border-radius:10px;font-size:12.5px;line-height:1.9}
+.sh-ind .c{font:800 12px monospace;direction:ltr;display:inline-block;background:#003d3d;color:#fff;border-radius:6px;padding:0 8px;margin-inline-end:6px}
+.sh-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.slot{border:1px solid #cbd5e1;border-radius:10px;overflow:hidden;break-inside:avoid;page-break-inside:avoid;background:#fff;display:flex;flex-direction:column}
+.slot .ph{position:relative;aspect-ratio:4/3;background:#f8fafc;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:12px;text-align:center;cursor:pointer;border-bottom:1px solid #e2e8f0}
+.slot .ph img{width:100%;height:100%;object-fit:contain;display:block}
+.slot .num{position:absolute;top:6px;right:6px;background:#003d3d;color:#fff;border-radius:999px;font:800 11px Cairo,sans-serif;padding:0 8px}
+.slot .x{position:absolute;top:6px;left:6px;background:#fff;border:1px solid #cbd5e1;border-radius:999px;width:24px;height:24px;cursor:pointer;font-size:13px;line-height:1}
+.slot .meta{padding:8px;display:grid;gap:5px}
+.slot .meta input,.slot .meta textarea{font:600 12px Cairo,Tahoma,sans-serif;border:1px solid #e2e8f0;border-radius:7px;padding:5px 7px;width:100%;box-sizing:border-box;background:#fff;color:#0f172a;resize:none}
+.slot .meta .pt{display:none;font-size:12px;line-height:1.8}
+.slot.drag .ph{background:#ecfdf5;color:#047857}
+.sh-foot{margin-top:12px;font-size:11px;color:#64748b;display:flex;justify-content:space-between;gap:8px;border-top:1px solid #e2e8f0;padding-top:8px}
+.rp-actions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+@media print{
+  @page{size:A4 portrait;margin:11mm}
+  body{background:#fff!important}
+  #chrome,.noprint,.rp-side,#prBar,#etecMetaBox,#pg-out,.slot .x,.slot .meta .in,.slot .ph .hint{display:none!important}
+  .rp-wrap{display:block}
+  .sheet{border:0;box-shadow:0;padding:0;max-width:none}
+  .slot .meta .pt{display:block}
+  .slot .ph{cursor:default}
+  .slot.empty{display:none}
+}
+</style>
+<script src="portal-meta.js?v=9.2.0"></script>
+<script src="portal-role.js?v=9.2.0"></script>
+</head>
+<body>
+<div id="chrome" class="noprint"></div>
+<main class="ph-main" style="max-width:1180px">
+  <h1 class="ph-h1 noprint">تقرير الشواهد</h1>
+  <p class="ph-lead noprint">اعمل على قالب التقرير كصفحة ويب: ارفع صورة في كل خانة واكتب وصفها، ثم أصدر PDF بالاسم الصحيح وارفعه إلى مجلد المؤشر.</p>
+  <div class="rp-wrap">
+    <section aria-label="قالب التقرير">
+      <div class="sheet" id="sheet"></div>
+      <div class="rp-actions noprint">
+        <button type="button" class="ph-btn" id="addSlot"><i class="fa-solid fa-plus"></i> خانة شاهد إضافية</button>
+        <span class="ph-lead" style="margin:0;align-self:center" id="slotInfo"></span>
+      </div>
+    </section>
+    <aside class="rp-side noprint" aria-label="أدوات التقرير">
+      <div class="rp-box"><h3>المؤشر</h3><select id="indSel" aria-label="المؤشر"></select>
+        <div class="rp-msg" id="saveMsg" role="status"></div></div>
+      <div class="rp-box rp-warn"><h3>قبل رفع أي صورة</h3>
+        الصور شواهد مدرسية قد تظهر فيها وجوه طلبة ومعلمين (نظام حماية البيانات الشخصية). لا ترفع صورة وجه طالب إلا بإذن الإدارة؛ فضّل الأنشطة والأعمال والوثائق، وغطِّ الأسماء والوجوه عند اللزوم. تُحذف بيانات الموقع (EXIF) من الصور تلقائياً عند الرفع.</div>
+      <div class="rp-box"><h3>الشواهد المرجعية المزوَّدة</h3><div id="refs" class="rp-refs">…</div></div>
+      <div class="rp-box"><h3>إصدار التقرير</h3>
+        اسم الملف المقترح (يتغير بعدد الصور):<div class="rp-name" id="fname"></div>
+        <div class="btns"><button type="button" class="pri" id="btnPrint"><i class="fa-solid fa-file-pdf"></i> إصدار PDF</button><button type="button" id="btnCopy">نسخ الاسم</button></div>
+        <p style="margin:8px 0 0;color:#475569">في نافذة الطباعة اختر «حفظ بصيغة PDF». يقترح المتصفح الاسم أعلاه تلقائياً؛ ثم ارفع الملف من الأسفل أو في مجلد المؤشر.</p></div>
+      <div class="rp-box"><h3>الرفع إلى Drive <span class="ph-chip idle" id="upState">غير مفعّل</span></h3>
+        <label>رمز الرفع (يسلّمه لك مدير النظام):<input type="password" id="tok" autocomplete="off" placeholder="الرمز"></label>
+        <label style="display:block;margin-top:6px">الاسم (للتوثيق):<input type="text" id="who" placeholder="اسمك"></label>
+        <div class="btns"><input type="file" id="pdfIn" accept="application/pdf" hidden><button type="button" class="pri" id="btnUp" disabled><i class="fa-solid fa-cloud-arrow-up"></i> رفع ملف PDF</button>
+          <button type="button" id="btnSaveC" disabled>حفظ المسودة مركزياً</button><button type="button" id="btnLoadC" disabled>استرجاع المسودة</button>
+          <a id="lnkRp" href="#" target="_blank" rel="noopener" hidden>مجلد التقرير</a></div>
+        <div class="rp-msg" id="upMsg" role="status"></div></div>
+      <div class="rp-box"><h3>المسودة على هذا الجهاز</h3>تُحفظ تلقائياً في المتصفح. للنقل بين الأجهزة صدّرها ملفاً ثم استوردها.
+        <div class="btns"><button type="button" id="btnExp">تصدير مسودة</button><input type="file" id="impIn" accept=".json,application/json" hidden><button type="button" id="btnImp">استيراد مسودة</button><button type="button" id="btnClear">مسح الخانات</button></div></div>
+    </aside>
+  </div>
+</main>
+<script src="portal-config.js?v=9.2.0"></script>
+<script src="portal-names.js?v=9.2.0"></script>
+<script src="phase-data.js?v=9.2.0"></script>
+<script src="phase-core.js?v=9.2.0"></script>
+<script src="report.js?v=9.2.0"></script>
+<script src="page-gate.js" data-lazy="1"></script>
+<script src="legal-notice.js"></script>
+<script src="content-protect.js"></script>
+</body>
+</html>

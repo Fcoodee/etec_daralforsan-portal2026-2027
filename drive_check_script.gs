@@ -47,7 +47,7 @@ var DOCS_FOLDER_IDS_NEW = { // مجلدات «الوثائق» المضافة ح
 var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word فقط (اضبطها عند تصميم refreshStatus الجديدة)
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.1.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.2.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5095,6 +5095,9 @@ function treeScanIndicator_(code, ent, sizes, errors) {
   var folder;
   try { folder = DriveApp.getFolderById(ent.f); } catch (e) { errors.push({ key: code, error: e.message }); out.error = true; return out; }
   var rv = treeChild_(folder, TREE_REVIEW), ap = treeChild_(folder, TREE_APPROVED), rp = treeChild_(folder, TREE_REPORT);
+  /* معرّفات المجلدات الفرعية (روابط الرفع والتقرير) وملف كل سجل (روابط التنزيل المباشر): fl[السجل] = [معبّأ 1/0، rv|ap، المعرّف] — مصغّرة كي لا يتجاوز الناتج حدّ الذاكرة المؤقتة (100KB) */
+  out.fo = {}; out.fl = {};
+  try { if (rv) out.fo.rv = rv.getId(); if (ap) out.fo.ap = ap.getId(); if (rp) out.fo.rp = rp.getId(); } catch (e) {}
   var rvFiles = [], apFiles = [], f, it;
   if (rv) { it = rv.getFiles(); while (it.hasNext()) { f = it.next(); rvFiles.push({ id: f.getId(), name: f.getName(), size: f.getSize() }); } } else errors.push({ key: code, error: "لا يوجد مجلد " + TREE_REVIEW });
   if (ap) { it = ap.getFiles(); while (it.hasNext()) { f = it.next(); apFiles.push({ id: f.getId(), name: f.getName(), size: f.getSize() }); } }
@@ -5105,8 +5108,10 @@ function treeScanIndicator_(code, ent, sizes, errors) {
     if (tplSize == null) errors.push({ key: code, error: "لا يوجد قالب في 01_القوالب للسجل «" + rec.n + "» فلا يمكن التمييز بين الفارغ والمعبّأ" });
     var placed = false, filled = false, approved = false;
     function isFilled(x) { var pr = splitName_(x.name); if (ACCEPT_DOC_EXT.indexOf(pr.ext) < 0) return false; if (x.size < MIN_BYTES.doc) return false; return tplSize == null ? false : x.size !== tplSize; }
-    rvFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) filled = true; } });
-    apFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) { filled = true; approved = true; } } });
+    var pick = null;
+    rvFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) filled = true; if (!pick || (filled && !pick[0])) pick = [isFilled(x) ? 1 : 0, "rv", x.id]; } });
+    apFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) { filled = true; approved = true; } if (!pick || isFilled(x) || pick[1] === "rv") pick = [isFilled(x) ? 1 : 0, "ap", x.id]; } });
+    if (pick) out.fl[rec.n] = pick;
     if (placed) out.ready++;
     if (filled) { out.up++; out.docs.push(rec.n); } else if (placed) out.blank.push(rec.n); else out.missing.push(rec.n);
     if (approved) out.ap++;
@@ -5243,4 +5248,77 @@ function doGet(e) {
     return ContentService.createTextOutput(p.callback + "(" + json + ");").setMimeType(ContentService.MimeType.JAVASCRIPT);
   }
   return ContentService.createTextOutput(json).setMimeType(ContentService.MimeType.JSON);
+}
+
+/* ========== 3) الرفع الآلي والمسودة المركزية (v9.2.0) ==========
+   - مفعّل فقط إن ضُبطت خاصية السكربت UPLOAD_TOKEN (إعدادات المشروع ← خصائص السكربت). يوزّع مدير النظام الرمز على الفريق سرّاً.
+   - تُرسل الصفحة طلب POST بنوع text/plain (بلا preflight). كل الإجراءات تتحقق من الرمز ثم من رمز المؤشر ومن اسم الملف وحجمه.
+   - لا يُحذف شيء نهائياً: الهيكل الفارغ والنسخة المستبدلة تذهبان إلى سلة Drive (قابلة للاسترجاع).
+   - التقييد: رابط التطبيق عام، فالحماية هي الرمز وحده؛ غيّر UPLOAD_TOKEN متى انكشف. */
+var UP_MAX_PDF_BYTES = 20 * 1024 * 1024, UP_MAX_DRAFT_CHARS = 9 * 1024 * 1024, UP_MAX_PHOTOS = 30;
+function upJson_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+function upTokenOk_(t) {
+  var real = PropertiesService.getScriptProperties().getProperty("UPLOAD_TOKEN");
+  if (!real || real.length < 8) return "off";
+  t = String(t || ""); if (t.length !== real.length) return "bad";
+  var d = 0; for (var i = 0; i < t.length; i++) d |= t.charCodeAt(i) ^ real.charCodeAt(i);
+  return d === 0 ? "ok" : "bad";
+}
+function upName_(code, name) {
+  /* <الرمز>_تقرير الشواهد_<البند>_<n>صور.pdf */
+  var pre = code + "_تقرير الشواهد_", m = /_(\d{1,2})\s*صور\.pdf$/.exec(String(name || ""));
+  if (String(name || "").indexOf(pre) !== 0 || !m) return null;
+  var n = parseInt(m[1], 10); return n >= 0 && n <= UP_MAX_PHOTOS ? n : null;
+}
+function doPost(e) {
+  var req;
+  try { req = JSON.parse((e && e.postData && e.postData.contents) || "{}"); } catch (x) { return upJson_({ ok: false, error: "طلب غير صالح" }); }
+  var tk = upTokenOk_(req.token);
+  if (tk === "off") return upJson_({ ok: false, error: "الرفع الآلي غير مفعّل بعد: يضبط مدير النظام UPLOAD_TOKEN في خصائص السكربت.", off: true });
+  if (tk !== "ok") return upJson_({ ok: false, error: "رمز الرفع غير صحيح." });
+  if (req.action === "ping") return upJson_({ ok: true, v: SCRIPT_VERSION });
+  var ent = TREE[req.code];
+  if (!ent) return upJson_({ ok: false, error: "رمز المؤشر غير معروف." });
+  var lock = LockService.getScriptLock();
+  if (!lock.tryLock(30000)) return upJson_({ ok: false, error: "عملية أخرى قيد التنفيذ؛ أعد المحاولة بعد لحظات." });
+  try {
+    var folder = DriveApp.getFolderById(ent.f);
+    if (req.action === "uploadReport") return upJson_(upReport_(folder, req));
+    if (req.action === "saveDraft") return upJson_(upSaveDraft_(folder, req));
+    if (req.action === "loadDraft") return upJson_(upLoadDraft_(folder, req));
+    return upJson_({ ok: false, error: "إجراء غير معروف." });
+  } catch (err) { return upJson_({ ok: false, error: "تعذّر التنفيذ: " + err.message }); }
+  finally { lock.releaseLock(); }
+}
+function upReport_(folder, req) {
+  var n = upName_(req.code, req.name);
+  if (n === null) return { ok: false, error: "اسم الملف لا يطابق الصيغة <الرمز>_تقرير الشواهد_<البند>_<عدد>صور.pdf" };
+  var bytes; try { bytes = Utilities.base64Decode(String(req.pdf || "")); } catch (x) { return { ok: false, error: "محتوى الملف غير صالح." }; }
+  if (!bytes || bytes.length < MIN_BYTES.report) return { ok: false, error: "الملف أصغر من الحد الأدنى (" + MIN_BYTES.report + " بايت)." };
+  if (bytes.length > UP_MAX_PDF_BYTES) return { ok: false, error: "الملف أكبر من 20 ميغابايت؛ اضغط الصور وأعد الإصدار." };
+  if (!(bytes[0] === 37 && bytes[1] === 80 && bytes[2] === 68 && bytes[3] === 70)) return { ok: false, error: "الملف ليس PDF." };
+  var rp = treeChild_(folder, TREE_REPORT); if (!rp) return { ok: false, error: "لا يوجد مجلد " + TREE_REPORT + " لهذا المؤشر." };
+  var trashed = 0, it = rp.getFiles(), f, nm;
+  while (it.hasNext()) {
+    f = it.next(); nm = f.getName();
+    /* الهيكل الفارغ (0صور) يُستبدل بالتقرير الحقيقي؛ والتقرير السابق بالاسم نفسه يذهب إلى السلة */
+    if (nm === req.name || (n > 0 && upName_(req.code, nm) === 0)) { f.setTrashed(true); trashed++; }
+  }
+  var file = rp.createFile(Utilities.newBlob(bytes, "application/pdf", req.name));
+  try { file.setDescription("رُفع عبر البوابة بواسطة: " + String(req.who || "غير محدد").slice(0, 60) + " — " + new Date().toISOString()); } catch (x) {}
+  try { CacheService.getScriptCache().remove(CACHE_KEY_TREE); } catch (x) {}
+  return { ok: true, id: file.getId(), url: file.getUrl(), photos: n, replaced: trashed };
+}
+function upDraftName_(code) { return "مسودة_تقرير_" + code + ".json"; }
+function upSaveDraft_(folder, req) {
+  var s = String(req.draft || ""); if (!s || s.length > UP_MAX_DRAFT_CHARS) return { ok: false, error: "المسودة فارغة أو أكبر من الحد." };
+  try { JSON.parse(s); } catch (x) { return { ok: false, error: "المسودة ليست JSON صالحاً." }; }
+  var nm = upDraftName_(req.code), it = folder.getFilesByName(nm), f;
+  if (it.hasNext()) { f = it.next(); f.setContent(s); } else f = folder.createFile(nm, s, "application/json");
+  return { ok: true, saved: new Date().toISOString(), size: s.length };
+}
+function upLoadDraft_(folder, req) {
+  var it = folder.getFilesByName(upDraftName_(req.code));
+  if (!it.hasNext()) return { ok: true, draft: null };
+  var f = it.next(); return { ok: true, draft: f.getBlob().getDataAsString(), saved: f.getLastUpdated().toISOString() };
 }
