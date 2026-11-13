@@ -141,7 +141,7 @@
 
   function bar() {
     var pg = pageKey();
-    if (document.getElementById("utChip") || pg === "login.html") return; /* evidence-link لها شريطها، وصفحة الدخول بلا شريط */
+    if (document.getElementById("utChip") || pg === "login.html" || pg === "index.html") return; /* evidence-link لها شريطها، وصفحة الدخول بلا شريط */
     var old = document.getElementById("prBar"); if (old) old.remove();
     var b = document.createElement("div");
     b.id = "prBar";

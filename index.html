@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="phase.css?v=9.1.1">
 <style>
+body{min-height:100vh}.ph-main{padding-top:8px}.rh-box{margin-top:14px}.rh-h{font-size:21px;text-align:center}.rh-p{text-align:center}.rh-grid{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))!important;gap:14px!important}.rh-pick{padding:18px 16px!important}
 .ix-hero{text-align:center;padding:20px 16px 4px}
 .ix-hero h1{font-size:25px;font-weight:900;color:var(--t7);margin:10px 0 4px}.ix-hero p{margin:0;font-size:13px;color:var(--mut)}
 .ix-live{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:6px 0 4px}
@@ -33,48 +34,8 @@
   <!-- يملؤه portal-role.js: اختيار الدور أولاً، ثم زر مباشر إلى مساحتك -->
   <div id="roleHome"></div>
 
-  <div class="ix-live" id="live" hidden>
-    <div class="ph-stat main"><div class="l">التقدّم الرسمي</div><div class="v" id="lp">—</div><div class="s" id="lps"></div></div>
-    <div class="ph-stat"><div class="l">مرفوعة (بعد المراجعة)</div><div class="v" id="lr">—</div><div class="s" id="lrs"></div></div>
-    <div class="ph-stat"><div class="l">معبّأة قيد المراجعة</div><div class="v" id="la">—</div><div class="s">بانتظار المشرفين</div></div>
-    <div class="ph-stat"><div class="l">تقارير الشواهد</div><div class="v" id="lt">—</div><div class="s" id="lts"></div></div>
-  </div>
-
-  <h2 class="ph-h2">أين تريد أن تذهب؟</h2>
-  <div class="ix-tiles">
-    <a class="ix-tile" href="home.html"><i class="fa-solid fa-house-user"></i><b>مساحتي</b><span>مؤشراتك وسجلاتك وتقدّمك بحسب دورك</span></a>
-    <a class="ix-tile" href="indicators.html"><i class="fa-solid fa-list-check"></i><b>المؤشرات والسجلات</b><span>كل المؤشرات (52) وحالة كل سجل ومجلده</span></a>
-    <a class="ix-tile" data-roles="admin" href="output.html"><i class="fa-solid fa-file-image"></i><b>تقرير الشواهد</b><span>أدرج صور المؤشر وأصدر التقرير PDF</span></a>
-    <a class="ix-tile" data-roles="admin" href="status-report.html"><i class="fa-solid fa-clipboard-list"></i><b>تقرير الحالة</b><span>أين نحن في جمع السجلات</span></a>
-  </div>
-
-  <h2 class="ph-h2">كيف نعمل؟</h2>
-  <ol class="ix-steps">
-    <li><b>نزّل القالب</b>من مجلد المؤشر في Drive (1_قيد_المراجعة) وعبّئه.</li>
-    <li><b>أعد رفعه ليُراجَع</b>بالاسم نفسه فوق الأصل؛ بعد مراجعة المشرف ونقله إلى «2_معتمد» يُحتسب مرفوعاً.</li>
-    <li><b>أصدر تقرير الشواهد</b>وارفعه في 3_تقرير_الشواهد (واحذف الهيكل الفارغ).</li>
-  </ol>
   <div class="ph-foot">منصة داخلية لمدارس دار الفرسان غير تابعة لهيئة تقويم التعليم والتدريب. النسبة الرسمية الآن على أساس «السجلات المنشأة»، وتتحول لاحقاً إلى «المرفوعة بعد المراجعة»؛ وهي لا تمثّل نتيجة تقويم أو اعتماداً.</div>
 </main>
-<script src="portal-config.js?v=9.1.1"></script>
-<script src="portal-names.js?v=9.1.1"></script>
-<script src="phase-data.js?v=9.1.1"></script>
-<script src="phase-core.js?v=9.1.1"></script>
-<script>
-(function () {
-  var P = window.PHC; if (!P) return;
-  P.onStatus(function (S) {
-    var t = P.totals(), live = document.getElementById("live");
-    document.getElementById("lp").textContent = P.pct(P.projP()) + "%";
-    document.getElementById("lps").textContent = "الأساس: " + P.basisTxt() + (S.live && !S.failed ? "" : " · لقطة " + (S.asof || ""));
-    document.getElementById("lr").textContent = t.ap + " / " + t.req; document.getElementById("lrs").textContent = "منشأة " + t.cr + " من " + t.req;
-    document.getElementById("la").textContent = t.review;
-    document.getElementById("lt").textContent = t.repCreated + " / " + t.ind; document.getElementById("lts").textContent = "منشأة · مربوطة " + t.repDone;
-    live.hidden = false;
-  });
-  P.load();
-})();
-</script>
 <script src="page-gate.js" data-lazy="1"></script>
 <script src="legal-notice.js"></script>
 <script src="content-protect.js"></script>
