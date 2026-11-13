@@ -24,7 +24,7 @@
   var ALL = ORDER.slice();
   var PAGES = {
     /* صفحات مرحلة ما بعد تصحيح المسار (المبنية من جديد): مفتوحة بحسب الدور بلا دخول */
-    "index.html": ALL, "home.html": ALL, "indicators.html": ALL,
+    "index.html": ALL, "home.html": ALL, "indicators.html": ALL, "progress.html": ALL,
     "report.html": ["admin", "sup", "member"]
     /* كل ما عداها قديم: لمدير النظام وحده (يُعدّ admin افتراضاً لأي صفحة غير مدرجة أعلاه) */
   };

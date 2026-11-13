@@ -47,7 +47,7 @@ var DOCS_FOLDER_IDS_NEW = { // مجلدات «الوثائق» المضافة ح
 var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word فقط (اضبطها عند تصميم refreshStatus الجديدة)
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.2.2";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.3.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5284,6 +5284,7 @@ function doPost(e) {
   try {
     var folder = DriveApp.getFolderById(ent.f);
     if (req.action === "uploadReport") return upJson_(upReport_(folder, req));
+    if (req.action === "uploadRecord") return upJson_(upRecord_(folder, req));
     if (req.action === "saveDraft") return upJson_(upSaveDraft_(folder, req));
     if (req.action === "loadDraft") return upJson_(upLoadDraft_(folder, req));
     return upJson_({ ok: false, error: "إجراء غير معروف." });
@@ -5308,6 +5309,31 @@ function upReport_(folder, req) {
   try { file.setDescription("رُفع عبر البوابة بواسطة: " + String(req.who || "غير محدد").slice(0, 60) + " — " + new Date().toISOString()); } catch (x) {}
   try { CacheService.getScriptCache().remove(CACHE_KEY_TREE); } catch (x) {}
   return { ok: true, id: file.getId(), url: file.getUrl(), photos: n, replaced: trashed };
+}
+/* رفع سجل معبّأ (v9.3.0): يحدَّد السجل باسمه (req.rec)، والاسم النهائي يحدده السكربت فلا يخطئ المستخدم.
+   يُستبدل ملف السجل في 1_قيد_المراجعة (القديم إلى السلة)، ويُرفض إن كان السجل معتمداً في 2_معتمد. Word (docx) فقط. */
+function upRecord_(folder, req) {
+  var ent = TREE[req.code], rec = null;
+  ent.r.forEach(function (x) { if (x.n === req.rec) rec = x; });
+  if (!rec) return { ok: false, error: "السجل غير معروف لهذا المؤشر." };
+  var ext = splitName_(req.name).ext;
+  if (ACCEPT_DOC_EXT.indexOf(ext) < 0) return { ok: false, error: "الصيغة المقبولة: " + ACCEPT_DOC_EXT.join(", ") + " فقط." };
+  var bytes; try { bytes = Utilities.base64Decode(String(req.file || "")); } catch (x) { return { ok: false, error: "محتوى الملف غير صالح." }; }
+  if (!bytes || bytes.length < MIN_BYTES.doc) return { ok: false, error: "الملف أصغر من الحد الأدنى." };
+  if (bytes.length > UP_MAX_PDF_BYTES) return { ok: false, error: "الملف أكبر من 20 ميغابايت." };
+  if (!(bytes[0] === 80 && bytes[1] === 75)) return { ok: false, error: "الملف ليس Word صالحاً (docx)." };
+  var rv = treeChild_(folder, TREE_REVIEW), ap = treeChild_(folder, TREE_APPROVED);
+  if (!rv) return { ok: false, error: "لا يوجد مجلد " + TREE_REVIEW + " لهذا المؤشر." };
+  var it, f;
+  if (ap) { it = ap.getFiles(); while (it.hasNext()) { f = it.next(); if (treeMatch_(f.getName(), req.code, rec)) return { ok: false, error: "هذا السجل معتمد؛ لا يُستبدل إلا بقرار المشرف." }; } }
+  var old = [], keep = null; it = rv.getFiles();
+  while (it.hasNext()) { f = it.next(); if (treeMatch_(f.getName(), req.code, rec)) { old.push(f); if (!keep) keep = f.getName(); } }
+  var name = keep ? splitName_(keep).base + ".docx" : req.code + "_" + treeSan_(rec.m) + "_v1.docx";
+  old.forEach(function (x) { x.setTrashed(true); });
+  var file = rv.createFile(Utilities.newBlob(bytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", name));
+  try { file.setDescription("رُفع عبر البوابة بواسطة: " + String(req.who || "غير محدد").slice(0, 60) + " — " + new Date().toISOString()); } catch (x) {}
+  try { CacheService.getScriptCache().remove(CACHE_KEY_TREE); } catch (x) {}
+  return { ok: true, id: file.getId(), name: name, replaced: old.length };
 }
 function upDraftName_(code) { return "مسودة_تقرير_" + code + ".json"; }
 function upSaveDraft_(folder, req) {

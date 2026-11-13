@@ -115,7 +115,8 @@
     var recs = i.recs.map(function (n) {
       var k = s.st[n] || "blank", f = s.fl[n], links = "";
       if (f && f[2]) links = '<span class="ph-rl"><a class="ph-btn sm" href="' + fileDl(f[2]) + '" target="_blank" rel="noopener" title="تنزيل ملف السجل مباشرة"><i class="fa-solid fa-download"></i> تنزيل</a><a class="ph-btn sm" href="' + fileView(f[2]) + '" target="_blank" rel="noopener" title="معاينة في Drive"><i class="fa-solid fa-eye"></i></a></span>';
-      return '<li class="ph-rec"><span class="ph-recn">' + esc(n) + "</span>" + links + chip(k) + "</li>"; }).join("");
+      var up = k === "approved" ? "" : '<button type="button" class="ph-btn sm" data-up="' + esc(i.code) + '" data-rec="' + esc(n) + '" title="ارفع الملف المعبّأ (Word) فيحلّ محل القالب"><i class="fa-solid fa-cloud-arrow-up"></i> رفع</button>';
+      return '<li class="ph-rec"><span class="ph-recn">' + esc(n) + "</span>" + links + up + chip(k) + (function () { var u = UPM[i.code + "|" + n]; return '<span class="ph-upm ' + (u ? u[1] : "") + '" role="status">' + (u ? esc(u[0]) : "") + "</span>"; })() + "</li>"; }).join("");
     var tag = i.dv ? '<span class="ph-tag" title="سجل متابعة مشتق من «إضاءات نحو تحقيق المؤشر» ويدخل في النسبة">سجل متابعة</span>' : "";
     return '<article class="ph-card" id="i-' + esc(i.code) + '" data-code="' + esc(i.code) + '">' +
       '<button type="button" class="ph-card-h" aria-expanded="' + open + '" data-toggle>' +
@@ -132,8 +133,37 @@
       '<a class="ph-btn" href="indicators.html?code=' + esc(i.code) + '"><i class="fa-solid fa-link"></i> رابط المؤشر</a></div>' +
       "</div></article>";
   }
+  /* رفع سجل معبّأ من البطاقة: لكل الأدوار (عضو/مشرف/مدير). السكربت يتحقق من الصيغة والاسم ويستبدل القالب. */
+  var UPM = {};
+  function whoAmI() {
+    try { var m = meGet(), R = window.PortalRole, r = R ? R.get() : ""; if (m && m.idx >= 0 && PH.teams[m.d]) return PH.teams[m.d].mem[m.idx]; if (m && PH.teams[m.d] && r === "sup") return PH.teams[m.d].sup; return (R && R.roles && R.roles[r] && (R.roles[r].name || R.roles[r])) || r || ""; } catch (e) { return ""; }
+  }
+  function uploadRecord(btn) {
+    var url = window.ETEC_STATUS_URL || "", li = btn.closest(".ph-rec"), out = li.querySelector(".ph-upm");
+    function say(t, c) { UPM[btn.dataset.up + "|" + btn.dataset.rec] = [t, c || ""]; out.textContent = t; out.className = "ph-upm " + (c || ""); }
+    if (!url) { say("الرفع غير مهيّأ.", "bad"); return; }
+    var inp = document.createElement("input"); inp.type = "file"; inp.accept = ".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    inp.onchange = function () {
+      var f = inp.files && inp.files[0]; if (!f) return;
+      if (!/\.docx$/i.test(f.name)) { say("الصيغة المقبولة: Word (docx) فقط.", "bad"); return; }
+      if (f.size > 20 * 1024 * 1024) { say("الملف أكبر من 20 ميغابايت.", "bad"); return; }
+      btn.disabled = true; say("جارٍ الرفع…", "");
+      var rd = new FileReader();
+      rd.onload = function () {
+        var b64 = String(rd.result).split(",")[1] || "";
+        fetch(url, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "uploadRecord", code: btn.dataset.up, rec: btn.dataset.rec, name: f.name, file: b64, who: whoAmI() }) })
+          .then(function (r) { return r.json(); })
+          .then(function (o) { btn.disabled = false; if (o && o.ok) { say("تم الرفع ✔ ويظهر «قيد المراجعة» بعد دقيقة.", "ok"); load(true); } else say((o && o.error) || "فشل الرفع.", "bad"); })
+          .catch(function () { btn.disabled = false; say("تعذّر الاتصال بالسكربت.", "bad"); });
+      };
+      rd.onerror = function () { btn.disabled = false; say("تعذّرت قراءة الملف.", "bad"); };
+      rd.readAsDataURL(f);
+    };
+    inp.click();
+  }
   function bindCards(root) {
     root.addEventListener("click", function (e) {
+      var ub = e.target.closest("[data-up]"); if (ub && root.contains(ub)) { uploadRecord(ub); return; }
       var h = e.target.closest("[data-toggle]"); if (!h || !root.contains(h)) return;
       var b = h.parentNode.querySelector(".ph-card-b"), ex = h.getAttribute("aria-expanded") === "true";
       h.setAttribute("aria-expanded", String(!ex)); if (ex) b.setAttribute("hidden", ""); else b.removeAttribute("hidden");
@@ -147,6 +177,7 @@
     var items = [
       ["home.html", "fa-house", role && roles[role] ? roles[role].hl : "مساحتي", "admin,sup,member,self"],
       ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "admin,sup,member,self"],
+      ["progress.html", "fa-chart-pie", "قراءة التقدّم", "admin,sup,member,self"],
       ["report.html", "fa-file-image", "تقرير الشواهد", "admin,sup,member"]
     ];
     var nav = items.filter(function (x) { return !role || x[3].split(",").indexOf(role) >= 0; }).map(function (x) {

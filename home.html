@@ -48,7 +48,7 @@
       main.innerHTML = '<h1 class="ph-h1">مساحتي</h1><p class="ph-lead">' + E(name) + " · " + E(P.DN[me.d]) + ' · <a href="#" data-change>تغيير الاسم</a></p>' +
         '<div class="ph-grid">' + stat("سجلاتي المرفوعة", t.ap + " / " + t.req, "بعد مراجعة المشرف · منشأة " + t.cr + " من " + t.req, "main") +
         stat("بانتظار التعبئة", t.blank, "قوالب فارغة تنتظرك") + stat("معبّأة قيد المراجعة", t.review, "رُفعت وتنتظر المشرف") + stat("تقارير الشواهد", t.repDone + " / " + t.ind, "مرفوعة") + "</div>" +
-        '<div class="ph-note"><b>كيف أعمل؟</b> افتح «مجلد المؤشر» ← نزّل القالب من «1_قيد_المراجعة» ← عبّئه ← أعد رفعه بالاسم نفسه فوق الأصل. يراجعه المشرف وينقله إلى «2_معتمد» فيُحتسب «مرفوعاً». ثم أصدر «تقرير الشواهد» من صفحته وارفعه في «3_تقرير_الشواهد» واحذف الهيكل الفارغ.</div>' +
+        '<div class="ph-note"><b>كيف أعمل؟</b> افتح بطاقة المؤشر ← «تنزيل» القالب ← عبّئه ← «رفع» من الصف نفسه (Word فقط) فيحلّ محل القالب. يراجعه المشرف ويعتمده فيُحتسب «مرفوعاً». ثم أصدر «تقرير الشواهد» من صفحته وارفعه بزر «رفع التقرير».</div>' +
         '<div class="ph-filters"><button type="button" class="ph-pill" aria-pressed="' + only + '" data-only>غير المرفوعة فقط</button><a class="ph-btn" href="indicators.html">كل مؤشرات المشروع</a></div>' +
         '<div id="cards">' + (list.length ? list.map(function (i) { return P.card(i, { owner: false }); }).join("") : '<div class="ph-empty">لا توجد مؤشرات مسندة لك في هذه القائمة.</div>') + "</div>";
       P.bindCards(main);

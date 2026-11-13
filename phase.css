@@ -82,3 +82,5 @@ table.ph-t{width:100%;border-collapse:collapse;background:#fff;border:1px solid 
 .ph-rl{display:inline-flex;gap:6px;margin-inline-start:auto;margin-inline-end:8px}
 .ph-btn.sm{padding:3px 9px;font-size:11.5px;border-radius:999px}
 .ph-rec{flex-wrap:wrap}
+
+.ph-upm{flex-basis:100%;font-size:11.5px;color:#475569}.ph-upm:empty{display:none}.ph-upm.ok{color:#15803d}.ph-upm.bad{color:#b91c1c}
