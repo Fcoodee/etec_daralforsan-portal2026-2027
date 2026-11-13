@@ -198,3 +198,5 @@ v9.4.1 — Print/PDF: removed the browser-added header (date/time + page title) 
 v9.4.2 — Report page: per-indicator evidence folder link. data/evidence_refs.json now accepts either a single URL string per indicator code or a list of {u,t} links; the report page shows a prominent 'open the evidence folder' button (download photos, then upload them to the report slots). Link list pending from FD.
 
 v9.4.3 — evidence_refs.json now holds the supplied evidence root and the four domain folders (_all, _domain). The report page falls back to the domain folder button when an indicator has no specific link; indicator-specific links still override.
+
+v9.4.4 — evidence_refs.json: added _criterion (11 criterion folders, 1.1-4.2, matched to the 2nd-edition numbering). Report page now opens the criterion folder first, then domain, then the root; indicator-specific links still override.
