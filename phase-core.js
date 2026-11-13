@@ -122,7 +122,7 @@
       '<ul class="ph-recs">' + recs + "</ul>" +
       '<div class="ph-row"><span class="ph-chip idle">منشأة ' + s.cr + "/" + s.req + '</span><span class="ph-chip ' + (s.ap ? "ok" : "idle") + '">مرفوعة (بعد المراجعة) ' + s.ap + "/" + s.req + "</span>" + repLine(s) + (s.review ? '<span class="ph-chip wip">معبّأة قيد المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
       '<div class="ph-actions"><a class="ph-btn pri" href="' + folderUrl(i) + '" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> مجلد المؤشر في Drive</a>' +
-      '<a class="ph-btn" data-roles="admin,sup,member" href="output.html?i=' + esc(i.code) + '"><i class="fa-solid fa-file-image"></i> تقرير الشواهد</a>' +
+      '<a class="ph-btn" data-roles="admin" href="output.html?i=' + esc(i.code) + '"><i class="fa-solid fa-file-image"></i> تقرير الشواهد</a>' +
       '<a class="ph-btn" href="indicators.html?code=' + esc(i.code) + '"><i class="fa-solid fa-link"></i> رابط المؤشر</a></div>' +
       "</div></article>";
   }
@@ -141,8 +141,8 @@
     var items = [
       ["home.html", "fa-house", role && roles[role] ? roles[role].hl : "مساحتي", "admin,sup,member,self"],
       ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "admin,sup,member,self"],
-      ["status-report.html", "fa-clipboard-list", "تقرير الحالة", "admin,sup,self"],
-      ["output.html", "fa-file-image", "تقرير الشواهد", "admin,sup,member"]
+      ["status-report.html", "fa-clipboard-list", "تقرير الحالة", "admin"],
+      ["output.html", "fa-file-image", "تقرير الشواهد", "admin"]
     ];
     var nav = items.filter(function (x) { return !role || x[3].split(",").indexOf(role) >= 0; }).map(function (x) {
       return '<a href="' + x[0] + '"' + (x[0] === active ? ' aria-current="page"' : "") + '><i class="fa-solid ' + x[1] + '"></i> ' + esc(x[2]) + "</a>"; }).join("");

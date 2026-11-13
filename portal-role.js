@@ -23,28 +23,19 @@
   /* من يرى أي صفحة. الصفحة خارج نطاق الدور تُعرض مع تنبيه ولا تُحجب (تخصيص عرض لا حماية). */
   var ALL = ORDER.slice();
   var PAGES = {
-    "index.html": ALL, "stages.html": ALL, "login.html": ALL, "home.html": ALL, "indicators.html": ALL, "evidence-link.html": ["admin"],
-    "indicator.html": ["admin", "sup", "member"],
-    "output.html": ["admin", "sup", "member"],
-    "hardcopy.html": ["admin", "sup"],
-    "approval-request.html": ["admin"],
-    "stage-wip.html": ["admin"],
-    "governance.html": ["admin", "sup", "self"],
-    "all_summary.html": ["admin"],
-    "status-report.html": ["admin", "sup", "self"],
-    "report-all.html": ["admin"],
-    "records-sources.html": ["admin", "sup", "self"],
-    "reference.html": ["admin", "sup", "self"],
-    "2026-2027.html": ["admin"],
-    "index-2025-2026.html": ["admin"]
+    /* صفحات مرحلة ما بعد تصحيح المسار (المبنية من جديد): مفتوحة بحسب الدور بلا دخول */
+    "index.html": ALL, "home.html": ALL, "indicators.html": ALL
+    /* كل ما عداها قديم: لمدير النظام وحده (يُعدّ admin افتراضاً لأي صفحة غير مدرجة أعلاه) */
   };
+
   /* روابط ثانوية مباشرة في مدخل كل دور (لا تتجاوز ثلاثة) */
   var SECOND = {
     admin:  [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["status-report.html", "fa-clipboard-list", "تقرير الحالة"], ["governance.html", "fa-scale-balanced", "الحوكمة الإدارية"]],
-    sup:    [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["output.html", "fa-file-image", "مولّد تقرير الشواهد"], ["status-report.html", "fa-clipboard-list", "تقرير الحالة"]],
-    member: [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["output.html", "fa-file-image", "مولّد تقرير الشواهد"]],
-    self:   [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["status-report.html", "fa-clipboard-list", "تقرير الحالة"], ["reference.html", "fa-book-open", "مرجع الهيئة"]]
+    sup:    [["indicators.html", "fa-list-check", "المؤشرات والسجلات"]],
+    member: [["indicators.html", "fa-list-check", "المؤشرات والسجلات"]],
+    self:   [["indicators.html", "fa-list-check", "المؤشرات والسجلات"]]
   };
+
 
   function pageKey() {
     var s = (location.pathname || "").split("/").pop();
@@ -114,8 +105,7 @@
     });
   }
   function allowed(page, role) {
-    var list = PAGES[page || pageKey()];
-    if (!list) return true;
+    var list = PAGES[page || pageKey()] || ["admin"];
     return !role || list.indexOf(role) >= 0;
   }
 
@@ -196,10 +186,12 @@
 
   /* صفحة لمدير النظام وحده: تُغطّى بنافذة دخول حتى يدخل المدير (تخصيص عرض لا حماية خادم) */
   function adminOnlyGate() {
-    var list = PAGES[pageKey()];
-    if (!list || list.length !== 1 || list[0] !== "admin" || role === "admin" || document.getElementById("rolGate")) return;
+    var list = PAGES[pageKey()] || ["admin"];
+    if (list.length !== 1 || list[0] !== "admin" || role === "admin" || document.getElementById("rolGate")) return;
+    var hs = document.createElement("style"); hs.id = "rolGateCss"; hs.textContent = "html.rol-lock body>*:not(#rolGate):not(#pg-overlay){display:none!important}"; document.head.appendChild(hs);
+    document.documentElement.classList.add("rol-lock");
     var d = document.createElement("div"); d.id = "rolGate";
-    d.style.cssText = "position:fixed;inset:0;z-index:2147482500;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;font-family:Cairo,Tahoma,sans-serif;background:linear-gradient(160deg,#002a2a,#0f172a)";
+    d.style.cssText = "position:fixed;inset:0;z-index:2147483100;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;font-family:Cairo,Tahoma,sans-serif;background:linear-gradient(160deg,#002a2a,#0f172a)";
     d.innerHTML = '<div style="background:#fff;border-radius:20px;max-width:420px;width:100%;padding:26px;text-align:right;border-top:6px solid #c29b38"><h2 style="margin:0 0 8px;font-size:17px;font-weight:900;color:#003d3d">هذه الصفحة لمدير النظام</h2><p style="margin:0 0 14px;font-size:13px;line-height:1.9;color:#475569">يحتاج مدير النظام وحده إلى رمز مستخدم وكلمة مرور.</p>' +
       '<button id="rolGo" type="button" style="width:100%;border:0;border-radius:12px;background:#006666;color:#fff;font:800 14px Cairo,Tahoma,sans-serif;padding:12px;cursor:pointer">دخول مدير النظام</button>' +
       '<a href="index.html" style="display:block;text-align:center;margin-top:12px;font-size:12px;color:#006666">العودة إلى اختيار الدور</a></div>';
@@ -208,7 +200,7 @@
   }
   function run() { css(); applyData(); bar(); home(); adminOnlyGate(); }
   window.PortalRole = { get: function () { return role; }, set: set, choose: choose, roles: ROLES, order: ORDER, pages: PAGES, allowed: allowed, valid: valid, refresh: function () { role = get(); run(); } };
-  window.addEventListener("etec:utchange", function () { role = get(); try { document.documentElement.setAttribute("data-role", role); } catch (e) {} applyData(); });
+  window.addEventListener("etec:utchange", function () { role = get(); if (role === "admin") { var g = document.getElementById("rolGate"); if (g) g.remove(); document.documentElement.classList.remove("rol-lock"); } try { document.documentElement.setAttribute("data-role", role); } catch (e) {} applyData(); });
   window.addEventListener("etec:logout", function () { if (role === "admin") { try { sessionStorage.removeItem(SKEY); sessionStorage.removeItem(ADMK); } catch (e) {} role = ""; try { document.documentElement.setAttribute("data-role", ""); } catch (e) {} applyData(); } });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run); else run();
 })();
