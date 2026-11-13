@@ -108,18 +108,10 @@
   /* معاينة/تنزيل التقرير المرفوع (ملف فيه صور) — لكل الأدوار */
   function repView(s) {
     var fs = (s.rep.files || []).filter(function (f) { return f.valid && f.n > 0 && f.id; });
+    if (!fs.length) return '<span class="ph-btn ph-eye off" aria-disabled="true" title="لا يوجد تقرير مرفوع بعد"><i class="fa-solid fa-eye"></i> معاينة التقرير</span>';
     return fs.map(function (f) {
-      return '<a class="ph-btn pri" href="' + fileView(f.id) + '" target="_blank" rel="noopener" title="' + esc(f.name) + '"><i class="fa-solid fa-eye"></i> معاينة التقرير</a><a class="ph-btn" href="' + fileDl(f.id) + '" target="_blank" rel="noopener"><i class="fa-solid fa-download"></i> تنزيل التقرير</a>';
+      return '<a class="ph-btn ph-eye on" href="' + fileView(f.id) + '" target="_blank" rel="noopener" title="' + esc(f.name) + '"><i class="fa-solid fa-eye"></i> معاينة التقرير</a><a class="ph-btn" href="' + fileDl(f.id) + '" target="_blank" rel="noopener"><i class="fa-solid fa-download"></i> تنزيل التقرير</a>';
     }).join("");
-  }
-  /* معاينة/تنزيل التقرير المرفوع (أعلى ملف صالح عدداً للصور) */
-  function repFile(s) {
-    var best = null; ((s.rep && s.rep.files) || []).forEach(function (f) { if (f && f.id && f.valid && f.n > 0 && (!best || f.n > best.n)) best = f; });
-    return best;
-  }
-  function repLinks(s) {
-    var f = s.repState === "done" ? repFile(s) : null; if (!f) return "";
-    return '<a class="ph-btn sm" href="' + fileView(f.id) + '" target="_blank" rel="noopener" title="معاينة التقرير المرفوع في Drive"><i class="fa-solid fa-eye"></i> معاينة التقرير</a><a class="ph-btn sm" href="' + fileDl(f.id) + '" target="_blank" rel="noopener" title="تنزيل التقرير المرفوع"><i class="fa-solid fa-download"></i></a>';
   }
   function repLine(s) {
     if (s.repState === "done") return '<span class="ph-chip ok">التقرير: مرفوع (' + s.rep.photos + " صور)</span>";
@@ -130,7 +122,9 @@
     o = o || {}; var s = sOf(i), open = !!o.open, me = ownerName(i);
     var recs = i.recs.map(function (n) {
       var k = s.st[n] || "blank", f = s.fl[n], links = "";
-      if (f && f[2]) links = '<span class="ph-rl"><a class="ph-btn sm" href="' + fileDl(f[2]) + '" target="_blank" rel="noopener" title="تنزيل ملف السجل مباشرة"><i class="fa-solid fa-download"></i> تنزيل</a><a class="ph-btn sm" href="' + fileView(f[2]) + '" target="_blank" rel="noopener" title="معاينة في Drive"><i class="fa-solid fa-eye"></i></a></span>';
+      var filledF = !!(f && f[2] && f[0] === 1);
+      links = '<span class="ph-rl">' + (f && f[2] ? '<a class="ph-btn sm" href="' + fileDl(f[2]) + '" target="_blank" rel="noopener" title="تنزيل ملف السجل مباشرة"><i class="fa-solid fa-download"></i> تنزيل</a>' : "") +
+        (filledF ? '<a class="ph-btn sm ph-eye on" href="' + fileView(f[2]) + '" target="_blank" rel="noopener" title="معاينة السجل المعبّأ في Drive" aria-label="معاينة السجل المعبّأ"><i class="fa-solid fa-eye"></i></a>' : '<span class="ph-btn sm ph-eye off" aria-disabled="true" title="لا توجد نسخة معبّأة بعد"><i class="fa-solid fa-eye"></i></span>') + "</span>";
       var up = k === "approved" ? "" : '<button type="button" class="ph-btn sm" data-up="' + esc(i.code) + '" data-rec="' + esc(n) + '" title="ارفع الملف المعبّأ (Word) فيحلّ محل القالب"><i class="fa-solid fa-cloud-arrow-up"></i> رفع</button>';
       return '<li class="ph-rec"><span class="ph-recn">' + esc(n) + "</span>" + links + up + chip(k) + (function () { var u = UPM[i.code + "|" + n]; return '<span class="ph-upm ' + (u ? u[1] : "") + '" role="status">' + (u ? esc(u[0]) : "") + "</span>"; })() + "</li>"; }).join("");
     var tag = i.dv ? '<span class="ph-tag" title="سجل متابعة مشتق من «إضاءات نحو تحقيق المؤشر» ويدخل في النسبة">سجل متابعة</span>' : "";
@@ -142,7 +136,7 @@
       '<div class="ph-card-b"' + (open ? "" : " hidden") + ">" +
       '<p class="ph-stmt">' + esc(i.text) + "</p>" +
       '<ul class="ph-recs">' + recs + "</ul>" +
-      '<div class="ph-row"><span class="ph-chip idle">منشأة ' + s.cr + "/" + s.req + '</span><span class="ph-chip ' + (s.ap ? "ok" : "idle") + '">مرفوعة (بعد المراجعة) ' + s.ap + "/" + s.req + "</span>" + repLine(s) + repLinks(s) + (s.review ? '<span class="ph-chip wip">معبّأة قيد المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
+      '<div class="ph-row"><span class="ph-chip idle">منشأة ' + s.cr + "/" + s.req + '</span><span class="ph-chip ' + (s.ap ? "ok" : "idle") + '">مرفوعة (بعد المراجعة) ' + s.ap + "/" + s.req + "</span>" + repLine(s) + (s.review ? '<span class="ph-chip wip">معبّأة قيد المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
       '<div class="ph-actions">' + repView(s) + '<a class="ph-btn pri" href="' + folderUrl(i) + '" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> مجلد المؤشر في Drive</a>' +
       (s.fo.rv ? '<a class="ph-btn" href="' + subUrl(s.fo.rv) + '" target="_blank" rel="noopener" title="ارفع النسخة المعبّأة بالاسم نفسه"><i class="fa-solid fa-cloud-arrow-up"></i> رفع السجل المعبّأ</a>' : "") +
       '<a class="ph-btn" data-roles="admin,sup,member" href="report.html?code=' + esc(i.code) + '"><i class="fa-solid fa-file-image"></i> تقرير الشواهد</a>' +
