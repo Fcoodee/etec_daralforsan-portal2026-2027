@@ -62,25 +62,46 @@
     });
   }
 
-  /* ===== رسم القالب ===== */
+  /* ===== رسم القالب (الورقة المطبوعة بالإنجليزية؛ المجالات والمعايير والمؤشرات والسجلات والوثائق والإضاءات بلغتين) ===== */
+  var I = window.ETEC_I18N || { dom: {}, crit: {}, ind: {}, rec: {}, docs: {} }, HL = window.ETEC_HL || {};
+  function bi(en, ar, cls) { return '<div class="bi ' + (cls || "") + '"><div class="en">' + E(en || ar || "") + '</div><div class="ar" dir="rtl" lang="ar">' + E(ar || "") + "</div></div>"; }
   function slotHtml(s, i) {
     var h = has(s), src = s.img || driveImg(s.link);
-    return '<div class="slot' + (h ? "" : " empty") + '" data-i="' + i + '"><div class="ph" data-pick tabindex="0" role="button" aria-label="رفع صورة للخانة ' + (i + 1) + '">' +
-      (h ? '<img alt="شاهد ' + (i + 1) + '" src="' + E(src) + '">' : '<span class="hint"><i class="fa-regular fa-image" style="font-size:26px"></i><br>اضغط لاختيار صورة أو اسحبها هنا</span>') +
-      '<span class="num">' + (i + 1) + "</span>" + (h ? '<button type="button" class="x" data-rm title="إزالة الصورة" aria-label="إزالة">×</button>' : "") + "</div>" +
-      '<div class="meta"><textarea class="in" data-f="cap" rows="2" placeholder="وصف الشاهد: ماذا يُظهر وأي نشاط؟">' + E(s.cap) + '</textarea>' +
-      '<div class="in" style="display:grid;grid-template-columns:1fr 1fr;gap:5px"><input type="date" data-f="date" value="' + E(s.date) + '" aria-label="التاريخ"><input type="text" data-f="src" value="' + E(s.src) + '" placeholder="السجل/المصدر" aria-label="المصدر"></div>' +
-      '<input class="in" type="text" dir="ltr" data-f="link" value="' + E(s.link) + '" placeholder="أو الصق رابط صورة (Drive أو غيره)" aria-label="رابط صورة">' +
-      '<div class="pt">' + ptText(s) + "</div></div></div>";
+    return '<div class="slot' + (h ? "" : " empty") + '" data-i="' + i + '"><div class="ph" data-pick tabindex="0" role="button" aria-label="Upload photo for slot ' + (i + 1) + '">' +
+      (h ? '<img alt="Evidence ' + (i + 1) + '" src="' + E(src) + '">' : '<span class="hint"><i class="fa-regular fa-image" style="font-size:26px"></i><br>Click to choose a photo or drop it here</span>') +
+      '<span class="num">' + (i + 1) + "</span>" + (h ? '<button type="button" class="x" data-rm title="Remove photo" aria-label="Remove">×</button>' : "") + "</div>" +
+      '<div class="meta"><textarea class="in" data-f="cap" dir="auto" rows="2" placeholder="Evidence description: what does it show, and which activity?">' + E(s.cap) + '</textarea>' +
+      '<div class="in" style="display:grid;grid-template-columns:1fr 1fr;gap:5px"><input type="date" data-f="date" value="' + E(s.date) + '" aria-label="Date"><input type="text" dir="auto" data-f="src" value="' + E(s.src) + '" placeholder="Record / source" aria-label="Source"></div>' +
+      '<input class="in" type="text" dir="ltr" data-f="link" value="' + E(s.link) + '" placeholder="Or paste an image link (Drive or other)" aria-label="Image link">' +
+      '<div class="pt" dir="auto">' + ptText(s) + "</div></div></div>";
   }
   function ptText(s) { var a = []; if (s.cap) a.push(E(s.cap)); var m = []; if (s.date) m.push(E(s.date)); if (s.src) m.push(E(s.src)); if (m.length) a.push("<small>" + m.join(" · ") + "</small>"); return a.join("<br>"); }
+  function listSec(en, ar, items, empty) {
+    return '<section class="sec"><h2 class="sec-t"><span>' + en + '</span><span dir="rtl" lang="ar">' + ar + "</span></h2>" +
+      (items.length ? '<ol class="sec-l">' + items.join("") + "</ol>" : '<p class="sec-e">' + empty + "</p>") + "</section>";
+  }
   function render() {
-    var i = ind(), R = P.sOf(i), now = new Date().toLocaleDateString("ar-SA-u-ca-gregory", { dateStyle: "long" });
+    var i = ind(), now = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+    var recs = i.recs.map(function (r) { return "<li>" + bi(I.rec[r], r) + "</li>"; });
+    var docs = (I.docs[i.code] || []).map(function (x) { return "<li>" + bi(x.en, x.ar) + "</li>"; });
+    var hl = (HL[i.code] || []).map(function (x) { return "<li>" + bi(x.en, x.ar) + "</li>"; });
     $("sheet").innerHTML =
-      '<div class="sh-head"><img src="logo1.png" alt="دار الفرسان"><div class="tt"><b>تقرير الشواهد</b><small>قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان · العام الدراسي 2026-2027</small></div><img src="logo0.png" alt="الدبلوما"></div>' +
-      '<div class="sh-ind"><span class="c">' + E(i.code) + "</span><b>" + E(i.st) + "</b><br>" + E(P.DN[i.d]) + " · " + E(i.cn) + "<br>" + E(i.text) + "<br><small>المسؤول: " + E(P.ownerName(i)) + " · التاريخ: " + E(now) + "</small></div>" +
+      '<div class="sh-head"><div class="logos"><img src="logo1.png" alt="Dar Al-Forsan Schools"><img src="logo0.png" alt="American Diploma"></div>' +
+      '<div class="tt"><b>Evidence Report</b><small>Dar Al-Forsan Schools — American Diploma Section (Boys) · Academic Year 2026–2027</small>' +
+      '<small>School Evaluation &amp; Accreditation Standards — General Education 2026</small></div></div>' +
+      '<div class="sh-ind"><div class="sh-two">' +
+        '<div><span class="lb">Domain</span>' + bi(I.dom[i.d], P.DN[i.d]) + "</div>" +
+        '<div><span class="lb">Criterion</span>' + bi(I.crit[i.c], i.cn) + "</div></div>" +
+      '<div class="sh-ic"><span class="c">' + E(i.code) + '</span><span class="lb">Indicator</span></div>' + bi(I.ind[i.code], i.text, "ind") +
+      '<div class="sh-meta">Owner: ' + E(P.ownerName(i)) + " · Date: " + E(now) + "</div></div>" +
+      '<h2 class="sec-t one"><span>Evidence Photos</span></h2>' +
       '<div class="sh-grid" id="grid">' + slots.map(slotHtml).join("") + "</div>" +
-      '<div class="sh-foot"><span>عدد الشواهد: <b>' + count() + "</b></span><span>منصة داخلية غير تابعة لهيئة تقويم التعليم والتدريب</span></div>";
+      '<div class="pg2">' +
+      listSec("Records", "سجلات", recs, "No records are defined for this indicator.") +
+      listSec("Documents", "وثائق", docs, "No supporting documents are proposed for this indicator.") +
+      listSec("Highlights toward achieving the indicator", "إضاءات نحو تحقيق المؤشر", hl, "Official highlights will be added here.").replace('<section class="sec">', '<section class="sec' + (hl.length ? "" : " noprint") + '">') +
+      "</div>" +
+      '<div class="sh-foot"><span>Evidence photos: <b>' + count() + "</b> · Unofficial English translation — the Arabic text is the reference.</span><span>Internal platform — not affiliated with the Education and Training Evaluation Commission (ETEC).</span></div>";
     info(); $("addSlot").disabled = slots.length >= MAXS;
   }
   function info() {
@@ -88,6 +109,7 @@
     $("slotInfo").textContent = n + " صور · الهدف لاعتبار التقرير «مربوطاً»: " + tg + (n >= tg ? " ✔" : "");
     $("fname").textContent = fname();
     $("btnPrint").disabled = n < 1;
+    var f = document.querySelector(".sh-foot b"); if (f) f.textContent = n;
   }
 
   /* ===== الأحداث ===== */
