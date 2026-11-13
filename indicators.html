@@ -6,9 +6,9 @@
 <meta name="robots" content="noindex,nofollow">
 <title>المؤشرات والسجلات — مشروع الاعتماد 2026-2027 — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=9.0.1">
-<script src="portal-meta.js?v=9.0.1"></script>
-<script src="portal-role.js?v=9.0.1"></script>
+<link rel="stylesheet" href="phase.css?v=9.1.0">
+<script src="portal-meta.js?v=9.1.0"></script>
+<script src="portal-role.js?v=9.1.0"></script>
 </head>
 <body>
 <div id="chrome"></div>
@@ -19,20 +19,20 @@
     <input id="q" type="search" placeholder="ابحث بالرمز أو الاسم أو السجل…" aria-label="بحث">
     <select id="fd" aria-label="المجال"><option value="">كل المجالات</option></select>
     <select id="fs" aria-label="الحالة">
-      <option value="">كل الحالات</option><option value="none">لم تبدأ</option><option value="part">جارٍ (بعض السجلات)</option><option value="review">فيها سجلات قيد المراجعة</option><option value="approved">فيها سجلات معتمدة</option><option value="done">مكتملة</option><option value="norep">بلا تقرير شواهد</option>
+      <option value="">كل الحالات</option><option value="none">لم تبدأ التعبئة</option><option value="review">فيها سجلات معبّأة قيد المراجعة</option><option value="approved">فيها سجلات مرفوعة (بعد المراجعة)</option><option value="done">كل سجلاتها مرفوعة</option><option value="norep">تقرير الشواهد غير منشأ</option><option value="shell">تقرير الشواهد بانتظار الربط</option><option value="part">تقرير الشواهد قيد الربط</option><option value="linked">تقرير الشواهد مربوط</option>
     </select>
     <select id="fo" aria-label="المسؤول"><option value="">كل المسؤولين</option></select>
     <button type="button" class="ph-pill" id="mine" aria-pressed="false" hidden>مؤشراتي فقط</button>
   </div>
   <div id="sum" class="ph-lead" role="status" aria-live="polite"></div>
   <div id="list"></div>
-  <div class="ph-foot">«قيد المراجعة» = ملف معبّأ في «1_قيد_المراجعة»، و«معتمد» = في «2_معتمد»، و«جاهز للتعبئة» = القالب الفارغ لم يُعبَّأ بعد. القرارات النهائية («مطابق») تُتخذ داخل Drive.</div>
+  <div class="ph-foot">«منشأ» = الملف موجود في مجلد المؤشر، و«معبّأ · قيد المراجعة» = معبّأ في «1_قيد_المراجعة» ولا يُحتسب بعد، و«مرفوع (بعد المراجعة)» = معبّأ ومراجَع في «2_معتمد». القرارات النهائية («مطابق») تُتخذ داخل Drive.</div>
 </main>
 
-<script src="portal-config.js?v=9.0.1"></script>
-<script src="portal-names.js?v=9.0.1"></script>
-<script src="phase-data.js?v=9.0.1"></script>
-<script src="phase-core.js?v=9.0.1"></script>
+<script src="portal-config.js?v=9.1.0"></script>
+<script src="portal-names.js?v=9.1.0"></script>
+<script src="phase-data.js?v=9.1.0"></script>
+<script src="phase-core.js?v=9.1.0"></script>
 <script>
 (function () {
   "use strict";
@@ -53,18 +53,20 @@
     if (onlyMine && me && !(i.d === me.d && i.own === me.idx)) return false;
     if (t && (i.code + " " + i.st + " " + i.cn + " " + i.text + " " + i.recs.join(" ")).toLowerCase().indexOf(t) < 0) return false;
     switch (fs.value) {
-      case "none": if (s.up > 0) return false; break;
-      case "part": if (!(s.up > 0 && s.up < s.req)) return false; break;
+      case "none": if (s.up > 0 || s.ap > 0) return false; break;
+      case "part": if (s.repState !== "part") return false; break;
+      case "shell": if (s.repState !== "shell") return false; break;
+      case "linked": if (s.repState !== "done") return false; break;
       case "review": if (!s.review) return false; break;
       case "approved": if (!s.ap) return false; break;
-      case "done": if (s.up < s.req) return false; break;
+      case "done": if (s.ap < s.req) return false; break;
       case "norep": if (s.repState !== "none") return false; break;
     }
     return true;
   }
   function draw() {
     var a = P.PH.inds.filter(match), t = P.totals(a);
-    sum.textContent = a.length + " مؤشراً · " + t.req + " سجلاً · مرفوع " + t.up + " · قيد المراجعة " + t.review + " · معتمد " + t.ap;
+    sum.textContent = a.length + " مؤشراً · " + t.req + " سجلاً · منشأة " + t.cr + " · مرفوعة (بعد المراجعة) " + t.ap + " · معبّأة قيد المراجعة " + t.review;
     list.innerHTML = a.length ? a.map(function (i) { return P.card(i, { open: i.code === focus }); }).join("") : '<div class="ph-empty">لا توجد مؤشرات تطابق هذا التصفية.</div>';
     if (window.PortalRole) { var els = list.querySelectorAll("[data-roles]"); for (var k = 0; k < els.length; k++) els[k].classList.toggle("pr-off", !!role && els[k].getAttribute("data-roles").split(",").indexOf(role) < 0); }
     if (first && focus) { var el = document.getElementById("i-" + focus); if (el) el.scrollIntoView({ block: "center" }); }

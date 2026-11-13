@@ -6,18 +6,18 @@
 <meta name="robots" content="noindex,nofollow">
 <title>مساحتي — مشروع الاعتماد 2026-2027 — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=9.0.1">
-<script src="portal-meta.js?v=9.0.1"></script>
-<script src="portal-role.js?v=9.0.1"></script>
+<link rel="stylesheet" href="phase.css?v=9.1.0">
+<script src="portal-meta.js?v=9.1.0"></script>
+<script src="portal-role.js?v=9.1.0"></script>
 </head>
 <body>
 <div id="chrome"></div>
 <main class="ph-main" id="main"><div class="ph-empty">جارٍ التحميل…</div></main>
 
-<script src="portal-config.js?v=9.0.1"></script>
-<script src="portal-names.js?v=9.0.1"></script>
-<script src="phase-data.js?v=9.0.1"></script>
-<script src="phase-core.js?v=9.0.1"></script>
+<script src="portal-config.js?v=9.1.0"></script>
+<script src="portal-names.js?v=9.1.0"></script>
+<script src="phase-data.js?v=9.1.0"></script>
+<script src="phase-core.js?v=9.1.0"></script>
 <script>
 (function () {
   "use strict";
@@ -44,12 +44,12 @@
     }
     var mine = P.PH.inds.filter(function (i) { return i.d === me.d && i.own === me.idx; }), t = P.totals(mine), name = P.PH.teams[me.d].mem[me.idx], only = false;
     function draw() {
-      var list = only ? mine.filter(function (i) { return P.sOf(i).p < 1; }) : mine;
+      var list = only ? mine.filter(function (i) { return P.sOf(i).pu < 1; }) : mine;
       main.innerHTML = '<h1 class="ph-h1">مساحتي</h1><p class="ph-lead">' + E(name) + " · " + E(P.DN[me.d]) + ' · <a href="#" data-change>تغيير الاسم</a></p>' +
-        '<div class="ph-grid">' + stat("سجلاتي المرفوعة", t.up + " / " + t.req, pctTxt(t.p) + " من المطلوب", "main") +
-        stat("جاهزة للتعبئة", t.blank, "قوالب فارغة تنتظرك") + stat("قيد المراجعة", t.review, "رُفعت وتنتظر المشرف") + stat("تقارير الشواهد", t.repDone + " / " + t.ind, "تقارير مكتملة (6 صور)") + "</div>" +
-        '<div class="ph-note"><b>كيف أعمل؟</b> افتح «مجلد المؤشر» ← نزّل القالب من «1_قيد_المراجعة» ← عبّئه ← أعد رفعه بالاسم نفسه فوق الأصل. ثم أصدر «تقرير الشواهد» من الصفحة المخصصة وارفعه في «3_تقرير_الشواهد».</div>' +
-        '<div class="ph-filters"><button type="button" class="ph-pill" aria-pressed="' + only + '" data-only>غير المكتملة فقط</button><a class="ph-btn" href="indicators.html">كل مؤشرات المشروع</a></div>' +
+        '<div class="ph-grid">' + stat("سجلاتي المرفوعة", t.ap + " / " + t.req, "بعد مراجعة المشرف · منشأة " + t.cr + " من " + t.req, "main") +
+        stat("بانتظار التعبئة", t.blank, "قوالب فارغة تنتظرك") + stat("معبّأة قيد المراجعة", t.review, "رُفعت وتنتظر المشرف") + stat("تقارير الشواهد", t.repDone + " / " + t.ind, "مربوطة (" + P.target() + " صور) · منشأة " + t.repCreated) + "</div>" +
+        '<div class="ph-note"><b>كيف أعمل؟</b> افتح «مجلد المؤشر» ← نزّل القالب من «1_قيد_المراجعة» ← عبّئه ← أعد رفعه بالاسم نفسه فوق الأصل. يراجعه المشرف وينقله إلى «2_معتمد» فيُحتسب «مرفوعاً». ثم أصدر «تقرير الشواهد» من صفحته وارفعه في «3_تقرير_الشواهد» واحذف الهيكل الفارغ.</div>' +
+        '<div class="ph-filters"><button type="button" class="ph-pill" aria-pressed="' + only + '" data-only>غير المرفوعة فقط</button><a class="ph-btn" href="indicators.html">كل مؤشرات المشروع</a></div>' +
         '<div id="cards">' + (list.length ? list.map(function (i) { return P.card(i, { owner: false }); }).join("") : '<div class="ph-empty">لا توجد مؤشرات مسندة لك في هذه القائمة.</div>') + "</div>";
       P.bindCards(main);
       main.querySelector("[data-only]").addEventListener("click", function () { only = !only; draw(); });
@@ -64,12 +64,12 @@
     var me = P.me.get();
     if (!me) { main.innerHTML = '<h1 class="ph-h1">فريقي</h1><p class="ph-lead">اختر مجال فريقك مرة واحدة.</p>' + pickDomain("أي فريق تشرف عليه؟"); bindDomain(function (d) { P.me.set({ d: d, idx: -1 }); viewSup(); }); return; }
     var T = P.PH.teams[me.d], team = P.PH.inds.filter(function (i) { return i.d === me.d; }), tt = P.totals(team);
-    var rows = T.mem.map(function (n, x) { var l = team.filter(function (i) { return i.own === x; }), t = P.totals(l); return '<tr><td>' + E(n) + '</td><td class="n">' + l.length + '</td><td class="n" dir="ltr">' + t.up + " / " + t.req + '</td><td class="n">' + t.review + '</td><td class="n">' + t.repDone + " / " + l.length + "</td><td>" + P.bar(t.p) + "</td></tr>"; }).join("");
+    var rows = T.mem.map(function (n, x) { var l = team.filter(function (i) { return i.own === x; }), t = P.totals(l); return '<tr><td>' + E(n) + '</td><td class="n">' + l.length + '</td><td class="n" dir="ltr">' + t.ap + " / " + t.req + '</td><td class="n">' + t.review + '</td><td class="n">' + t.repDone + " / " + l.length + "</td><td>" + P.bar2(t.pu, t.pc) + "</td></tr>"; }).join("");
     var wait = [];
     team.forEach(function (i) { var s = P.sOf(i); i.recs.forEach(function (n) { if (s.st[n] === "review") wait.push({ i: i, n: n }); }); });
     main.innerHTML = '<h1 class="ph-h1">فريقي</h1><p class="ph-lead">' + E(T.sup) + " · " + E(P.DN[me.d]) + ' · <a href="#" data-change>تغيير الفريق</a></p>' +
-      '<div class="ph-grid">' + stat("تقدّم الفريق", pctTxt(tt.p), tt.up + " من " + tt.req + " سجلاً", "main") + stat("بانتظار مراجعتك", tt.review, "سجلات رُفعت معبّأة") + stat("معتمدة", tt.ap, "في «2_معتمد»") + stat("مؤشرات لم تبدأ", tt.ind - tt.started, "من " + tt.ind) + "</div>" +
-      '<h2 class="ph-h2">أعضاء الفريق</h2><table class="ph-t"><thead><tr><th>العضو</th><th>مؤشرات</th><th>مرفوع / مطلوب</th><th>بانتظار المراجعة</th><th>تقارير الشواهد</th><th>التقدّم</th></tr></thead><tbody>' + rows + "</tbody></table>" +
+      '<div class="ph-grid">' + stat("تقدّم الفريق (" + P.basisTxt() + ")", pctTxt(tt.p), "مرفوعة بعد المراجعة " + tt.ap + " من " + tt.req + " · منشأة " + tt.cr, "main") + stat("بانتظار مراجعتك", tt.review, "سجلات معبّأة قيد المراجعة") + stat("مرفوعة", tt.ap, "في «2_معتمد»") + stat("لم تبدأ التعبئة", tt.ind - tt.started, "مؤشرات من " + tt.ind) + "</div>" +
+      '<h2 class="ph-h2">أعضاء الفريق</h2><table class="ph-t"><thead><tr><th>العضو</th><th>مؤشرات</th><th>مرفوعة / مطلوب</th><th>قيد المراجعة</th><th>تقارير مربوطة</th><th>منشأة ◂ مرفوعة</th></tr></thead><tbody>' + rows + "</tbody></table>" +
       '<h2 class="ph-h2">بانتظار مراجعتك <span class="ph-chip wip">' + wait.length + "</span></h2>" +
       (wait.length ? '<div class="ph-box"><ul class="ph-recs">' + wait.map(function (w) { return '<li class="ph-rec"><span class="ph-recn"><a href="indicators.html?code=' + E(w.i.code) + '"><b dir="ltr">' + E(w.i.code) + "</b></a> · " + E(w.n) + ' <small>(' + E(P.ownerName(w.i)) + ')</small></span><a class="ph-btn" target="_blank" rel="noopener" href="' + P.folderUrl(w.i) + '">افتح المجلد</a></li>'; }).join("") + "</ul></div>" : '<div class="ph-empty">لا توجد سجلات بانتظار المراجعة الآن.</div>') +
       '<h2 class="ph-h2">مؤشرات الفريق</h2><div id="cards">' + team.map(function (i) { return P.card(i); }).join("") + "</div>";
@@ -80,12 +80,12 @@
   /* ===== مدير النظام ومشرف التقويم الذاتي: الصورة الكاملة ===== */
   function viewAll() {
     var t = P.totals(), isAdmin = role === "admin", T = P.PH.teams;
-    var doms = [1, 2, 3, 4].map(function (d) { var l = P.PH.inds.filter(function (i) { return i.d === d; }), x = P.totals(l); return '<div class="ph-stat"><div class="l">' + E(P.DN[d]) + '</div><div class="v" dir="ltr" style="text-align:right">' + pctTxt(P.domP(d)) + '</div><div class="s">' + x.up + " من " + x.req + " سجلاً · " + l.length + " مؤشراً</div>" + P.bar(P.domP(d)) + "</div>"; }).join("");
-    var crit = P.critList().map(function (c) { return { c: c, p: P.critP(c.c) }; }).sort(function (a, b) { return a.p - b.p || (a.c.c < b.c.c ? -1 : 1); });
-    var crows = crit.map(function (x) { var l = P.PH.inds.filter(function (i) { return i.c === x.c.c; }), tt = P.totals(l); return '<tr><td class="n" dir="ltr">' + E(x.c.c) + "</td><td>" + E(x.c.cn) + "</td><td>" + E(P.DN[x.c.d]) + '</td><td class="n" dir="ltr">' + tt.up + " / " + tt.req + "</td><td>" + P.bar(x.p) + '</td><td class="n">' + pctTxt(x.p) + "</td></tr>"; }).join("");
-    var trows = [1, 2, 3, 4].map(function (d) { var l = P.PH.inds.filter(function (i) { return i.d === d; }), x = P.totals(l); var ms = T[d].mem.map(function (n, k) { var q = P.totals(l.filter(function (i) { return i.own === k; })); return E(n) + ' <small dir="ltr">(' + q.up + "/" + q.req + ")</small>"; }).join(" · ");
+    var doms = [1, 2, 3, 4].map(function (d) { var l = P.PH.inds.filter(function (i) { return i.d === d; }), x = P.totals(l); return '<div class="ph-stat"><div class="l">' + E(P.DN[d]) + '</div><div class="v" dir="ltr" style="text-align:right">' + pctTxt(P.domP(d)) + '</div><div class="s">منشأة ' + x.cr + " · مرفوعة " + x.ap + " من " + x.req + " سجلاً · " + l.length + " مؤشراً</div>" + P.bar2(P.domP(d, "u"), P.domP(d, "c")) + "</div>"; }).join("");
+    var crit = P.critList().map(function (c) { return { c: c, p: P.critP(c.c, "u"), pc: P.critP(c.c, "c") }; }).sort(function (a, b) { return a.p - b.p || (a.c.c < b.c.c ? -1 : 1); });
+    var crows = crit.map(function (x) { var l = P.PH.inds.filter(function (i) { return i.c === x.c.c; }), tt = P.totals(l); return '<tr><td class="n" dir="ltr">' + E(x.c.c) + "</td><td>" + E(x.c.cn) + "</td><td>" + E(P.DN[x.c.d]) + '</td><td class="n" dir="ltr">' + tt.ap + " / " + tt.req + "</td><td>" + P.bar2(x.p, x.pc) + '</td><td class="n">' + pctTxt(x.p) + "</td></tr>"; }).join("");
+    var trows = [1, 2, 3, 4].map(function (d) { var l = P.PH.inds.filter(function (i) { return i.d === d; }), x = P.totals(l); var ms = T[d].mem.map(function (n, k) { var q = P.totals(l.filter(function (i) { return i.own === k; })); return E(n) + ' <small dir="ltr">(' + q.ap + "/" + q.req + ")</small>"; }).join(" · ");
       return "<tr><td>" + E(P.DN[d]) + "</td><td>" + E(T[d].sup) + "</td><td>" + ms + '</td><td class="n">' + x.review + '</td><td class="n">' + pctTxt(x.p) + "</td></tr>"; }).join("");
-    var notStarted = [1, 2, 3, 4].map(function (d) { var l = P.PH.inds.filter(function (i) { return i.d === d && P.sOf(i).up === 0; }); return '<div class="ph-box"><b>' + E(P.DN[d]) + ' <span class="ph-chip idle">' + l.length + ' لم تبدأ</span></b><div class="ph-chips" style="margin-top:8px">' + l.map(function (i) { return '<a href="indicators.html?code=' + E(i.code) + '" dir="ltr" title="' + E(i.st) + '">' + E(i.code) + "</a>"; }).join("") + "</div></div>"; }).join("");
+    var notStarted = [1, 2, 3, 4].map(function (d) { var l = P.PH.inds.filter(function (i) { return i.d === d && P.sOf(i).up === 0 && P.sOf(i).ap === 0; }); return '<div class="ph-box"><b>' + E(P.DN[d]) + ' <span class="ph-chip idle">' + l.length + ' لم تبدأ التعبئة</span></b><div class="ph-chips" style="margin-top:8px">' + l.map(function (i) { return '<a href="indicators.html?code=' + E(i.code) + '" dir="ltr" title="' + E(i.st) + '">' + E(i.code) + "</a>"; }).join("") + "</div></div>"; }).join("");
     var admin = "";
     if (isAdmin) {
       var S = P.ST, bad = [], inv = [], legacy = [], miss = [];
@@ -93,16 +93,16 @@
       (S.errors || []).forEach(function (e) { bad.push(e.key + ": " + e.error); });
       var pr = function (a) { return a.length ? "<ul>" + a.slice(0, 12).map(function (x) { return "<li dir='auto'>" + E(x) + "</li>"; }).join("") + (a.length > 12 ? "<li>… و" + (a.length - 12) + " أخرى</li>" : "") + "</ul>" : '<span class="ph-chip ok">لا شيء</span>'; };
       admin = '<h2 class="ph-h2">صحة المنظومة <span class="ph-chip idle">لمدير النظام</span></h2><div class="ph-grid">' + stat("الاتصال بـ Drive", S.live && !S.failed ? "متصل" : "غير متصل", S.live ? "إصدار السكربت " + E(S.ver) + (S.partial ? " · مسح جزئي" : "") : "تُعرض لقطة 12-11-2026") +
-        stat("قوالب ناقصة", miss.length, "سجلات بلا ملف في مجلدها") + stat("ملفات لا تطابق سجلاً", inv.length, "أسماء تحتاج تصحيحاً") + stat("تقارير بالتسمية القديمة", legacy.length, "«التقرير البصري»") + "</div>" +
-        '<div class="ph-box"><b>أخطاء المسح</b>' + pr(bad) + "<b>قوالب ناقصة</b>" + pr(miss) + "<b>ملفات لا تطابق أي سجل</b>" + pr(inv) + "<b>تقارير بالتسمية القديمة</b>" + pr(legacy) + '<div class="ph-actions"><a class="ph-btn" target="_blank" rel="noopener" href="' + P.rootUrl() + '"><i class="fa-solid fa-folder-tree"></i> جذر Drive الجديد</a><a class="ph-btn" href="status-report.html">تقرير الحالة</a></div></div>';
+        stat("سجلات غير منشأة", miss.length, "بلا ملف في مجلدها") + stat("ملفات لا تطابق سجلاً", inv.length, "أسماء تحتاج تصحيحاً") + stat("تقارير بالتسمية القديمة", legacy.length, "«التقرير البصري»") + "</div>" +
+        '<div class="ph-box"><b>أخطاء المسح</b>' + pr(bad) + "<b>سجلات غير منشأة</b>" + pr(miss) + "<b>ملفات لا تطابق أي سجل</b>" + pr(inv) + "<b>تقارير بالتسمية القديمة</b>" + pr(legacy) + '<div class="ph-actions"><a class="ph-btn" target="_blank" rel="noopener" href="' + P.rootUrl() + '"><i class="fa-solid fa-folder-tree"></i> جذر Drive الجديد</a><a class="ph-btn" href="status-report.html">تقرير الحالة</a></div></div>';
     }
     main.innerHTML = '<h1 class="ph-h1">' + (isAdmin ? "لوحة مدير النظام" : "الفجوات والنسب") + '</h1><p class="ph-lead">صورة واحدة للمشروع: ' + (isAdmin ? "هل المنظومة سليمة وأين نقف؟" : "أين فجواتنا؟") + "</p>" +
-      '<div class="ph-grid">' + stat("التقدّم الرسمي", pctTxt(P.projP()), "متوسط المؤشرات الـ" + t.ind, "main") + stat("سجلات مرفوعة", t.up + " / " + t.req, "ملفات معبّأة أُعيد رفعها") + stat("قيد المراجعة", t.review, "بانتظار المشرفين") + stat("معتمدة", t.ap, "في «2_معتمد»") + stat("تقارير الشواهد", t.repDone + " / " + t.ind, "مكتملة (6 صور)") + stat("قوالب جاهزة", t.ready + " / " + t.req, "فارغة في مجلدات المؤشرات") + "</div>" +
-      '<div class="ph-note">القالب الفارغ لا يُحتسب مرفوعاً. السجل يُحتسب حين يُعبّأ ويُعاد رفعه. «مطابق» قرارك مع المشرف داخل Drive وليس في هذه الصفحة.</div>' +
+      '<div class="ph-grid">' + stat("التقدّم الرسمي", pctTxt(P.projP()), "الأساس: " + P.basisTxt() + " · متوسط " + t.ind + " مؤشراً", "main") + stat("سجلات منشأة", t.cr + " / " + t.req, pctTxt(t.pc) + " · القوالب موجودة في المجلدات") + stat("مرفوعة (بعد المراجعة)", t.ap + " / " + t.req, pctTxt(t.pu) + " · معبّأة ومراجَعة") + stat("معبّأة قيد المراجعة", t.review, "بانتظار المشرفين، لا تُحتسب بعد") + stat("تقارير الشواهد", t.repCreated + " / " + t.ind, "منشأة · مربوطة " + t.repDone + " · قيد الربط " + t.repPart) + "</div>" +
+      '<div class="ph-note"><b>معيارا السجلات:</b> «منشأة» = القالب موجود في مجلد المؤشر، و«مرفوعة» = عُبّئ وراجعه المشرف ونُقل إلى «2_معتمد». النسبة الرسمية الآن على أساس <b>' + P.basisTxt() + '</b> وتتحول لاحقاً إلى «المرفوعة بعد المراجعة». القالب الفارغ هنا يعني «منشأ» فقط، وليس إنجازاً. «مطابق» قرارك مع المشرف داخل Drive.</div>' +
       '<h2 class="ph-h2">المجالات</h2><div class="ph-grid">' + doms + "</div>" +
-      '<h2 class="ph-h2">المعايير من الأضعف</h2><table class="ph-t"><thead><tr><th>المعيار</th><th>الاسم</th><th>المجال</th><th>مرفوع / مطلوب</th><th>التقدّم</th><th></th></tr></thead><tbody>' + crows + "</tbody></table>" +
-      '<h2 class="ph-h2">الفرق</h2><table class="ph-t"><thead><tr><th>المجال</th><th>المشرف</th><th>الأعضاء (مرفوع/مطلوب)</th><th>قيد المراجعة</th><th>التقدّم</th></tr></thead><tbody>' + trows + "</tbody></table>" +
-      '<h2 class="ph-h2">مؤشرات لم تبدأ</h2>' + notStarted + admin +
+      '<h2 class="ph-h2">المعايير من الأضعف (بحسب المرفوعة)</h2><table class="ph-t"><thead><tr><th>المعيار</th><th>الاسم</th><th>المجال</th><th>مرفوعة / مطلوب</th><th>منشأة ◂ مرفوعة</th><th></th></tr></thead><tbody>' + crows + "</tbody></table>" +
+      '<h2 class="ph-h2">الفرق</h2><table class="ph-t"><thead><tr><th>المجال</th><th>المشرف</th><th>الأعضاء (مرفوعة/مطلوب)</th><th>قيد المراجعة</th><th>التقدّم الرسمي</th></tr></thead><tbody>' + trows + "</tbody></table>" +
+      '<h2 class="ph-h2">مؤشرات لم تبدأ التعبئة</h2>' + notStarted + admin +
       '<div class="ph-actions" style="margin-top:14px"><a class="ph-btn pri" href="indicators.html"><i class="fa-solid fa-list-check"></i> استعراض المؤشرات والسجلات</a></div>';
   }
 

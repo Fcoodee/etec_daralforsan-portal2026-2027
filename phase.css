@@ -76,3 +76,5 @@ table.ph-t{width:100%;border-collapse:collapse;background:#fff;border:1px solid 
 .rh-ic{font-size:28px;color:#67e8f9;background:rgba(255,255,255,.1);border-radius:14px;padding:14px}
 .rh-t{flex:1;min-width:200px}.rh-t small{display:block;font-size:11.5px;font-weight:700;color:#67e8f9}.rh-t b{font-size:19px;font-weight:900}
 .rh-btn{text-decoration:none;background:#67e8f9;color:#020617;font-weight:900;font-size:14px;border-radius:12px;padding:10px 20px}.rh-btn:hover{background:#fff}
+
+.ph-bar2{position:relative}.ph-bar2 i{position:absolute;top:0;right:0;height:100%}.ph-bar2 i.c{background:#99d6d6}.ph-bar2 i.u{background:var(--t7)}

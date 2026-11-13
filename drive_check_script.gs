@@ -47,7 +47,7 @@ var DOCS_FOLDER_IDS_NEW = { // مجلدات «الوثائق» المضافة ح
 var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word فقط (اضبطها عند تصميم refreshStatus الجديدة)
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.0.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.1.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -63,6 +63,7 @@ var TIME_LIMIT_MS  = 5 * 60 * 1000;
  */
 var TREE_ROOT_ID = "1sSYgHcq4Fejp2V3Y6TtY0dMpP_2Osu0_"; // Diploma_ETEC2026
 var TREE_TEMPLATES = "01_القوالب", TREE_REVIEW = "1_قيد_المراجعة", TREE_APPROVED = "2_معتمد", TREE_REPORT = "3_تقرير_الشواهد";
+var REPORT_TARGET = 6;              // مؤقت: عدد صور تقرير الشواهد لاعتباره «مربوطاً» (قرار مدير المشروع لاحقاً)
 var TREE_MODE = true;               // true: doGet/refreshStatus يقرآن الشجرة الجديدة ويُخرجان schema:"tree-v2"
 var CACHE_KEY_TREE = "evidence_tree_v1";
 var TREE = {
@@ -5126,15 +5127,16 @@ function treeScanIndicator_(code, ent, sizes, errors) {
   return out;
 }
 function refreshTree_() {
-  var t0 = Date.now(), sizes = treeTemplateSizes_(), errors = [], ind = {}, req = 0, up = 0, ready = 0, ap = 0, partial = false;
+  var t0 = Date.now(), sizes = treeTemplateSizes_(), errors = [], ind = {}, req = 0, up = 0, ready = 0, ap = 0, repC = 0, repL = 0, partial = false;
   var codes = Object.keys(TREE).sort();
   for (var k = 0; k < codes.length; k++) {
     if (Date.now() - t0 > TIME_LIMIT_MS) { partial = true; break; }
     var c = codes[k], r = treeScanIndicator_(c, TREE[c], sizes, errors);
     ind[c] = r; req += r.req; up += r.up; ready += r.ready; ap += r.ap;
+    if (r.rep && r.rep.n > 0) repC++; if (r.rep && r.rep.photos >= REPORT_TARGET) repL++;
   }
-  var out = { schema: "tree-v2", version: SCRIPT_VERSION, generatedAt: new Date().toISOString(), asof: new Date().toISOString().slice(0, 10), required: req, uploaded: up, ready: ready, approved: ap, ind: ind, errors: errors, partial: partial,
-    basis: "السجل المرفوع = ملف docx معبّأ وغير فارغ يختلف عن قالبه الفارغ؛ القالب الفارغ لا يُحتسب" };
+  var out = { schema: "tree-v2", version: SCRIPT_VERSION, generatedAt: new Date().toISOString(), asof: new Date().toISOString().slice(0, 10), required: req, uploaded: up, ready: ready, approved: ap, created: ready, done: ap, repCreated: repC, repLinked: repL, repTarget: REPORT_TARGET, ind: ind, errors: errors, partial: partial,
+    basis: "منشأة = ملف السجل موجود في مجلد المؤشر (فارغاً أو معبّأ)؛ مرفوعة = ملف معبّأ يختلف عن قالبه داخل 2_معتمد بعد مراجعة المشرف؛ معبّأة قيد المراجعة = معبّأ في 1_قيد_المراجعة (لا تُحتسب)؛ تقرير الشواهد: منشأ = ملف PDF موجود، ومربوط = عدد الصور في اسمه ≥ الهدف" };
   var json = JSON.stringify(out);
   try { CacheService.getScriptCache().put(CACHE_KEY_TREE, json, CACHE_SECONDS); } catch (e) {}
   return json;
@@ -5143,7 +5145,7 @@ function refreshTree_() {
 function verifyTree() {
   var o = JSON.parse(refreshTree_()), bad = [];
   Object.keys(o.ind).forEach(function (c) { var r = o.ind[c]; if (r.error) bad.push(c + " ← تعذّر فتح المجلد"); if (r.missing.length) bad.push(c + " ← قوالب ناقصة: " + r.missing.join("، ")); if (r.invalid.length) bad.push(c + " ← ملفات لا تطابق أي سجل: " + r.invalid.join("، ")); });
-  Logger.log("المطلوب " + o.required + " — قوالب جاهزة " + o.ready + " — مرفوعة (معبّأة) " + o.uploaded + " — معتمدة " + o.approved + (bad.length ? "\n" + bad.join("\n") : "\nلا مشكلات."));
+  Logger.log("المطلوب " + o.required + " — منشأة " + o.created + " — معبّأة (قيد المراجعة أو بعدها) " + o.uploaded + " — مرفوعة بعد المراجعة " + o.done + " — تقارير شواهد: منشأة " + o.repCreated + "/52 ومربوطة " + o.repLinked + (bad.length ? "\n" + bad.join("\n") : "\nلا مشكلات."));
   return o;
 }
 

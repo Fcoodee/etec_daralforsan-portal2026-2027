@@ -7,11 +7,16 @@
   var PH = window.ETEC_PH || { inds: [], teams: {} };
   var DN = { 1: "الإدارة المدرسية", 2: "التعليم والتعلم", 3: "نواتج التعلم", 4: "البيئة المدرسية" };
   var STATE = {
-    missing:  { t: "قالب ناقص",     c: "bad",  tip: "لا يوجد ملف هذا السجل في مجلد المؤشر؛ يُبلَّغ مدير النظام." },
-    blank:    { t: "جاهز للتعبئة",  c: "idle", tip: "القالب الفارغ موجود في «1_قيد_المراجعة»: نزّله وعبّئه وأعد رفعه بالاسم نفسه." },
-    review:   { t: "قيد المراجعة",  c: "wip",  tip: "رُفع معبّأً في «1_قيد_المراجعة» وينتظر المراجعة." },
-    approved: { t: "معتمد",        c: "ok",   tip: "الملف المعبّأ موجود في «2_معتمد»." }
+    missing:  { t: "غير منشأ",                c: "bad",  tip: "لا يوجد ملف هذا السجل في مجلد المؤشر؛ يُبلَّغ مدير النظام." },
+    blank:    { t: "منشأ · بانتظار التعبئة",   c: "idle", tip: "القالب الفارغ موجود في «1_قيد_المراجعة»: نزّله وعبّئه وأعد رفعه بالاسم نفسه." },
+    review:   { t: "معبّأ · قيد المراجعة",     c: "wip",  tip: "رُفع معبّأً في «1_قيد_المراجعة» وينتظر مراجعة المشرف؛ لا يُحتسب مرفوعاً قبل نقله إلى «2_معتمد»." },
+    approved: { t: "مرفوع (بعد المراجعة)",     c: "ok",   tip: "ملف معبّأ ومراجَع موجود في «2_معتمد»." }
   };
+  /* أساس النسبة الرسمية: created (المنشأة) أو uploaded (المرفوعة بعد المراجعة) — إعداد ETEC_PROGRESS_BASIS في portal-config.js */
+  function basis() { return window.ETEC_PROGRESS_BASIS === "uploaded" ? "uploaded" : "created"; }
+  function basisTxt() { return basis() === "uploaded" ? "المرفوعة بعد المراجعة" : "السجلات المنشأة"; }
+  function target() { return +window.ETEC_REPORT_TARGET || 6; }
+
   var ST = { live: false, asof: "", gen: "", ver: "", errors: [], ind: {}, loaded: false, failed: false };
   var listeners = [];
 
@@ -24,32 +29,42 @@
 
   /* ===== حالة مؤشر واحد، من الحيّ أو من اللقطة ===== */
   function sOf(i) {
-    var raw = ST.ind[i.code], snap = (window.ETEC_SNAPSHOT && ETEC_SNAPSHOT.ind && ETEC_SNAPSHOT.ind[i.code]) || null, st = {}, out;
+    var raw = ST.ind[i.code], snap = (window.ETEC_SNAPSHOT && ETEC_SNAPSHOT.ind && ETEC_SNAPSHOT.ind[i.code]) || null, st = {}, out, tg = target();
     if (raw) {
       i.recs.forEach(function (n) { st[n] = (raw.st && raw.st[n]) || ((raw.docs || []).indexOf(n) >= 0 ? "review" : ((raw.missing || []).indexOf(n) >= 0 ? "missing" : "blank")); });
       out = { req: raw.req || i.recs.length, up: raw.up || 0, ap: raw.ap || 0, ready: raw.ready || 0, st: st, rep: raw.rep || { n: 0, photos: 0, files: [] }, invalid: raw.invalid || [], live: true };
     } else {
       i.recs.forEach(function (n) { st[n] = snap && (snap.docs || []).indexOf(n) >= 0 ? "review" : "blank"; });
-      out = { req: i.recs.length, up: snap ? snap.up || 0 : 0, ap: 0, ready: snap ? snap.ready || 0 : 0, st: st, rep: { n: 0, photos: 0, files: [] }, invalid: [], live: false };
+      var shell = !!(window.ETEC_SNAPSHOT && ETEC_SNAPSHOT.repShell);
+      out = { req: i.recs.length, up: snap ? snap.up || 0 : 0, ap: 0, ready: snap ? snap.ready || 0 : 0, st: st, rep: { n: shell ? 1 : 0, photos: 0, files: [] }, invalid: [], live: false };
     }
-    out.p = out.req ? Math.min(out.up, out.req) / out.req : 0;
+    /* منشأة = ملف السجل موجود؛ مرفوعة = معبّأ ومراجَع في 2_معتمد. */
+    out.cr = out.ready;
+    out.pc = out.req ? Math.min(out.cr, out.req) / out.req : 0;
+    out.pu = out.req ? Math.min(out.ap, out.req) / out.req : 0;
+    out.p = basis() === "uploaded" ? out.pu : out.pc;
     out.review = 0; i.recs.forEach(function (n) { if (st[n] === "review") out.review++; });
-    out.repState = out.rep.n > 0 ? ((out.rep.photos || 0) >= 6 ? "done" : "part") : "none";
+    var ph = out.rep.photos || 0;
+    /* تقرير الشواهد: none غير منشأ · shell منشأ (هيكل بلا صور) · part قيد ربط الشواهد · done مربوط */
+    out.repState = out.rep.n > 0 ? (ph >= tg ? "done" : ph > 0 ? "part" : "shell") : "none";
     return out;
   }
   /* المعادلة نفسها المعتمدة في لوحة المتابعة: المؤشر = المرفوع/المطلوب، المعيار = متوسط مؤشراته، المجال = متوسط معاييره، المشروع = متوسط المؤشرات */
-  function critP(c) { return avg(PH.inds.filter(function (i) { return i.c === c; }).map(function (i) { return sOf(i).p; })); }
+  function pv(s, b) { return b === "u" ? s.pu : b === "c" ? s.pc : s.p; }
+  function critP(c, b) { return avg(PH.inds.filter(function (i) { return i.c === c; }).map(function (i) { return pv(sOf(i), b); })); }
   function critList(d) { var m = {}, o = []; PH.inds.forEach(function (i) { if ((!d || i.d === d) && !m[i.c]) { m[i.c] = 1; o.push({ c: i.c, cn: i.cn, d: i.d }); } }); return o; }
-  function domP(d) { return avg(critList(d).map(function (x) { return critP(x.c); })); }
-  function projP() { return avg(PH.inds.map(function (i) { return sOf(i).p; })); }
+  function domP(d, b) { return avg(critList(d).map(function (x) { return critP(x.c, b); })); }
+  function projP(b) { return avg(PH.inds.map(function (i) { return pv(sOf(i), b); })); }
   function totals(list) {
-    var t = { req: 0, up: 0, ap: 0, review: 0, ready: 0, blank: 0, ind: 0, started: 0, repDone: 0, repPart: 0 };
+    var t = { req: 0, up: 0, ap: 0, cr: 0, review: 0, ready: 0, blank: 0, ind: 0, started: 0, repNone: 0, repShell: 0, repPart: 0, repDone: 0, repCreated: 0 };
     (list || PH.inds).forEach(function (i) {
-      var s = sOf(i); t.ind++; t.req += s.req; t.up += s.up; t.ap += s.ap; t.review += s.review; t.ready += s.ready;
+      var s = sOf(i); t.ind++; t.req += s.req; t.up += s.up; t.ap += s.ap; t.cr += s.cr; t.review += s.review; t.ready += s.ready;
       i.recs.forEach(function (n) { if (s.st[n] === "blank") t.blank++; });
-      if (s.up > 0) t.started++; if (s.repState === "done") t.repDone++; else if (s.repState === "part") t.repPart++;
+      if (s.up > 0 || s.ap > 0) t.started++;
+      if (s.repState === "done") t.repDone++; else if (s.repState === "part") t.repPart++; else if (s.repState === "shell") t.repShell++; else t.repNone++;
+      if (s.repState !== "none") t.repCreated++;
     });
-    t.p = t.req ? t.up / t.req : 0; return t;
+    t.pc = t.req ? t.cr / t.req : 0; t.pu = t.req ? t.ap / t.req : 0; t.p = basis() === "uploaded" ? t.pu : t.pc; return t;
   }
   function ownerName(i) { var T = PH.teams[i.d]; return T ? T.mem[i.own] : ""; }
 
@@ -82,11 +97,15 @@
 
   /* ===== مكوّنات العرض ===== */
   function bar(p, cls) { return '<span class="ph-bar ' + (cls || "") + '" role="img" aria-label="' + pct(p) + '%"><i style="width:' + pct(p) + '%"></i></span>'; }
+  /* شريط بلونين: داكن = مرفوعة (بعد المراجعة)، فاتح = منشأة */
+  function bar2(pu, pc) { return '<span class="ph-bar ph-bar2" role="img" aria-label="منشأة ' + pct(pc) + '٪ · مرفوعة ' + pct(pu) + '٪"><i class="c" style="width:' + pct(pc) + '%"></i><i class="u" style="width:' + pct(pu) + '%"></i></span>'; }
   function chip(state, label) { var m = STATE[state] || STATE.blank; return '<span class="ph-chip ' + m.c + '" title="' + esc(m.tip) + '">' + esc(label || m.t) + "</span>"; }
   function repLine(s) {
-    if (s.repState === "done") return '<span class="ph-chip ok">تقرير الشواهد: مكتمل (' + s.rep.photos + " صور)</span>";
-    if (s.repState === "part") return '<span class="ph-chip wip">تقرير الشواهد: ' + s.rep.photos + " من 6 صور</span>";
-    return '<span class="ph-chip idle">تقرير الشواهد: لم يُرفع</span>';
+    var tg = target();
+    if (s.repState === "done") return '<span class="ph-chip ok">تقرير الشواهد: مربوط (' + s.rep.photos + " صور)</span>";
+    if (s.repState === "part") return '<span class="ph-chip wip">تقرير الشواهد: قيد ربط الشواهد (' + s.rep.photos + " من " + tg + " صور)</span>";
+    if (s.repState === "shell") return '<span class="ph-chip idle" title="هيكل فارغ في «3_تقرير_الشواهد»: أصدر التقرير من صفحة «تقرير الشواهد» وارفعه ثم احذف الهيكل.">تقرير الشواهد: منشأ · بانتظار الربط</span>';
+    return '<span class="ph-chip bad">تقرير الشواهد: غير منشأ</span>';
   }
   /* بطاقة مؤشر: العنوان والتقدّم وحالة كل سجل وروابط المجلد والتقرير */
   function card(i, o) {
@@ -97,11 +116,11 @@
       '<button type="button" class="ph-card-h" aria-expanded="' + open + '" data-toggle>' +
       '<span class="ph-code" dir="ltr">' + esc(i.code) + "</span>" +
       '<span class="ph-card-t"><b>' + esc(i.st) + "</b><small>" + esc(DN[i.d]) + " · " + esc(i.cn) + (o.owner === false ? "" : " · " + esc(me)) + "</small></span>" + tag +
-      '<span class="ph-card-p"><b dir="ltr">' + s.up + "/" + s.req + "</b>" + bar(s.p) + "</span></button>" +
+      '<span class="ph-card-p" title="مرفوعة بعد المراجعة / المطلوب · الفاتح = منشأة"><b dir="ltr">' + s.ap + "/" + s.req + "</b>" + bar2(s.pu, s.pc) + "</span></button>" +
       '<div class="ph-card-b"' + (open ? "" : " hidden") + ">" +
       '<p class="ph-stmt">' + esc(i.text) + "</p>" +
       '<ul class="ph-recs">' + recs + "</ul>" +
-      '<div class="ph-row">' + repLine(s) + (s.review ? '<span class="ph-chip wip">بانتظار المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
+      '<div class="ph-row"><span class="ph-chip idle">منشأة ' + s.cr + "/" + s.req + '</span><span class="ph-chip ' + (s.ap ? "ok" : "idle") + '">مرفوعة (بعد المراجعة) ' + s.ap + "/" + s.req + "</span>" + repLine(s) + (s.review ? '<span class="ph-chip wip">معبّأة قيد المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
       '<div class="ph-actions"><a class="ph-btn pri" href="' + folderUrl(i) + '" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> مجلد المؤشر في Drive</a>' +
       '<a class="ph-btn" data-roles="admin,sup,member" href="output.html?i=' + esc(i.code) + '"><i class="fa-solid fa-file-image"></i> تقرير الشواهد</a>' +
       '<a class="ph-btn" href="indicators.html?code=' + esc(i.code) + '"><i class="fa-solid fa-link"></i> رابط المؤشر</a></div>' +
@@ -143,5 +162,5 @@
   }
 
   window.PHC = { PH: PH, DN: DN, STATE: STATE, ST: ST, esc: esc, pct: pct, avg: avg, byCode: byCode, folderUrl: folderUrl, rootUrl: rootUrl, sOf: sOf, critP: critP, critList: critList, domP: domP, projP: projP, totals: totals, ownerName: ownerName,
-    me: { get: meGet, set: meSet, clear: meClear }, load: load, onStatus: onStatus, bar: bar, chip: chip, card: card, bindCards: bindCards, chrome: chrome, fmtT: fmtT };
+    bar2: bar2, basis: basis, basisTxt: basisTxt, target: target, me: { get: meGet, set: meSet, clear: meClear }, load: load, onStatus: onStatus, bar: bar, chip: chip, card: card, bindCards: bindCards, chrome: chrome, fmtT: fmtT };
 })();
