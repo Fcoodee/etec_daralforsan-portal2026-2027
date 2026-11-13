@@ -105,28 +105,22 @@
   /* شريط بلونين: داكن = مرفوعة (بعد المراجعة)، فاتح = منشأة */
   function bar2(pu, pc) { return '<span class="ph-bar ph-bar2" role="img" aria-label="منشأة ' + pct(pc) + '٪ · مرفوعة ' + pct(pu) + '٪"><i class="c" style="width:' + pct(pc) + '%"></i><i class="u" style="width:' + pct(pu) + '%"></i></span>'; }
   function chip(state, label) { var m = STATE[state] || STATE.blank; return '<span class="ph-chip ' + m.c + '" title="' + esc(m.tip) + '">' + esc(label || m.t) + "</span>"; }
-  /* معاينة/تنزيل التقرير المرفوع (ملف فيه صور) — لكل الأدوار */
-  function repView(s) {
-    var fs = (s.rep.files || []).filter(function (f) { return f.valid && f.n > 0 && f.id; });
-    if (!fs.length) return '<span class="ph-btn ph-eye off" aria-disabled="true" title="لا يوجد تقرير مرفوع بعد"><i class="fa-solid fa-eye"></i> معاينة التقرير</span>';
-    return fs.map(function (f) {
-      return '<a class="ph-btn ph-eye on" href="' + fileView(f.id) + '" target="_blank" rel="noopener" title="' + esc(f.name) + '"><i class="fa-solid fa-eye"></i> معاينة التقرير</a><a class="ph-btn" href="' + fileDl(f.id) + '" target="_blank" rel="noopener"><i class="fa-solid fa-download"></i> تنزيل التقرير</a>';
-    }).join("");
-  }
-  function repLine(s) {
-    if (s.repState === "done") return '<span class="ph-chip ok">التقرير: مرفوع (' + s.rep.photos + " صور)</span>";
-    return '<span class="ph-chip idle" title="أصدر التقرير من صفحة «تقرير الشواهد» وارفعه.">التقرير: لم يُرفع</span>';
-  }
   /* بطاقة مؤشر: العنوان والتقدّم وحالة كل سجل وروابط المجلد والتقرير */
   function card(i, o) {
     o = o || {}; var s = sOf(i), open = !!o.open, me = ownerName(i);
     var recs = i.recs.map(function (n) {
-      var k = s.st[n] || "blank", f = s.fl[n], links = "";
-      var filledF = !!(f && f[2] && f[0] === 1);
-      links = '<span class="ph-rl">' + (f && f[2] ? '<a class="ph-btn sm" href="' + fileDl(f[2]) + '" target="_blank" rel="noopener" title="تنزيل ملف السجل مباشرة"><i class="fa-solid fa-download"></i> تنزيل</a>' : "") +
-        (filledF ? '<a class="ph-btn sm ph-eye on" href="' + fileView(f[2]) + '" target="_blank" rel="noopener" title="معاينة السجل المعبّأ في Drive" aria-label="معاينة السجل المعبّأ"><i class="fa-solid fa-eye"></i></a>' : '<span class="ph-btn sm ph-eye off" aria-disabled="true" title="لا توجد نسخة معبّأة بعد"><i class="fa-solid fa-eye"></i></span>') + "</span>";
-      var up = k === "approved" ? "" : '<button type="button" class="ph-btn sm" data-up="' + esc(i.code) + '" data-rec="' + esc(n) + '" title="ارفع الملف المعبّأ (Word) فيحلّ محل القالب"><i class="fa-solid fa-cloud-arrow-up"></i> رفع</button>';
-      return '<li class="ph-rec"><span class="ph-recn">' + esc(n) + "</span>" + links + up + chip(k) + (function () { var u = UPM[i.code + "|" + n]; return '<span class="ph-upm ' + (u ? u[1] : "") + '" role="status">' + (u ? esc(u[0]) : "") + "</span>"; })() + "</li>"; }).join("");
+      var k = s.st[n] || "blank", f = s.fl[n], filledF = !!(f && f[2] && f[0] === 1);
+      var eye = filledF ? '<a class="ph-btn sm ph-eye on" href="' + fileView(f[2]) + '" target="_blank" rel="noopener" title="معاينة السجل المعبّأ" aria-label="معاينة: ' + esc(n) + '"><i class="fa-solid fa-eye"></i></a>' : '<span class="ph-btn sm ph-eye off" aria-disabled="true" title="لا توجد نسخة معبّأة بعد"><i class="fa-solid fa-eye"></i><span class="sr">غير متاحة</span></span>';
+      var dl = f && f[2] ? '<a class="ph-btn sm" href="' + fileDl(f[2]) + '" target="_blank" rel="noopener" title="' + (filledF ? "تنزيل السجل المعبّأ" : "تنزيل القالب") + '" aria-label="تنزيل: ' + esc(n) + '"><i class="fa-solid fa-download"></i></a>' : '<span class="ph-dash" aria-label="لا ملف">—</span>';
+      var up = k === "approved" ? '<span class="ph-dash" title="معتمد؛ لا يُستبدل إلا بقرار المشرف" aria-label="معتمد">—</span>' : '<button type="button" class="ph-btn sm" data-up="' + esc(i.code) + '" data-rec="' + esc(n) + '" title="ارفع الملف المعبّأ (Word) فيحلّ محل القالب" aria-label="رفع: ' + esc(n) + '"><i class="fa-solid fa-cloud-arrow-up"></i> رفع</button>';
+      var u = UPM[i.code + "|" + n];
+      return '<tr class="ph-rec"><th scope="row" class="ph-rn">' + esc(n) + '</th><td class="ph-rs">' + chip(k) + '<span class="ph-upm ' + (u ? u[1] : "") + '" role="status">' + (u ? esc(u[0]) : "") + '</span></td><td class="ph-rc">' + eye + '</td><td class="ph-rc">' + dl + '</td><td class="ph-rc">' + up + "</td></tr>"; }).join("");
+    var rf = (s.rep.files || []).filter(function (x) { return x.valid && x.n > 0 && x.id; }).sort(function (x, y) { return y.n - x.n; })[0];
+    var repRow = '<tr class="ph-rec ph-rrep"><th scope="row" class="ph-rn"><i class="fa-solid fa-file-image"></i> تقرير الشواهد</th><td class="ph-rs">' + (rf ? '<span class="ph-chip ok">مرفوع · ' + rf.n + ' صور</span>' : '<span class="ph-chip idle">لم يُرفع</span>') + '</td>' +
+      '<td class="ph-rc">' + (rf ? '<a class="ph-btn sm ph-eye on" href="' + fileView(rf.id) + '" target="_blank" rel="noopener" title="معاينة التقرير المرفوع" aria-label="معاينة التقرير"><i class="fa-solid fa-eye"></i></a>' : '<span class="ph-btn sm ph-eye off" aria-disabled="true" title="لا يوجد تقرير مرفوع بعد"><i class="fa-solid fa-eye"></i><span class="sr">غير متاح</span></span>') + '</td>' +
+      '<td class="ph-rc">' + (rf ? '<a class="ph-btn sm" href="' + fileDl(rf.id) + '" target="_blank" rel="noopener" title="تنزيل التقرير" aria-label="تنزيل التقرير"><i class="fa-solid fa-download"></i></a>' : '<span class="ph-dash" aria-label="لا ملف">—</span>') + '</td>' +
+      '<td class="ph-rc"><a class="ph-btn sm" data-roles="admin,sup,member" href="report.html?code=' + esc(i.code) + '" title="أصدر التقرير وارفعه من صفحة التقرير"><i class="fa-solid fa-cloud-arrow-up"></i> إصدار ورفع</a></td></tr>';
+    var table = '<div class="ph-tw"><table class="ph-rt"><caption class="sr">سجلات المؤشر ' + esc(i.code) + ' وتقريره</caption><thead><tr><th scope="col">السجل</th><th scope="col">الحالة</th><th scope="col" class="ph-rc">معاينة</th><th scope="col" class="ph-rc">تنزيل</th><th scope="col" class="ph-rc">رفع</th></tr></thead><tbody>' + recs + repRow + "</tbody></table></div>";
     var tag = i.dv ? '<span class="ph-tag" title="سجل متابعة مشتق من «إضاءات نحو تحقيق المؤشر» ويدخل في النسبة">سجل متابعة</span>' : "";
     return '<article class="ph-card" id="i-' + esc(i.code) + '" data-code="' + esc(i.code) + '">' +
       '<button type="button" class="ph-card-h" aria-expanded="' + open + '" data-toggle>' +
@@ -135,11 +129,9 @@
       '<span class="ph-card-p" title="اكتمال المؤشر = 50% سجلات + 50% تقرير الشواهد · الرقم: سجلات مرفوعة / مطلوبة · الفاتح = منشأة"><b dir="ltr">' + s.ap + "/" + s.req + "</b>" + bar2(s.pu, s.pc) + "</span></button>" +
       '<div class="ph-card-b"' + (open ? "" : " hidden") + ">" +
       '<p class="ph-stmt">' + esc(i.text) + "</p>" +
-      '<ul class="ph-recs">' + recs + "</ul>" +
-      '<div class="ph-row"><span class="ph-chip idle">منشأة ' + s.cr + "/" + s.req + '</span><span class="ph-chip ' + (s.ap ? "ok" : "idle") + '">مرفوعة (بعد المراجعة) ' + s.ap + "/" + s.req + "</span>" + repLine(s) + (s.review ? '<span class="ph-chip wip">معبّأة قيد المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
-      '<div class="ph-actions">' + repView(s) + '<a class="ph-btn pri" href="' + folderUrl(i) + '" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> مجلد المؤشر في Drive</a>' +
-      (s.fo.rv ? '<a class="ph-btn" href="' + subUrl(s.fo.rv) + '" target="_blank" rel="noopener" title="ارفع النسخة المعبّأة بالاسم نفسه"><i class="fa-solid fa-cloud-arrow-up"></i> رفع السجل المعبّأ</a>' : "") +
-      '<a class="ph-btn" data-roles="admin,sup,member" href="report.html?code=' + esc(i.code) + '"><i class="fa-solid fa-file-image"></i> تقرير الشواهد</a>' +
+      table +
+      '<div class="ph-row"><span class="ph-chip idle">منشأة ' + s.cr + "/" + s.req + '</span><span class="ph-chip ' + (s.ap ? "ok" : "idle") + '">مرفوعة (بعد المراجعة) ' + s.ap + "/" + s.req + "</span>" + (s.review ? '<span class="ph-chip wip">معبّأة قيد المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
+      '<div class="ph-actions"><a class="ph-btn pri" href="' + folderUrl(i) + '" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> مجلد المؤشر في Drive</a>' +
       '<a class="ph-btn" href="indicators.html?code=' + esc(i.code) + '"><i class="fa-solid fa-link"></i> رابط المؤشر</a></div>' +
       "</div></article>";
   }
@@ -149,7 +141,7 @@
     try { var m = meGet(), R = window.PortalRole, r = R ? R.get() : ""; if (m && m.idx >= 0 && PH.teams[m.d]) return PH.teams[m.d].mem[m.idx]; if (m && PH.teams[m.d] && r === "sup") return PH.teams[m.d].sup; return (R && R.roles && R.roles[r] && (R.roles[r].name || R.roles[r])) || r || ""; } catch (e) { return ""; }
   }
   function uploadRecord(btn) {
-    var url = window.ETEC_STATUS_URL || "", li = btn.closest(".ph-rec"), out = li.querySelector(".ph-upm");
+    var url = window.ETEC_STATUS_URL || "", li = btn.closest("tr"), out = li.querySelector(".ph-upm");
     function say(t, c) { UPM[btn.dataset.up + "|" + btn.dataset.rec] = [t, c || ""]; out.textContent = t; out.className = "ph-upm " + (c || ""); }
     if (!url) { say("الرفع غير مهيّأ.", "bad"); return; }
     var inp = document.createElement("input"); inp.type = "file"; inp.accept = ".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document";
