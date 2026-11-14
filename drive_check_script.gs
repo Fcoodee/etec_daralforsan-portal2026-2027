@@ -47,7 +47,7 @@ var DOCS_FOLDER_IDS_NEW = { // مجلدات «الوثائق» المضافة ح
 var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word فقط (اضبطها عند تصميم refreshStatus الجديدة)
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.4.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.5.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5371,7 +5371,13 @@ function reviewRecord_(folder, req, mode) {
   var rv = treeChild_(folder, TREE_REVIEW), ap = treeChild_(folder, TREE_APPROVED);
   if (!rv || !ap) return { ok: false, error: "مجلد المراجعة أو المعتمد غير موجود لهذا المؤشر." };
   var it, f;
-  it = ap.getFiles(); while (it.hasNext()) { f = it.next(); if (treeMatch_(f.getName(), req.code, rec)) return { ok: false, error: "هذا السجل معتمد مسبقاً." }; }
+  var apf = []; it = ap.getFiles(); while (it.hasNext()) { f = it.next(); if (treeMatch_(f.getName(), req.code, rec)) apf.push(f); }
+  if (apf.length && mode === "approve") return { ok: false, error: "هذا السجل معتمد مسبقاً." };
+  /* v9.5.0: إعادة سجل معتمد للتعبئة = يُرجَع ملفه إلى 1_قيد_المراجعة ثم تُسجَّل الملاحظة */
+  if (apf.length && mode === "return") {
+    apf.sort(function (a, b) { return b.getLastUpdated() - a.getLastUpdated(); });
+    try { apf[0].moveTo(rv); } catch (e) { return { ok: false, error: "تعذّر إرجاع الملف المعتمد إلى المراجعة: " + e.message + " (إن كان الملف مملوكاً لحساب آخر فانقله يدوياً)." }; }
+  }
   var cand = []; it = rv.getFiles();
   while (it.hasNext()) { f = it.next(); if (treeMatch_(f.getName(), req.code, rec)) cand.push(f); }
   if (!cand.length) return { ok: false, error: "لا يوجد ملف لهذا السجل في قيد المراجعة." };
