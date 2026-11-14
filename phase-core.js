@@ -76,6 +76,8 @@
 
   /* ===== الهوية في هذا الجهاز: عضو (مجال+اسم) أو مشرف (مجال) ===== */
   var MK = "etec.me.v1";
+  /* ملاحظات قديمة وُقّعت باسم عضو (قبل v9.7.1): لا يُعرض توقيعها لأن المراجِع ليس عضواً */
+  function isMemName(n) { try { return Object.keys(PH.teams).some(function (d) { return PH.teams[d].mem.indexOf(n) >= 0; }); } catch (e) { return false; } }
   function meGet() { try { var q = new URLSearchParams(location.search), d = q.get("d"), m = q.get("m"); if (d && PH.teams[d]) { var o = { d: +d, idx: /^\d$/.test(m || "") ? +m : -1 }; meSet(o); return o; } } catch (e) {} try { var v = JSON.parse(localStorage.getItem(MK) || "null"); if (v && PH.teams[v.d]) return v; } catch (e) {} return null; }
   function meSet(o) { try { localStorage.setItem(MK, JSON.stringify(o)); } catch (e) {} }
   function meClear() { try { localStorage.removeItem(MK); } catch (e) {} }
@@ -115,7 +117,7 @@
       var dl = f && f[2] ? '<a class="ph-btn sm" href="' + fileDl(f[2]) + '" target="_blank" rel="noopener" title="' + (filledF ? "تنزيل السجل المعبّأ" : "تنزيل القالب") + '" aria-label="تنزيل: ' + esc(n) + '"><i class="fa-solid fa-download"></i></a>' : '<span class="ph-dash" aria-label="لا ملف">—</span>';
       var up = k === "approved" ? '<span class="ph-dash" title="معتمد؛ لا يُستبدل إلا بقرار المشرف" aria-label="معتمد">—</span>' : '<button type="button" class="ph-btn sm" data-up="' + esc(i.code) + '" data-rec="' + esc(n) + '" title="ارفع الملف المعبّأ (Word) فيحلّ محل القالب" aria-label="رفع: ' + esc(n) + '"><i class="fa-solid fa-cloud-arrow-up"></i> رفع</button>';
       var u = UPM[i.code + "|" + n], rt = s.ret && s.ret[n];
-      var note = k === "returned" && rt ? '<span class="ph-retn"><b>ملاحظة المشرف:</b> ' + esc(rt.n) + (rt.w ? " — " + esc(rt.w) : "") + "</span>" : "";
+      var note = k === "returned" && rt ? '<span class="ph-retn"><b>ملاحظة المشرف:</b> ' + esc(rt.n) + (rt.w && !isMemName(rt.w) ? " — " + esc(rt.w) : "") + "</span>" : "";
       var rvw = k === "review" || k === "returned" ? '<span class="ph-rv" data-roles="admin,sup,self"><button type="button" class="ph-btn sm ph-ok" data-act="approve" data-code="' + esc(i.code) + '" data-rec="' + esc(n) + '"><i class="fa-solid fa-circle-check"></i> اعتماد</button>' + (k === "review" ? '<button type="button" class="ph-btn sm" data-act="return" data-code="' + esc(i.code) + '" data-rec="' + esc(n) + '"><i class="fa-solid fa-rotate-left"></i> إعادة للتعبئة</button>' : "") + "</span>" : "";
       return '<tr class="ph-rec"><th scope="row" class="ph-rn">' + esc(n) + '</th><td class="ph-rs">' + chip(k) + note + rvw + '<span class="ph-upm ' + (u ? u[1] : "") + '" role="status">' + (u ? esc(u[0]) : "") + '</span></td><td class="ph-rc">' + eye + '</td><td class="ph-rc">' + dl + '</td><td class="ph-rc">' + up + "</td></tr>"; }).join("");
     var rf = (s.rep.files || []).filter(function (x) { return x.valid && x.n > 0 && x.id; }).sort(function (x, y) { return y.n - x.n; })[0];
