@@ -209,8 +209,9 @@
     var el = document.getElementById("chrome"); if (!el) return;
     var R = window.PortalRole, role = R ? R.get() : "", roles = R ? R.roles : {};
     var items = [
-      ["home.html", "fa-house", role && roles[role] ? roles[role].hl : "مساحتي", "admin,sup,member,self"],
-      ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "admin,sup,member,self"],
+      ["home.html", "fa-house", role && roles[role] ? roles[role].hl : "الرئيسية", "admin,sup,self"],
+      ["indicators.html", "fa-user-pen", "مؤشراتي وسجلاتي", "member"],
+      ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "admin,sup,self"],
       ["progress.html", "fa-chart-pie", "قراءة التقدّم", "admin,self"],
       ["report.html", "fa-file-image", "تقرير الشواهد", "admin,sup,member"]
     ];

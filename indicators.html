@@ -6,15 +6,16 @@
 <meta name="robots" content="noindex,nofollow">
 <title>المؤشرات والسجلات — مشروع الاعتماد 2026-2027 — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=9.7.1">
-<script src="portal-meta.js?v=9.7.1"></script>
-<script src="portal-role.js?v=9.7.1"></script>
+<link rel="stylesheet" href="phase.css?v=9.8.0">
+<script src="portal-meta.js?v=9.8.0"></script>
+<script src="portal-role.js?v=9.8.0"></script>
 </head>
 <body>
 <div id="chrome"></div>
 <main class="ph-main">
   <h1 class="ph-h1">المؤشرات والسجلات</h1>
   <p class="ph-lead">كل المؤشرات (52) وسجلاتها (140) وحالة كل سجل. افتح أي مؤشر لترى سجلاته ومجلده.</p>
+  <section id="mysp" aria-label="مساحتي" hidden></section>
   <div class="ph-filters" role="search">
     <input id="q" type="search" placeholder="ابحث بالرمز أو الاسم أو السجل…" aria-label="بحث">
     <select id="fd" aria-label="المجال"><option value="">كل المجالات</option></select>
@@ -27,10 +28,10 @@
   <div id="list"></div>
 </main>
 
-<script src="portal-config.js?v=9.7.1"></script>
-<script src="portal-names.js?v=9.7.1"></script>
-<script src="phase-data.js?v=9.7.1"></script>
-<script src="phase-core.js?v=9.7.1"></script>
+<script src="portal-config.js?v=9.8.0"></script>
+<script src="portal-names.js?v=9.8.0"></script>
+<script src="phase-data.js?v=9.8.0"></script>
+<script src="phase-core.js?v=9.8.0"></script>
 <script>
 (function () {
   "use strict";
@@ -62,7 +63,34 @@
     }
     return true;
   }
+  /* مساحتي (للعضو): مربع أعلى الصفحة — تقدّمي وتنبيهات المشرف؛ يُفتح تلقائياً عند وجود سجلات أُعيدت إليّ */
+  var mysp = document.getElementById("mysp"), myOpen = null, myTouched = false;
+  function renderMy() {
+    if (role !== "member") { mysp.hidden = true; return; }
+    me = P.me.get(); mysp.hidden = false;
+    if (!me || me.idx < 0) {
+      mysp.innerHTML = '<div class="ph-my"><b>مساحتي · حدّد اسمك مرة واحدة</b><div class="ph-mypick"><select id="myd" aria-label="المجال">' + [1, 2, 3, 4].map(function (d) { return '<option value="' + d + '">' + E(P.DN[d]) + "</option>"; }).join("") + '</select><select id="myn" aria-label="الاسم"></select><button type="button" class="ph-btn pri sm" id="mysave">حفظ</button></div></div>';
+      var d = document.getElementById("myd"), n = document.getElementById("myn");
+      function names() { n.innerHTML = P.PH.teams[+d.value].mem.map(function (x, k) { return '<option value="' + k + '">' + E(x) + "</option>"; }).join(""); }
+      d.addEventListener("change", names); names();
+      document.getElementById("mysave").addEventListener("click", function () { P.me.set({ d: +d.value, idx: +n.value }); me = P.me.get(); onlyMine = true; mine.hidden = false; mine.setAttribute("aria-pressed", "true"); draw(); });
+      return;
+    }
+    mine.hidden = false;
+    var my = P.PH.inds.filter(function (i) { return i.d === me.d && i.own === me.idx; }), t = P.totals(my), nm = P.PH.teams[me.d].mem[me.idx], ret = [];
+    my.forEach(function (i) { var st = P.sOf(i); i.recs.forEach(function (r) { if (st.st[r] === "returned") ret.push({ code: i.code, rec: r, n: (st.ret[r] || {}).n || "", w: (st.ret[r] || {}).w || "" }); }); });
+    if (!myTouched) myOpen = ret.length > 0;
+    mysp.innerHTML = '<details class="ph-my"' + (myOpen ? " open" : "") + '><summary><b>مساحتي</b> · ' + E(nm) + ' <span class="ph-chip ok">مرفوعة ' + t.ap + "/" + t.req + "</span>" + (ret.length ? ' <span class="ph-chip ret">أُعيدت إليك ' + ret.length + "</span>" : "") + (t.review ? ' <span class="ph-chip wip">قيد المراجعة ' + t.review + "</span>" : "") + "</summary>" +
+      '<div class="ph-mybody"><div class="ph-mystats"><span>اكتمال مؤشراتي <b dir="ltr">' + P.pct(t.p) + '%</b></span><span>بانتظار التعبئة <b>' + t.blank + '</b></span><span>تقارير مرفوعة <b dir="ltr">' + t.repDone + "/" + t.ind + "</b></span></div>" +
+      '<div class="ph-myb" role="img" aria-label="اكتمال مؤشراتي ' + P.pct(t.p) + '%"><i style="width:' + P.pct(t.p) + '%"></i></div>' +
+      (ret.length ? '<div class="ph-myret"><b>سجلات أعادها المشرف للتعبئة:</b><ul>' + ret.map(function (x) { return '<li><a href="#" data-go="' + E(x.code) + '">' + E(x.code + " · " + x.rec) + "</a> — " + E(x.n) + (x.w ? " (" + E(x.w) + ")" : "") + "</li>"; }).join("") + "</ul></div>" : "") +
+      '<p class="ph-mychg"><a href="#" id="mychg">تغيير الاسم</a></p></div></details>';
+    var det = mysp.querySelector("details"); det.querySelector("summary").addEventListener("click", function () { myTouched = true; myOpen = !det.open; });
+    document.getElementById("mychg").addEventListener("click", function (e) { e.preventDefault(); P.me.clear(); me = null; onlyMine = false; mine.hidden = true; myTouched = false; draw(); });
+    mysp.querySelectorAll("[data-go]").forEach(function (a) { a.addEventListener("click", function (e) { e.preventDefault(); focus = a.dataset.go; q.value = ""; fo.value = ""; fd.value = ""; draw(); var el = document.getElementById("i-" + focus); if (el) el.scrollIntoView({ block: "center" }); }); });
+  }
   function draw() {
+    renderMy();
     var a = P.PH.inds.filter(match), t = P.totals(a);
     sum.textContent = a.length + " مؤشراً · " + t.req + " سجلاً · منشأة " + t.cr + " · مرفوعة (بعد المراجعة) " + t.ap + " · معبّأة قيد المراجعة " + t.review;
     list.innerHTML = a.length ? a.map(function (i) { return P.card(i, { open: i.code === focus }); }).join("") : '<div class="ph-empty">لا توجد مؤشرات تطابق هذا التصفية.</div>';

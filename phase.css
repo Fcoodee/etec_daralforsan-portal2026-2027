@@ -114,3 +114,20 @@ table.ph-t{width:100%;border-collapse:collapse;background:#fff;border:1px solid 
 .ph-rv{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
 .ph-rv .ph-ok{background:#ecfdf5;border-color:#6ee7b7;color:#065f46}
 .ph-rin{flex:1 1 150px;min-width:120px;font:inherit;font-size:12px;padding:4px 8px;border:1px solid #94a3b8;border-radius:8px}
+
+/* مساحتي: مربع أعلى المؤشرات (v9.8.0) */
+.ph-my{background:#fff;border:1px solid var(--line);border-top:5px solid var(--t5);border-radius:14px;padding:10px 14px;margin:0 0 12px}
+.ph-my>summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:14px}
+.ph-my>summary::-webkit-details-marker{display:none}
+.ph-my>summary::after{content:"\25BE";margin-inline-start:auto;color:var(--mut)}
+.ph-my[open]>summary::after{content:"\25B4"}
+.ph-mybody{margin-top:8px}
+.ph-mystats{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:#334155}
+.ph-mystats b{color:#0f172a}
+.ph-myb{height:10px;background:#e2e8f0;border-radius:999px;overflow:hidden;margin:6px 0}
+.ph-myb i{display:block;height:100%;background:var(--t5);border-radius:999px}
+.ph-myret{margin-top:8px;padding:8px 12px;border:1px solid #fecdd3;background:#fff1f2;border-radius:10px;font-size:13px}
+.ph-myret ul{margin:4px 0 0;padding-inline-start:18px}
+.ph-mychg{margin:8px 0 0;font-size:12px}
+.ph-mypick{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.ph-mypick select{font:inherit;padding:6px 10px;border:1px solid #94a3b8;border-radius:8px;background:#fff}

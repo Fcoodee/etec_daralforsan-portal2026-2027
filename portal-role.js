@@ -17,7 +17,7 @@
   var ROLES = {
     admin:  { n: "مدير النظام", ic: "fa-user-shield", hl: "لوحة التحكم", q: "هل المنظومة سليمة؟", home: "home.html?u=admin" },
     sup:    { n: "مشرف فريق السجلات والشواهد", ic: "fa-user-check", hl: "لوحة المراجعة", q: "ما الذي ينتظر مراجعتي؟", home: "home.html?u=sup" },
-    member: { n: "عضو فريق السجلات والشواهد", ic: "fa-user-pen", hl: "مساحتي", q: "ماذا أرفع الآن؟", home: "home.html?u=member" },
+    member: { n: "عضو فريق السجلات والشواهد", ic: "fa-user-pen", hl: "مؤشراتي وسجلاتي", q: "ماذا أرفع الآن؟", home: "indicators.html?u=member" },
     self:   { n: "مشرف عمليات التقويم الذاتي", ic: "fa-magnifying-glass-chart", hl: "الفجوات والنسب", q: "أين فجواتنا؟", home: "home.html?u=self" }
   };
   /* من يرى أي صفحة. الصفحة خارج نطاق الدور تُعرض مع تنبيه ولا تُحجب (تخصيص عرض لا حماية). */
@@ -33,7 +33,7 @@
   var SECOND = {
     admin:  [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["progress.html", "fa-chart-pie", "قراءة التقدّم"]],
     sup:    [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["report.html", "fa-file-image", "تقرير الشواهد"]],
-    member: [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["report.html", "fa-file-image", "تقرير الشواهد"]],
+    member: [["report.html", "fa-file-image", "تقرير الشواهد"]],
     self:   [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["progress.html", "fa-chart-pie", "قراءة التقدّم"]]
   };
 
