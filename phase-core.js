@@ -140,8 +140,14 @@
   }
   /* رفع سجل معبّأ من البطاقة: لكل الأدوار (عضو/مشرف/مدير). السكربت يتحقق من الصيغة والاسم ويستبدل القالب. */
   var UPM = {};
+  /* من يقوم بالإجراء: يُشتق من الدور المختار أولاً (الهوية المحفوظة في الجهاز قد تكون لعضو سابق) */
   function whoAmI() {
-    try { var m = meGet(), R = window.PortalRole, r = R ? R.get() : ""; if (m && m.idx >= 0 && PH.teams[m.d]) return PH.teams[m.d].mem[m.idx]; if (m && PH.teams[m.d] && r === "sup") return PH.teams[m.d].sup; return (R && R.roles && R.roles[r] && (R.roles[r].n || R.roles[r].name)) || r || ""; } catch (e) { return ""; }
+    try {
+      var m = meGet(), R = window.PortalRole, r = R ? R.get() : "", T = m && PH.teams[m.d];
+      if (r === "member" && T && m.idx >= 0) return T.mem[m.idx];
+      if (r === "sup" && T) return T.sup;
+      return (R && R.roles && R.roles[r] && (R.roles[r].n || R.roles[r].name)) || r || "";
+    } catch (e) { return ""; }
   }
   function uploadRecord(btn) {
     var url = window.ETEC_STATUS_URL || "", li = btn.closest("tr"), out = li.querySelector(".ph-upm");
