@@ -47,7 +47,7 @@ var DOCS_FOLDER_IDS_NEW = { // مجلدات «الوثائق» المضافة ح
 var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word فقط (اضبطها عند تصميم refreshStatus الجديدة)
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.3.1";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.3.2";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5335,8 +5335,17 @@ function upRecord_(folder, req) {
   var old = [], keep = null; it = rv.getFiles();
   while (it.hasNext()) { f = it.next(); if (treeMatch_(f.getName(), req.code, rec)) { old.push(f); if (!keep) keep = f.getName(); } }
   var name = keep ? splitName_(keep).base + ".docx" : req.code + "_" + treeSan_(rec.m) + "_v1.docx";
-  old.forEach(function (x) { x.setTrashed(true); });
-  var file = rv.createFile(Utilities.newBlob(bytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", name));
+  /* الملف القديم قد يكون مملوكاً لحساب آخر (رُفع يدوياً من Drive)؛ مالك السكربت لا يستطيع حذفه → نحاول الحذف ثم إعادة التسمية ثم نُبلغ بوضوح */
+  var stuck = [];
+  old.forEach(function (x) {
+    try { x.setTrashed(true); return; } catch (e1) {}
+    try { x.setName("_مستبدل_" + Date.now() + "_" + x.getName()); return; } catch (e2) {}
+    stuck.push(x.getName());
+  });
+  if (stuck.length) return { ok: false, error: "الملف الحالي (" + stuck[0] + ") مملوك لحساب آخر ولا يستطيع السكربت استبداله. احذفه من Drive بحساب مالكه ثم أعد الرفع." };
+  var file;
+  try { file = rv.createFile(Utilities.newBlob(bytes, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", name)); }
+  catch (e3) { return { ok: false, error: "تعذّر إنشاء الملف في المجلد (صلاحية الكتابة): " + e3.message }; }
   try { file.setDescription("رُفع عبر البوابة بواسطة: " + String(req.who || "غير محدد").slice(0, 60) + " — " + new Date().toISOString()); } catch (x) {}
   /* علامة «قُدّم للمراجعة»: يرثها الملف حين ينقله المشرف إلى 2_معتمد (المعرّف نفسه) */
   try { PropertiesService.getScriptProperties().setProperty("S_" + file.getId(), new Date().toISOString()); } catch (x) {}
