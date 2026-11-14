@@ -80,16 +80,26 @@
     return '<section class="sec"><h2 class="sec-t"><span>' + en + "</span>" + (ar ? '<span dir="rtl" lang="ar">' + ar + "</span>" : "") + "</h2>" +
       (items.length ? '<ol class="sec-l">' + items.join("") + "</ol>" : '<p class="sec-e">' + empty + "</p>") + "</section>";
   }
+  /* ===== رموز QR تفاعلية: تحمل الرمز واسم السجل فقط (بلا معرّفات Drive) فتبقى صالحة بعد إعادة الرفع ===== */
+  function qrBase() { var h = location.hostname; if (!h || /^(localhost|127\.|\[::1\])/.test(h)) return "https://fcoodee.github.io/etec_daralforsan-portal2026-2027/"; return location.origin + location.pathname.replace(/[^\/]*$/, ""); }
+  function qrUrl(kind, rec) { return qrBase() + "open.html?code=" + encodeURIComponent(code) + "&t=" + kind + (rec != null ? "&r=" + rec : ""); }
+  function qrSvg(url, px) {
+    try { var q = window.qrcode(0, "M"); q.addData(url); q.make(); var n = q.getModuleCount(), d = "", r, c;
+      for (r = 0; r < n; r++) for (c = 0; c < n; c++) if (q.isDark(r, c)) d += "M" + (c + 2) + " " + (r + 2) + "h1v1h-1z";
+      return '<svg xmlns="http://www.w3.org/2000/svg" width="' + px + '" height="' + px + '" viewBox="0 0 ' + (n + 4) + " " + (n + 4) + '" shape-rendering="crispEdges" role="img" aria-label="QR"><rect width="100%" height="100%" fill="#fff"/><path d="' + d + '" fill="#000"/></svg>';
+    } catch (e) { return ""; }
+  }
+  function qrBox(url, px, cap) { return '<a class="qr" href="' + E(url) + '" target="_blank" rel="noopener" title="' + E(cap) + '">' + qrSvg(url, px) + "<small>" + E(cap) + "</small></a>"; }
   function render() {
     var i = ind(), now = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     /* قرار مدير المشروع: الرسمي (المجال/المعيار/المؤشر/الإضاءات) بلغتين؛ وما يخص القسم (السجلات والوثائق) بالإنجليزية فقط */
-    var recs = i.recs.map(function (r) { return '<li><div class="bi"><div class="en">' + E(I.rec[r] || r) + "</div></div></li>"; });
+    var recs = i.recs.map(function (r, k) { return '<li class="rec-q"><div class="bi"><div class="en">' + E(I.rec[r] || r) + "</div></div>" + qrBox(qrUrl("rec", k), 64, "Scan: open this record") + "</li>"; });
     var docs = (I.docs[i.code] || []).map(function (x) { return '<li><div class="bi"><div class="en">' + E(x.en) + "</div></div></li>"; });
     var hl = (HL[i.code] || []).map(function (x) { return "<li>" + bi(x.en, x.ar) + "</li>"; });
     $("sheet").innerHTML =
       '<div class="sh-head"><div class="logos"><img src="logo1.png" alt="Dar Al-Forsan Schools"><img src="logo0.png" alt="American Diploma"></div>' +
       '<div class="tt"><b>Evidence Report</b><small>Dar Al-Forsan Schools — American Diploma Section (Boys) · Academic Year 2026–2027</small>' +
-      '<small>School Evaluation &amp; Accreditation Standards — General Education 2026</small></div></div>' +
+      '<small>School Evaluation &amp; Accreditation Standards — General Education 2026</small></div>' + qrBox(qrUrl("rep"), 70, "Scan: open this report") + "</div>" +
       '<div class="sh-ind"><div class="sh-two">' +
         '<div><span class="lb">Domain</span>' + bi(I.dom[i.d], P.DN[i.d]) + "</div>" +
         '<div><span class="lb">Criterion</span>' + bi(I.crit[i.c], i.cn) + "</div></div>" +

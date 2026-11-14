@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" style="color-scheme:light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>فتح الشاهد — بوابة الاعتماد المدرسي</title>
+<style>
+body{margin:0;font-family:Cairo,Tahoma,Arial,sans-serif;background:#f8fafc;color:#0f172a;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
+.bx{background:#fff;border:1px solid #e2e8f0;border-radius:18px;max-width:440px;width:100%;padding:24px;text-align:center;border-top:6px solid #c29b38}
+h1{margin:0 0 6px;font-size:18px;color:#003d3d}p{margin:6px 0;font-size:13.5px;line-height:1.9;color:#475569}
+.c{display:inline-block;font:800 13px monospace;background:#003d3d;color:#fff;border-radius:6px;padding:0 10px;margin-bottom:8px}
+.bar{height:6px;background:#dbeafe;border-radius:999px;overflow:hidden;margin:14px 0}.bar i{display:block;height:100%;width:35%;background:#2563eb;border-radius:999px;animation:s 1.2s ease-in-out infinite}
+@keyframes s{0%{margin-inline-start:-35%}100%{margin-inline-start:100%}}
+a.b{display:inline-block;margin-top:10px;background:#006666;color:#fff;text-decoration:none;font-weight:800;border-radius:999px;padding:8px 18px;font-size:13px}
+.bad{color:#92400e}
+</style>
+</head>
+<body>
+<div class="bx" role="status" aria-live="polite">
+  <span class="c" id="cd">—</span>
+  <h1 id="tt">جارٍ البحث عن الملف…</h1>
+  <p id="ms">نجلب أحدث نسخة مرفوعة من Drive. قد يستغرق ذلك حتى دقيقة.</p>
+  <div class="bar" id="br"><i></i></div>
+  <div id="ac"></div>
+</div>
+<script src="portal-config.js"></script>
+<script src="portal-names.js"></script>
+<script src="phase-data.js"></script>
+<script src="phase-core.js"></script>
+<script>
+/* فتح شاهد من رمز QR: الرمز يحمل الرمز والسجل فقط (لا معرّفات ملفات) فيبقى صالحاً بعد إعادة الرفع.
+   open.html?code=1-1-1-1&t=rec&r=<رقم السجل 0..>  |  open.html?code=1-1-1-1&t=rep */
+(function () {
+  var P = window.PHC, q = new URLSearchParams(location.search), code = q.get("code") || "", t = q.get("t") === "rep" ? "rep" : "rec", rec = q.get("r") || "";
+  var ii0 = P && P.byCode(code); if (ii0 && /^\d+$/.test(rec)) rec = ii0.recs[+rec] || "";
+  function $(id) { return document.getElementById(id); }
+  var i = P && P.byCode(code);
+  if (!i) { $("br").hidden = true; $("tt").textContent = "رمز غير صالح"; $("ms").textContent = "لا يوجد مؤشر بهذا الرمز."; return; }
+  $("cd").textContent = code + (t === "rec" && rec ? " · " + rec : " · تقرير الشواهد");
+  function fail(msg) { $("br").hidden = true; $("tt").textContent = "لم يُرفع بعد"; $("tt").className = "bad"; $("ms").textContent = msg; $("ac").innerHTML = '<a class="b" href="indicators.html?code=' + encodeURIComponent(code) + '">فتح المؤشر في البوابة</a>'; }
+  P.onStatus(function (S) {
+    if (S.loading || !S.loaded) return;
+    if (!(S.live && !S.failed)) { fail("تعذّر جلب الحالة الحيّة الآن. أعد المحاولة بعد قليل."); return; }
+    var s = P.sOf(i), id = "";
+    if (t === "rec") { var f = s.fl && s.fl[rec]; if (f && f[2] && f[0] === 1) id = f[2]; }
+    else { var rf = ((s.rep && s.rep.files) || []).filter(function (x) { return x.valid && x.n > 0 && x.id; }).sort(function (a, b) { return b.n - a.n; })[0]; if (rf) id = rf.id; }
+    if (!id) { fail(t === "rec" ? "هذا السجل لم يُعبَّأ ويُرفع بعد." : "تقرير الشواهد لهذا المؤشر لم يُرفع بعد."); return; }
+    var url = P.fileView(id); $("tt").textContent = "جارٍ فتح الملف…"; $("ac").innerHTML = '<a class="b" href="' + url + '">إن لم يُفتح تلقائياً اضغط هنا</a>';
+    location.replace(url);
+  });
+  P.load();
+})();
+</script>
+</body>
+</html>
