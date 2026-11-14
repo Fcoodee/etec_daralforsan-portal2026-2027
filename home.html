@@ -6,23 +6,23 @@
 <meta name="robots" content="noindex,nofollow">
 <title>مساحتي — مشروع الاعتماد 2026-2027 — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=9.8.9">
+<link rel="stylesheet" href="phase.css?v=9.8.10">
 <script>/* حارس الإصدار: إن كانت الصفحة محفوظة قديمة في المتصفح تُعاد من الخادم مرة واحدة */
 (function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=9.8.9"></script>
-<script src="portal-role.js?v=9.8.9"></script>
+<script src="portal-meta.js?v=9.8.10"></script>
+<script src="portal-role.js?v=9.8.10"></script>
 </head>
 <body>
 <div id="chrome"></div>
 <main class="ph-main" id="main"><div class="ph-empty">جارٍ التحميل…</div></main>
 
-<script src="portal-config.js?v=9.8.9"></script>
-<script src="portal-names.js?v=9.8.9"></script>
-<script src="phase-data.js?v=9.8.9"></script>
-<script src="phase-core.js?v=9.8.9"></script>
+<script src="portal-config.js?v=9.8.10"></script>
+<script src="portal-names.js?v=9.8.10"></script>
+<script src="phase-data.js?v=9.8.10"></script>
+<script src="phase-core.js?v=9.8.10"></script>
 <script>
 (function () {
   "use strict";
@@ -41,14 +41,24 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
     var me = P.me.get();
     if (!me) { main.innerHTML = '<h1 class="ph-h1">فريقي</h1><p class="ph-lead">اختر مجال فريقك مرة واحدة.</p>' + pickDomain("أي فريق تشرف عليه؟"); bindDomain(function (d) { P.me.set({ d: d, idx: -1 }); viewSup(); }); return; }
     var T = P.PH.teams[me.d], team = P.PH.inds.filter(function (i) { return i.d === me.d; }), tt = P.totals(team);
-    var rows = T.mem.map(function (n, x) { var l = team.filter(function (i) { return i.own === x; }), t = P.totals(l); return '<tr><td>' + E(n) + '</td><td class="n">' + l.length + '</td><td class="n" dir="ltr">' + t.ap + " / " + t.req + '</td><td class="n">' + t.review + '</td><td class="n">' + t.repDone + " / " + l.length + "</td></tr>"; }).join("");
-    var wait = [];
-    team.forEach(function (i) { var s = P.sOf(i); i.recs.forEach(function (n) { if (s.st[n] === "review") wait.push({ i: i, n: n }); }); });
+    var wait = [], ret = 0;
+    team.forEach(function (i) { var s = P.sOf(i); i.recs.forEach(function (n) { if (s.st[n] === "review") wait.push({ i: i, n: n }); if (s.st[n] === "returned") ret++; }); });
+    var pt = function (x) { return '<span dir="ltr">' + P.pct(x) + "%</span>"; };
+    var mcards = T.mem.map(function (n, x) {
+      var l = team.filter(function (i) { return i.own === x; }), t = P.totals(l), pr = P.pct(t.p);
+      return '<div class="ph-mc"><div class="ph-mc-h"><b>' + E(n) + '</b><span class="ph-mc-p" dir="ltr">' + pr + '%</span></div>' +
+        '<div class="ph-myb" role="img" aria-label="اكتمال ' + E(n) + " " + pr + '%"><i style="width:' + pr + '%"></i></div>' +
+        '<div class="ph-mc-s"><span>مؤشرات <b>' + l.length + '</b></span><span>معتمدة <b dir="ltr">' + t.ap + "/" + t.req + '</b></span><span>قيد المراجعة <b>' + t.review + '</b></span><span>مُعادة <b>' + t.returned + '</b></span><span>بانتظار التعبئة <b>' + t.blank + '</b></span><span>تقارير <b dir="ltr">' + t.repDone + "/" + l.length + "</b></span></div></div>"; }).join("");
     main.innerHTML = '<h1 class="ph-h1">فريقي</h1><p class="ph-lead">' + E(T.sup) + " · " + E(P.DN[me.d]) + ' · <a href="#" data-change>تغيير الفريق</a></p>' +
+      '<div class="ph-grid"><div class="ph-stat main"><div class="l">تقدّم فريقي (الرسمي)</div><div class="v">' + pt(tt.p) + '</div><div class="s">' + tt.ind + " مؤشراً · سجلات + تقرير الشواهد</div></div>" +
+      '<div class="ph-stat"><div class="l">بانتظار مراجعتك</div><div class="v">' + wait.length + '</div><div class="s">سجلات معبّأة قيد المراجعة</div></div>' +
+      '<div class="ph-stat"><div class="l">سجلات معتمدة</div><div class="v">' + tt.ap + " من " + tt.req + '</div><div class="s">بعد المراجعة</div></div>' +
+      '<div class="ph-stat"><div class="l">أُعيدت للتعبئة</div><div class="v">' + ret + '</div><div class="s">عند الأعضاء الآن</div></div>' +
+      '<div class="ph-stat"><div class="l">تقارير الشواهد</div><div class="v">' + tt.repDone + " من " + tt.ind + '</div><div class="s">مرفوعة</div></div></div>' +
+      '<h2 class="ph-h2">أعضاء الفريق</h2><div class="ph-mcs">' + mcards + "</div>" +
       '<h2 class="ph-h2">بانتظار مراجعتك <span class="ph-chip wip">' + wait.length + "</span></h2>" +
-      (wait.length ? '<div class="ph-box"><ul class="ph-recs">' + wait.map(function (w) { return '<li class="ph-rec"><span class="ph-recn"><a href="indicators.html?code=' + E(w.i.code) + '"><b dir="ltr">' + E(w.i.code) + "</b></a> · " + E(w.n) + ' <small>(' + E(P.ownerName(w.i)) + ')</small></span><a class="ph-btn" target="_blank" rel="noopener" href="' + P.folderUrl(w.i) + '">افتح المجلد</a></li>'; }).join("") + "</ul></div>" : '<div class="ph-empty">لا توجد سجلات بانتظار المراجعة الآن.</div>') +
-      '<details class="ph-box" style="margin-top:14px"><summary style="cursor:pointer;font-weight:800">تقدّم أعضاء الفريق</summary><table class="ph-t"><thead><tr><th>العضو</th><th>مؤشرات</th><th>مرفوعة / مطلوب</th><th>قيد المراجعة</th><th>تقارير مرفوعة</th></tr></thead><tbody>' + rows + "</tbody></table></details>" +
-      '<details class="ph-box" style="margin-top:10px"><summary style="cursor:pointer;font-weight:800">مؤشرات الفريق</summary><div id="cards">' + team.map(function (i) { return P.card(i); }).join("") + "</div></details>";
+      (wait.length ? '<div class="ph-box"><ul class="ph-recs">' + wait.map(function (w) { return '<li class="ph-rec"><span class="ph-recn"><a href="indicators.html?code=' + E(w.i.code) + '"><b dir="ltr">' + E(w.i.code) + "</b></a> · " + E(w.n) + ' <small>(' + E(P.ownerName(w.i)) + ')</small></span><a class="ph-btn" href="indicators.html?code=' + E(w.i.code) + '">مراجعة</a></li>'; }).join("") + "</ul></div>" : '<div class="ph-empty">لا توجد سجلات بانتظار المراجعة الآن.</div>') +
+      '<details class="ph-box" style="margin-top:14px"><summary style="cursor:pointer;font-weight:800">مؤشرات الفريق</summary><div id="cards">' + team.map(function (i) { return P.card(i); }).join("") + "</div></details>";
     P.bindCards(main); applyRoles();
     main.onclick = function (e) { if (e.target.closest("[data-change]")) { e.preventDefault(); location.href = "index.html"; } };
   }
