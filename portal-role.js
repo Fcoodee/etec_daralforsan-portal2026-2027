@@ -17,7 +17,7 @@
   var ROLES = {
     admin:  { n: "مدير النظام", ic: "fa-user-shield", hl: "لوحة التحكم", q: "هل المنظومة سليمة؟", home: "home.html?u=admin" },
     sup:    { n: "مشرف فريق السجلات والشواهد", ic: "fa-user-check", hl: "لوحة المراجعة", q: "ما الذي ينتظر مراجعتي؟", home: "home.html?u=sup" },
-    member: { n: "عضو فريق السجلات والشواهد", ic: "fa-user-pen", hl: "مؤشراتي وسجلاتي", q: "ماذا أرفع الآن؟", home: "indicators.html?u=member" },
+    member: { n: "عضو فريق السجلات والشواهد", ic: "fa-user-pen", hl: "المؤشرات والسجلات", q: "ماذا أرفع الآن؟", home: "indicators.html?u=member" },
     self:   { n: "مشرف عمليات التقويم الذاتي", ic: "fa-magnifying-glass-chart", hl: "الفجوات والنسب", q: "أين فجواتنا؟", home: "home.html?u=self" }
   };
   /* من يرى أي صفحة. الصفحة خارج نطاق الدور تُعرض مع تنبيه ولا تُحجب (تخصيص عرض لا حماية). */
@@ -164,7 +164,7 @@
       b.className = "warn";
       b.innerHTML = "<span><b>هذه الصفحة خارج مساحة دورك</b> (" + esc(ROLES[role].n) + ")؛ تُعرض للاطلاع فقط.</span>" + sel + '<span class="sp"></span><a href="' + ROLES[role].home + '">العودة إلى «' + esc(ROLES[role].hl) + "»</a>";
     } else {
-      b.innerHTML = '<span><b>' + esc(ROLES[role].n) + "</b></span>" + sel + '<span class="sp"></span><a href="' + ROLES[role].home + '">«' + esc(ROLES[role].hl) + "»</a>";
+      b.innerHTML = '<span><b>' + esc(ROLES[role].n) + "</b></span>" + sel + (role === "member" ? "" : '<span class="sp"></span><a href="' + ROLES[role].home + '">«' + esc(ROLES[role].hl) + "»</a>");
     }
     document.body.insertBefore(b, document.body.firstChild);
     var s = document.getElementById("prSel");
