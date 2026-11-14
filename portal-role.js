@@ -129,7 +129,10 @@
     st.textContent =
       ".pr-off{display:none!important}" +
       "html:not([data-role=\"admin\"]) [data-admin-only]{display:none!important}" +
-      "#prBar{font-family:Cairo,Tahoma,sans-serif;direction:rtl;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:7px 14px;font-size:12px;line-height:1.7;background:#f0fdfa;border-bottom:1px solid #99f6e4;color:#134e4a}" +
+      "#prBar{font-family:Cairo,Tahoma,sans-serif;direction:rtl;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:7px max(14px,env(safe-area-inset-right)) 7px max(14px,env(safe-area-inset-left));font-size:12px;line-height:1.7;background:#f0fdfa;border-bottom:1px solid #99f6e4;color:#134e4a;max-width:100%}" +
+      "#prBar>*{min-width:0}#prBar select{max-width:100%}" +
+      "@media (pointer:coarse){#prBar{font-size:13px}#prBar select{min-height:40px;font-size:16px;padding:4px 10px}#prBar a{min-height:40px;display:inline-flex;align-items:center;padding:4px 14px}}" +
+      "@media (max-width:640px){#prBar{gap:6px 8px;padding-block:4px}#prBar .rn{display:none}#prBar select{flex:1 1 150px}}" +
       "#prBar.warn{background:#fffbeb;border-bottom-color:#fcd34d;color:#78350f}" +
       "#prBar.none{background:#eff6ff;border-bottom-color:#bfdbfe;color:#1e3a8a}" +
       "#prBar b{font-weight:800}" +
@@ -164,7 +167,7 @@
       b.className = "warn";
       b.innerHTML = "<span><b>هذه الصفحة خارج مساحة دورك</b> (" + esc(ROLES[role].n) + ")؛ تُعرض للاطلاع فقط.</span>" + sel + '<span class="sp"></span><a href="' + ROLES[role].home + '">العودة إلى «' + esc(ROLES[role].hl) + "»</a>";
     } else {
-      b.innerHTML = '<span><b>' + esc(ROLES[role].n) + "</b></span>" + sel + (role === "member" ? "" : '<span class="sp"></span><a href="' + ROLES[role].home + '">«' + esc(ROLES[role].hl) + "»</a>");
+      b.innerHTML = '<span class="rn"><b>' + esc(ROLES[role].n) + "</b></span>" + sel + (role === "member" ? "" : '<span class="sp"></span><a href="' + ROLES[role].home + '">«' + esc(ROLES[role].hl) + "»</a>");
     }
     document.body.insertBefore(b, document.body.firstChild);
     var s = document.getElementById("prSel");

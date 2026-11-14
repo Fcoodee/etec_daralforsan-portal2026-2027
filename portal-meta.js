@@ -8,7 +8,7 @@
   if (window.ETEC_META) return;
   /* showEtecLogo: false لإخفاء شعار هيئة تقويم التعليم والتدريب من ترويسات الصفحات.
      السياسات (1445هـ، ص26) تمنع المدرسة المعتمدة من استخدام شعار الهيئة أو المركز في منشوراتها؛ والافتراضي true إلى أن تقرّر إدارة المدرسة وضعها من الاعتماد. */
-  var META = { version: 'v9.8.15', updated: '2026-11-13T23:00:00+03:00', updatedText: '13 نوفمبر 2026', showEtecLogo: true };
+  var META = { version: 'v9.8.18', updated: '2026-11-13T23:00:00+03:00', updatedText: '13 نوفمبر 2026', showEtecLogo: true };
   window.ETEC_META = META;
   var UK = 'etec.utype.v1', AK = 'df_auth_v1';
   var NAMES = { admin: 'مدير النظام', sup: 'مشرف فريق السجلات والشواهد', member: 'عضو فريق السجلات والشواهد', self: 'مشرف عمليات التقويم الذاتي' };
@@ -23,7 +23,7 @@
   css.textContent =
     '#etecMetaBox{position:fixed;bottom:6px;right:8px;left:8px;z-index:2147483000;display:flex;flex-direction:column;align-items:flex-start;gap:3px;pointer-events:none;direction:rtl;font-family:Tahoma,Arial,sans-serif}' +
     '#etecMetaBox.auth{bottom:50px}' +
-    '#etecMetaVer{font:600 10px/1.4 Tahoma,Arial,sans-serif;color:#64748b;background:rgba(255,255,255,.94);border:1px solid #e2e8f0;border-radius:999px;padding:2px 9px;box-shadow:0 1px 3px rgba(0,0,0,.06);max-width:100%}' +
+    '#etecMetaVer{font:600 11px/1.4 Tahoma,Arial,sans-serif;color:#64748b;background:rgba(255,255,255,.94);border:1px solid #e2e8f0;border-radius:999px;padding:2px 9px;box-shadow:0 1px 3px rgba(0,0,0,.06);max-width:100%}' +
     '#etecMetaUser{font:700 11px/1.4 Tahoma,Arial,sans-serif;color:#0f5f5a;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:999px;padding:3px 11px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 1px 3px rgba(0,0,0,.08)}' +
     '@media print{#etecMetaBox{display:none!important}}';
   var box, ver, usr;

@@ -34,6 +34,8 @@
             cursor: pointer; transition: transform .15s ease;
         }
         #df-lock-btn:hover { transform: scale(1.08); }
+        /* v9.8.16: على الشاشات الصغيرة يُنقل الزر إلى الأسفل حتى لا يغطي أزرار الأعلى */
+        @media (max-width: 900px) { #df-lock-btn, #df-logout-btn { top: auto !important; bottom: calc(46px + env(safe-area-inset-bottom)); left: max(14px, env(safe-area-inset-left)); } }
 
         #df-logout-btn {
             position: fixed; top: 64px; left: 14px; z-index: 9999;

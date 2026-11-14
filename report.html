@@ -2,11 +2,11 @@
 <html lang="ar" dir="rtl" style="color-scheme:light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <title>تقرير الشواهد — بوابة الاعتماد المدرسي والتميز</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=9.8.15">
+<link rel="stylesheet" href="phase.css?v=9.8.18">
 <style>
 .rp-wrap{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px;align-items:start}
 @media(max-width:980px){.rp-wrap{grid-template-columns:1fr}}
@@ -47,6 +47,8 @@
 .slot .meta input,.slot .meta textarea{font:600 12px Cairo,Tahoma,sans-serif;border:1px solid #e2e8f0;border-radius:7px;padding:5px 7px;width:100%;box-sizing:border-box;background:#fff;color:#0f172a;resize:none}
 .slot .meta .pt{display:none;font-size:12px;line-height:1.8}
 .slot.drag .ph{background:#ecfdf5;color:#047857}
+@media (pointer:coarse){button,.btn,a.ph-btn,.pri,select,input:not([type=checkbox]):not([type=radio]){min-height:44px}select,input:not([type=checkbox]):not([type=radio]):not([type=file]),textarea{font-size:16px}button{padding-inline:14px}}
+@media screen and (max-width:640px){.sh-head{flex-wrap:wrap;gap:10px}.sh-head .logos{order:1}.sh-head .qr{order:2}.sh-head .tt{order:3;flex:1 1 100%}.sh-head .tt b{font-size:20px}#sheet{padding:14px!important}}
 .qr{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:#334155;flex:none}.qr svg{display:block;border:1px solid #cbd5e1;border-radius:4px}.qr small{font:700 8.5px Arial,sans-serif;max-width:92px;text-align:center;line-height:1.2}
 .sh-head .qr{margin-inline-start:auto}.sec-l li.rec-q{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .sh-foot{margin-top:12px;font-size:11px;color:#64748b;display:flex;justify-content:space-between;gap:8px;border-top:1px solid #e2e8f0;padding-top:8px}
@@ -75,8 +77,8 @@
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=9.8.15"></script>
-<script src="portal-role.js?v=9.8.15"></script>
+<script src="portal-meta.js?v=9.8.18"></script>
+<script src="portal-role.js?v=9.8.18"></script>
 </head>
 <body>
 <div id="chrome" class="noprint"></div>
@@ -112,14 +114,14 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
     </aside>
   </div>
 </main>
-<script src="portal-config.js?v=9.8.15"></script>
-<script src="portal-names.js?v=9.8.15"></script>
-<script src="phase-data.js?v=9.8.15"></script>
-<script src="report-i18n.js?v=9.8.15"></script>
-<script src="highlights.js?v=9.8.15"></script>
-<script src="phase-core.js?v=9.8.15"></script>
-<script src="qrcode-lib.js?v=9.8.15"></script>
-<script src="report.js?v=9.8.15"></script>
+<script src="portal-config.js?v=9.8.18"></script>
+<script src="portal-names.js?v=9.8.18"></script>
+<script src="phase-data.js?v=9.8.18"></script>
+<script src="report-i18n.js?v=9.8.18"></script>
+<script src="highlights.js?v=9.8.18"></script>
+<script src="phase-core.js?v=9.8.18"></script>
+<script src="qrcode-lib.js?v=9.8.18"></script>
+<script src="report.js?v=9.8.18"></script>
 <script src="page-gate.js" data-lazy="1"></script>
 <script src="legal-notice.js"></script>
 <script src="content-protect.js"></script>
