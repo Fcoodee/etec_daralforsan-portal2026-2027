@@ -173,6 +173,8 @@
       var v = s.value;
       if (!canSwitch(role, v)) { s.value = role || ""; return; }
       /* الانتقال إلى مساحة الدور الجديد مباشرة (عضو ← صفحة العضو وسجلاته، وهكذا) */
+      /* عضو/مشرف: يُختار المجال والاسم صراحةً من البوابة (لا يُعاد الاسم السابق تلقائياً) */
+      if (v === "member" || v === "sup") { location.href = "index.html?pick=" + v; return; }
       choose(v, function () { location.href = ROLES[v].home; });
       s.value = role || "";
     });
