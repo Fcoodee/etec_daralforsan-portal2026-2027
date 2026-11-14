@@ -47,7 +47,7 @@ var DOCS_FOLDER_IDS_NEW = { // مجلدات «الوثائق» المضافة ح
 var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word فقط (اضبطها عند تصميم refreshStatus الجديدة)
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.3.2";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.4.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5091,7 +5091,7 @@ function treeMatch_(fileName, code, rec) {
   return b === mm;
 }
 function treeScanIndicator_(code, ent, sizes, errors) {
-  var out = { req: ent.r.length, ready: 0, st: {}, up: 0, ap: 0, docs: [], blank: [], missing: [], files: [], invalid: [], rep: { n: 0, photos: 0, files: [] } };
+  var out = { req: ent.r.length, ready: 0, st: {}, up: 0, ap: 0, docs: [], blank: [], missing: [], files: [], invalid: [], ret: {}, rep: { n: 0, photos: 0, files: [] } };
   var folder;
   try { folder = DriveApp.getFolderById(ent.f); } catch (e) { errors.push({ key: code, error: e.message }); out.error = true; return out; }
   var rv = treeChild_(folder, TREE_REVIEW), ap = treeChild_(folder, TREE_APPROVED), rp = treeChild_(folder, TREE_REPORT);
@@ -5108,14 +5108,15 @@ function treeScanIndicator_(code, ent, sizes, errors) {
     if (tplSize == null) errors.push({ key: code, error: "لا يوجد قالب في 01_القوالب للسجل «" + rec.n + "» فلا يمكن التمييز بين الفارغ والمعبّأ" });
     var placed = false, filled = false, approved = false;
     function isFilled(x) { var pr = splitName_(x.name); if (ACCEPT_DOC_EXT.indexOf(pr.ext) < 0) return false; if (x.size < MIN_BYTES.doc) return false; if (SUBMITTED_[x.id]) return true; /* مرفوع من البطاقة = قُدّم للمراجعة (v9.3.1) */ return tplSize == null ? false : x.size !== tplSize; }
-    var pick = null;
-    rvFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) filled = true; if (!pick || (filled && !pick[0])) pick = [isFilled(x) ? 1 : 0, "rv", x.id]; } });
+    var pick = null, retInfo = null;
+    rvFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) { filled = true; if (RETURNED_[x.id]) retInfo = RETURNED_[x.id]; } if (!pick || (filled && !pick[0])) pick = [isFilled(x) ? 1 : 0, "rv", x.id]; } });
     apFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) { filled = true; approved = true; } if (!pick || isFilled(x) || pick[1] === "rv") pick = [isFilled(x) ? 1 : 0, "ap", x.id]; } });
     if (pick) out.fl[rec.n] = pick;
     if (placed) out.ready++;
     if (filled) { out.up++; out.docs.push(rec.n); } else if (placed) out.blank.push(rec.n); else out.missing.push(rec.n);
     if (approved) out.ap++;
-    out.st[rec.n] = approved ? "approved" : filled ? "review" : placed ? "blank" : "missing";
+    out.st[rec.n] = approved ? "approved" : filled ? (retInfo ? "returned" : "review") : placed ? "blank" : "missing";
+    if (retInfo && !approved) out.ret[rec.n] = { n: String(retInfo.n || "").slice(0, 160), w: String(retInfo.w || "").slice(0, 40), t: String(retInfo.t || "").slice(0, 10) };
   });
   rvFiles.concat(apFiles).forEach(function (x) { var known = ent.r.some(function (rec) { return treeMatch_(x.name, code, rec); }); if (!known) out.invalid.push(x.name); });
   if (rp) {
@@ -5131,10 +5132,16 @@ function treeScanIndicator_(code, ent, sizes, errors) {
   }
   return out;
 }
-var SUBMITTED_ = {};
+var SUBMITTED_ = {}, RETURNED_ = {};
 function loadSubmitted_() {
-  SUBMITTED_ = {};
-  try { var all = PropertiesService.getScriptProperties().getProperties(); Object.keys(all).forEach(function (k) { if (k.indexOf("S_") === 0) SUBMITTED_[k.substring(2)] = all[k]; }); } catch (e) {}
+  SUBMITTED_ = {}; RETURNED_ = {};
+  try {
+    var all = PropertiesService.getScriptProperties().getProperties();
+    Object.keys(all).forEach(function (k) {
+      if (k.indexOf("S_") === 0) SUBMITTED_[k.substring(2)] = all[k];
+      else if (k.indexOf("R_") === 0) { try { RETURNED_[k.substring(2)] = JSON.parse(all[k]); } catch (e) {} }
+    });
+  } catch (e) {}
 }
 function refreshTree_() {
   loadSubmitted_();
@@ -5291,6 +5298,8 @@ function doPost(e) {
     var folder = DriveApp.getFolderById(ent.f);
     if (req.action === "uploadReport") return upJson_(upReport_(folder, req));
     if (req.action === "uploadRecord") return upJson_(upRecord_(folder, req));
+    if (req.action === "approveRecord") return upJson_(reviewRecord_(folder, req, "approve"));
+    if (req.action === "returnRecord") return upJson_(reviewRecord_(folder, req, "return"));
     if (req.action === "saveDraft") return upJson_(upSaveDraft_(folder, req));
     if (req.action === "loadDraft") return upJson_(upLoadDraft_(folder, req));
     return upJson_({ ok: false, error: "إجراء غير معروف." });
@@ -5351,6 +5360,35 @@ function upRecord_(folder, req) {
   try { PropertiesService.getScriptProperties().setProperty("S_" + file.getId(), new Date().toISOString()); } catch (x) {}
   try { CacheService.getScriptCache().remove(CACHE_KEY_TREE); } catch (x) {}
   return { ok: true, id: file.getId(), name: name, replaced: old.length };
+}
+/* مراجعة سجل (v9.4.0): اعتماد = نقله إلى 2_معتمد؛ إعادة للتعبئة = يبقى في 1_قيد_المراجعة بعلامة R_ وملاحظة يراها العضو.
+   الأدوار المسموحة: مدير النظام، مشرف الفريق، مشرف عمليات التقويم الذاتي (تنظيم عرض لا مصادقة؛ الفريق موثوق). */
+function reviewRecord_(folder, req, mode) {
+  if (["admin", "sup", "self"].indexOf(String(req.role || "")) < 0) return { ok: false, error: "المراجعة لمشرف الفريق أو مشرف العمليات أو مدير النظام فقط." };
+  var ent = TREE[req.code], rec = null;
+  ent.r.forEach(function (x) { if (x.n === req.rec) rec = x; });
+  if (!rec) return { ok: false, error: "السجل غير معروف لهذا المؤشر." };
+  var rv = treeChild_(folder, TREE_REVIEW), ap = treeChild_(folder, TREE_APPROVED);
+  if (!rv || !ap) return { ok: false, error: "مجلد المراجعة أو المعتمد غير موجود لهذا المؤشر." };
+  var it, f;
+  it = ap.getFiles(); while (it.hasNext()) { f = it.next(); if (treeMatch_(f.getName(), req.code, rec)) return { ok: false, error: "هذا السجل معتمد مسبقاً." }; }
+  var cand = []; it = rv.getFiles();
+  while (it.hasNext()) { f = it.next(); if (treeMatch_(f.getName(), req.code, rec)) cand.push(f); }
+  if (!cand.length) return { ok: false, error: "لا يوجد ملف لهذا السجل في قيد المراجعة." };
+  cand.sort(function (a, b) { return b.getLastUpdated() - a.getLastUpdated(); });
+  var file = cand[0], who = String(req.who || "غير محدد").slice(0, 40), now = new Date().toISOString();
+  if (mode === "approve") {
+    try { file.moveTo(ap); } catch (e) { return { ok: false, error: "تعذّر النقل إلى المعتمد: " + e.message + " (إن كان الملف مملوكاً لحساب آخر فاحذفه وأعد رفعه من البوابة)." }; }
+    try { PropertiesService.getScriptProperties().deleteProperty("R_" + file.getId()); } catch (e) {}
+    try { file.setDescription("اعتُمد عبر البوابة بواسطة: " + who + " — " + now); } catch (e) {}
+  } else {
+    var note = String(req.note || "").replace(/\s+/g, " ").trim();
+    if (note.length < 3) return { ok: false, error: "اكتب سبب الإعادة (3 أحرف على الأقل)." };
+    try { PropertiesService.getScriptProperties().setProperty("R_" + file.getId(), JSON.stringify({ n: note.slice(0, 160), w: who, t: now.slice(0, 10) })); } catch (e) { return { ok: false, error: "تعذّر حفظ الملاحظة: " + e.message }; }
+    try { file.setDescription("أُعيد للتعبئة بواسطة: " + who + " — " + now + " — " + note.slice(0, 120)); } catch (e) {}
+  }
+  try { CacheService.getScriptCache().remove(CACHE_KEY_TREE); } catch (e) {}
+  return { ok: true, mode: mode, name: file.getName() };
 }
 function upDraftName_(code) { return "مسودة_تقرير_" + code + ".json"; }
 function upSaveDraft_(folder, req) {

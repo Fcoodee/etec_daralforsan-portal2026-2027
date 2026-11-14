@@ -108,3 +108,9 @@ table.ph-t{width:100%;border-collapse:collapse;background:#fff;border:1px solid 
 .ph-rt .ph-upm{display:block;flex-basis:auto;margin-top:3px}
 .ph-rt tr.ph-rec{display:table-row;padding:0;border:0;font-size:inherit}
 .ph-rt .ph-btn{white-space:nowrap}.ph-rt thead th.ph-rc:last-child,.ph-rt td.ph-rc:last-child{width:120px}
+
+.ph-chip.ret{background:#fff1f2;color:#9f1239;border:1px solid #fecdd3}
+.ph-retn{display:block;margin-top:4px;font-size:12px;color:#9f1239;line-height:1.5}
+.ph-rv{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.ph-rv .ph-ok{background:#ecfdf5;border-color:#6ee7b7;color:#065f46}
+.ph-rin{flex:1 1 150px;min-width:120px;font:inherit;font-size:12px;padding:4px 8px;border:1px solid #94a3b8;border-radius:8px}

@@ -10,6 +10,7 @@
     missing:  { t: "غير منشأ",                c: "bad",  tip: "لا يوجد ملف لهذا السجل؛ أبلغ مدير النظام." },
     blank:    { t: "منشأ · بانتظار التعبئة",   c: "idle", tip: "نزّل القالب وعبّئه وأعد رفعه بالاسم نفسه." },
     review:   { t: "معبّأ · قيد المراجعة",     c: "wip",  tip: "بانتظار مراجعة المشرف." },
+    returned: { t: "أُعيد للتعبئة",             c: "ret",  tip: "أعاده المشرف بملاحظة؛ عدّله وأعد رفعه من زر «رفع»." },
     approved: { t: "مرفوع (بعد المراجعة)",     c: "ok",   tip: "راجعه المشرف وأقرّه." }
   };
   /* أساس النسبة الرسمية: created (المنشأة) أو uploaded (المرفوعة بعد المراجعة) — إعداد ETEC_PROGRESS_BASIS في portal-config.js */
@@ -35,11 +36,11 @@
     var raw = ST.ind[i.code], snap = (window.ETEC_SNAPSHOT && ETEC_SNAPSHOT.ind && ETEC_SNAPSHOT.ind[i.code]) || null, st = {}, out, tg = target();
     if (raw) {
       i.recs.forEach(function (n) { st[n] = (raw.st && raw.st[n]) || ((raw.docs || []).indexOf(n) >= 0 ? "review" : ((raw.missing || []).indexOf(n) >= 0 ? "missing" : "blank")); });
-      out = { req: raw.req || i.recs.length, up: raw.up || 0, ap: raw.ap || 0, ready: raw.ready || 0, st: st, rep: raw.rep || { n: 0, photos: 0, files: [] }, invalid: raw.invalid || [], fl: raw.fl || {}, fo: raw.fo || {}, live: true };
+      out = { req: raw.req || i.recs.length, up: raw.up || 0, ap: raw.ap || 0, ready: raw.ready || 0, st: st, rep: raw.rep || { n: 0, photos: 0, files: [] }, invalid: raw.invalid || [], fl: raw.fl || {}, fo: raw.fo || {}, ret: raw.ret || {}, live: true };
     } else {
       i.recs.forEach(function (n) { st[n] = snap && (snap.docs || []).indexOf(n) >= 0 ? "review" : "blank"; });
       var shell = !!(window.ETEC_SNAPSHOT && ETEC_SNAPSHOT.repShell);
-      out = { req: i.recs.length, up: snap ? snap.up || 0 : 0, ap: 0, ready: snap ? snap.ready || 0 : 0, st: st, rep: { n: shell ? 1 : 0, photos: 0, files: [] }, invalid: [], fl: {}, fo: {}, live: false };
+      out = { req: i.recs.length, up: snap ? snap.up || 0 : 0, ap: 0, ready: snap ? snap.ready || 0 : 0, st: st, rep: { n: shell ? 1 : 0, photos: 0, files: [] }, invalid: [], fl: {}, fo: {}, ret: {}, live: false };
     }
     /* منشأة = ملف السجل موجود؛ مرفوعة = معبّأ ومراجَع في 2_معتمد. */
     out.cr = out.ready;
@@ -62,10 +63,10 @@
   function domP(d, b) { return avg(critList(d).map(function (x) { return critP(x.c, b); })); }
   function projP(b) { return avg(PH.inds.map(function (i) { return pv(sOf(i), b); })); }
   function totals(list) {
-    var t = { req: 0, up: 0, ap: 0, cr: 0, review: 0, ready: 0, blank: 0, ind: 0, started: 0, repNone: 0, repDone: 0 };
+    var t = { returned: 0, req: 0, up: 0, ap: 0, cr: 0, review: 0, ready: 0, blank: 0, ind: 0, started: 0, repNone: 0, repDone: 0 };
     (list || PH.inds).forEach(function (i) {
       var s = sOf(i); t.ind++; t.req += s.req; t.up += s.up; t.ap += s.ap; t.cr += s.cr; t.review += s.review; t.ready += s.ready;
-      i.recs.forEach(function (n) { if (s.st[n] === "blank") t.blank++; });
+      i.recs.forEach(function (n) { if (s.st[n] === "blank") t.blank++; if (s.st[n] === "returned") t.returned++; });
       if (s.up > 0 || s.ap > 0) t.started++;
       if (s.repState === "done") t.repDone++; else t.repNone++;
     });
@@ -113,8 +114,10 @@
       var eye = filledF ? '<a class="ph-btn sm ph-eye on" href="' + fileView(f[2]) + '" target="_blank" rel="noopener" title="معاينة السجل المعبّأ" aria-label="معاينة: ' + esc(n) + '"><i class="fa-solid fa-eye"></i></a>' : '<span class="ph-btn sm ph-eye off" aria-disabled="true" title="لا توجد نسخة معبّأة بعد"><i class="fa-solid fa-eye"></i><span class="sr">غير متاحة</span></span>';
       var dl = f && f[2] ? '<a class="ph-btn sm" href="' + fileDl(f[2]) + '" target="_blank" rel="noopener" title="' + (filledF ? "تنزيل السجل المعبّأ" : "تنزيل القالب") + '" aria-label="تنزيل: ' + esc(n) + '"><i class="fa-solid fa-download"></i></a>' : '<span class="ph-dash" aria-label="لا ملف">—</span>';
       var up = k === "approved" ? '<span class="ph-dash" title="معتمد؛ لا يُستبدل إلا بقرار المشرف" aria-label="معتمد">—</span>' : '<button type="button" class="ph-btn sm" data-up="' + esc(i.code) + '" data-rec="' + esc(n) + '" title="ارفع الملف المعبّأ (Word) فيحلّ محل القالب" aria-label="رفع: ' + esc(n) + '"><i class="fa-solid fa-cloud-arrow-up"></i> رفع</button>';
-      var u = UPM[i.code + "|" + n];
-      return '<tr class="ph-rec"><th scope="row" class="ph-rn">' + esc(n) + '</th><td class="ph-rs">' + chip(k) + '<span class="ph-upm ' + (u ? u[1] : "") + '" role="status">' + (u ? esc(u[0]) : "") + '</span></td><td class="ph-rc">' + eye + '</td><td class="ph-rc">' + dl + '</td><td class="ph-rc">' + up + "</td></tr>"; }).join("");
+      var u = UPM[i.code + "|" + n], rt = s.ret && s.ret[n];
+      var note = k === "returned" && rt ? '<span class="ph-retn"><b>ملاحظة المشرف:</b> ' + esc(rt.n) + (rt.w ? " — " + esc(rt.w) : "") + "</span>" : "";
+      var rvw = k === "review" || k === "returned" ? '<span class="ph-rv" data-roles="admin,sup,self"><button type="button" class="ph-btn sm ph-ok" data-act="approve" data-code="' + esc(i.code) + '" data-rec="' + esc(n) + '"><i class="fa-solid fa-circle-check"></i> اعتماد</button>' + (k === "review" ? '<button type="button" class="ph-btn sm" data-act="return" data-code="' + esc(i.code) + '" data-rec="' + esc(n) + '"><i class="fa-solid fa-rotate-left"></i> إعادة للتعبئة</button>' : "") + "</span>" : "";
+      return '<tr class="ph-rec"><th scope="row" class="ph-rn">' + esc(n) + '</th><td class="ph-rs">' + chip(k) + note + rvw + '<span class="ph-upm ' + (u ? u[1] : "") + '" role="status">' + (u ? esc(u[0]) : "") + '</span></td><td class="ph-rc">' + eye + '</td><td class="ph-rc">' + dl + '</td><td class="ph-rc">' + up + "</td></tr>"; }).join("");
     var rf = (s.rep.files || []).filter(function (x) { return x.valid && x.n > 0 && x.id; }).sort(function (x, y) { return y.n - x.n; })[0];
     var repRow = '<tr class="ph-rec ph-rrep"><th scope="row" class="ph-rn"><i class="fa-solid fa-file-image"></i> تقرير الشواهد</th><td class="ph-rs">' + (rf ? '<span class="ph-chip ok">مرفوع · ' + rf.n + ' صور</span>' : '<span class="ph-chip idle">لم يُرفع</span>') + '</td>' +
       '<td class="ph-rc">' + (rf ? '<a class="ph-btn sm ph-eye on" href="' + fileView(rf.id) + '" target="_blank" rel="noopener" title="معاينة التقرير المرفوع" aria-label="معاينة التقرير"><i class="fa-solid fa-eye"></i></a>' : '<span class="ph-btn sm ph-eye off" aria-disabled="true" title="لا يوجد تقرير مرفوع بعد"><i class="fa-solid fa-eye"></i><span class="sr">غير متاح</span></span>') + '</td>' +
@@ -138,7 +141,7 @@
   /* رفع سجل معبّأ من البطاقة: لكل الأدوار (عضو/مشرف/مدير). السكربت يتحقق من الصيغة والاسم ويستبدل القالب. */
   var UPM = {};
   function whoAmI() {
-    try { var m = meGet(), R = window.PortalRole, r = R ? R.get() : ""; if (m && m.idx >= 0 && PH.teams[m.d]) return PH.teams[m.d].mem[m.idx]; if (m && PH.teams[m.d] && r === "sup") return PH.teams[m.d].sup; return (R && R.roles && R.roles[r] && (R.roles[r].name || R.roles[r])) || r || ""; } catch (e) { return ""; }
+    try { var m = meGet(), R = window.PortalRole, r = R ? R.get() : ""; if (m && m.idx >= 0 && PH.teams[m.d]) return PH.teams[m.d].mem[m.idx]; if (m && PH.teams[m.d] && r === "sup") return PH.teams[m.d].sup; return (R && R.roles && R.roles[r] && (R.roles[r].n || R.roles[r].name)) || r || ""; } catch (e) { return ""; }
   }
   function uploadRecord(btn) {
     var url = window.ETEC_STATUS_URL || "", li = btn.closest("tr"), out = li.querySelector(".ph-upm");
@@ -163,8 +166,31 @@
     };
     inp.click();
   }
+  /* مراجعة السجل من البطاقة: اعتماد (نقل إلى معتمد) أو إعادة للتعبئة (يبقى في المراجعة بملاحظة) */
+  function reviewCall(btn, action, note) {
+    var url = window.ETEC_STATUS_URL || "", box = btn.closest(".ph-rs"), out = box.querySelector(".ph-upm"), key = btn.dataset.code + "|" + btn.dataset.rec, R = window.PortalRole;
+    function say(t, c) { UPM[key] = [t, c || ""]; out.textContent = t; out.className = "ph-upm " + (c || ""); }
+    if (!url) { say("غير مهيّأ.", "bad"); return; }
+    box.querySelectorAll("button").forEach(function (b) { b.disabled = true; }); say("جارٍ التنفيذ…", "");
+    fetch(url, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: action, code: btn.dataset.code, rec: btn.dataset.rec, note: note || "", who: whoAmI(), role: R ? R.get() : "" }) })
+      .then(function (r) { return r.json(); })
+      .then(function (o) { if (o && o.ok) { say(action === "approveRecord" ? "اعتُمد ✔" : "أُعيد للتعبئة ✔ (ظهرت الملاحظة للعضو)", "ok"); load(true); } else { box.querySelectorAll("button").forEach(function (b) { b.disabled = false; }); say((o && o.error) || "فشل التنفيذ.", "bad"); } })
+      .catch(function () { box.querySelectorAll("button").forEach(function (b) { b.disabled = false; }); say("تعذّر الاتصال بالسكربت.", "bad"); });
+  }
   function bindCards(root) {
     root.addEventListener("click", function (e) {
+      var ab = e.target.closest("[data-act]");
+      if (ab && root.contains(ab)) {
+        var act = ab.dataset.act;
+        if (act === "approve") { reviewCall(ab, "approveRecord"); return; }
+        if (act === "return") {
+          var rv = ab.closest(".ph-rv"); rv.dataset.old = rv.innerHTML;
+          rv.innerHTML = '<input type="text" class="ph-rin" maxlength="160" placeholder="سبب الإعادة / المطلوب تعديله" aria-label="سبب الإعادة"><button type="button" class="ph-btn sm ph-ok" data-act="retgo" data-code="' + esc(ab.dataset.code) + '" data-rec="' + esc(ab.dataset.rec) + '">إرسال</button><button type="button" class="ph-btn sm" data-act="retcancel">إلغاء</button>';
+          rv.querySelector("input").focus(); return;
+        }
+        if (act === "retcancel") { var r2 = ab.closest(".ph-rv"); r2.innerHTML = r2.dataset.old || ""; return; }
+        if (act === "retgo") { var inp = ab.closest(".ph-rv").querySelector("input"), v = (inp.value || "").trim(); if (v.length < 3) { inp.focus(); inp.placeholder = "اكتب السبب (3 أحرف فأكثر)"; return; } reviewCall(ab, "returnRecord", v); return; }
+      }
       var ub = e.target.closest("[data-up]"); if (ub && root.contains(ub)) { uploadRecord(ub); return; }
       var h = e.target.closest("[data-toggle]"); if (!h || !root.contains(h)) return;
       var b = h.parentNode.querySelector(".ph-card-b"), ex = h.getAttribute("aria-expanded") === "true";
