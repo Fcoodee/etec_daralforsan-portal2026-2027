@@ -149,3 +149,6 @@ table.ph-t{width:100%;border-collapse:collapse;background:#fff;border:1px solid 
 .ph-sync-bar i{display:block;height:100%;width:35%;background:#2563eb;border-radius:999px;animation:phSlide 1.2s ease-in-out infinite}
 @keyframes phSlide{0%{margin-inline-start:-35%}100%{margin-inline-start:100%}}
 @media (prefers-reduced-motion:reduce){.ph-sync-bar i{animation:none;width:100%;opacity:.6}}
+
+a.ph-mc{text-decoration:none;color:inherit;display:block;transition:box-shadow .15s,border-color .15s}a.ph-mc:hover,a.ph-mc:focus-visible{border-color:#006666;box-shadow:0 2px 8px rgba(0,102,102,.18)}
+.ph-mc-go{margin-top:8px;font-size:12px;font-weight:800;color:#006666}
