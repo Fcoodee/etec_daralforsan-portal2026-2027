@@ -6,9 +6,9 @@
 <meta name="robots" content="noindex,nofollow">
 <title>المؤشرات والسجلات — مشروع الاعتماد 2026-2027 — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=9.8.2">
-<script src="portal-meta.js?v=9.8.2"></script>
-<script src="portal-role.js?v=9.8.2"></script>
+<link rel="stylesheet" href="phase.css?v=9.8.3">
+<script src="portal-meta.js?v=9.8.3"></script>
+<script src="portal-role.js?v=9.8.3"></script>
 </head>
 <body>
 <div id="chrome"></div>
@@ -28,10 +28,10 @@
   <div id="list"></div>
 </main>
 
-<script src="portal-config.js?v=9.8.2"></script>
-<script src="portal-names.js?v=9.8.2"></script>
-<script src="phase-data.js?v=9.8.2"></script>
-<script src="phase-core.js?v=9.8.2"></script>
+<script src="portal-config.js?v=9.8.3"></script>
+<script src="portal-names.js?v=9.8.3"></script>
+<script src="phase-data.js?v=9.8.3"></script>
+<script src="phase-core.js?v=9.8.3"></script>
 <script>
 (function () {
   "use strict";
@@ -42,13 +42,15 @@
   [1, 2, 3, 4].forEach(function (d) { fd.insertAdjacentHTML("beforeend", '<option value="' + d + '">' + E(P.DN[d]) + "</option>"); });
   [1, 2, 3, 4].forEach(function (d) { var T = P.PH.teams[d]; fo.insertAdjacentHTML("beforeend", '<optgroup label="' + E(P.DN[d]) + '">' + T.mem.map(function (n, x) { return '<option value="' + d + "|" + x + '">' + E(n) + "</option>"; }).join("") + "</optgroup>"); });
   if (url.get("d") && P.PH.teams[url.get("d")]) fd.value = url.get("d");
-  if (role === "member" && me && me.idx >= 0) { mine.hidden = false; onlyMine = true; mine.setAttribute("aria-pressed", "true"); }
+  /* العضو لا يرى إلا مجاله ومؤشراته وسجلاته: تُزال فلاتر المجال والمسؤول وزر «مؤشراتي فقط» ويُفرض التصفية */
+  if (role === "member") { onlyMine = true; fd.remove(); fo.remove(); mine.remove(); document.querySelector(".ph-lead").textContent = "مؤشراتك وسجلاتك وحالة كل سجل ومجلده."; }
   else if (role === "sup" && me) { fd.value = String(me.d); }
 
   function match(i) {
     var s = P.sOf(i), t = q.value.trim().toLowerCase();
     if (fd.value && i.d !== +fd.value) return false;
     if (fo.value) { var p = fo.value.split("|"); if (i.d !== +p[0] || i.own !== +p[1]) return false; }
+    if (role === "member" && !(me && me.idx >= 0 && i.d === me.d && i.own === me.idx)) return false;
     if (onlyMine && me && !(i.d === me.d && i.own === me.idx)) return false;
     if (t && (i.code + " " + i.st + " " + i.cn + " " + i.text + " " + i.recs.join(" ")).toLowerCase().indexOf(t) < 0) return false;
     switch (fs.value) {
@@ -73,10 +75,9 @@
       var d = document.getElementById("myd"), n = document.getElementById("myn");
       function names() { n.innerHTML = P.PH.teams[+d.value].mem.map(function (x, k) { return '<option value="' + k + '">' + E(x) + "</option>"; }).join(""); }
       d.addEventListener("change", names); names();
-      document.getElementById("mysave").addEventListener("click", function () { P.me.set({ d: +d.value, idx: +n.value }); me = P.me.get(); onlyMine = true; mine.hidden = false; mine.setAttribute("aria-pressed", "true"); draw(); });
+      document.getElementById("mysave").addEventListener("click", function () { P.me.set({ d: +d.value, idx: +n.value }); me = P.me.get(); draw(); });
       return;
     }
-    mine.hidden = false;
     var my = P.PH.inds.filter(function (i) { return i.d === me.d && i.own === me.idx; }), t = P.totals(my), nm = P.PH.teams[me.d].mem[me.idx], ret = [];
     my.forEach(function (i) { var st = P.sOf(i); i.recs.forEach(function (r) { if (st.st[r] === "returned") ret.push({ code: i.code, rec: r, n: (st.ret[r] || {}).n || "", w: (st.ret[r] || {}).w || "" }); }); });
     if (!myTouched) myOpen = ret.length > 0;
@@ -86,7 +87,7 @@
       (ret.length ? '<div class="ph-myret"><b>سجلات أعادها المشرف للتعبئة:</b><ul>' + ret.map(function (x) { return '<li><a href="#" data-go="' + E(x.code) + '">' + E(x.code + " · " + x.rec) + "</a> — " + E(x.n) + (x.w ? " (" + E(x.w) + ")" : "") + "</li>"; }).join("") + "</ul></div>" : "") +
       '<p class="ph-mychg"><a href="#" id="mychg">تغيير الاسم</a></p></div></details>';
     var det = mysp.querySelector("details"); det.querySelector("summary").addEventListener("click", function () { myTouched = true; myOpen = !det.open; });
-    document.getElementById("mychg").addEventListener("click", function (e) { e.preventDefault(); P.me.clear(); me = null; onlyMine = false; mine.hidden = true; myTouched = false; draw(); });
+    document.getElementById("mychg").addEventListener("click", function (e) { e.preventDefault(); P.me.clear(); me = null; myTouched = false; draw(); });
     mysp.querySelectorAll("[data-go]").forEach(function (a) { a.addEventListener("click", function (e) { e.preventDefault(); focus = a.dataset.go; q.value = ""; fo.value = ""; fd.value = ""; draw(); var el = document.getElementById("i-" + focus); if (el) el.scrollIntoView({ block: "center" }); }); });
   }
   function draw() {
