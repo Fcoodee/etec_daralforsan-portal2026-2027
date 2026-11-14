@@ -242,15 +242,21 @@
   function init() {
     P.chrome("report.html");
     var me = P.me.get(), q = ""; try { q = new URLSearchParams(location.search).get("code") || ""; } catch (e) {}
+    var role = window.PortalRole ? PortalRole.get() : "";
     var mine = me && me.idx >= 0 ? P.PH.inds.filter(function (i) { return i.d === me.d && i.own === me.idx; }) : [];
+    /* النطاق حسب الدور: عضو ← مؤشراته؛ مشرف فريق ← مؤشرات مجاله؛ مشرف العمليات ومدير النظام ← الكل */
+    var scope = role === "member" ? mine : (role === "sup" && me && P.PH.teams[me.d] ? P.PH.inds.filter(function (i) { return i.d === me.d; }) : null);
+    var allowed = function (c) { return !scope || scope.some(function (i) { return i.code === c; }); };
+    var opt = function (i) { return '<option value="' + i.code + '">' + i.code + " — " + E(i.st) + "</option>"; };
     var sel = $("indSel"), html = "";
-    if (mine.length) html += '<optgroup label="مؤشراتي">' + mine.map(function (i) { return '<option value="' + i.code + '">' + i.code + " — " + E(i.st) + "</option>"; }).join("") + "</optgroup>";
-    var onlyMine = !!(window.PortalRole && PortalRole.get() === "member" && mine.length); /* العضو: مؤشراته فقط */
-    if (!onlyMine) [1, 2, 3, 4].forEach(function (d) { html += '<optgroup label="' + E(P.DN[d]) + '">' + P.PH.inds.filter(function (i) { return i.d === d; }).map(function (i) { return '<option value="' + i.code + '">' + i.code + " — " + E(i.st) + "</option>"; }).join("") + "</optgroup>"; });
+    if (role === "member") html += '<optgroup label="مؤشراتي">' + mine.map(opt).join("") + "</optgroup>";
+    else if (scope) html += '<optgroup label="' + E(P.DN[me.d]) + '">' + scope.map(opt).join("") + "</optgroup>";
+    else {
+      [1, 2, 3, 4].forEach(function (d) { html += '<optgroup label="' + E(P.DN[d]) + '">' + P.PH.inds.filter(function (i) { return i.d === d; }).map(opt).join("") + "</optgroup>"; });
+    }
     sel.innerHTML = html; sel.addEventListener("change", function () { open(sel.value); });
     try { $("tok").value = localStorage.getItem(TK) || ""; $("who").value = localStorage.getItem(WK) || (me && me.idx >= 0 ? P.PH.teams[me.d].mem[me.idx] : ""); } catch (e) {}
-    var inMine = function (c) { return mine.some(function (i) { return i.code === c; }); };
-    var first = P.byCode(q) && (!onlyMine || inMine(q)) ? q : (mine[0] ? mine[0].code : P.PH.inds[0].code);
+    var first = P.byCode(q) && allowed(q) ? q : (scope ? (scope[0] ? scope[0].code : P.PH.inds[0].code) : P.PH.inds[0].code);
     openDb().then(function () { return open(first); }).then(function () { ping(); });
     P.onStatus(function () { if (ready) rpLink(); });
     P.load();
