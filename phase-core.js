@@ -218,19 +218,24 @@
     ];
     var nav = items.filter(function (x) { return !role || x[3].split(",").indexOf(role) >= 0; }).map(function (x) {
       return '<a href="' + x[0] + '"' + (x[0] === active ? ' aria-current="page"' : "") + '><i class="fa-solid ' + x[1] + '"></i> ' + esc(x[2]) + "</a>"; }).join("");
-    el.innerHTML = '<div class="ph-top"><a class="ph-home" href="index.html"><i class="fa-solid fa-house"></i> البوابة</a><span class="ph-sub">مشروع الاعتماد 2026-2027 · الدبلوما الأمريكية (بنين) · مدارس دار الفرسان</span><span class="ph-conn" id="phConn"></span></div>' +
+    el.innerHTML = '<div class="ph-top"><a class="ph-home" href="index.html"><i class="fa-solid fa-house"></i> البوابة</a><span class="ph-sub">مشروع الاعتماد 2026-2027 · الدبلوما الأمريكية (بنين) · مدارس دار الفرسان</span></div>' +
       '<header class="ph-head"><div class="ph-logos"><img src="logo0.png" alt="Diploma 2026"><img src="logo1.png" alt="دار الفرسان"><img src="logo2.png" alt="ETEC"></div></header>' +
-      '<nav class="ph-nav" aria-label="التنقل">' + nav + "</nav>";
+      '<nav class="ph-nav" aria-label="التنقل">' + nav + '<div class="ph-sync" id="phConn" role="status" aria-live="polite"></div></nav>';
     onStatus(function () { connChip(); });
   }
   function fmtT(t) { try { return new Date(t).toLocaleString("ar-SA-u-ca-gregory", { dateStyle: "medium", timeStyle: "short" }); } catch (e) { return t; } }
+  var syncTimer = null, syncT0 = 0;
   function connChip() {
     var c = document.getElementById("phConn"); if (!c) return;
     var role = window.PortalRole ? PortalRole.get() : "", live = ST.live && !ST.failed, when = live ? fmtT(ST.gen) : (ST.asof || "");
-    var txt = ST.loading ? "جارٍ تحديث الحالة…" : live ? "آخر تحديث: " + when : (role === "admin" ? "لقطة " + when + " · ليست حالة حيّة" : "الأرقام حتى " + when);
-    c.className = "ph-conn " + (ST.loading ? "load" : live ? "ok" : "off");
-    c.innerHTML = '<i class="fa-solid ' + (ST.loading ? "fa-rotate fa-spin" : live ? "fa-circle-check" : "fa-circle-exclamation") + '"></i> ' + esc(txt) + ' <button type="button" id="phRef" class="ph-ref" aria-label="تحديث"><i class="fa-solid fa-arrows-rotate"></i> تحديث</button>';
-    document.getElementById("phRef").addEventListener("click", function () { load(true); });
+    var txt = live ? "آخر تحديث للحالة: " + when : ST.failed ? "تعذّر جلب الحالة الحيّة" + (when ? " · الأرقام المعروضة حتى " + when : "") : (role === "admin" ? "لقطة " + when + " · ليست حالة حيّة" : "الأرقام حتى " + when);
+    c.className = "ph-sync " + (ST.loading ? "load" : live ? "ok" : "off");
+    c.innerHTML = '<div class="ph-sync-row"><i class="fa-solid ' + (ST.loading ? "fa-rotate fa-spin" : live ? "fa-circle-check" : "fa-circle-exclamation") + '"></i><span class="ph-sync-t" id="phSyncT">' + (ST.loading ? "جارٍ جلب الحالة الحيّة، انتظر: <b id=\"phSyncS\">0</b> ثانية · قد يستغرق حتى دقيقة" : esc(txt)) + '</span>' +
+      '<button type="button" id="phRef" class="ph-ref"' + (ST.loading ? " disabled" : "") + ' aria-label="تحديث الحالة الآن"><i class="fa-solid fa-arrows-rotate"></i> ' + (ST.loading ? "جارٍ التحديث" : "تحديث الآن") + '</button></div>' +
+      (ST.loading ? '<div class="ph-sync-bar" role="progressbar" aria-label="جارٍ التحديث"><i></i></div>' : "");
+    if (syncTimer) { clearInterval(syncTimer); syncTimer = null; }
+    if (ST.loading) { syncT0 = Date.now(); syncTimer = setInterval(function () { var e = document.getElementById("phSyncS"); if (e) e.textContent = Math.round((Date.now() - syncT0) / 1000); }, 500); }
+    var b = document.getElementById("phRef"); if (b) b.addEventListener("click", function () { load(true); });
   }
 
   window.PHC = { PH: PH, DN: DN, STATE: STATE, ST: ST, esc: esc, pct: pct, avg: avg, byCode: byCode, folderUrl: folderUrl, fileDl: fileDl, fileView: fileView, subUrl: subUrl, rootUrl: rootUrl, sOf: sOf, critP: critP, critList: critList, domP: domP, projP: projP, totals: totals, ownerName: ownerName,
