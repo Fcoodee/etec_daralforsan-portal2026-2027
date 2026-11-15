@@ -193,3 +193,8 @@ select,input,textarea,button{max-width:100%}
 .ph-tw{contain:paint}
 @media (max-width:640px){.ph-grid .ph-stat:last-child:nth-child(odd){grid-column:1/-1}}
 @media (pointer:coarse){#mychg{display:inline-flex;align-items:center;min-height:44px;padding-inline:8px;font-weight:800}}
+
+/* رقم متحقق يومض بالأخضر: السجلات المنشأة (القوالب موجودة) وتقارير الشواهد المرفوعة */
+.ph-gl{color:#15803d;font-weight:900;border-radius:8px;padding:0 6px;background:#ecfdf5;box-shadow:0 0 0 0 rgba(22,163,74,.55);animation:ph-glnum 1.8s ease-in-out infinite;display:inline-block;unicode-bidi:isolate}
+@keyframes ph-glnum{0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,.55);background:#ecfdf5}50%{box-shadow:0 0 0 8px rgba(22,163,74,0);background:#bbf7d0}}
+@media (prefers-reduced-motion:reduce){.ph-gl{animation:none;box-shadow:0 0 0 2px #16a34a}}

@@ -6,14 +6,14 @@
 <meta name="robots" content="noindex,nofollow">
 <title>المؤشرات والسجلات — مشروع الاعتماد 2026-2027 — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=9.9.0">
+<link rel="stylesheet" href="phase.css?v=9.9.1">
 <script>/* حارس الإصدار: إن كانت الصفحة محفوظة قديمة في المتصفح تُعاد من الخادم مرة واحدة */
 (function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=9.9.0"></script>
-<script src="portal-role.js?v=9.9.0"></script>
+<script src="portal-meta.js?v=9.9.1"></script>
+<script src="portal-role.js?v=9.9.1"></script>
 </head>
 <body>
 <div id="chrome"></div>
@@ -33,10 +33,10 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
   <div id="list"></div>
 </main>
 
-<script src="portal-config.js?v=9.9.0"></script>
-<script src="portal-names.js?v=9.9.0"></script>
-<script src="phase-data.js?v=9.9.0"></script>
-<script src="phase-core.js?v=9.9.0"></script>
+<script src="portal-config.js?v=9.9.1"></script>
+<script src="portal-names.js?v=9.9.1"></script>
+<script src="phase-data.js?v=9.9.1"></script>
+<script src="phase-core.js?v=9.9.1"></script>
 <script>
 (function () {
   "use strict";
@@ -90,7 +90,7 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
     my.forEach(function (i) { var st = P.sOf(i); i.recs.forEach(function (r) { if (st.st[r] === "returned") ret.push({ code: i.code, rec: r, n: (st.ret[r] || {}).n || "", w: (st.ret[r] || {}).w || "" }); }); });
     if (!myTouched) myOpen = ret.length > 0;
     mysp.innerHTML = '<details class="ph-my"' + (myOpen ? " open" : "") + '><summary><b>مساحتي</b> · ' + E(nm) + ' <span class="ph-chip ok">مرفوعة ' + t.ap + "/" + t.req + "</span>" + (ret.length ? ' <span class="ph-chip ret">أُعيدت إليك ' + ret.length + "</span>" : "") + (t.review ? ' <span class="ph-chip wip">قيد المراجعة ' + t.review + "</span>" : "") + "</summary>" +
-      '<div class="ph-mybody"><div class="ph-mystats"><span>اكتمال مؤشراتي <b dir="ltr">' + P.pct(t.p) + '%</b></span><span>بانتظار التعبئة <b>' + t.blank + '</b></span><span>تقارير مرفوعة <b dir="ltr">' + t.repDone + "/" + t.ind + "</b></span></div>" +
+      '<div class="ph-mybody"><div class="ph-mystats"><span>اكتمال مؤشراتي <b dir="ltr">' + P.pct(t.p) + '%</b></span><span>بانتظار التعبئة <b>' + t.blank + '</b></span><span>تقارير مرفوعة <b dir="ltr">' + P.gl(t.repDone, t.repDone) + "/" + t.ind + "</b></span></div>" +
       '<div class="ph-myb" role="img" aria-label="اكتمال مؤشراتي ' + P.pct(t.p) + '%"><i style="width:' + P.pct(t.p) + '%"></i></div>' +
       (ret.length ? '<div class="ph-myret"><b>سجلات أعادها المشرف للتعبئة:</b><ul>' + ret.map(function (x) { return '<li><a href="#" data-go="' + E(x.code) + '">' + E(x.code + " · " + x.rec) + "</a> — " + E(x.n) + (x.w ? " (" + E(x.w) + ")" : "") + "</li>"; }).join("") + "</ul></div>" : "") +
       '<p class="ph-mychg"><a href="#" id="mychg">تغيير الاسم</a></p></div></details>';
@@ -103,7 +103,7 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
   function draw() {
     renderMy();
     var a = P.PH.inds.filter(match), t = P.totals(a);
-    sum.textContent = a.length + " مؤشراً · " + t.req + " سجلاً · منشأة " + t.cr + " · مرفوعة (بعد المراجعة) " + t.ap + " · معبّأة قيد المراجعة " + t.review;
+    sum.innerHTML = a.length + " مؤشراً · " + t.req + " سجلاً · منشأة " + P.gl(t.cr, t.cr) + " · مرفوعة (بعد المراجعة) " + t.ap + " · معبّأة قيد المراجعة " + t.review;
     list.innerHTML = a.length ? a.map(function (i) { return P.card(i, { open: i.code === focus }); }).join("") : '<div class="ph-empty">لا توجد مؤشرات تطابق هذا التصفية.</div>';
     if (window.PortalRole) { var els = list.querySelectorAll("[data-roles]"); for (var k = 0; k < els.length; k++) els[k].classList.toggle("pr-off", !!role && els[k].getAttribute("data-roles").split(",").indexOf(role) < 0); }
     if (first && focus) { var el = document.getElementById("i-" + focus); if (el) el.scrollIntoView({ block: "center" }); }

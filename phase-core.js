@@ -15,6 +15,7 @@
   };
   /* أساس النسبة الرسمية: created (المنشأة) أو uploaded (المرفوعة بعد المراجعة) — إعداد ETEC_PROGRESS_BASIS في portal-config.js */
   function basis() { return window.ETEC_PROGRESS_BASIS === "uploaded" ? "uploaded" : "created"; }
+  function gl(txt, on) { return on ? '<span class="ph-gl">' + txt + "</span>" : txt; }
   function basisTxt() { return basis() === "uploaded" ? "المرفوعة بعد المراجعة" : "السجلات المنشأة"; }
   function target() { return +window.ETEC_REPORT_TARGET || 6; }
 
@@ -135,7 +136,7 @@
       '<div class="ph-card-b"' + (open ? "" : " hidden") + ">" +
       '<p class="ph-stmt">' + esc(i.text) + "</p>" +
       table +
-      '<div class="ph-row"><span class="ph-chip idle">منشأة ' + s.cr + "/" + s.req + '</span><span class="ph-chip ' + (s.ap ? "ok" : "idle") + '">مرفوعة (بعد المراجعة) ' + s.ap + "/" + s.req + "</span>" + (s.review ? '<span class="ph-chip wip">معبّأة قيد المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
+      '<div class="ph-row"><span class="ph-chip idle">منشأة ' + gl(s.cr + "/" + s.req, s.cr) + '</span><span class="ph-chip ' + (s.ap ? "ok" : "idle") + '">مرفوعة (بعد المراجعة) ' + s.ap + "/" + s.req + "</span>" + (s.review ? '<span class="ph-chip wip">معبّأة قيد المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
       '<div class="ph-actions"><a class="ph-btn pri" href="' + folderUrl(i) + '" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> مجلد المؤشر في Drive</a>' +
       '</div>' +
       "</div></article>";
@@ -240,5 +241,5 @@
   }
 
   window.PHC = { PH: PH, DN: DN, STATE: STATE, ST: ST, esc: esc, pct: pct, avg: avg, byCode: byCode, folderUrl: folderUrl, fileDl: fileDl, fileView: fileView, subUrl: subUrl, rootUrl: rootUrl, sOf: sOf, critP: critP, critList: critList, domP: domP, projP: projP, totals: totals, ownerName: ownerName,
-    bar2: bar2, basis: basis, basisTxt: basisTxt, target: target, me: { get: meGet, set: meSet, clear: meClear }, load: load, onStatus: onStatus, bar: bar, chip: chip, card: card, bindCards: bindCards, chrome: chrome, fmtT: fmtT };
+    bar2: bar2, basis: basis, basisTxt: basisTxt, gl: gl, target: target, me: { get: meGet, set: meSet, clear: meClear }, load: load, onStatus: onStatus, bar: bar, chip: chip, card: card, bindCards: bindCards, chrome: chrome, fmtT: fmtT };
 })();

@@ -6,14 +6,14 @@
 <meta name="robots" content="noindex,nofollow">
 <title>قراءة التقدّم — مشروع الاعتماد 2026-2027 — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=9.9.0">
+<link rel="stylesheet" href="phase.css?v=9.9.1">
 <script>/* حارس الإصدار: إن كانت الصفحة محفوظة قديمة في المتصفح تُعاد من الخادم مرة واحدة */
 (function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=9.9.0"></script>
-<script src="portal-role.js?v=9.9.0"></script>
+<script src="portal-meta.js?v=9.9.1"></script>
+<script src="portal-role.js?v=9.9.1"></script>
 <style>
 :root{--d1:#1d4ed8;--d2:#047857;--d3:#b45309;--d4:#7e22ce;--d1b:#eff6ff;--d2b:#ecfdf5;--d3b:#fffbeb;--d4b:#faf5ff}
 .pg-hero{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 22px}
@@ -69,10 +69,10 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
 <div id="chrome"></div>
 <main class="ph-main" id="main"><div class="ph-empty">جارٍ التحميل…</div></main>
 
-<script src="portal-config.js?v=9.9.0"></script>
-<script src="portal-names.js?v=9.9.0"></script>
-<script src="phase-data.js?v=9.9.0"></script>
-<script src="phase-core.js?v=9.9.0"></script>
+<script src="portal-config.js?v=9.9.1"></script>
+<script src="portal-names.js?v=9.9.1"></script>
+<script src="phase-data.js?v=9.9.1"></script>
+<script src="phase-core.js?v=9.9.1"></script>
 <script>
 (function () {
   "use strict";
@@ -104,9 +104,9 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
       '<div class="pg-kpis">' +
       kpi("المؤشرات", T.ind, "في 4 مجالات و" + P.critList().length + " معياراً") +
       kpi("السجلات المرفوعة", T.ap + " / " + T.req, "بعد مراجعة المشرف") +
-      kpi("السجلات المنشأة", T.cr + " / " + T.req, "القوالب موجودة") +
+      kpi("السجلات المنشأة", P.gl(T.cr + " / " + T.req, T.cr), "القوالب موجودة") +
       kpi("معبّأة قيد المراجعة", T.review, "بانتظار المشرفين") +
-      kpi("تقارير الشواهد", T.repDone + " / " + T.ind, "مرفوعة") + "</div>" +
+      kpi("تقارير الشواهد", P.gl(T.repDone, T.repDone) + " / " + T.ind, "مرفوعة") + "</div>" +
       '<p class="pg-formula"><b>كيف تُقرأ النسبة؟</b> اكتمال المؤشر = نصف لسجلاته ووثائقه (الأساس الحالي: ' + E(P.basisTxt()) + ") + نصف لتقرير الشواهد. فمؤشر بلا تقرير لا يتجاوز 50%.</p></div></section>";
 
     /* بطاقات المجالات */
@@ -117,7 +117,7 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
       h += '<article class="pg-dom" style="--c:' + COL[d][0] + ";--cb:" + COL[d][1] + '"><h3>' + E(P.DN[d]) + '</h3><div class="big">' + pc(tot) + "%</div>" +
         '<div class="pg-bar" role="img" aria-label="سجلات ' + pc(rf / 2) + '% وتقارير ' + pc(tf / 2) + '% من 100"><i class="r" style="width:' + (rf * 50).toFixed(1) + '%"></i><i class="t" style="width:' + (tf * 50).toFixed(1) + '%"></i></div>' +
         '<div class="pg-leg" style="--c:' + COL[d][0] + '"><span style="--k:' + COL[d][0] + '">السجلات ' + pc(rf) + '%</span><span style="--k:repeating-linear-gradient(45deg,' + COL[d][0] + ',' + COL[d][0] + ' 2px,#fff 2px,#fff 4px)">التقارير ' + pc(tf) + "%</span></div>" +
-        "<ul><li>المؤشرات · المعايير<b>" + l.length + " · " + cr + "</b></li><li>سجلات مرفوعة<b>" + t.ap + " / " + t.req + "</b></li><li>سجلات منشأة<b>" + t.cr + " / " + t.req + "</b></li><li>قيد المراجعة<b>" + t.review + "</b></li><li>تقارير مرفوعة<b>" + t.repDone + " / " + l.length + "</b></li><li>المشرف<b style=\"direction:rtl\">" + E(P.PH.teams[d].sup) + "</b></li></ul></article>";
+        "<ul><li>المؤشرات · المعايير<b>" + l.length + " · " + cr + "</b></li><li>سجلات مرفوعة<b>" + t.ap + " / " + t.req + "</b></li><li>سجلات منشأة<b>" + P.gl(t.cr + " / " + t.req, t.cr) + "</b></li><li>قيد المراجعة<b>" + t.review + "</b></li><li>تقارير مرفوعة<b>" + P.gl(t.repDone, t.repDone) + " / " + l.length + "</b></li><li>المشرف<b style=\"direction:rtl\">" + E(P.PH.teams[d].sup) + "</b></li></ul></article>";
     });
     h += "</div>";
 
