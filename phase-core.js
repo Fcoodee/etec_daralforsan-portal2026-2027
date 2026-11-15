@@ -214,7 +214,8 @@
       ["home.html", "fa-house", role && roles[role] ? roles[role].hl : "الرئيسية", "admin,sup,self"],
       ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "admin,sup,member,self"],
       ["progress.html", "fa-chart-pie", "قراءة التقدّم", "admin,self"],
-      ["report.html", "fa-file-image", "تقرير الشواهد", "admin,sup,member"]
+      ["report.html", "fa-file-image", "تقرير الشواهد", "admin,sup,member"],
+      ["reference.html", "fa-book-open", "المرجع", "admin,self"]
     ];
     var nav = items.filter(function (x) { return !role || x[3].split(",").indexOf(role) >= 0; }).map(function (x) {
       return '<a href="' + x[0] + '"' + (x[0] === active ? ' aria-current="page"' : "") + '><i class="fa-solid ' + x[1] + '"></i> ' + esc(x[2]) + "</a>"; }).join("");
