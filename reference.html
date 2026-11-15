@@ -6,14 +6,14 @@
 <meta name="robots" content="noindex,nofollow">
 <title>المرجع: المجالات والمعايير والمؤشرات والإضاءات والسجلات — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=9.8.19">
+<link rel="stylesheet" href="phase.css?v=9.8.20">
 <script>/* حارس الإصدار */
 (function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=9.8.19"></script>
-<script src="portal-role.js?v=9.8.19"></script>
+<script src="portal-meta.js?v=9.8.20"></script>
+<script src="portal-role.js?v=9.8.20"></script>
 <style>
 :root{--d1:#1d4ed8;--d2:#047857;--d3:#b45309;--d4:#7e22ce;--d1b:#eff6ff;--d2b:#ecfdf5;--d3b:#fffbeb;--d4b:#faf5ff}
 .rf-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:10px 0}
@@ -51,6 +51,19 @@ body:not(.en) .rf-en{display:none}
 .rf-src li{font-size:13px;margin:6px 0;overflow-wrap:anywhere}
 .rf-src a{color:#0f5f5f;font-weight:700}
 .rf-src small{display:block;color:var(--mut)}
+.rf-pdfs{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin:10px 0}
+.rf-pdf{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.rf-pdf b{font-size:14px;line-height:1.6}.rf-pdf small{color:var(--mut);font-size:12px}
+.rf-pdf .row{display:flex;gap:10px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap}
+.rf-pdf .qr{display:block;border:1px solid var(--line);border-radius:8px;overflow:hidden;line-height:0}
+.rf-pdf .qr svg{width:84px;height:84px}
+.rf-pdf .btns{display:flex;gap:6px;flex-wrap:wrap}
+#rfMod{position:fixed;inset:0;z-index:2147483000;background:rgba(15,23,42,.72);display:none;flex-direction:column;padding:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}
+#rfMod.on{display:flex}
+#rfMod .bar{display:flex;gap:8px;align-items:center;background:#fff;border-radius:12px 12px 0 0;padding:8px 12px;font-weight:800;font-size:13px}
+#rfMod .bar span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#rfMod iframe{flex:1;width:100%;border:0;background:#fff;border-radius:0 0 12px 12px}
+#rfMod .why{background:#fffbeb;padding:6px 12px;font-size:12px}
 mark{background:#fef08a;border-radius:3px}
 @media print{.rf-tools,#chrome{display:none}.rf-dom,.rf-crit,.rf-ind{break-inside:avoid-page}}
 </style>
@@ -70,18 +83,25 @@ mark{background:#fef08a;border-radius:3px}
     <span class="rf-cnt" id="cnt" role="status"></span>
   </div>
   <div id="tree"></div>
+  <section class="rf-src" aria-label="الملفات المرجعية" id="pdfSec">
+    <h2>الملفات المرجعية (PDF) من مجلد المشروع في Drive</h2>
+    <p class="ph-lead" style="margin:0 0 4px">اضغط «عرض» لفتح الملف في نافذة داخل الصفحة، أو امسح رمز QR من جهاز ذكي. الملفات خاصة بحساب المشروع: يفتحها من له صلاحية على المجلد فقط.</p>
+    <div class="rf-pdfs" id="pdfs"></div>
+  </section>
   <div class="rf-note" id="notes"></div>
   <section class="rf-src" aria-label="المراجع">
     <h2>المراجع ومصادر المعلومات</h2>
     <ol id="srcs"></ol>
   </section>
 </main>
-<script src="portal-config.js?v=9.8.19"></script>
-<script src="portal-names.js?v=9.8.19"></script>
-<script src="phase-data.js?v=9.8.19"></script>
-<script src="report-i18n.js?v=9.8.19"></script>
-<script src="highlights.js?v=9.8.19"></script>
-<script src="phase-core.js?v=9.8.19"></script>
+<div id="rfMod" role="dialog" aria-modal="true" aria-label="عرض الملف"><div class="bar"><span id="rfT"></span><a class="ph-btn sm" id="rfO" target="_blank" rel="noopener">فتح في Drive</a><button type="button" class="ph-btn sm" id="rfX">إغلاق</button></div><div class="why">إن ظهرت رسالة «لا تملك صلاحية» فسجّل الدخول بحساب Google المصرّح له، أو استعمل «فتح في Drive».</div><iframe id="rfF" title="عرض الملف" referrerpolicy="no-referrer"></iframe></div>
+<script src="portal-config.js?v=9.8.20"></script>
+<script src="portal-names.js?v=9.8.20"></script>
+<script src="phase-data.js?v=9.8.20"></script>
+<script src="report-i18n.js?v=9.8.20"></script>
+<script src="highlights.js?v=9.8.20"></script>
+<script src="phase-core.js?v=9.8.20"></script>
+<script src="qrcode-lib.js?v=9.8.20"></script>
 <script>
 (function () {
   "use strict";
@@ -164,8 +184,29 @@ mark{background:#fef08a;border-radius:3px}
   ];
   document.getElementById("srcs").innerHTML = S.map(function (s) { return "<li>" + (s[1] ? '<a href="' + E(s[1]) + '" target="_blank" rel="noopener noreferrer">' + E(s[0]) + "</a>" : "<b>" + E(s[0]) + "</b>") + "<small>" + E(s[2]) + "</small></li>"; }).join("");
 
+
+  /* ===== ملفات PDF المرجعية ===== */
+  var PDFS = [
+    ["وثيقة معايير التقويم والتصنيف والاعتماد المدرسي — الإصدار الثاني 2026", "16 صفحة", "1Tu1cUCus3S5sfw0k-kY5w94Kdx_8bdBx"],
+    ["الدليل الإجرائي للتقويم الذاتي — الإصدار الثالث 1447هـ / 2026", "26 صفحة", "1vHidO5HpPUVB-rhSZJMD-ozvQXAcPZEa"],
+    ["سياسات التقويم والاعتماد المدرسي", "", "1Hn0UBjufldQgfpR1zJm5iRly_QfiYQ58"],
+    ["دليل الخدمات الإلكترونية (الملف في Drive باسم «دليل المنصة الرقمية»)", "", "1ujsoGVQP1_Wtfnw-83791uREMY-heQiP"],
+    ["دليل بوابة مدير المدرسة", "", "1PeRMP8revKjFFRs-YizE-taOz7Fitp-2"]
+  ];
+  function qsvg(url, px) { try { var q = window.qrcode(0, "M"); q.addData(url); q.make(); var n = q.getModuleCount(), d = "", r, c; for (r = 0; r < n; r++) for (c = 0; c < n; c++) if (q.isDark(r, c)) d += "M" + (c + 2) + " " + (r + 2) + "h1v1h-1z"; return '<svg xmlns="http://www.w3.org/2000/svg" width="' + px + '" height="' + px + '" viewBox="0 0 ' + (n + 4) + " " + (n + 4) + '" shape-rendering="crispEdges" role="img" aria-label="QR"><rect width="100%" height="100%" fill="#fff"/><path d="' + d + '" fill="#000"/></svg>'; } catch (e) { return ""; } }
+  document.getElementById("pdfs").innerHTML = PDFS.map(function (f, k) {
+    var view = "https://drive.google.com/file/d/" + f[2] + "/view";
+    return '<div class="rf-pdf"><b>' + E(f[0]) + "</b>" + (f[1] ? "<small>" + E(f[1]) + "</small>" : "") + '<div class="row"><div class="btns"><button type="button" class="ph-btn sm" data-pdf="' + k + '"><i class="fa-solid fa-eye"></i> عرض</button><a class="ph-btn sm" href="' + view + '" target="_blank" rel="noopener"><i class="fa-solid fa-up-right-from-square"></i> Drive</a></div><a class="qr" href="' + view + '" target="_blank" rel="noopener" title="رمز QR: يفتح الملف في Drive">' + qsvg(view, 84) + "</a></div></div>";
+  }).join("");
+  var mod = document.getElementById("rfMod"), fr = document.getElementById("rfF"), lastBtn = null;
+  function closeM() { mod.classList.remove("on"); fr.removeAttribute("src"); if (lastBtn) lastBtn.focus(); }
+  document.getElementById("pdfs").addEventListener("click", function (e) { var b = e.target.closest("[data-pdf]"); if (!b) return; var f = PDFS[+b.dataset.pdf]; lastBtn = b; document.getElementById("rfT").textContent = f[0]; document.getElementById("rfO").href = "https://drive.google.com/file/d/" + f[2] + "/view"; fr.src = "https://drive.google.com/file/d/" + f[2] + "/preview"; mod.classList.add("on"); document.getElementById("rfX").focus(); });
+  document.getElementById("rfX").addEventListener("click", closeM);
+  mod.addEventListener("click", function (e) { if (e.target === mod) closeM(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && mod.classList.contains("on")) closeM(); });
+
   /* خريطة الأدوات من data/ (تعمل على الخادم؛ وعند الفتح محلياً بلا خادم تُهمل بهدوء) */
-  fetch("data/tools_map_feb2026.json?v=9.8.19").then(function (r) { return r.json(); }).then(function (j) { TOOLS = j || {}; }).catch(function () { TOOLS = {}; }).then(function () { fillTools(); draw(); });
+  fetch("data/tools_map_feb2026.json?v=9.8.20").then(function (r) { return r.json(); }).then(function (j) { TOOLS = j || {}; }).catch(function () { TOOLS = {}; }).then(function () { fillTools(); draw(); });
   draw();
 })();
 </script>
