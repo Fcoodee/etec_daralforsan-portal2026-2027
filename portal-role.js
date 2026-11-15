@@ -24,7 +24,7 @@
   var ALL = ORDER.slice();
   var PAGES = {
     /* صفحات مرحلة ما بعد تصحيح المسار (المبنية من جديد): مفتوحة بحسب الدور بلا دخول */
-    "index.html": ALL, "home.html": ALL, "indicators.html": ALL, "progress.html": ["admin", "self"], "reference.html": ["admin", "self"],
+    "index.html": ALL, "primary.html": ALL, "home.html": ALL, "indicators.html": ALL, "progress.html": ["admin", "self"], "reference.html": ["admin", "self"],
     "report.html": ["admin", "sup", "member"]
     /* كل ما عداها قديم: لمدير النظام وحده (يُعدّ admin افتراضاً لأي صفحة غير مدرجة أعلاه) */
   };
@@ -154,7 +154,7 @@
 
   function bar() {
     var pg = pageKey();
-    if (document.getElementById("utChip") || pg === "login.html" || pg === "index.html") return; /* evidence-link لها شريطها، وصفحة الدخول بلا شريط */
+    if (document.getElementById("utChip") || pg === "login.html" || pg === "index.html" || pg === "primary.html") return; /* evidence-link لها شريطها، وصفحة الدخول بلا شريط */
     var old = document.getElementById("prBar"); if (old) old.remove();
     var b = document.createElement("div");
     b.id = "prBar";
@@ -177,7 +177,7 @@
       if (!canSwitch(role, v)) { s.value = role || ""; return; }
       /* الانتقال إلى مساحة الدور الجديد مباشرة (عضو ← صفحة العضو وسجلاته، وهكذا) */
       /* عضو/مشرف: يُختار المجال والاسم صراحةً من البوابة (لا يُعاد الاسم السابق تلقائياً) */
-      if (v === "member" || v === "sup") { location.href = "index.html?pick=" + v; return; }
+      if (v === "member" || v === "sup") { location.href = "primary.html?pick=" + v; return; }
       choose(v, function () { location.href = ROLES[v].home; });
       s.value = role || "";
     });
@@ -211,7 +211,7 @@
     var names = list.map(function (k) { return ROLES[k].n; }).join("، ");
     d.innerHTML = '<div style="background:#fff;border-radius:20px;max-width:420px;width:100%;padding:26px;text-align:right;border-top:6px solid #c29b38"><h2 style="margin:0 0 8px;font-size:17px;font-weight:900;color:#003d3d">' + (adminOnly ? "هذه الصفحة لمدير النظام" : "هذه الصفحة خارج مساحة دورك") + '</h2><p style="margin:0 0 14px;font-size:13px;line-height:1.9;color:#475569">' + (adminOnly ? "يحتاج مدير النظام وحده إلى رمز مستخدم وكلمة مرور." : "تُفتح لهذه الأدوار: " + esc(names) + ".") + '</p>' +
       (adminOnly ? '<button id="rolGo" type="button" style="width:100%;border:0;border-radius:12px;background:#006666;color:#fff;font:800 14px Cairo,Tahoma,sans-serif;padding:12px;cursor:pointer">دخول مدير النظام</button>' : "") +
-      '<a href="index.html" style="display:block;text-align:center;margin-top:12px;font-size:12px;color:#006666">العودة إلى اختيار الدور</a></div>';
+      '<a href="primary.html" style="display:block;text-align:center;margin-top:12px;font-size:12px;color:#006666">العودة إلى اختيار الدور</a></div>';
     document.body.appendChild(d);
     var go = document.getElementById("rolGo");
     if (go) go.addEventListener("click", function () { choose("admin", function () { try { var u = new URL(location.href); u.searchParams.set("u", "admin"); location.href = u.toString(); } catch (e) { location.reload(); } }); });
