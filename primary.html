@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script src="page-gate.js" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."></script>
+<script src="admin-only.js?v=9.13.0"></script>
 <meta name="robots" content="noindex,nofollow">
 <title>المرحلة الابتدائية — بوابة ربط الشواهد بالسجلات — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=9.12.1">
+<link rel="stylesheet" href="phase.css?v=9.13.0">
 <style>
 .wl{max-width:880px;margin:0 auto;padding:0 16px 40px}
 .wl-hero{text-align:center;padding:26px 8px 8px}
@@ -34,8 +36,8 @@
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=9.12.1"></script>
-<script src="portal-role.js?v=9.12.1"></script>
+<script src="portal-meta.js?v=9.13.0"></script>
+<script src="portal-role.js?v=9.13.0"></script>
 </head>
 <body>
 <header class="ph-head" style="padding-top:18px">
@@ -44,7 +46,7 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
 <main class="wl">
   <section class="wl-hero">
     <h1>بوابة ربط الشواهد بالسجلات — المرحلة الابتدائية</h1>
-    <p class="sub"><a href="index.html" style="color:var(--t5);font-weight:800">‹ كل المراحل</a> · الصفوف 3–6 · قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان · العام الدراسي 2026-2027</p>
+    <p class="sub"><a href="stages.html" style="color:var(--t5);font-weight:800">‹ كل المراحل</a> · الصفوف 3–6 · قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان · العام الدراسي 2026-2027</p>
   </section>
   <section class="wl-about" aria-label="عن المشروع">
     <b>ما هذا المشروع؟</b> لكل مؤشر سجلاته ومجلده وتقرير شواهده، ويتابع كل مستخدم ما يخصّه. الأساس: معايير التقويم والاعتماد المدرسي (الإصدار الثاني) لهيئة تقويم التعليم والتدريب.
@@ -62,7 +64,7 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
   </section>
   <div class="ph-foot">منصة داخلية غير تابعة لهيئة تقويم التعليم والتدريب.</div>
 </main>
-<script src="phase-data.js?v=9.12.1"></script>
+<script src="phase-data.js?v=9.13.0"></script>
 <script>
 (function () {
   var R = window.PortalRole, PH = window.ETEC_PH; if (!R || !PH) return;

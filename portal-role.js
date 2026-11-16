@@ -24,7 +24,7 @@
   var ALL = ORDER.slice();
   var PAGES = {
     /* صفحات مرحلة ما بعد تصحيح المسار (المبنية من جديد): مفتوحة بحسب الدور بلا دخول */
-    "index.html": ALL, "primary.html": ALL, "home.html": ALL, "indicators.html": ALL, "progress.html": ["admin", "self"], "reference.html": ["admin", "self"],
+    "index.html": ALL, "stages.html": ALL, "primary.html": ALL, "home.html": ALL, "indicators.html": ALL, "progress.html": ["admin", "self"], "reference.html": ["admin", "self"],
     "report.html": ["admin", "sup", "member"]
     /* كل ما عداها قديم: لمدير النظام وحده (يُعدّ admin افتراضاً لأي صفحة غير مدرجة أعلاه) */
   };
@@ -154,7 +154,7 @@
 
   function bar() {
     var pg = pageKey();
-    if (document.getElementById("utChip") || pg === "login.html" || pg === "index.html" || pg === "primary.html") return; /* evidence-link لها شريطها، وصفحة الدخول بلا شريط */
+    if (document.getElementById("utChip") || pg === "login.html" || pg === "index.html" || pg === "stages.html" || pg === "primary.html") return; /* evidence-link لها شريطها، وصفحة الدخول بلا شريط */
     var old = document.getElementById("prBar"); if (old) old.remove();
     var b = document.createElement("div");
     b.id = "prBar";
