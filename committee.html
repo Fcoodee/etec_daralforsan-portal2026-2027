@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="portal-meta.js?v=9.11.0"></script>
+<script src="portal-meta.js?v=9.11.1"></script>
 <style>
 :root{
   --navy:#123a63;--blue:#1f78c1;--purple:#6a2c91;--teal:#0e8a9d;--gold:#b7791f;--slate:#5f6f80;
@@ -136,6 +136,26 @@ html[dir=ltr] .cm-hl li{padding:7px 0 7px 38px}
 .cm-deny{max-width:520px;margin:60px auto;text-align:center;background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px;box-shadow:var(--sh)}
 .cm-deny i{font-size:40px;color:var(--wip)}
 .cm-ft{max-width:1280px;margin:0 auto;padding:0 20px 80px;font-size:12px;color:var(--mut)}
+
+/* ثنائي اللغة: العربية والإنجليزية معاً */
+.b1,.b2{display:inline}
+.b1+.b2{margin-inline-start:.4em}
+.cm-k .l .b2,.cm-dom li>span .b2{display:block;font-size:.78em;font-weight:600;margin:0;text-align:right;opacity:.85}
+.cm-k .l .b2::before,.cm-dom li>span .b2::before{content:none}
+.cm-dom li{align-items:flex-start}
+.cm-dom li b{white-space:nowrap}
+.b2::before{content:" · ";opacity:.6}
+.cm-ttl h1 .b2,.cm-ttl p .b2,.cm-dom h3 .b2,.cm-ind h4 .b2,.cm-head p .b2,.cm-head .cr .b2,.cm-head h2 .b2,.cm-rec b .b2,.cm-hl li .b2,.cm-card>h3 .b2,.cm-h2 .b2,.cm-note .b2,.cm-demo span .b2,.cm-rep b .b2,.cm-deny .b2{display:block;font-size:.8em;font-weight:600;opacity:.88;text-align:right;line-height:1.5}
+.cm-ttl h1 .b2::before,.cm-ttl p .b2::before,.cm-dom h3 .b2::before,.cm-ind h4 .b2::before,.cm-head p .b2::before,.cm-head .cr .b2::before,.cm-head h2 .b2::before,.cm-rec b .b2::before,.cm-hl li .b2::before,.cm-card>h3 .b2::before,.cm-h2 .b2::before,.cm-note .b2::before,.cm-demo span .b2::before,.cm-rep b .b2::before,.cm-deny .b2::before{content:none}
+.cm-ind h4{-webkit-line-clamp:3;min-height:0}
+.cm-head p.il .b2{display:inline;font-size:.85em;text-align:start}
+.cm-head p.il .b2::before{content:" · "}
+.cm-hl li .b2{color:#334155;font-weight:500}
+html[dir=ltr] .b2{text-align:left}
+.cm-seg{display:inline-flex;border:1px solid rgba(255,255,255,.5);border-radius:999px;overflow:hidden;background:rgba(255,255,255,.12)}
+.cm-seg button{border:0;background:transparent;color:#fff;font-weight:800;font-size:12.5px;padding:5px 13px;cursor:pointer}
+.cm-seg button:hover{background:rgba(255,255,255,.2)}
+.cm-seg button[aria-pressed=true]{background:#fff;color:var(--navy)}
 .fade{animation:fin .28s ease-out}
 @keyframes fin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @media(max-width:700px){.cm-hero .in{padding:12px}.cm-ttl h1{font-size:20px}.cm-logos img{height:48px}.cm-tools{margin-inline-start:0}.cm-wrap{padding:12px 12px 70px}}
@@ -156,25 +176,25 @@ html[dir=ltr] .cm-hl li{padding:7px 0 7px 38px}
     <div class="in">
       <div class="cm-logos"><img src="logo1.png" alt="مدارس دار الفرسان · Dar Al-Forsan Schools"><span class="sep"></span><img src="logo0.png" alt="قسم الدبلوما · Diploma Section"></div>
       <div class="cm-ttl"><h1 id="hT"></h1><p id="hS"></p></div>
-      <div class="cm-tools"><span class="cm-pill ro"><i class="fa-solid fa-eye"></i> <span id="roT"></span></span><button type="button" class="cm-pill" id="langBtn" aria-label="Language"><i class="fa-solid fa-language"></i> <span id="langT"></span></button></div>
+      <div class="cm-tools"><span class="cm-pill ro"><i class="fa-solid fa-eye"></i> <span id="roT"></span></span><div class="cm-seg" id="langSeg" role="group" aria-label="اللغة · Language"><button type="button" data-lang="both" aria-pressed="true">عربي + EN</button><button type="button" data-lang="ar" aria-pressed="false">العربية</button><button type="button" data-lang="en" aria-pressed="false">English</button></div></div>
     </div>
   </header>
   <div class="cm-wrap fade" id="view"></div>
   <div class="cm-ft" id="ft"></div>
 </div>
 <div class="cm-mod" id="mod" role="dialog" aria-modal="true"><div class="box"><div class="bar"><b id="modT"></b><a class="cm-btn" id="modO" target="_blank" rel="noopener"></a><button type="button" class="cm-btn" id="modX" aria-label="close"><i class="fa-solid fa-xmark"></i></button></div><iframe id="modF" title="preview" allow="autoplay"></iframe></div></div>
-<script src="portal-config.js?v=9.11.0"></script>
-<script src="portal-names.js?v=9.11.0"></script>
-<script src="phase-data.js?v=9.11.0"></script>
-<script src="report-i18n.js?v=9.11.0"></script>
-<script src="highlights.js?v=9.11.0"></script>
-<script src="phase-core.js?v=9.11.0"></script>
+<script src="portal-config.js?v=9.11.1"></script>
+<script src="portal-names.js?v=9.11.1"></script>
+<script src="phase-data.js?v=9.11.1"></script>
+<script src="report-i18n.js?v=9.11.1"></script>
+<script src="highlights.js?v=9.11.1"></script>
+<script src="phase-core.js?v=9.11.1"></script>
 <script>
 (function () {
   "use strict";
   var P = window.PHC, E = P.esc, inds = P.PH.inds, HL = window.ETEC_HL || {}, I18N = window.ETEC_I18N || {};
-  var lang = "ar", demo = true, started = false;
-  try { lang = localStorage.getItem("etec.cm.lang") === "en" ? "en" : "ar"; } catch (e) {}
+  var lang = "both", demo = true, started = false;
+  try { var sv = localStorage.getItem("etec.cm.lang"); if (sv === "ar" || sv === "en" || sv === "both") lang = sv; } catch (e) {}
   var $ = function (id) { return document.getElementById(id); };
 
   var T = {
@@ -193,14 +213,19 @@ html[dir=ltr] .cm-hl li{padding:7px 0 7px 38px}
       apprOnly: "The committee only sees approved items. Drive files require view access granted by the school.", prev: "Previous", next: "Next", of: "of", close: "Close",
       denyT: "Restricted access", denyP: "This page is for the system administrator only. The signed-in account is not authorised.", denyB: "Sign out", foot: "A read-only view supporting external evaluation; it does not replace the Commission's official channel. This is an internal preview prototype.", soon: "File unavailable (illustrative data)" }
   };
-  function t(k) { return T[lang][k]; }
+  function tp(k) { return lang === "en" ? T.en[k] : T.ar[k]; }
+  function t(k) { return lang === "both" ? '<span class="b1">' + T.ar[k] + '</span><span class="b2" dir="ltr">' + T.en[k] + "</span>" : tp(k); }
+  function bi(a, e2) { a = E(a); e2 = E(e2 || ""); if (lang === "ar" || !e2) return a; if (lang === "en") return e2; return '<span class="b1">' + a + '</span><span class="b2" dir="ltr">' + e2 + "</span>"; }
   var COLS = { 1: "var(--d1)", 2: "var(--d2)", 3: "var(--d3)", 4: "var(--d4)" };
   var en = function () { return lang === "en"; };
-  function dn(d) { return en() ? (I18N.dom || {})[d] || P.DN[d] : P.DN[d]; }
-  function cn(i) { return en() ? (I18N.crit || {})[i.c] || i.cn : i.cn; }
-  function itext(i) { return en() ? (I18N.ind || {})[i.code] || i.text : i.text; }
-  function ititle(i) { return en() ? itext(i) : i.st; }
-  function rn(n) { var x = (I18N.rec || {})[n]; return en() && x ? x : n; }
+  var rtl = function () { return lang !== "en"; };
+  function dnp(d) { return en() ? (I18N.dom || {})[d] || P.DN[d] : P.DN[d]; }
+  function dn(d) { return bi(P.DN[d], (I18N.dom || {})[d]); }
+  function cn(i) { return bi(i.cn, (I18N.crit || {})[i.c]); }
+  function itext(i) { return bi(i.text, (I18N.ind || {})[i.code]); }
+  function ititle(i) { return lang === "ar" ? E(i.st) : (lang === "en" ? E((I18N.ind || {})[i.code] || i.text) : '<span class="b1">' + E(i.st) + '</span><span class="b2" dir="ltr">' + E((I18N.ind || {})[i.code] || "") + "</span>"); }
+  function rnp(n) { var x = (I18N.rec || {})[n]; return en() && x ? x : n; }
+  function rn(n) { return bi(n, (I18N.rec || {})[n]); }
   function gl(txt, on) { return on ? '<span class="gl">' + txt + "</span>" : txt; }
 
   /* ===== الحالات ===== */
@@ -237,63 +262,64 @@ html[dir=ltr] .cm-hl li{padding:7px 0 7px 38px}
     var out = kpis() + '<h2 class="cm-h2"><i class="fa-solid fa-diagram-project" style="color:var(--blue)"></i>' + t("domains") + '</h2><div class="cm-grid dom">';
     [1, 2, 3, 4].forEach(function (d) {
       var l = inds.filter(function (i) { return i.d === d; }), a = agg(l), p = pc(a.apN, a.req);
-      out += '<button type="button" class="cm-dom" style="--c:' + COLS[d] + '" data-go="d' + d + '"><h3>' + E(dn(d)) + '</h3><div class="row">' + ring(p) + "<ul><li>" + t("inds") + "<b>" + l.length + "</b></li><li>" + t("crit") + "<b>" + crits(d).length + "</b></li><li>" + t("recsAp") + "<b>" + gl(a.apN + " / " + a.req, a.apN) + "</b></li><li>" + t("reps") + "<b>" + gl(a.rep, a.rep) + " / " + l.length + '</b></li></ul></div><div class="cm-go"><span>' + t("open") + '</span><i class="fa-solid fa-arrow-' + (en() ? "right" : "left") + '"></i></div></button>';
+      out += '<button type="button" class="cm-dom" style="--c:' + COLS[d] + '" data-go="d' + d + '"><h3>' + (dn(d)) + '</h3><div class="row">' + ring(p) + "<ul><li><span>" + t("inds") + "</span><b>" + l.length + "</b></li><li><span>" + t("crit") + "</span><b>" + crits(d).length + "</b></li><li><span>" + t("recsAp") + "</span><b>" + gl(a.apN + " / " + a.req, a.apN) + "</b></li><li><span>" + t("reps") + "</span><b>" + gl(a.rep, a.rep) + " / " + l.length + '</b></li></ul></div><div class="cm-go"><span>' + t("open") + '</span><i class="fa-solid fa-arrow-' + (rtl() ? "left" : "right") + '"></i></div></button>';
     });
     return out + "</div>";
   }
   function indCard(i) {
     var s = stOf(i), p = pc(s.apN, s.req);
-    return '<button type="button" class="cm-ind" style="--c:' + COLS[i.d] + '" data-go="' + i.code + '"><div class="top"><span class="code">' + i.code + "</span>" + (s.rep ? '<span class="chip ok"><i class="fa-solid fa-camera"></i> ' + t("repS1") + '</span>' : '<span class="chip no"><i class="fa-regular fa-clock"></i> ' + t("repS0") + '</span>') + "</div><h4>" + E(ititle(i)) + '</h4><div class="cm-meter" aria-hidden="true"><i style="width:' + p + '%"></i></div><div class="cm-foot"><span>' + t("recsAp") + " " + gl(s.apN + "/" + s.req, s.apN) + "</span></div></button>";
+    return '<button type="button" class="cm-ind" style="--c:' + COLS[i.d] + '" data-go="' + i.code + '"><div class="top"><span class="code">' + i.code + "</span>" + (s.rep ? '<span class="chip ok"><i class="fa-solid fa-camera"></i> ' + t("repS1") + '</span>' : '<span class="chip no"><i class="fa-regular fa-clock"></i> ' + t("repS0") + '</span>') + "</div><h4>" + (ititle(i)) + '</h4><div class="cm-meter" aria-hidden="true"><i style="width:' + p + '%"></i></div><div class="cm-foot"><span>' + t("recsAp") + " " + gl(s.apN + "/" + s.req, s.apN) + "</span></div></button>";
   }
   function viewDomain(d) {
-    var l = inds.filter(function (i) { return i.d === d; }), a = agg(l), out = '<nav class="cm-bc"><a data-go="">' + t("home") + "</a><span>›</span><span>" + E(dn(d)) + "</span></nav>";
-    out += '<div class="cm-head" style="--c:' + COLS[d] + '"><div class="cr">' + t("domains") + "</div><h2>" + E(dn(d)) + "</h2><p>" + l.length + " " + t("ind") + " · " + crits(d).length + " " + t("crit") + " · " + t("recsAp") + " " + a.apN + "/" + a.req + "</p></div>";
+    var l = inds.filter(function (i) { return i.d === d; }), a = agg(l), out = '<nav class="cm-bc"><a data-go="">' + t("home") + "</a><span>›</span><span>" + (dn(d)) + "</span></nav>";
+    out += '<div class="cm-head" style="--c:' + COLS[d] + '"><div class="cr">' + t("domains") + "</div><h2>" + (dn(d)) + "</h2><p class=\"il\">" + l.length + " " + t("ind") + " · " + crits(d).length + " " + t("crit") + " · " + t("recsAp") + " " + a.apN + "/" + a.req + "</p></div>";
     crits(d).forEach(function (c) {
       var li = l.filter(function (i) { return i.c === c; });
-      out += '<h2 class="cm-h2"><span class="code" style="--c:' + COLS[d] + '">' + c + "</span>" + E(cn(li[0])) + " <small>" + li.length + " " + t("ind") + '</small></h2><div class="cm-grid">' + li.map(indCard).join("") + "</div>";
+      out += '<h2 class="cm-h2"><span class="code" style="--c:' + COLS[d] + '">' + c + "</span>" + (cn(li[0])) + " <small>" + li.length + " " + t("ind") + '</small></h2><div class="cm-grid">' + li.map(indCard).join("") + "</div>";
     });
     return out;
   }
   function recCard(i, s, n) {
     var ok = s.ap[n], id = s.ids[n], acts = "";
     if (ok) {
-      if (id) acts = '<button type="button" class="cm-btn" data-view="' + E(id) + '" data-name="' + E(rn(n)) + '"><i class="fa-solid fa-eye"></i> ' + t("view") + '</button><a class="cm-btn" target="_blank" rel="noopener" href="' + E(P.fileView(id)) + '"><i class="fa-solid fa-up-right-from-square"></i> ' + t("tab") + '</a><a class="cm-btn" target="_blank" rel="noopener" href="' + E(P.fileDl(id)) + '"><i class="fa-solid fa-download"></i> ' + t("dl") + '</a><button type="button" class="cm-btn" data-copy="' + E(P.fileView(id)) + '"><i class="fa-regular fa-copy"></i> ' + t("copy") + "</button>";
-      else acts = '<a class="cm-btn" target="_blank" rel="noopener" href="' + E(P.folderUrl(i)) + '"' + (demo ? ' title="' + E(t("soon")) + '"' : "") + '><i class="fa-brands fa-google-drive"></i> ' + t("folder") + "</a>";
+      if (id) acts = '<button type="button" class="cm-btn" data-view="' + E(id) + '" data-name="' + E(rnp(n)) + '"><i class="fa-solid fa-eye"></i> ' + t("view") + '</button><a class="cm-btn" target="_blank" rel="noopener" href="' + E(P.fileView(id)) + '"><i class="fa-solid fa-up-right-from-square"></i> ' + t("tab") + '</a><a class="cm-btn" target="_blank" rel="noopener" href="' + E(P.fileDl(id)) + '"><i class="fa-solid fa-download"></i> ' + t("dl") + '</a><button type="button" class="cm-btn" data-copy="' + E(P.fileView(id)) + '"><i class="fa-regular fa-copy"></i> ' + t("copy") + "</button>";
+      else acts = '<a class="cm-btn" target="_blank" rel="noopener" href="' + E(P.folderUrl(i)) + '"' + (demo ? ' title="' + E(tp("soon")) + '"' : "") + '><i class="fa-brands fa-google-drive"></i> ' + t("folder") + "</a>";
     }
-    return '<div class="cm-rec ' + (ok ? "ok" : "") + '"><div class="t"><span class="ic"><i class="fa-regular ' + (ok ? "fa-file-circle-check" : "fa-file") + '"></i></span><div><b>' + E(rn(n)) + "</b><div>" + (ok ? '<span class="chip ok"><i class="fa-solid fa-circle-check"></i> ' + t("appr") + "</span>" : '<span class="chip wip"><i class="fa-regular fa-clock"></i> ' + t("wip") + "</span>") + '</div></div></div><div class="acts">' + acts + "</div></div>";
+    return '<div class="cm-rec ' + (ok ? "ok" : "") + '"><div class="t"><span class="ic"><i class="fa-regular ' + (ok ? "fa-file-circle-check" : "fa-file") + '"></i></span><div><b>' + (rn(n)) + "</b><div>" + (ok ? '<span class="chip ok"><i class="fa-solid fa-circle-check"></i> ' + t("appr") + "</span>" : '<span class="chip wip"><i class="fa-regular fa-clock"></i> ' + t("wip") + "</span>") + '</div></div></div><div class="acts">' + acts + "</div></div>";
   }
   function viewInd(code) {
     var i = P.byCode(code), s = stOf(i), hl = HL[i.code] || [], idx = inds.indexOf(i), pv = inds[idx - 1], nx = inds[idx + 1], c = COLS[i.d];
-    var out = '<nav class="cm-bc"><a data-go="">' + t("home") + '</a><span>›</span><a data-go="d' + i.d + '">' + E(dn(i.d)) + "</a><span>›</span><span>" + i.code + "</span></nav>";
-    out += '<div class="cm-head" style="--c:' + c + '"><div class="cr">' + E(dn(i.d)) + " ‹ " + i.c + " · " + E(cn(i)) + '</div><h2><span class="code">' + i.code + "</span>" + (en() ? "" : E(i.st)) + "</h2><p>" + E(itext(i)) + "</p></div>";
-    out += '<div class="cm-nav"><a class="cm-btn" ' + (pv ? 'data-go="' + pv.code + '"' : 'aria-disabled="true"') + '><i class="fa-solid fa-chevron-' + (en() ? "left" : "right") + '"></i> ' + (pv ? pv.code : t("prev")) + '</a><a class="cm-btn" ' + (nx ? 'data-go="' + nx.code + '"' : 'aria-disabled="true"') + ">" + (nx ? nx.code : t("next")) + ' <i class="fa-solid fa-chevron-' + (en() ? "right" : "left") + '"></i></a></div>';
+    var out = '<nav class="cm-bc"><a data-go="">' + t("home") + '</a><span>›</span><a data-go="d' + i.d + '">' + (dn(i.d)) + "</a><span>›</span><span>" + i.code + "</span></nav>";
+    out += '<div class="cm-head" style="--c:' + c + '"><div class="cr">' + (dn(i.d)) + " ‹ " + i.c + " · " + (cn(i)) + '</div><h2><span class="code">' + i.code + "</span>" + (lang === "ar" ? E(i.st) : (lang === "both" ? E(i.st) : "")) + "</h2><p>" + (itext(i)) + "</p></div>";
+    out += '<div class="cm-nav"><a class="cm-btn" ' + (pv ? 'data-go="' + pv.code + '"' : 'aria-disabled="true"') + '><i class="fa-solid fa-chevron-' + (rtl() ? "right" : "left") + '"></i> ' + (pv ? pv.code : t("prev")) + '</a><a class="cm-btn" ' + (nx ? 'data-go="' + nx.code + '"' : 'aria-disabled="true"') + ">" + (nx ? nx.code : t("next")) + ' <i class="fa-solid fa-chevron-' + (rtl() ? "left" : "right") + '"></i></a></div>';
     out += '<div class="cm-pills"><a data-sc="s-hl"><i class="fa-solid fa-lightbulb"></i> ' + t("hl") + '</a><a data-sc="s-rec"><i class="fa-solid fa-folder-open"></i> ' + t("records") + '</a><a data-sc="s-rep"><i class="fa-solid fa-camera-retro"></i> ' + t("report") + "</a></div>";
-    if (hl.length) out += '<section class="cm-card" id="s-hl"><h3><i class="fa-solid fa-lightbulb" style="color:' + c + '"></i>' + t("hl") + '</h3><ol class="cm-hl">' + hl.map(function (x) { return "<li>" + E(en() && x.en ? x.en : x.ar) + "</li>"; }).join("") + "</ol></section>";
+    if (hl.length) out += '<section class="cm-card" id="s-hl"><h3><i class="fa-solid fa-lightbulb" style="color:' + c + '"></i>' + t("hl") + '</h3><ol class="cm-hl">' + hl.map(function (x) { return "<li class=\"stk\">" + (lang === "en" ? E(x.en || x.ar) : (lang === "ar" ? E(x.ar) : '<span class="b1">' + E(x.ar) + '</span><span class="b2" dir="ltr">' + E(x.en || "") + "</span>")) + "</li>"; }).join("") + "</ol></section>";
     out += '<section class="cm-card" id="s-rec"><h3><i class="fa-solid fa-folder-open" style="color:' + c + '"></i>' + t("records") + ' <small style="color:var(--mut);font-weight:700">' + gl(s.apN + " / " + s.req, s.apN) + " " + t("appr") + '</small></h3><div class="cm-recs">' + i.recs.map(function (n) { return recCard(i, s, n); }).join("") + '</div><p class="cm-note">' + t("apprOnly") + "</p></section>";
     var rep = s.rep, rl = "";
-    if (rep) rl = s.repId ? '<a class="cm-btn pri" target="_blank" rel="noopener" href="' + E(P.fileView(s.repId)) + '"><i class="fa-solid fa-up-right-from-square"></i> ' + t("tab") + '</a> <button type="button" class="cm-btn" data-view="' + E(s.repId) + '" data-name="' + E(t("report")) + '"><i class="fa-solid fa-eye"></i> ' + t("view") + '</button> <a class="cm-btn" target="_blank" rel="noopener" href="' + E(P.fileDl(s.repId)) + '"><i class="fa-solid fa-download"></i> ' + t("dl") + "</a>" : "";
+    if (rep) rl = s.repId ? '<a class="cm-btn pri" target="_blank" rel="noopener" href="' + E(P.fileView(s.repId)) + '"><i class="fa-solid fa-up-right-from-square"></i> ' + t("tab") + '</a> <button type="button" class="cm-btn" data-view="' + E(s.repId) + '" data-name="' + E(tp("report")) + '"><i class="fa-solid fa-eye"></i> ' + t("view") + '</button> <a class="cm-btn" target="_blank" rel="noopener" href="' + E(P.fileDl(s.repId)) + '"><i class="fa-solid fa-download"></i> ' + t("dl") + "</a>" : "";
     out += '<section class="cm-card" id="s-rep"><h3><i class="fa-solid fa-camera-retro" style="color:' + c + '"></i>' + t("report") + '</h3><div class="cm-rep ' + (rep ? "" : "none") + '"><div class="ic"><i class="fa-solid ' + (rep ? "fa-file-circle-check" : "fa-hourglass-half") + '"></i></div><div><b>' + (rep ? gl(t("repOk"), true) : t("repNo")) + '</b><div class="cm-note">' + (rep ? t("repOkN") : t("repNoN")) + '</div></div></div><p style="margin:12px 0 0">' + rl + ' <a class="cm-btn' + (rl ? "" : " pri") + '" target="_blank" rel="noopener" href="' + E(P.folderUrl(i)) + '"><i class="fa-brands fa-google-drive"></i> ' + t("folder") + "</a></p></section>";
     return out;
   }
 
   /* ===== التوجيه والرسم ===== */
+  function segMark() { var bs = document.querySelectorAll("#langSeg [data-lang]"); for (var k = 0; k < bs.length; k++) bs[k].setAttribute("aria-pressed", bs[k].getAttribute("data-lang") === lang ? "true" : "false"); }
   function route() { return (location.hash || "").slice(1); }
   function render() {
     if (!$("view")) return;
     var r = route(), v = $("view");
-    document.documentElement.lang = lang; document.documentElement.dir = en() ? "ltr" : "rtl";
-    $("hT").textContent = t("title"); $("hS").textContent = t("sub"); $("roT").textContent = t("ro"); $("langT").textContent = t("lang"); $("demoLb").textContent = t("demoLb");
-    $("demoTxt").textContent = demo ? t("demoOn") : t("demoOff"); $("demoBar").className = "cm-demo" + (demo ? "" : " live"); $("ft").textContent = t("foot"); $("modX").setAttribute("aria-label", t("close"));
+    document.documentElement.lang = en() ? "en" : "ar"; document.documentElement.dir = rtl() ? "rtl" : "ltr";
+    $("hT").innerHTML = t("title"); $("hS").innerHTML = t("sub"); $("roT").innerHTML = t("ro"); $("demoLb").innerHTML = t("demoLb"); segMark();
+    $("demoTxt").innerHTML = demo ? t("demoOn") : t("demoOff"); $("demoBar").className = "cm-demo" + (demo ? "" : " live"); $("ft").innerHTML = t("foot"); $("modX").setAttribute("aria-label", tp("close"));
     var html;
     if (/^d[1-4]$/.test(r)) html = viewDomain(+r.slice(1)); else if (P.byCode(r)) html = viewInd(r); else html = viewHome();
     v.className = "cm-wrap fade"; v.innerHTML = html;
-    document.title = t("title") + " — " + (P.byCode(r) ? r : (/^d[1-4]$/.test(r) ? dn(+r.slice(1)) : t("home")));
+    document.title = tp("title") + " — " + (P.byCode(r) ? r : (/^d[1-4]$/.test(r) ? dnp(+r.slice(1)) : tp("home")));
     var rings = v.querySelectorAll(".cm-ring .fg");
     requestAnimationFrame(function () { requestAnimationFrame(function () { for (var k = 0; k < rings.length; k++) rings[k].setAttribute("stroke-dashoffset", rings[k].getAttribute("data-off")); }); });
   }
   function go(to) { if (("#" + to) === location.hash || (!to && !location.hash)) { render(); } else { location.hash = to; } window.scrollTo(0, 0); }
 
-  function mod(id, name) { $("modT").textContent = name || ""; $("modO").textContent = t("tab"); $("modO").href = P.fileView(id); $("modF").src = "https://drive.google.com/file/d/" + id + "/preview"; $("mod").classList.add("on"); $("modX").focus(); }
+  function mod(id, name) { $("modT").textContent = name || ""; $("modO").innerHTML = t("tab"); $("modO").href = P.fileView(id); $("modF").src = "https://drive.google.com/file/d/" + id + "/preview"; $("mod").classList.add("on"); $("modX").focus(); }
   function modClose() { $("mod").classList.remove("on"); $("modF").src = "about:blank"; }
 
   function bind() {
@@ -301,12 +327,12 @@ html[dir=ltr] .cm-hl li{padding:7px 0 7px 38px}
       var a = e.target.closest("[data-go]"); if (a && a.getAttribute("aria-disabled") !== "true") { e.preventDefault(); go(a.getAttribute("data-go")); return; }
       var s = e.target.closest("[data-sc]"); if (s) { var el = $(s.getAttribute("data-sc")); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
       var v = e.target.closest("[data-view]"); if (v) { mod(v.getAttribute("data-view"), v.getAttribute("data-name")); return; }
-      var c = e.target.closest("[data-copy]"); if (c) { var u = c.getAttribute("data-copy"), lb = c.innerHTML; var done = function () { c.textContent = t("copied"); setTimeout(function () { c.innerHTML = lb; }, 1400); }; if (navigator.clipboard) navigator.clipboard.writeText(u).then(done, done); else done(); }
+      var c = e.target.closest("[data-copy]"); if (c) { var u = c.getAttribute("data-copy"), lb = c.innerHTML; var done = function () { c.innerHTML = t("copied"); setTimeout(function () { c.innerHTML = lb; }, 1400); }; if (navigator.clipboard) navigator.clipboard.writeText(u).then(done, done); else done(); }
     });
     $("modX").addEventListener("click", modClose);
     $("mod").addEventListener("click", function (e) { if (e.target === $("mod")) modClose(); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") modClose(); });
-    $("langBtn").addEventListener("click", function () { lang = en() ? "ar" : "en"; try { localStorage.setItem("etec.cm.lang", lang); } catch (e) {} render(); });
+    document.getElementById("langSeg").addEventListener("click", function (e) { var b = e.target.closest("[data-lang]"); if (!b) return; lang = b.getAttribute("data-lang"); try { localStorage.setItem("etec.cm.lang", lang); } catch (x) {} render(); });
     $("demoSw").addEventListener("change", function () { demo = this.checked; render(); });
     window.addEventListener("hashchange", render);
     P.onStatus(function () { if (!demo) render(); });
@@ -316,7 +342,7 @@ html[dir=ltr] .cm-hl li{padding:7px 0 7px 38px}
   /* ===== بوابة الدخول: مدير النظام وحده ===== */
   function showDeny() {
     $("app").hidden = true; $("deny").hidden = false;
-    $("denyT").textContent = t("denyT"); $("denyP").textContent = t("denyP"); $("denyBtn").textContent = t("denyB");
+    $("denyT").innerHTML = t("denyT"); $("denyP").innerHTML = t("denyP"); $("denyBtn").innerHTML = t("denyB");
     $("denyBtn").onclick = function () { try { window.DFGate.logout(); } catch (e) {} location.reload(); };
   }
   var tries = 0;
