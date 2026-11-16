@@ -6,23 +6,23 @@
 <meta name="robots" content="noindex,nofollow">
 <title>مساحتي — مشروع الاعتماد 2026-2027 — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=9.12.0">
+<link rel="stylesheet" href="phase.css?v=9.12.1">
 <script>/* حارس الإصدار: إن كانت الصفحة محفوظة قديمة في المتصفح تُعاد من الخادم مرة واحدة */
 (function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=9.12.0"></script>
-<script src="portal-role.js?v=9.12.0"></script>
+<script src="portal-meta.js?v=9.12.1"></script>
+<script src="portal-role.js?v=9.12.1"></script>
 </head>
 <body>
 <div id="chrome"></div>
 <main class="ph-main" id="main"><div class="ph-empty">جارٍ التحميل…</div></main>
 
-<script src="portal-config.js?v=9.12.0"></script>
-<script src="portal-names.js?v=9.12.0"></script>
-<script src="phase-data.js?v=9.12.0"></script>
-<script src="phase-core.js?v=9.12.0"></script>
+<script src="portal-config.js?v=9.12.1"></script>
+<script src="portal-names.js?v=9.12.1"></script>
+<script src="phase-data.js?v=9.12.1"></script>
+<script src="phase-core.js?v=9.12.1"></script>
 <script>
 (function () {
   "use strict";
@@ -77,9 +77,9 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
       P.PH.inds.forEach(function (i) { var s = P.sOf(i); s.invalid.forEach(function (f) { inv.push(i.code + " ← " + f); }); i.recs.forEach(function (n) { if (s.st[n] === "missing") miss.push(i.code + " ← " + n); }); (s.rep.files || []).forEach(function (f) { if (f.legacy) legacy.push(i.code + " ← " + f.name); }); });
       (S.errors || []).forEach(function (e) { bad.push(e.key + ": " + e.error); });
       var pr = function (a) { return a.length ? "<ul>" + a.slice(0, 12).map(function (x) { return "<li dir='auto'>" + E(x) + "</li>"; }).join("") + (a.length > 12 ? "<li>… و" + (a.length - 12) + " أخرى</li>" : "") + "</ul>" : '<span class="ph-chip ok">لا شيء</span>'; };
-      admin = '<h2 class="ph-h2">صحة المنظومة <span class="ph-chip idle">لمدير النظام</span></h2><div class="ph-grid">' + stat("الاتصال بـ Drive", S.live && !S.failed ? "متصل" : "غير متصل", S.live ? "إصدار السكربت " + E(S.ver) + (S.partial ? " · مسح جزئي" : "") : "تُعرض لقطة 12-11-2026") +
+      admin = '<h2 class="ph-h2">صحة المنظومة <span class="ph-chip idle">لمدير النظام</span></h2><div class="ph-grid">' + stat("الاتصال بـالتخزين السحابي", S.live && !S.failed ? "متصل" : "غير متصل", S.live ? "إصدار السكربت " + E(S.ver) + (S.partial ? " · مسح جزئي" : "") : "تُعرض لقطة 12-11-2026") +
         stat("سجلات غير منشأة", miss.length, "بلا ملف في مجلدها") + stat("ملفات لا تطابق سجلاً", inv.length, "أسماء تحتاج تصحيحاً") + stat("تقارير بالتسمية القديمة", legacy.length, "«التقرير البصري»") + "</div>" +
-        '<div class="ph-box"><b>أخطاء المسح</b>' + pr(bad) + "<b>سجلات غير منشأة</b>" + pr(miss) + "<b>ملفات لا تطابق أي سجل</b>" + pr(inv) + "<b>تقارير بالتسمية القديمة</b>" + pr(legacy) + '<div class="ph-actions"><a class="ph-btn" target="_blank" rel="noopener" href="' + P.rootUrl() + '"><i class="fa-solid fa-folder-tree"></i> جذر Drive الجديد</a></div></div>';
+        '<div class="ph-box"><b>أخطاء المسح</b>' + pr(bad) + "<b>سجلات غير منشأة</b>" + pr(miss) + "<b>ملفات لا تطابق أي سجل</b>" + pr(inv) + "<b>تقارير بالتسمية القديمة</b>" + pr(legacy) + '<div class="ph-actions"><a class="ph-btn" target="_blank" rel="noopener" href="' + P.rootUrl() + '"><i class="fa-solid fa-folder-tree"></i> جذر التخزين السحابي الجديد</a></div></div>';
     }
     main.innerHTML = '<h1 class="ph-h1">' + (isAdmin ? "لوحة مدير النظام" : "الفجوات والنسب") + '</h1><p class="ph-lead">صورة واحدة للمشروع: ' + (isAdmin ? "هل المنظومة سليمة وأين نقف؟" : "أين فجواتنا؟") + "</p>" +
       '<div class="ph-grid">' + stat("التقدّم الرسمي", pctTxt(P.projP()), "متوسط " + t.ind + " مؤشراً · سجلات + تقرير الشواهد", "main") + "</div>" +

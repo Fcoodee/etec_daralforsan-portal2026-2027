@@ -137,7 +137,7 @@
       '<p class="ph-stmt">' + esc(i.text) + "</p>" +
       table +
       '<div class="ph-row"><span class="ph-chip idle">منشأة ' + gl(s.cr + "/" + s.req, s.cr) + '</span><span class="ph-chip ' + (s.ap ? "ok" : "idle") + '">مرفوعة (بعد المراجعة) ' + s.ap + "/" + s.req + "</span>" + (s.review ? '<span class="ph-chip wip">معبّأة قيد المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
-      '<div class="ph-actions"><a class="ph-btn pri" href="' + folderUrl(i) + '" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> مجلد المؤشر في Drive</a>' +
+      '<div class="ph-actions"><a class="ph-btn pri" href="' + folderUrl(i) + '" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> مجلد المؤشر في التخزين السحابي</a>' +
       '</div>' +
       "</div></article>";
   }
@@ -231,9 +231,9 @@
   function connChip() {
     var c = document.getElementById("phConn"); if (!c) return;
     var role = window.PortalRole ? PortalRole.get() : "", live = ST.live && !ST.failed, when = live ? fmtT(ST.gen) : (ST.asof || "");
-    var txt = live ? "آخر تحديث للحالة: " + when : ST.failed ? "تعذّر جلب الحالة الحيّة" + (when ? " · الأرقام المعروضة حتى " + when : "") : (role === "admin" ? "لقطة " + when + " · ليست حالة حيّة" : "الأرقام حتى " + when);
+    var txt = live ? "آخر تحديث للحالة: " + when : ST.failed ? "جاري تحديث قاعدة البيانات ..." + (when ? " · الأرقام المعروضة حتى " + when : "") : (role === "admin" ? "لقطة " + when + " · جاري تحديث قاعدة البيانات ..." : "الأرقام حتى " + when);
     c.className = "ph-sync " + (ST.loading ? "load" : live ? "ok" : "off");
-    c.innerHTML = '<div class="ph-sync-row"><i class="fa-solid ' + (ST.loading ? "fa-rotate fa-spin" : live ? "fa-circle-check" : "fa-circle-exclamation") + '"></i><span class="ph-sync-t" id="phSyncT">' + (ST.loading ? "جارٍ جلب الحالة الحيّة، انتظر: <b id=\"phSyncS\">0</b> ثانية · قد يستغرق حتى دقيقة" : esc(txt)) + '</span>' +
+    c.innerHTML = '<div class="ph-sync-row"><i class="fa-solid ' + (ST.loading ? "fa-rotate fa-spin" : live ? "fa-circle-check" : "fa-circle-exclamation") + '"></i><span class="ph-sync-t" id="phSyncT">' + (ST.loading ? "جاري تحديث قاعدة البيانات ... انتظر: <b id=\"phSyncS\">0</b> ثانية · قد يستغرق حتى دقيقة" : esc(txt)) + '</span>' +
       '<button type="button" id="phRef" class="ph-ref"' + (ST.loading ? " disabled" : "") + ' aria-label="تحديث الحالة الآن"><i class="fa-solid fa-arrows-rotate"></i> ' + (ST.loading ? "جارٍ التحديث" : "تحديث الآن") + '</button></div>' +
       (ST.loading ? '<div class="ph-sync-bar" role="progressbar" aria-label="جارٍ التحديث"><i></i></div>' : "");
     if (syncTimer) { clearInterval(syncTimer); syncTimer = null; }

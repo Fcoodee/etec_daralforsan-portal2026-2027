@@ -72,7 +72,7 @@
       '<span class="num">' + (i + 1) + "</span>" + (h ? '<button type="button" class="x" data-rm title="Remove photo" aria-label="Remove">×</button>' : "") + "</div>" +
       '<div class="meta"><textarea class="in" data-f="cap" dir="auto" rows="2" placeholder="Evidence description: what does it show, and which activity?">' + E(s.cap) + '</textarea>' +
       '<div class="in" style="display:grid;grid-template-columns:1fr 1fr;gap:5px"><input type="date" data-f="date" value="' + E(s.date) + '" aria-label="Date"><input type="text" dir="auto" data-f="src" value="' + E(s.src) + '" placeholder="Record / source" aria-label="Source"></div>' +
-      '<input class="in" type="text" dir="ltr" data-f="link" value="' + E(s.link) + '" placeholder="Or paste an image link (Drive or other)" aria-label="Image link">' +
+      '<input class="in" type="text" dir="ltr" data-f="link" value="' + E(s.link) + '" placeholder="Or paste an image link (Cloud Storage or other)" aria-label="Image link">' +
       '<div class="pt" dir="auto">' + ptText(s) + "</div></div></div>";
   }
   function ptText(s) { var a = []; if (s.cap) a.push(E(s.cap)); var m = []; if (s.date) m.push(E(s.date)); if (s.src) m.push(E(s.src)); if (m.length) a.push("<small>" + m.join(" · ") + "</small>"); return a.join("<br>"); }
@@ -221,7 +221,7 @@
     if (f.size > 20 * 1024 * 1024) { msg("upMsg", "الملف أكبر من 20 ميغابايت.", "bad"); return; }
     if (count() < 1) { msg("upMsg", "أضف صورة واحدة على الأقل قبل الرفع.", "bad"); return; }
     var nm = fname();
-    if (!confirm("سيُرفع الملف إلى مجلد التقرير باسم:\n" + nm + "\n(عدد الصور حسب القالب الحالي: " + count() + ")\nويُنقل الهيكل الفارغ إلى سلة Drive. متابعة؟")) return;
+    if (!confirm("سيُرفع الملف إلى مجلد التقرير باسم:\n" + nm + "\n(عدد الصور حسب القالب الحالي: " + count() + ")\nويُنقل الهيكل الفارغ إلى سلة التخزين السحابي. متابعة؟")) return;
     var r = new FileReader(); msg("upMsg", "جارٍ الرفع…");
     r.onload = function () {
       post("uploadReport", { name: nm, pdf: String(r.result).split(",")[1] }).then(function (o) {

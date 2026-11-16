@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="portal-meta.js?v=9.12.0"></script>
+<script src="portal-meta.js?v=9.12.1"></script>
 <style>
 :root{
   --navy:#123a63;--blue:#1f78c1;--purple:#6a2c91;--teal:#0e8a9d;--gold:#b7791f;--slate:#5f6f80;
@@ -183,12 +183,12 @@ html[dir=ltr] .b2{text-align:left}
   <div class="cm-ft" id="ft"></div>
 </div>
 <div class="cm-mod" id="mod" role="dialog" aria-modal="true"><div class="box"><div class="bar"><b id="modT"></b><a class="cm-btn" id="modO" target="_blank" rel="noopener"></a><button type="button" class="cm-btn" id="modX" aria-label="close"><i class="fa-solid fa-xmark"></i></button></div><iframe id="modF" title="preview" allow="autoplay"></iframe></div></div>
-<script src="portal-config.js?v=9.12.0"></script>
-<script src="portal-names.js?v=9.12.0"></script>
-<script src="phase-data.js?v=9.12.0"></script>
-<script src="report-i18n.js?v=9.12.0"></script>
-<script src="highlights.js?v=9.12.0"></script>
-<script src="phase-core.js?v=9.12.0"></script>
+<script src="portal-config.js?v=9.12.1"></script>
+<script src="portal-names.js?v=9.12.1"></script>
+<script src="phase-data.js?v=9.12.1"></script>
+<script src="report-i18n.js?v=9.12.1"></script>
+<script src="highlights.js?v=9.12.1"></script>
+<script src="phase-core.js?v=9.12.1"></script>
 <script>
 (function () {
   "use strict";
@@ -199,18 +199,18 @@ html[dir=ltr] .b2{text-align:left}
 
   var T = {
     ar: { title: "بوابة الاعتماد نحو التميز", sub: "الدبلوما الأمريكية (قسم البنين) · المرحلة الابتدائية · واجهة اللجنة", ro: "للقراءة فقط", lang: "English",
-      demoOn: "نموذج للمعاينة — الحالات المعروضة توضيحية ومولَّدة تلقائياً، وليست واقع الاعتماد الفعلي.", demoOff: "البيانات الحيّة (لقطة محفوظة إن تعذّر الاتصال). السجلات غير المعتمدة تظهر «قيد الاستكمال».", demoLb: "بيانات توضيحية",
+      demoOn: "نموذج للمعاينة — الحالات المعروضة توضيحية ومولَّدة تلقائياً، وليست واقع الاعتماد الفعلي.", demoOff: "جاري تحديث قاعدة البيانات ... (تُعرض آخر لقطة محفوظة إن تعذّر الاتصال). السجلات غير المعتمدة تظهر «قيد الاستكمال».", demoLb: "بيانات توضيحية",
       home: "الرئيسية", domains: "المجالات الأربعة", inds: "المؤشرات", recsAp: "سجلات معتمدة", reps: "تقارير الشواهد", done: "مؤشرات مكتملة", crit: "معيار", ind: "مؤشر", rec: "سجل", open: "عرض المجال",
       hl: "الإضاءات", records: "السجلات والوثائق", report: "تقرير الشواهد", appr: "معتمد", wip: "قيد الاستكمال", repOk: "التقرير البصري مرفوع", repS1: "التقرير مرفوع", repS0: "التقرير قيد الإعداد", repNo: "التقرير البصري قيد الإعداد",
-      repOkN: "يضم صور الشواهد المختارة للمؤشر.", repNoN: "سيظهر هنا عند رفعه واعتماده.", view: "عرض هنا", tab: "فتح في المتصفح", dl: "تنزيل (خارج المتصفح)", copy: "نسخ الرابط", copied: "نُسخ", folder: "فتح مجلد المؤشر في Drive",
-      apprOnly: "لا يُعرض للجنة إلا ما اعتُمد. تتطلب ملفات Drive صلاحية عرض ممنوحة من المدرسة.", prev: "السابق", next: "التالي", of: "من", close: "إغلاق",
+      repOkN: "يضم صور الشواهد المختارة للمؤشر.", repNoN: "سيظهر هنا عند رفعه واعتماده.", view: "عرض هنا", tab: "فتح في المتصفح", dl: "تنزيل (خارج المتصفح)", copy: "نسخ الرابط", copied: "نُسخ", folder: "فتح مجلد المؤشر في التخزين السحابي",
+      apprOnly: "لا يُعرض للجنة إلا ما اعتُمد. تتطلب ملفات التخزين السحابي صلاحية عرض ممنوحة من المدرسة.", prev: "السابق", next: "التالي", of: "من", close: "إغلاق",
       denyT: "الوصول مقيّد", denyP: "هذه الصفحة لمدير النظام وحده. الحساب الحالي غير مصرّح له.", denyB: "تسجيل الخروج", foot: "واجهة عرض للقراءة فقط لمساندة التقويم الخارجي؛ لا تُغني عن القناة الرسمية للهيئة. تُستعمل لعرض نموذج المعاينة داخل المدرسة.", soon: "ملف غير متاح (بيانات توضيحية)" },
     en: { title: "Excellence Accreditation Portal", sub: "American Diploma (Boys' Section) · Primary Stage · Committee View", ro: "Read-only", lang: "العربية",
-      demoOn: "Preview prototype — statuses shown are illustrative and auto-generated, not the actual accreditation status.", demoOff: "Live data (cached snapshot if offline). Unapproved records appear as “In progress”.", demoLb: "Illustrative data",
+      demoOn: "Preview prototype — statuses shown are illustrative and auto-generated, not the actual accreditation status.", demoOff: "Updating the database ... (the last saved snapshot is shown if offline). Unapproved records appear as “In progress”.", demoLb: "Illustrative data",
       home: "Home", domains: "The four domains", inds: "Indicators", recsAp: "Approved records", reps: "Evidence reports", done: "Complete indicators", crit: "criteria", ind: "indicators", rec: "records", open: "Open domain",
       hl: "Highlights", records: "Records & documents", report: "Evidence report", appr: "Approved", wip: "In progress", repOk: "Visual report uploaded", repS1: "Report uploaded", repS0: "Report pending", repNo: "Visual report in preparation",
-      repOkN: "Contains the selected evidence photos for the indicator.", repNoN: "Will appear here once uploaded and approved.", view: "View here", tab: "Open in browser", dl: "Download (outside browser)", copy: "Copy link", copied: "Copied", folder: "Open indicator folder in Drive",
-      apprOnly: "The committee only sees approved items. Drive files require view access granted by the school.", prev: "Previous", next: "Next", of: "of", close: "Close",
+      repOkN: "Contains the selected evidence photos for the indicator.", repNoN: "Will appear here once uploaded and approved.", view: "View here", tab: "Open in browser", dl: "Download (outside browser)", copy: "Copy link", copied: "Copied", folder: "Open indicator folder in Cloud Storage",
+      apprOnly: "The committee only sees approved items. Cloud Storage files require view access granted by the school.", prev: "Previous", next: "Next", of: "of", close: "Close",
       denyT: "Restricted access", denyP: "This page is for the system administrator only. The signed-in account is not authorised.", denyB: "Sign out", foot: "A read-only view supporting external evaluation; it does not replace the Commission's official channel. This is an internal preview prototype.", soon: "File unavailable (illustrative data)" }
   };
   function tp(k) { return lang === "en" ? T.en[k] : T.ar[k]; }
