@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="portal-meta.js?v=9.13.0"></script>
+<script src="portal-meta.js?v=9.13.1"></script>
 <style>
 :root{--navy:#123a63;--blue:#1f78c1;--purple:#6a2c91;--ink:#0f172a;--mut:#64748b;--line:#e2e8f0;--bg:#f4f6fb}
 *{box-sizing:border-box}
@@ -47,6 +47,16 @@ body{margin:0;font-family:Cairo,"Segoe UI",Tahoma,Arial,sans-serif;background:va
 .btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(91,42,134,.45)}
 .btn small{display:block;font-weight:600;font-size:11.5px;opacity:.85;direction:ltr}
 .err{margin-top:10px;color:#b91c1c;font-weight:800;font-size:13.5px;min-height:20px}
+.tl{list-style:none;margin:14px 0 0;padding:0;position:relative}
+.tl::before{content:"";position:absolute;inset-inline-start:15px;top:6px;bottom:6px;width:3px;border-radius:3px;background:linear-gradient(var(--blue),var(--purple))}
+.tl li{position:relative;padding:0 44px 14px 0}
+html[dir=ltr] .tl li{padding:0 0 14px 44px}
+.tl li::before{content:"";position:absolute;inset-inline-start:7px;top:6px;width:19px;height:19px;border-radius:50%;background:#fff;border:4px solid var(--blue)}
+.tl li.now::before{border-color:var(--purple);background:var(--purple);box-shadow:0 0 0 6px rgba(106,44,145,.18)}
+.tl .d{display:inline-block;background:var(--bg);border:1px solid var(--line);color:var(--navy);border-radius:999px;padding:0 12px;font-weight:900;font-size:13px}
+.tl .t{margin:2px 0 0;font-size:14.5px;font-weight:700}
+.tl .e{margin:0;font-size:12.5px;color:var(--mut);direction:ltr;text-align:left}
+.tl .n{margin:0;font-size:12px;color:#92400e}
 .foot{text-align:center;font-size:12px;color:var(--mut);margin-top:6px}
 @media(max-width:640px){.hero h1{font-size:24px}.logos img{height:58px}.card{padding:16px}.lock{justify-content:center;text-align:center}.lock .tx{min-width:0}}
 @media(prefers-reduced-motion:reduce){.meet,.badge i{animation:none}.btn{transition:none}html{scroll-behavior:auto}}
@@ -70,6 +80,19 @@ body{margin:0;font-family:Cairo,"Segoe UI",Tahoma,Arial,sans-serif;background:va
       <div class="fact"><b>52</b><span>مؤشراً · Indicators</span></div>
       <div class="fact"><b>140</b><span>سجلاً · Records</span></div>
     </div>
+  </section>
+  <section class="card" aria-labelledby="tlT">
+    <h2 id="tlT"><i class="fa-solid fa-timeline" style="color:var(--purple)"></i> خط زمني للعمل <span style="font-weight:600;color:var(--mut);font-size:14px;direction:ltr">· Timeline</span></h2>
+    <ol class="tl">
+      <li><span class="d"><bdi dir="ltr">2025 – 2026</bdi></span><p class="t">مرحلة جمع الشواهد واستكمال التقويم الذاتي (العام الدراسي <bdi dir="ltr">2025–2026</bdi>)</p><p class="e">Evidence collection and self-evaluation phase (academic year 2025–2026)</p></li>
+      <li><span class="d">فبراير 2026</span><p class="t">صدور معايير التقويم والاعتماد المدرسي 2026 (11 معياراً و52 مؤشراً)</p><p class="e">School evaluation and accreditation standards 2026 issued (11 standards, 52 indicators)</p></li>
+      <li><span class="d">20 سبتمبر 2026</span><p class="t">استئناف دورة جمع الشواهد <bdi dir="ltr">2026–2027</bdi> امتداداً للعمل السابق</p><p class="e">Evidence collection resumed for 2026–2027 as a continuation</p></li>
+      <li><span class="d">30 سبتمبر 2026</span><p class="t">بدء «مشروع ربط الشواهد بالسجلات»</p><p class="e">Start of the “Linking Evidence to Records” project</p></li>
+      <li><span class="d">10 نوفمبر 2026</span><p class="t">اعتماد الإصدار الثاني من المعايير مرجعاً رسمياً</p><p class="e">Second edition of the standards adopted as the official reference</p></li>
+      <li><span class="d">11 نوفمبر 2026</span><p class="t">بدء مرحلة «تصحيح المسار»</p><p class="e">Start of the “course correction” phase</p></li>
+      <li><span class="d">12 نوفمبر 2026</span><p class="t">بناء الهيكل الجديد للتخزين السحابي: 52 مؤشراً و140 سجلاً</p><p class="e">New cloud-storage structure built: 52 indicators, 140 records</p></li>
+      <li class="now"><span class="d">13 – 16 نوفمبر 2026</span><p class="t">إعادة بناء المنصة، ثم نموذج واجهة اللجنة وإغلاق العمل مؤقتاً</p><p class="e">Platform rebuilt, committee view prototype, work temporarily closed</p></li>
+    </ol>
   </section>
   <section class="card lock" aria-labelledby="lockT">
     <svg class="meet" viewBox="0 0 150 116" role="img" aria-label="اجتماع فريق عمل · Team meeting">
