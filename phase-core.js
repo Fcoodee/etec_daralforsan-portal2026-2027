@@ -217,9 +217,9 @@
       ["progress.html", "fa-chart-pie", "قراءة التقدّم", "admin,self"],
       ["report.html", "fa-file-image", "تقرير الشواهد", "admin,sup,member"],
       ["reference.html", "fa-book-open", "المرجع", "admin,self"],
-      ["committee.html", "fa-user-check", "واجهة اللجنة (نموذج)", "admin,self"]
+      ["committee.html", "fa-user-check", "واجهة اللجنة (نموذج)", "admin"]
     ];
-    var nav = items.filter(function (x) { return !role || x[3].split(",").indexOf(role) >= 0; }).map(function (x) {
+    var nav = items.filter(function (x) { return x[3] === "admin" ? role === "admin" : (!role || x[3].split(",").indexOf(role) >= 0); }).map(function (x) {
       return '<a href="' + x[0] + '"' + (x[0] === active ? ' aria-current="page"' : "") + '><i class="fa-solid ' + x[1] + '"></i> ' + esc(x[2]) + "</a>"; }).join("");
     el.innerHTML = '<div class="ph-top"><a class="ph-home" href="primary.html"><i class="fa-solid fa-house"></i> البوابة</a><a class="ph-home" href="index.html" title="كل المراحل">المراحل</a><span class="ph-sub">مشروع الاعتماد 2026-2027 · الدبلوما الأمريكية (بنين) · مدارس دار الفرسان</span></div>' +
       '<header class="ph-head"><div class="ph-logos"><img src="logo0.png" alt="Diploma 2026"><img src="logo1.png" alt="دار الفرسان"><img src="logo2.png" alt="ETEC"></div></header>' +

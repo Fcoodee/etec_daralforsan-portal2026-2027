@@ -4,12 +4,15 @@
 #    من الرابط /access.txt طالما الموقع مستضاف كملفات عامة (GitHub Pages).
 #    راجع ملاحظة الأمان المرفقة قبل رفع أي بيانات إنتاجية حقيقية.
 
-admin,admin123
+eng,sha256:f65516d9ca1a7263:a2c838d0f23870509e54bdb7c088753de34aac1fa791101773e8860c50e7763b
+adm,sha256:363acddca70a00d9:1e5a2299764ecaf99108af040d28006a3f96db0fac3257f7e6984fd5ead26feb
 f.it@live.com,admin123
 mf6643169@gmail.com,admin123
 hassan.yassin@daralforsan.edu.sa,admin123
 waleed.hyder@daralforsan.edu.sa,admin123
 abd,2030
+# مدير النظام: eng وحده (سطر #@admin يحل محل الافتراضي «admin»). eng وadm مخزّنان بصيغة sha256:الملح:البصمة
+#@admin,eng
 
 # ===== أقفال اللوحات — v8.12.0: حلّ محلها legacy-lock.js (محتوى ما قبل «تصحيح المسار» لمدير النظام وحده؛ سطر اختياري  #@admin,مستخدم  لتعيين المديرين) =====
 # يقرؤها board-lock.js، ويتجاهلها نظام الدخول لأنها تبدأ بـ #
