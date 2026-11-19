@@ -15,7 +15,7 @@
     const style = document.createElement('style');
     style.id = 'df-protect-style';
     style.textContent = `
-        body.df-locked, body.df-locked * {
+        html:not(.sh-admin) body.df-locked, html:not(.sh-admin) body.df-locked * {
             -webkit-user-select: none !important;
             -moz-user-select: none !important;
             -ms-user-select: none !important;
@@ -183,6 +183,7 @@
     }
 
     function isUnlocked() {
+        if (document.documentElement.classList.contains('sh-admin')) return true; /* جلسة مدير النظام الصالحة (انظر shield.js) */
         if (sessionStorage.getItem(SESSION_KEY) !== 'true') return false;
         try { var a = JSON.parse(localStorage.getItem('df_auth_v1') || 'null'); if (!(a && a.exp > Date.now())) { sessionStorage.removeItem(SESSION_KEY); sessionStorage.removeItem(SESSION_USER_KEY); return false; } } catch (e) {}
         return true;
