@@ -201,3 +201,4 @@ select,input,textarea,button{max-width:100%}
 
 /* عناصر العمل (رفع/اعتماد/إصدار) تظهر لجلسة مدير النظام الصالحة فقط (يضع shield.js الصنف sh-admin على html) */
 html:not(.sh-admin) .ad-only{display:none!important}
+html.sh-admin .vis-only{display:none!important}

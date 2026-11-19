@@ -45,8 +45,8 @@ window.ETEC_LEGAL_POLICY = { first: 3, highMinutes: 20, mediumMinutes: 1440, low
    (إخفاء شعار الهيئة من الترويسات: المفتاح showEtecLogo في portal-meta.js — يعمل في كل الصفحات.) */
 window.ETEC_DOMAIN_RESULTS = null;
 window.ETEC_TOOLS_STATUS = { team: null, surveyTeacher: null, surveyLearner: null, surveyFamily: null, obsClass: null, obsEnv: null, interviews: null, docs: null };
-/* لوحة نحو التميز (dashboard.html): false = مقفلة لمدير النظام وحده (القاعدة الحالية)؛ true = مفتوحة للتتبع والعرض فقط، وتبقى تبويبات العمل وأزرارها لمدير النظام وحده. لا تُفتح إلا بقرار مدير المشروع. */
-window.ETEC_DASH_PUBLIC = false;
+/* لوحة نحو التميز (dashboard.html): true (قرار مدير المشروع 19 نوفمبر 2026) = اللوحة مفتوحة من صفحة الهبوط للزائر للاستعراض فقط؛ وتبقى صفحات العمل وتبويباتها وأزرارها لمدير النظام وحده. false = مقفلة لمدير النظام. */
+window.ETEC_DASH_PUBLIC = true;
 window.ETEC_STAGES = [
   { id: "primary",      name: "الابتدائي", open: true,  url: "dashboard.html" },
   { id: "intermediate", name: "المتوسط",   open: false, wipUrl: "stage-wip.html?s=intermediate" },
