@@ -16,7 +16,7 @@
   /* أساس النسبة الرسمية: created (المنشأة) أو uploaded (المرفوعة بعد المراجعة) — إعداد ETEC_PROGRESS_BASIS في portal-config.js */
   function basis() { var b = window.ETEC_PROGRESS_BASIS; return b === "uploaded" ? "uploaded" : b === "created" ? "created" : "mixed"; }
   function gl(txt, on) { return on ? '<span class="ph-gl">' + txt + "</span>" : txt; }
-  function basisTxt() { var b = basis(); return b === "uploaded" ? "السجلات الجاهزة (المعبّأة والمعتمدة)" : b === "created" ? "السجلات المنشأة" : "المنشأة 50% + الجاهزة 50% من اجمالي سجلات المؤشر"; }
+  function basisTxt() { var b = basis(); return b === "uploaded" ? "السجلات الجاهزة (المعبّأة والمعتمدة)" : b === "created" ? "السجلات المنشأة" : "الانطلاق من 50% بإنشاء السجلات ثم الجاهزة (25%) والتقرير (25%)"; }
   function target() { return +window.ETEC_REPORT_TARGET || 6; }
 
   var ST = { live: false, asof: "", gen: "", ver: "", errors: [], ind: {}, loaded: false, failed: false };
@@ -47,17 +47,20 @@
     out.cr = out.ready;
     out.rpc = out.req ? Math.min(out.cr, out.req) / out.req : 0;
     out.rpu = out.req ? Math.min(out.ap, out.req) / out.req : 0;
-    /* مختلط (الأساس الحالي): نصف تقدّم السجلات للمنشأة (القوالب موجودة) ونصفه للجاهزة من إجمالي سجلات المؤشر */
-    out.rpm = 0.5 * out.rpc + 0.5 * out.rpu;
     out.review = 0; i.recs.forEach(function (n) { if (st[n] === "review") out.review++; });
     var ph = out.rep.photos || 0;
     /* تقرير الشواهد البصرية: حالتان فقط — none لم يُرفع (لا ملف أو قالب فارغ) · done مرفوع (تقرير فيه صور) */
     out.repState = ph > 0 ? "done" : "none";
     /* اكتمال المؤشر = 50% سجلاته ووثائقه + 50% تقرير الشواهد البصرية (قرار مدير المشروع). rpc/rpu للسجلات وحدها. */
     var r = out.repState === "done" ? 1 : 0;
-    out.pc = (out.rpc + r) / 2; out.pu = (out.rpu + r) / 2; out.pm = (out.rpm + r) / 2;
-    var bs = basis(); out.rp = bs === "uploaded" ? out.rpu : bs === "created" ? out.rpc : out.rpm;
-    out.p = bs === "uploaded" ? out.pu : bs === "created" ? out.pc : out.pm;
+    out.pc = (out.rpc + r) / 2; out.pu = (out.rpu + r) / 2;
+    /* مختلط (الأساس الحالي، قرار مدير المشروع): ينطلق المؤشر من 50% بإنشاء سجلاته كلها (قوالب)، ثم يرتفع 25% بجاهزية السجلات (جاهزة ÷ إجمالي سجلات المؤشر) و25% بجاهزية تقرير الشواهد البصرية. المكوّنات: pa منشأة، pb جاهزة، pr تقرير. */
+    var bs = basis();
+    if (bs === "uploaded") { out.pa = 0; out.pb = 0.5 * out.rpu; out.pr = 0.5 * r; }
+    else if (bs === "created") { out.pa = 0.5 * out.rpc; out.pb = 0; out.pr = 0.5 * r; }
+    else { out.pa = 0.5 * out.rpc; out.pb = 0.25 * out.rpu; out.pr = 0.25 * r; }
+    out.pm = 0.5 * out.rpc + 0.25 * out.rpu + 0.25 * r;
+    out.p = out.pa + out.pb + out.pr;
     return out;
   }
   /* المعادلة نفسها المعتمدة في لوحة المتابعة: المؤشر = المرفوع/المطلوب، المعيار = متوسط مؤشراته، المجال = متوسط معاييره، المشروع = متوسط المؤشرات */
@@ -135,7 +138,7 @@
       '<button type="button" class="ph-card-h" aria-expanded="' + open + '" data-toggle>' +
       '<span class="ph-code" dir="ltr">' + esc(i.code) + "</span>" +
       '<span class="ph-card-t"><b>' + esc(i.st) + "</b><small>" + esc(DN[i.d]) + " · " + esc(i.cn) + (o.owner === false ? "" : " · " + esc(me)) + "</small></span>" + tag +
-      '<span class="ph-card-p" title="اكتمال المؤشر = 50% سجلات + 50% تقرير الشواهد البصرية · الرقم: سجلات جاهزة / مطلوبة · الفاتح = منشأة"><b dir="ltr">' + s.ap + "/" + s.req + "</b>" + bar2(s.pu, s.pc) + "</span></button>" +
+      '<span class="ph-card-p" title="اكتمال المؤشر = 50% منشأة + 25% سجلات جاهزة + 25% تقرير الشواهد البصرية · الرقم: سجلات جاهزة / مطلوبة · الفاتح = منشأة"><b dir="ltr">' + s.ap + "/" + s.req + "</b>" + bar2(s.pu, s.pc) + "</span></button>" +
       '<div class="ph-card-b"' + (open ? "" : " hidden") + ">" +
       '<p class="ph-stmt">' + esc(i.text) + "</p>" +
       table +
