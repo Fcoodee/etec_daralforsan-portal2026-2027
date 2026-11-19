@@ -75,7 +75,7 @@
   }
   function withGate(cb) {
     if (window.DFGate) { cb(); return; }
-    var sc = document.createElement("script"); sc.src = "page-gate.js?v=10.0.1"; sc.dataset.lazy = "1";
+    var sc = document.createElement("script"); sc.src = "page-gate.js?v=10.0.2"; sc.dataset.lazy = "1";
     sc.onload = cb; sc.onerror = function () { alert("تعذّر تحميل نافذة الدخول؛ أعد تحميل الصفحة."); };
     document.head.appendChild(sc);
   }
@@ -146,6 +146,7 @@
 
   function bar() {
     var pg = pageKey();
+    if (true) return; /* مدير نظام واحد: لا شريط أدوار */
     if (document.getElementById("utChip") || pg === "login.html" || pg === "index.html" || pg === "stages.html" || pg === "primary.html") return; /* evidence-link لها شريطها، وصفحة الدخول بلا شريط */
     var old = document.getElementById("prBar"); if (old) old.remove();
     var b = document.createElement("div");
@@ -203,7 +204,7 @@
     var names = list.map(function (k) { return ROLES[k].n; }).join("، ");
     d.innerHTML = '<div style="background:#fff;border-radius:20px;max-width:420px;width:100%;padding:26px;text-align:right;border-top:6px solid #c29b38"><h2 style="margin:0 0 8px;font-size:17px;font-weight:900;color:#003d3d">' + (adminOnly ? "هذه الصفحة لمدير النظام" : "هذه الصفحة خارج مساحة دورك") + '</h2><p style="margin:0 0 14px;font-size:13px;line-height:1.9;color:#475569">' + (adminOnly ? "يحتاج مدير النظام وحده إلى رمز مستخدم وكلمة مرور." : "تُفتح لهذه الأدوار: " + esc(names) + ".") + '</p>' +
       (adminOnly ? '<button id="rolGo" type="button" style="width:100%;border:0;border-radius:12px;background:#006666;color:#fff;font:800 14px Cairo,Tahoma,sans-serif;padding:12px;cursor:pointer">دخول مدير النظام</button>' : "") +
-      '<a href="primary.html" style="display:block;text-align:center;margin-top:12px;font-size:12px;color:#006666">العودة إلى اختيار الدور</a></div>';
+      '<a href="index.html" style="display:block;text-align:center;margin-top:12px;font-size:12px;color:#006666">العودة إلى الصفحة الرئيسية</a></div>';
     document.body.appendChild(d);
     var go = document.getElementById("rolGo");
     if (go) go.addEventListener("click", function () { choose("admin", function () { try { var u = new URL(location.href); u.searchParams.set("u", "admin"); location.href = u.toString(); } catch (e) { location.reload(); } }); });
