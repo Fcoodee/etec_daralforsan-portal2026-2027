@@ -60,12 +60,6 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
 .pg-donut ul{list-style:none;margin:0;padding:0;font-size:12.5px}
 .pg-donut li::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-inline-end:6px;vertical-align:-2px;background:var(--k)}
 .pg-donut li b{direction:ltr;display:inline-block}
-.pg-heat{display:flex;flex-direction:column;gap:10px}
-.pg-hrow h4{margin:0 0 4px;font-size:12.5px;font-weight:900;color:var(--c)}
-.pg-tiles{display:flex;flex-wrap:wrap;gap:5px}
-.pg-tile{position:relative;display:flex;align-items:center;justify-content:center;width:62px;height:34px;border-radius:8px;border:2px solid var(--c);background:linear-gradient(to top,var(--c) var(--f),#fff var(--f));font-size:10.5px;font-weight:800;direction:ltr;text-decoration:none;color:#0f172a}
-.pg-tile span{background:rgba(255,255,255,.88);border-radius:4px;padding:0 3px}
-.pg-tile.rep::after{content:"";position:absolute;top:2px;inset-inline-end:2px;width:7px;height:7px;border-radius:50%;background:#16a34a;border:1px solid #fff}
 .pg-note{font-size:12px;color:var(--mut);margin-top:8px}
 .nd-team{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:6px}
 .nd-tm{border:1px solid var(--line);border-inline-start:5px solid var(--c);border-radius:12px;background:var(--cb);padding:8px 12px;font-size:12.8px;line-height:1.9}
@@ -253,12 +247,6 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
       '<section class="pg-box"><h2>حالة السجلات (' + T.req + ')</h2><div class="pg-donut">' + donut([{ v: st.approved, c: "#047857" }, { v: st.review, c: "#d97706" }, { v: st.blank, c: "#94a3b8" }, { v: st.missing, c: "#dc2626" }]) +
       '<ul><li style="--k:#047857">مرفوعة (معتمدة) <b>' + st.approved + '</b></li><li style="--k:#d97706">معبّأة قيد المراجعة <b>' + st.review + '</b></li><li style="--k:#94a3b8">منشأة بانتظار التعبئة <b>' + st.blank + '</b></li><li style="--k:#dc2626">غير منشأة <b>' + st.missing + "</b></li></ul></div></section></div>";
 
-    h += '<section class="pg-box" style="margin-top:14px"><h2>خريطة المؤشرات الـ' + T.ind + '</h2><div class="pg-heat">' + [1, 2, 3, 4].map(function (d) {
-      return '<div class="pg-hrow" style="--c:' + COL[d][0] + '"><h4>' + E(P.DN[d]) + '</h4><div class="pg-tiles">' + S.filter(function (x) { return x.i.d === d; }).map(function (x) {
-        return '<a class="pg-tile' + (x.s.repState === "done" ? " rep" : "") + '" style="--f:' + pc(x.s.p) + '%" href="#i-' + E(x.i.code) + '" data-go="' + E(x.i.code) + '" title="' + E(x.i.code + " · " + x.i.st + " — " + pc(x.s.p) + "%" + (x.s.repState === "done" ? " · تقرير الشواهد البصرية مرفوع" : "")) + '"><span>' + E(x.i.code) + "</span></a>";
-      }).join("") + "</div></div>";
-    }).join("") + '</div><p class="pg-note">ارتفاع التعبئة داخل المربع = نسبة اكتمال المؤشر. النقطة الخضراء = تقرير الشواهد البصرية مرفوع. اضغط أي مؤشر لفتحه في الشجرة أدناه.</p></section>';
-
     h += teamHtml();
 
     h += '<h2 class="ph-h2" style="margin-top:18px">المجال ← المعيار ← المؤشر ← السجلات الداعمة ← تقرير الشواهد البصرية</h2>' +
@@ -283,7 +271,6 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
   main.addEventListener("click", function (e) {
     var b = e.target.closest("[data-v]");
     if (b) { lastBtn = b; var id = b.dataset.v; document.getElementById("rfT").textContent = b.dataset.vt || ""; document.getElementById("rfO").href = "https://drive.google.com/file/d/" + id + "/view"; fr.src = "https://drive.google.com/file/d/" + id + "/preview"; mod.classList.add("on"); document.getElementById("rfX").focus(); return; }
-    var g = e.target.closest("[data-go]"); if (g) { e.preventDefault(); openInd(g.dataset.go); return; }
     var d = e.target.closest("[data-dom]");
     if (d) { fdSel = String(fdSel) === d.dataset.dom ? "" : d.dataset.dom; drawTree(); var t = document.getElementById("tree"); if (t) t.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
     if (e.target.closest("#clr")) { fdSel = ""; document.getElementById("q").value = ""; document.getElementById("fa").value = ""; drawTree(); return; }
