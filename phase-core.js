@@ -49,9 +49,9 @@
     out.rpu = out.req ? Math.min(out.ap, out.req) / out.req : 0;
     out.review = 0; i.recs.forEach(function (n) { if (st[n] === "review") out.review++; });
     var ph = out.rep.photos || 0;
-    /* تقرير الشواهد: حالتان فقط — none لم يُرفع (لا ملف أو قالب فارغ) · done مرفوع (تقرير فيه صور) */
+    /* تقرير الشواهد البصرية: حالتان فقط — none لم يُرفع (لا ملف أو قالب فارغ) · done مرفوع (تقرير فيه صور) */
     out.repState = ph > 0 ? "done" : "none";
-    /* اكتمال المؤشر = 50% سجلاته ووثائقه + 50% تقرير الشواهد (قرار مدير المشروع). rpc/rpu للسجلات وحدها. */
+    /* اكتمال المؤشر = 50% سجلاته ووثائقه + 50% تقرير الشواهد البصرية (قرار مدير المشروع). rpc/rpu للسجلات وحدها. */
     var r = out.repState === "done" ? 1 : 0;
     out.pc = (out.rpc + r) / 2; out.pu = (out.rpu + r) / 2;
     out.p = basis() === "uploaded" ? out.pu : out.pc;
@@ -122,7 +122,7 @@
       var rvw = k === "approved" ? '<span class="ph-rv" data-roles="admin,sup,self"><button type="button" class="ph-btn sm" data-act="return" data-code="' + esc(i.code) + '" data-rec="' + esc(n) + '"><i class="fa-solid fa-rotate-left"></i> إعادة للتعبئة</button></span>' : k === "review" || k === "returned" ? '<span class="ph-rv" data-roles="admin,sup,self"><button type="button" class="ph-btn sm ph-ok" data-act="approve" data-code="' + esc(i.code) + '" data-rec="' + esc(n) + '"><i class="fa-solid fa-circle-check"></i> اعتماد</button>' + (k === "review" ? '<button type="button" class="ph-btn sm" data-act="return" data-code="' + esc(i.code) + '" data-rec="' + esc(n) + '"><i class="fa-solid fa-rotate-left"></i> إعادة للتعبئة</button>' : "") + "</span>" : "";
       return '<tr class="ph-rec"><th scope="row" class="ph-rn">' + esc(n) + '</th><td class="ph-rs">' + chip(k) + note + rvw + '<span class="ph-upm ' + (u ? u[1] : "") + '" role="status">' + (u ? esc(u[0]) : "") + '</span></td><td class="ph-rc">' + eye + '</td><td class="ph-rc">' + dl + '</td><td class="ph-rc">' + up + "</td></tr>"; }).join("");
     var rf = (s.rep.files || []).filter(function (x) { return x.valid && x.n > 0 && x.id; }).sort(function (x, y) { return y.n - x.n; })[0];
-    var repRow = '<tr class="ph-rec ph-rrep"><th scope="row" class="ph-rn"><i class="fa-solid fa-file-image"></i> تقرير الشواهد</th><td class="ph-rs">' + (rf ? '<span class="ph-chip ok">مرفوع · ' + rf.n + ' صور</span>' : '<span class="ph-chip idle">لم يُرفع</span>') + '</td>' +
+    var repRow = '<tr class="ph-rec ph-rrep"><th scope="row" class="ph-rn"><i class="fa-solid fa-file-image"></i> تقرير الشواهد البصرية</th><td class="ph-rs">' + (rf ? '<span class="ph-chip ok">مرفوع · ' + rf.n + ' صور</span>' : '<span class="ph-chip idle">لم يُرفع</span>') + '</td>' +
       '<td class="ph-rc">' + (rf ? '<a class="ph-btn sm ph-eye on" href="' + fileView(rf.id) + '" target="_blank" rel="noopener" title="معاينة التقرير المرفوع" aria-label="معاينة التقرير"><i class="fa-solid fa-eye"></i></a>' : '<span class="ph-btn sm ph-eye off" aria-disabled="true" title="لا يوجد تقرير مرفوع بعد"><i class="fa-solid fa-eye"></i><span class="sr">غير متاح</span></span>') + '</td>' +
       '<td class="ph-rc">' + (rf ? '<a class="ph-btn sm" href="' + fileDl(rf.id) + '" target="_blank" rel="noopener" title="تنزيل التقرير" aria-label="تنزيل التقرير"><i class="fa-solid fa-download"></i></a>' : '<span class="ph-dash" aria-label="لا ملف">—</span>') + '</td>' +
       '<td class="ph-rc"><a class="ph-btn sm" data-roles="admin,sup,member" href="report.html?code=' + esc(i.code) + '" title="أصدر التقرير وارفعه من صفحة التقرير"><i class="fa-solid fa-cloud-arrow-up"></i> إصدار ورفع</a></td></tr>';
@@ -132,7 +132,7 @@
       '<button type="button" class="ph-card-h" aria-expanded="' + open + '" data-toggle>' +
       '<span class="ph-code" dir="ltr">' + esc(i.code) + "</span>" +
       '<span class="ph-card-t"><b>' + esc(i.st) + "</b><small>" + esc(DN[i.d]) + " · " + esc(i.cn) + (o.owner === false ? "" : " · " + esc(me)) + "</small></span>" + tag +
-      '<span class="ph-card-p" title="اكتمال المؤشر = 50% سجلات + 50% تقرير الشواهد · الرقم: سجلات مرفوعة / مطلوبة · الفاتح = منشأة"><b dir="ltr">' + s.ap + "/" + s.req + "</b>" + bar2(s.pu, s.pc) + "</span></button>" +
+      '<span class="ph-card-p" title="اكتمال المؤشر = 50% سجلات + 50% تقرير الشواهد البصرية · الرقم: سجلات مرفوعة / مطلوبة · الفاتح = منشأة"><b dir="ltr">' + s.ap + "/" + s.req + "</b>" + bar2(s.pu, s.pc) + "</span></button>" +
       '<div class="ph-card-b"' + (open ? "" : " hidden") + ">" +
       '<p class="ph-stmt">' + esc(i.text) + "</p>" +
       table +
@@ -217,7 +217,7 @@
       ["home.html", "fa-house", role && roles[role] ? roles[role].hl : "الرئيسية", "admin,sup,self,preview"],
       ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "admin,sup,member,self,preview"],
       ["progress.html", "fa-chart-pie", "قراءة التقدّم", "admin,self,preview"],
-      ["report.html", "fa-file-image", "تقرير الشواهد", "admin,sup,member,preview"],
+      ["report.html", "fa-file-image", "تقرير الشواهد البصرية", "admin,sup,member,preview"],
       ["reference.html", "fa-book-open", "المرجع", "admin,self,preview"],
       ["committee.html", "fa-user-check", "واجهة اللجنة (نموذج)", "admin,preview"]
     ];

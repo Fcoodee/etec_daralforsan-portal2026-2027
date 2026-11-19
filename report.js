@@ -1,4 +1,4 @@
-/* report.js — v9.2.0 — صفحة العمل على قالب تقرير الشواهد: خانات صور وأوصاف، مسودة محلية، إصدار PDF بالاسم الصحيح، ورفع/مسودة مركزية عبر Apps Script. */
+/* report.js — v9.2.0 — صفحة العمل على قالب تقرير الشواهد البصرية: خانات صور وأوصاف، مسودة محلية، إصدار PDF بالاسم الصحيح، ورفع/مسودة مركزية عبر Apps Script. */
 (function () {
   "use strict";
   var P = window.PHC; if (!P) return;
@@ -11,7 +11,7 @@
   function has(s) { return !!(s.img || s.link); }
   function count() { return slots.filter(has).length; }
   function clean(x) { return String(x || "").replace(/[\\\/:*?"<>|]/g, " ").replace(/\s+/g, " ").trim(); }
-  function fname() { var i = ind(); return code + "_تقرير الشواهد_" + clean(i ? i.st : "") + "_" + count() + "صور.pdf"; }
+  function fname() { var i = ind(); return code + "_تقرير الشواهد البصرية_" + clean(i ? i.st : "") + "_" + count() + "صور.pdf"; }
   function msg(id, t, cls) { var e = $(id); if (!e) return; e.textContent = t || ""; e.className = "rp-msg" + (cls ? " " + cls : ""); }
   function driveImg(u) {
     u = String(u || "").trim(); if (!/^https?:\/\//i.test(u)) return "";
@@ -98,7 +98,7 @@
     var hl = (HL[i.code] || []).map(function (x) { return "<li>" + bi(x.en, x.ar) + "</li>"; });
     $("sheet").innerHTML =
       '<div class="sh-head"><div class="logos"><img src="logo1.png" alt="Dar Al-Forsan Schools"><img src="logo0.png" alt="American Diploma"></div>' +
-      '<div class="tt"><b>Evidence Report</b><small>Dar Al-Forsan Schools — American Diploma Section (Boys) · Academic Year 2026–2027</small>' +
+      '<div class="tt"><b>Visual Evidence Report</b><small>Dar Al-Forsan Schools — American Diploma Section (Boys) · Academic Year 2026–2027</small>' +
       '<small>School Evaluation &amp; Accreditation Standards — General Education 2026</small></div>' + qrBox(qrUrl("rep"), 70, "Scan: open this report") + "</div>" +
       '<div class="sh-ind"><div class="sh-two">' +
         '<div><span class="lb">Domain</span>' + bi(I.dom[i.d], P.DN[i.d]) + "</div>" +
@@ -247,7 +247,7 @@
   function rpLink() { var i = ind(), s = i && P.sOf(i), a = $("lnkRp"); if (s && s.fo && s.fo.rp) { a.href = P.subUrl(s.fo.rp); a.hidden = false; } else { a.href = P.subUrl ? P.folderUrl(i) : "#"; a.hidden = false; a.textContent = "مجلد المؤشر"; } }
   function open(c) {
     code = c; ready = false; slots = []; try { history.replaceState(null, "", "report.html?code=" + encodeURIComponent(c)); } catch (e) {}
-    $("indSel").value = c; document.title = "تقرير الشواهد " + c;
+    $("indSel").value = c; document.title = "تقرير الشواهد البصرية " + c;
     return dbGet(c).then(function (d) { slots = d && Array.isArray(d.slots) ? d.slots.slice(0, MAXS) : []; fit(); render(); ready = true; loadRefs(); rpLink(); if (d) msg("saveMsg", "استُرجعت مسودتك المحفوظة على هذا الجهاز.", "ok"); else msg("saveMsg", ""); if (tok().length >= 8) ping(); });
   }
   function init() {

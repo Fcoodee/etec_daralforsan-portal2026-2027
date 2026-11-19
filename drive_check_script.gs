@@ -45,6 +45,7 @@ var DOCS_FOLDER_IDS_NEW = { // مجلدات «الوثائق» المضافة ح
   "4-2-1-2": "1QShfcHHeIyXCfM1VxO-RTAhdSaZPKhpj"
 };
 var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word فقط (اضبطها عند تصميم refreshStatus الجديدة)
+var COUNT_DOC_EXT  = ["docx", "pdf"]; // الصيغ التي تُحتسب «معبّأة/معتمدة» عند الفحص؛ الرفع من البطاقة يبقى docx فقط (ACCEPT_DOC_EXT). PDF = النسخة المعتمدة للعرض ولا قالب PDF فارغ يُقارَن به
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
 var SCRIPT_VERSION = "v9.5.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
@@ -4958,7 +4959,7 @@ function cleanDesc_(base, ctx) {
   var s = norm_(base).replace(/_/g, " ");
   if (ctx.code) s = s.split(ctx.code).join(" ");
   if (ctx.label) s = s.split(norm_(ctx.label)).join(" ");
-  s = s.replace(/تقرير الشواهد/g, " ").replace(/(^|\s)ف\d+(\s|$)/g, " ").replace(/صوره?\s*-?\s*\d*/g, " ").replace(/لقطه\s*-?\s*\d*/g, " ").replace(/شاهد\s*\d*/g, " ").replace(/20\d\d(-\d\d){0,2}/g, " ");
+  s = s.replace(/تقرير الشواهد( البصريه)?/g, " ").replace(/(^|\s)ف\d+(\s|$)/g, " ").replace(/صوره?\s*-?\s*\d*/g, " ").replace(/لقطه\s*-?\s*\d*/g, " ").replace(/شاهد\s*\d*/g, " ").replace(/20\d\d(-\d\d){0,2}/g, " ");
   return s.replace(/[-()]+/g, " ").replace(/\s+/g, " ").trim();
 }
 /* ctx: { kind: "doc"|"img"|"report", code, label } — الوثيقة: «اسم الوثيقة_وصف_سنة-شهر» */
@@ -4985,7 +4986,7 @@ function proposedName_(name, ctx, created, seq) {
   var ext = pr.ext || (ctx.kind === "report" ? "pdf" : ""), parts = [];
   if (ctx.kind === "doc") { parts.push(ctx.label); if (desc) parts.push(desc); parts.push(ymd_(created, false)); }
   else if (ctx.kind === "img") { parts.push(ctx.code, "صورة-" + pad2_(seq || 1), desc || "وصف-مطلوب", ymd_(created, true)); }
-  else { parts.push(ctx.code, "تقرير الشواهد"); if (ctx.label) parts.push(ctx.label); var rn = reportPhotos_(name); parts.push(rn === null ? "؟صور" : rn + "صور"); }
+  else { parts.push(ctx.code, "تقرير الشواهد البصرية"); if (ctx.label) parts.push(ctx.label); var rn = reportPhotos_(name); parts.push(rn === null ? "؟صور" : rn + "صور"); }
   return parts.filter(function (x) { return x; }).join("_") + (ext ? "." + ext : "");
 }
 /* مراجعة المشرف وحده تصنع علامة «متحقق»؛ ولا تُحتسب مراجعة لملف اسمه غير مطابق */
@@ -5107,11 +5108,11 @@ function treeScanIndicator_(code, ent, sizes, errors) {
     if (tplSize == null) tplSize = sizes[norm_("قالب_" + rec.m + " " + code + "_v1.docx")];
     if (tplSize == null) errors.push({ key: code, error: "لا يوجد قالب في 01_القوالب للسجل «" + rec.n + "» فلا يمكن التمييز بين الفارغ والمعبّأ" });
     var placed = false, filled = false, approved = false;
-    function isFilled(x) { var pr = splitName_(x.name); if (ACCEPT_DOC_EXT.indexOf(pr.ext) < 0) return false; if (x.size < MIN_BYTES.doc) return false; if (SUBMITTED_[x.id]) return true; /* مرفوع من البطاقة = قُدّم للمراجعة (v9.3.1) */ return tplSize == null ? false : x.size !== tplSize; }
+    function isFilled(x) { var pr = splitName_(x.name); if (COUNT_DOC_EXT.indexOf(pr.ext) < 0) return false; if (x.size < MIN_BYTES.doc) return false; if (pr.ext === "pdf") return true; /* PDF لا قالب فارغ له: وجوده بحجم صالح = معبّأ */ if (SUBMITTED_[x.id]) return true; /* مرفوع من البطاقة = قُدّم للمراجعة (v9.3.1) */ return tplSize == null ? false : x.size !== tplSize; }
     var pick = null, retInfo = null;
     rvFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) { filled = true; if (RETURNED_[x.id]) retInfo = RETURNED_[x.id]; } if (!pick || (filled && !pick[0])) pick = [isFilled(x) ? 1 : 0, "rv", x.id]; } });
-    apFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) { filled = true; approved = true; } if (!pick || isFilled(x) || pick[1] === "rv") pick = [isFilled(x) ? 1 : 0, "ap", x.id]; } });
-    if (pick) out.fl[rec.n] = pick;
+    apFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) { filled = true; approved = true; } var xPdf = splitName_(x.name).ext === "pdf"; /* للعرض: يُفضَّل PDF المعتمد على docx متى وُجد (الاحتساب لا يتأثر) */ if (!pick || pick[1] === "rv" || (xPdf && isFilled(x)) || (isFilled(x) && !pick[3])) pick = [isFilled(x) ? 1 : 0, "ap", x.id, xPdf && isFilled(x) ? 1 : 0]; } });
+    if (pick) out.fl[rec.n] = pick.slice(0, 3);
     if (placed) out.ready++;
     if (filled) { out.up++; out.docs.push(rec.n); } else if (placed) out.blank.push(rec.n); else out.missing.push(rec.n);
     if (approved) out.ap++;
@@ -5202,8 +5203,8 @@ function refresh_() {
           var rn = kind === "report" ? reportPhotos_(nm) : null, warn = kind === "report" ? reportWarn_(rn) : "";
           if (!ok) warn = (warn ? warn + "؛ " : "") + "لا يُحتسب: ملف غير صالح (امتداد غير مقبول أو فارغ)";
           if (kind === "report") (out.reportsList[code] = out.reportsList[code] || []).push({ id: id, name: nm, ok: chk.ok, n: rn, ver: isVer, valid: ok });
-          verRows.push([id, kind === "doc" ? "وثيقة" : (kind === "img" ? "صورة" : "تقرير الشواهد"), kind === "doc" ? "" : code,
-            kind === "doc" ? v[4] : (kind === "img" ? "الصور" : "تقرير الشواهد"), linksTxt, v[5] || "", nm,
+          verRows.push([id, kind === "doc" ? "وثيقة" : (kind === "img" ? "صورة" : "تقرير الشواهد البصرية"), kind === "doc" ? "" : code,
+            kind === "doc" ? v[4] : (kind === "img" ? "الصور" : "تقرير الشواهد البصرية"), linksTxt, v[5] || "", nm,
             chk.ok ? "✔" : "✖", chk.issues.join("؛ "), chk.ok ? "" : proposedName_(nm, ctx, f.getDateCreated(), x + 1),
             (!chk.ok && prev.apply === true), prev.sup || "", prev.note || "", warn]);
         }
@@ -5278,9 +5279,9 @@ function upTokenOk_(t) {
   return d === 0 ? "ok" : "bad";
 }
 function upName_(code, name) {
-  /* <الرمز>_تقرير الشواهد_<البند>_<n>صور.pdf */
-  var pre = code + "_تقرير الشواهد_", m = /_(\d{1,2})\s*صور\.pdf$/.exec(String(name || ""));
-  if (String(name || "").indexOf(pre) !== 0 || !m) return null;
+  /* <الرمز>_تقرير الشواهد البصرية_<البند>_<n>صور.pdf (ويُقبل القديم: _تقرير الشواهد_) */
+  var pre = code + "_تقرير الشواهد البصرية_", pre0 = code + "_تقرير الشواهد_", m = /_(\d{1,2})\s*صور\.pdf$/.exec(String(name || ""));
+  if ((String(name || "").indexOf(pre) !== 0 && String(name || "").indexOf(pre0) !== 0) || !m) return null; /* يُقبل الاسم القديم «تقرير الشواهد» للتوافق */
   var n = parseInt(m[1], 10); return n >= 0 && n <= UP_MAX_PHOTOS ? n : null;
 }
 function doPost(e) {
@@ -5308,7 +5309,7 @@ function doPost(e) {
 }
 function upReport_(folder, req) {
   var n = upName_(req.code, req.name);
-  if (n === null) return { ok: false, error: "اسم الملف لا يطابق الصيغة <الرمز>_تقرير الشواهد_<البند>_<عدد>صور.pdf" };
+  if (n === null) return { ok: false, error: "اسم الملف لا يطابق الصيغة <الرمز>_تقرير الشواهد البصرية_<البند>_<عدد>صور.pdf" };
   var bytes; try { bytes = Utilities.base64Decode(String(req.pdf || "")); } catch (x) { return { ok: false, error: "محتوى الملف غير صالح." }; }
   if (!bytes || bytes.length < MIN_BYTES.report) return { ok: false, error: "الملف أصغر من الحد الأدنى (" + MIN_BYTES.report + " بايت)." };
   if (bytes.length > UP_MAX_PDF_BYTES) return { ok: false, error: "الملف أكبر من 20 ميغابايت؛ اضغط الصور وأعد الإصدار." };

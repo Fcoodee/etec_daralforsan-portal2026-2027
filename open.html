@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=9.14.1"></script>
-<script src="page-gate.js?v=9.14.1" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."></script>
-<script src="admin-only.js?v=9.14.1"></script>
+<script src="shield.js?v=9.15.0"></script>
+<script src="page-gate.js?v=9.15.0" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."></script>
+<script src="admin-only.js?v=9.15.0"></script>
 <meta name="robots" content="noindex,nofollow">
 <title>فتح الشاهد — بوابة الاعتماد المدرسي</title>
 <style>
@@ -27,10 +27,10 @@ a.b{display:inline-flex;align-items:center;min-height:44px;margin-top:10px;backg
   <div class="bar" id="br"><i></i></div>
   <div id="ac"></div>
 </div>
-<script src="portal-config.js?v=9.14.1"></script>
-<script src="portal-names.js?v=9.14.1"></script>
-<script src="phase-data.js?v=9.14.1"></script>
-<script src="phase-core.js?v=9.14.1"></script>
+<script src="portal-config.js?v=9.15.0"></script>
+<script src="portal-names.js?v=9.15.0"></script>
+<script src="phase-data.js?v=9.15.0"></script>
+<script src="phase-core.js?v=9.15.0"></script>
 <script>
 /* فتح شاهد من رمز QR: الرمز يحمل الرمز والسجل فقط (لا معرّفات ملفات) فيبقى صالحاً بعد إعادة الرفع.
    open.html?code=1-1-1-1&t=rec&r=<رقم السجل 0..>  |  open.html?code=1-1-1-1&t=rep */
@@ -40,7 +40,7 @@ a.b{display:inline-flex;align-items:center;min-height:44px;margin-top:10px;backg
   function $(id) { return document.getElementById(id); }
   var i = P && P.byCode(code);
   if (!i) { $("br").hidden = true; $("tt").textContent = "رمز غير صالح"; $("ms").textContent = "لا يوجد مؤشر بهذا الرمز."; return; }
-  $("cd").textContent = code + (t === "rec" && rec ? " · " + rec : " · تقرير الشواهد");
+  $("cd").textContent = code + (t === "rec" && rec ? " · " + rec : " · تقرير الشواهد البصرية");
   function fail(msg) { $("br").hidden = true; $("tt").textContent = "لم يُرفع بعد"; $("tt").className = "bad"; $("ms").textContent = msg; $("ac").innerHTML = '<a class="b" href="indicators.html?code=' + encodeURIComponent(code) + '">فتح المؤشر في البوابة</a>'; }
   P.onStatus(function (S) {
     if (S.loading || !S.loaded) return;
@@ -48,7 +48,7 @@ a.b{display:inline-flex;align-items:center;min-height:44px;margin-top:10px;backg
     var s = P.sOf(i), id = "";
     if (t === "rec") { var f = s.fl && s.fl[rec]; if (f && f[2] && f[0] === 1) id = f[2]; }
     else { var rf = ((s.rep && s.rep.files) || []).filter(function (x) { return x.valid && x.n > 0 && x.id; }).sort(function (a, b) { return b.n - a.n; })[0]; if (rf) id = rf.id; }
-    if (!id) { fail(t === "rec" ? "هذا السجل لم يُعبَّأ ويُرفع بعد." : "تقرير الشواهد لهذا المؤشر لم يُرفع بعد."); return; }
+    if (!id) { fail(t === "rec" ? "هذا السجل لم يُعبَّأ ويُرفع بعد." : "تقرير الشواهد البصرية لهذا المؤشر لم يُرفع بعد."); return; }
     var url = P.fileView(id); $("tt").textContent = "جارٍ فتح الملف…"; $("ac").innerHTML = '<a class="b" href="' + url + '">إن لم يُفتح تلقائياً اضغط هنا</a>';
     location.replace(url);
   });

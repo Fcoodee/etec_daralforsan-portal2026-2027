@@ -33,8 +33,8 @@
   /* روابط ثانوية مباشرة في مدخل كل دور (لا تتجاوز ثلاثة) */
   var SECOND = {
     admin:  [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["progress.html", "fa-chart-pie", "قراءة التقدّم"]],
-    sup:    [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["report.html", "fa-file-image", "تقرير الشواهد"]],
-    member: [["report.html", "fa-file-image", "تقرير الشواهد"]],
+    sup:    [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["report.html", "fa-file-image", "تقرير الشواهد البصرية"]],
+    member: [["report.html", "fa-file-image", "تقرير الشواهد البصرية"]],
     self:   [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["progress.html", "fa-chart-pie", "قراءة التقدّم"]],
     preview:[["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["committee.html", "fa-user-check", "واجهة اللجنة (نموذج)"]]
   };
@@ -85,7 +85,7 @@
   }
   function withGate(cb) {
     if (window.DFGate) { cb(); return; }
-    var sc = document.createElement("script"); sc.src = "page-gate.js?v=9.14.1"; sc.dataset.lazy = "1";
+    var sc = document.createElement("script"); sc.src = "page-gate.js?v=9.15.0"; sc.dataset.lazy = "1";
     sc.onload = cb; sc.onerror = function () { alert("تعذّر تحميل نافذة الدخول؛ أعد تحميل الصفحة."); };
     document.head.appendChild(sc);
   }
