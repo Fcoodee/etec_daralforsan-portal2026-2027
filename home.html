@@ -1,108 +1,12 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" style="color-scheme:light">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=9.15.0"></script>
-<script src="page-gate.js?v=9.15.0" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."></script>
-<script src="admin-only.js?v=9.15.0"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
-<title>مساحتي — مشروع الاعتماد 2026-2027 — مدارس دار الفرسان</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=9.15.0">
-<script>/* حارس الإصدار: إن كانت الصفحة محفوظة قديمة في المتصفح تُعاد من الخادم مرة واحدة */
-(function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
-fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
-if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
-</script>
-<script src="portal-meta.js?v=9.15.0"></script>
-<script src="portal-role.js?v=9.15.0"></script>
+<meta http-equiv="refresh" content="0;url=dashboard.html">
+<title>تحويل إلى لوحة نحو التميز</title>
+<script>location.replace("dashboard.html"+location.search+location.hash);</script>
 </head>
-<body>
-<div id="chrome"></div>
-<main class="ph-main" id="main"><div class="ph-empty">جارٍ التحميل…</div></main>
-
-<script src="portal-config.js?v=9.15.0"></script>
-<script src="portal-names.js?v=9.15.0"></script>
-<script src="phase-data.js?v=9.15.0"></script>
-<script src="phase-core.js?v=9.15.0"></script>
-<script>
-(function () {
-  "use strict";
-  var P = window.PHC, E = P.esc, role = window.PortalRole ? PortalRole.get() : "", main = document.getElementById("main");
-  if (!role) { location.replace("primary.html"); return; }
-  P.chrome("home.html");
-
-  function stat(l, v, s, cls) { return '<div class="ph-stat ' + (cls || "") + '"><div class="l">' + l + '</div><div class="v" dir="ltr" style="text-align:right">' + v + '</div><div class="s">' + (s || "") + "</div></div>"; }
-  function pctTxt(x) { return P.pct(x) + "%"; }
-  function pickDomain(then) {
-    return '<div class="ph-box"><b>' + then + '</b><div class="ph-pick">' + [1, 2, 3, 4].map(function (d) { return '<button type="button" data-d="' + d + '">' + E(P.DN[d]) + "</button>"; }).join("") + "</div></div>";
-  }
-
-  /* ===== مشرف الفريق: فريقي وما ينتظر مراجعتي ===== */
-  function viewSup() {
-    var me = P.me.get();
-    if (!me) { main.innerHTML = '<h1 class="ph-h1">فريقي</h1><p class="ph-lead">اختر مجال فريقك مرة واحدة.</p>' + pickDomain("أي فريق تشرف عليه؟"); bindDomain(function (d) { P.me.set({ d: d, idx: -1 }); viewSup(); }); return; }
-    var T = P.PH.teams[me.d], team = P.PH.inds.filter(function (i) { return i.d === me.d; }), tt = P.totals(team);
-    var wait = [], ret = 0;
-    team.forEach(function (i) { var s = P.sOf(i); i.recs.forEach(function (n) { if (s.st[n] === "review") wait.push({ i: i, n: n }); if (s.st[n] === "returned") ret++; }); });
-    var pt = function (x) { return '<span dir="ltr">' + P.pct(x) + "%</span>"; };
-    var mcards = T.mem.map(function (n, x) {
-      var l = team.filter(function (i) { return i.own === x; }), t = P.totals(l), pr = P.pct(t.p);
-      return '<a class="ph-mc" href="indicators.html?u=sup&d=' + me.d + '&o=' + me.d + '|' + x + '" title="افتح مؤشرات وسجلات ' + E(n) + '"><div class="ph-mc-h"><b>' + E(n) + '</b><span class="ph-mc-p" dir="ltr">' + pr + '%</span></div>' +
-        '<div class="ph-myb" role="img" aria-label="اكتمال ' + E(n) + " " + pr + '%"><i style="width:' + pr + '%"></i></div>' +
-        '<div class="ph-mc-s"><span>مؤشرات <b>' + l.length + '</b></span><span>معتمدة <b dir="ltr">' + t.ap + "/" + t.req + '</b></span><span>قيد المراجعة <b>' + t.review + '</b></span><span>مُعادة <b>' + t.returned + '</b></span><span>بانتظار التعبئة <b>' + t.blank + '</b></span><span>تقارير <b dir="ltr">' + P.gl(t.repDone, t.repDone) + "/" + l.length + '</b></span></div><div class="ph-mc-go">فتح مؤشراته وسجلاته ◂</div></a>'; }).join("");
-    main.innerHTML = '<h1 class="ph-h1">فريقي</h1><p class="ph-lead">' + E(T.sup) + " · " + E(P.DN[me.d]) + ' · <a href="#" data-change>تغيير الفريق</a></p>' +
-      '<div class="ph-grid"><div class="ph-stat main"><div class="l">تقدّم فريقي (الرسمي)</div><div class="v">' + pt(tt.p) + '</div><div class="s">' + tt.ind + " مؤشراً · سجلات + تقرير الشواهد البصرية</div></div>" +
-      '<div class="ph-stat"><div class="l">بانتظار مراجعتك</div><div class="v">' + wait.length + '</div><div class="s">سجلات معبّأة قيد المراجعة</div></div>' +
-      '<div class="ph-stat"><div class="l">سجلات معتمدة</div><div class="v">' + tt.ap + " من " + tt.req + '</div><div class="s">بعد المراجعة</div></div>' +
-      '<div class="ph-stat"><div class="l">أُعيدت للتعبئة</div><div class="v">' + ret + '</div><div class="s">عند الأعضاء الآن</div></div>' +
-      '<div class="ph-stat"><div class="l">تقارير الشواهد</div><div class="v">' + P.gl(tt.repDone, tt.repDone) + " من " + tt.ind + '</div><div class="s">مرفوعة</div></div></div>' +
-      '<h2 class="ph-h2">أعضاء الفريق</h2><div class="ph-mcs">' + mcards + "</div>" +
-      '<h2 class="ph-h2">بانتظار مراجعتك <span class="ph-chip wip">' + wait.length + "</span></h2>" +
-      (wait.length ? '<div class="ph-box"><ul class="ph-recs">' + wait.map(function (w) { return '<li class="ph-rec"><span class="ph-recn"><a href="indicators.html?code=' + E(w.i.code) + '"><b dir="ltr">' + E(w.i.code) + "</b></a> · " + E(w.n) + ' <small>(' + E(P.ownerName(w.i)) + ')</small></span><a class="ph-btn" href="indicators.html?code=' + E(w.i.code) + '">مراجعة</a></li>'; }).join("") + "</ul></div>" : '<div class="ph-empty">لا توجد سجلات بانتظار المراجعة الآن.</div>') +
-      "";
-    P.bindCards(main); applyRoles();
-    main.onclick = function (e) { if (e.target.closest("[data-change]")) { e.preventDefault(); location.href = "primary.html"; } };
-  }
-
-  /* ===== مدير النظام ومشرف التقويم الذاتي: الصورة الكاملة ===== */
-  function viewAll() {
-    var t = P.totals(), isAdmin = role === "admin", T = P.PH.teams;
-    var doms = [1, 2, 3, 4].map(function (d) { var l = P.PH.inds.filter(function (i) { return i.d === d; }), x = P.totals(l); return '<div class="ph-stat"><div class="l">' + E(P.DN[d]) + '</div><div class="v" dir="ltr" style="text-align:right">' + pctTxt(P.domP(d)) + '</div><div class="s">منشأة ' + P.gl(x.cr, x.cr) + " · مرفوعة " + x.ap + " من " + x.req + " سجلاً · " + l.length + " مؤشراً</div>" + P.bar2(P.domP(d, "u"), P.domP(d, "c")) + "</div>"; }).join("");
-    var crit = P.critList().map(function (c) { return { c: c, p: P.critP(c.c, "u"), pc: P.critP(c.c, "c") }; }).sort(function (a, b) { return a.p - b.p || (a.c.c < b.c.c ? -1 : 1); });
-    var crows = crit.map(function (x) { var l = P.PH.inds.filter(function (i) { return i.c === x.c.c; }), tt = P.totals(l); return '<tr><td class="n" dir="ltr">' + E(x.c.c) + "</td><td>" + E(x.c.cn) + "</td><td>" + E(P.DN[x.c.d]) + '</td><td class="n" dir="ltr">' + tt.ap + " / " + tt.req + "</td><td>" + P.bar2(x.p, x.pc) + '</td><td class="n">' + pctTxt(x.p) + "</td></tr>"; }).join("");
-    var trows = [1, 2, 3, 4].map(function (d) { var l = P.PH.inds.filter(function (i) { return i.d === d; }), x = P.totals(l); var ms = T[d].mem.map(function (n, k) { var q = P.totals(l.filter(function (i) { return i.own === k; })); return E(n) + ' <small dir="ltr">(' + q.ap + "/" + q.req + ")</small>"; }).join(" · ");
-      return "<tr><td>" + E(P.DN[d]) + "</td><td>" + E(T[d].sup) + "</td><td>" + ms + '</td><td class="n">' + x.review + '</td><td class="n">' + pctTxt(x.p) + "</td></tr>"; }).join("");
-    var admin = "";
-    if (isAdmin) {
-      var S = P.ST, bad = [], inv = [], legacy = [], miss = [];
-      P.PH.inds.forEach(function (i) { var s = P.sOf(i); s.invalid.forEach(function (f) { inv.push(i.code + " ← " + f); }); i.recs.forEach(function (n) { if (s.st[n] === "missing") miss.push(i.code + " ← " + n); }); (s.rep.files || []).forEach(function (f) { if (f.legacy) legacy.push(i.code + " ← " + f.name); }); });
-      (S.errors || []).forEach(function (e) { bad.push(e.key + ": " + e.error); });
-      var pr = function (a) { return a.length ? "<ul>" + a.slice(0, 12).map(function (x) { return "<li dir='auto'>" + E(x) + "</li>"; }).join("") + (a.length > 12 ? "<li>… و" + (a.length - 12) + " أخرى</li>" : "") + "</ul>" : '<span class="ph-chip ok">لا شيء</span>'; };
-      admin = '<h2 class="ph-h2">صحة المنظومة <span class="ph-chip idle">لمدير النظام</span></h2><div class="ph-grid">' + stat("الاتصال بـالتخزين السحابي", S.live && !S.failed ? "متصل" : "غير متصل", S.live ? "إصدار السكربت " + E(S.ver) + (S.partial ? " · مسح جزئي" : "") : "تُعرض لقطة 12-11-2026") +
-        stat("سجلات غير منشأة", miss.length, "بلا ملف في مجلدها") + stat("ملفات لا تطابق سجلاً", inv.length, "أسماء تحتاج تصحيحاً") + stat("تقارير بالتسمية القديمة", legacy.length, "«التقرير البصري»") + "</div>" +
-        '<div class="ph-box"><b>أخطاء المسح</b>' + pr(bad) + "<b>سجلات غير منشأة</b>" + pr(miss) + "<b>ملفات لا تطابق أي سجل</b>" + pr(inv) + "<b>تقارير بالتسمية القديمة</b>" + pr(legacy) + '<div class="ph-actions"><a class="ph-btn" target="_blank" rel="noopener" href="' + P.rootUrl() + '"><i class="fa-solid fa-folder-tree"></i> جذر التخزين السحابي الجديد</a></div></div>';
-    }
-    main.innerHTML = '<h1 class="ph-h1">' + (isAdmin ? "لوحة مدير النظام" : "الفجوات والنسب") + '</h1><p class="ph-lead">صورة واحدة للمشروع: ' + (isAdmin ? "هل المنظومة سليمة وأين نقف؟" : "أين فجواتنا؟") + "</p>" +
-      '<div class="ph-grid">' + stat("التقدّم الرسمي", pctTxt(P.projP()), "متوسط " + t.ind + " مؤشراً · سجلات + تقرير الشواهد البصرية", "main") + "</div>" +
-      '<h2 class="ph-h2">المجالات</h2><div class="ph-grid">' + doms + "</div>" +
-      '<h2 class="ph-h2">المعايير من الأضعف (بحسب المرفوعة)</h2><table class="ph-t"><thead><tr><th>المعيار</th><th>الاسم</th><th>المجال</th><th>مرفوعة / مطلوب</th><th>منشأة ◂ مرفوعة</th><th></th></tr></thead><tbody>' + crows + "</tbody></table>" +
-      '<h2 class="ph-h2">الفرق</h2><table class="ph-t"><thead><tr><th>المجال</th><th>المشرف</th><th>الأعضاء (مرفوعة/مطلوب)</th><th>قيد المراجعة</th><th>التقدّم الرسمي</th></tr></thead><tbody>' + trows + "</tbody></table>" +
-      admin +
-      '<div class="ph-actions" style="margin-top:14px"><a class="ph-btn pri" href="indicators.html"><i class="fa-solid fa-list-check"></i> استعراض المؤشرات والسجلات</a></div>';
-  }
-
-  function bindDomain(cb) { main.onclick = function (e) { var b = e.target.closest("[data-d]"); if (b) cb(+b.dataset.d); }; }
-  function applyRoles() { if (window.PortalRole && PortalRole.refresh) { /* يعيد تطبيق data-roles على البطاقات المرسومة */ try { var els = main.querySelectorAll("[data-roles]"); for (var k = 0; k < els.length; k++) els[k].classList.toggle("pr-off", els[k].getAttribute("data-roles").split(",").indexOf(role) < 0); } catch (e) {} } }
-
-  function render() { if (role === "member") { location.replace("indicators.html"); return; } if (role === "sup") viewSup(); else viewAll(); applyRoles(); }
-  P.onStatus(render);
-  P.load();
-})();
-</script>
-<script src="page-gate.js?v=9.15.0" data-lazy="1"></script>
-<script src="legal-notice.js?v=9.15.0"></script>
-<script src="content-protect.js?v=9.15.0"></script>
-</body>
+<body><p style="font-family:Tahoma,Arial,sans-serif;text-align:center;margin-top:40px">انتقلت هذه الصفحة إلى <a href="dashboard.html">لوحة نحو التميز · نسبة الإنجاز الكلية للمشروع</a>.</p></body>
 </html>

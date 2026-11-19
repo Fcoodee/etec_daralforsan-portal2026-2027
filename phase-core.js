@@ -153,7 +153,6 @@
     } catch (e) { return ""; }
   }
   function uploadRecord(btn) {
-    if (window.PortalRole && PortalRole.get() === "preview") return; /* المعاينة: اطلاع فقط */
     var url = window.ETEC_STATUS_URL || "", li = btn.closest("tr"), out = li.querySelector(".ph-upm");
     function say(t, c) { UPM[btn.dataset.up + "|" + btn.dataset.rec] = [t, c || ""]; out.textContent = t; out.className = "ph-upm " + (c || ""); }
     if (!url) { say("الرفع غير مهيّأ.", "bad"); return; }
@@ -178,7 +177,6 @@
   }
   /* مراجعة السجل من البطاقة: اعتماد (نقل إلى معتمد) أو إعادة للتعبئة (يبقى في المراجعة بملاحظة) */
   function reviewCall(btn, action, note) {
-    if (window.PortalRole && PortalRole.get() === "preview") return; /* المعاينة: اطلاع فقط */
     var url = window.ETEC_STATUS_URL || "", box = btn.closest(".ph-rs"), out = box.querySelector(".ph-upm"), key = btn.dataset.code + "|" + btn.dataset.rec, R = window.PortalRole;
     function say(t, c) { UPM[key] = [t, c || ""]; out.textContent = t; out.className = "ph-upm " + (c || ""); }
     if (!url) { say("غير مهيّأ.", "bad"); return; }
@@ -214,14 +212,12 @@
     var el = document.getElementById("chrome"); if (!el) return;
     var R = window.PortalRole, role = R ? R.get() : "", roles = R ? R.roles : {};
     var items = [
-      ["home.html", "fa-house", role && roles[role] ? roles[role].hl : "الرئيسية", "admin,sup,self,preview"],
-      ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "admin,sup,member,self,preview"],
-      ["progress.html", "fa-chart-pie", "قراءة التقدّم", "admin,self,preview"],
-      ["report.html", "fa-file-image", "تقرير الشواهد البصرية", "admin,sup,member,preview"],
-      ["reference.html", "fa-book-open", "المرجع", "admin,self,preview"],
-      ["committee.html", "fa-user-check", "واجهة اللجنة (نموذج)", "admin,preview"]
+      ["dashboard.html", "fa-chart-pie", "نسبة الإنجاز الكلية"],
+      ["indicators.html", "fa-list-check", "المؤشرات والسجلات"],
+      ["report.html", "fa-file-image", "تقرير الشواهد البصرية"],
+      ["reference.html", "fa-book-open", "المرجع"]
     ];
-    var nav = items.filter(function (x) { return !role ? x[3] !== "admin,preview" : x[3].split(",").indexOf(role) >= 0; }).map(function (x) {
+    var nav = items.map(function (x) {
       return '<a href="' + x[0] + '"' + (x[0] === active ? ' aria-current="page"' : "") + '><i class="fa-solid ' + x[1] + '"></i> ' + esc(x[2]) + "</a>"; }).join("");
     el.innerHTML = '<div class="ph-top"><a class="ph-home" href="primary.html"><i class="fa-solid fa-house"></i> البوابة</a><a class="ph-home" href="stages.html" title="كل المراحل">المراحل</a><span class="ph-sub">مشروع الاعتماد 2026-2027 · الدبلوما الأمريكية (بنين) · مدارس دار الفرسان</span></div>' +
       '<header class="ph-head"><div class="ph-logos"><img src="logo0.png" alt="Diploma 2026"><img src="logo1.png" alt="دار الفرسان"><img src="logo2.png" alt="ETEC"></div></header>' +
