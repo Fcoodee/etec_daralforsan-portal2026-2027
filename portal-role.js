@@ -75,7 +75,7 @@
   }
   function withGate(cb) {
     if (window.DFGate) { cb(); return; }
-    var sc = document.createElement("script"); sc.src = "page-gate.js?v=10.3.5"; sc.dataset.lazy = "1";
+    var sc = document.createElement("script"); sc.src = "page-gate.js?v=10.3.6"; sc.dataset.lazy = "1";
     sc.onload = cb; sc.onerror = function () { alert("تعذّر تحميل نافذة الدخول؛ أعد تحميل الصفحة."); };
     document.head.appendChild(sc);
   }
