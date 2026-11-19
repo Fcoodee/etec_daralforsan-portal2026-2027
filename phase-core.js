@@ -14,9 +14,9 @@
     approved: { t: "جاهز",                      c: "ok",   tip: "جاهز: معبّأ ومعتمد." }
   };
   /* أساس النسبة الرسمية: created (المنشأة) أو uploaded (المرفوعة بعد المراجعة) — إعداد ETEC_PROGRESS_BASIS في portal-config.js */
-  function basis() { return window.ETEC_PROGRESS_BASIS === "uploaded" ? "uploaded" : "created"; }
+  function basis() { var b = window.ETEC_PROGRESS_BASIS; return b === "uploaded" ? "uploaded" : b === "created" ? "created" : "mixed"; }
   function gl(txt, on) { return on ? '<span class="ph-gl">' + txt + "</span>" : txt; }
-  function basisTxt() { return basis() === "uploaded" ? "السجلات الجاهزة (المعبّأة والمعتمدة)" : "السجلات المنشأة"; }
+  function basisTxt() { var b = basis(); return b === "uploaded" ? "السجلات الجاهزة (المعبّأة والمعتمدة)" : b === "created" ? "السجلات المنشأة" : "المنشأة 50% + الجاهزة 50% من اجمالي سجلات المؤشر"; }
   function target() { return +window.ETEC_REPORT_TARGET || 6; }
 
   var ST = { live: false, asof: "", gen: "", ver: "", errors: [], ind: {}, loaded: false, failed: false };
@@ -47,14 +47,17 @@
     out.cr = out.ready;
     out.rpc = out.req ? Math.min(out.cr, out.req) / out.req : 0;
     out.rpu = out.req ? Math.min(out.ap, out.req) / out.req : 0;
+    /* مختلط (الأساس الحالي): نصف تقدّم السجلات للمنشأة (القوالب موجودة) ونصفه للجاهزة من إجمالي سجلات المؤشر */
+    out.rpm = 0.5 * out.rpc + 0.5 * out.rpu;
     out.review = 0; i.recs.forEach(function (n) { if (st[n] === "review") out.review++; });
     var ph = out.rep.photos || 0;
     /* تقرير الشواهد البصرية: حالتان فقط — none لم يُرفع (لا ملف أو قالب فارغ) · done مرفوع (تقرير فيه صور) */
     out.repState = ph > 0 ? "done" : "none";
     /* اكتمال المؤشر = 50% سجلاته ووثائقه + 50% تقرير الشواهد البصرية (قرار مدير المشروع). rpc/rpu للسجلات وحدها. */
     var r = out.repState === "done" ? 1 : 0;
-    out.pc = (out.rpc + r) / 2; out.pu = (out.rpu + r) / 2;
-    out.p = basis() === "uploaded" ? out.pu : out.pc;
+    out.pc = (out.rpc + r) / 2; out.pu = (out.rpu + r) / 2; out.pm = (out.rpm + r) / 2;
+    var bs = basis(); out.rp = bs === "uploaded" ? out.rpu : bs === "created" ? out.rpc : out.rpm;
+    out.p = bs === "uploaded" ? out.pu : bs === "created" ? out.pc : out.pm;
     return out;
   }
   /* المعادلة نفسها المعتمدة في لوحة المتابعة: المؤشر = المرفوع/المطلوب، المعيار = متوسط مؤشراته، المجال = متوسط معاييره، المشروع = متوسط المؤشرات */
