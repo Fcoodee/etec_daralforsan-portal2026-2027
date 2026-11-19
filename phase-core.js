@@ -211,14 +211,15 @@
   function chrome(active) {
     var el = document.getElementById("chrome"); if (!el) return;
     var R = window.PortalRole, role = R ? R.get() : "", roles = R ? R.roles : {};
+    /* [الرابط، الأيقونة، الاسم، للمدير وحده؟] — تبويبات العمل تظهر لجلسة مدير النظام فقط؛ غير ذلك للتتبع والعرض */
     var items = [
-      ["dashboard.html", "fa-chart-pie", "نسبة الإنجاز الكلية"],
-      ["indicators.html", "fa-list-check", "المؤشرات والسجلات"],
-      ["report.html", "fa-file-image", "تقرير الشواهد البصرية"],
-      ["reference.html", "fa-book-open", "المرجع"]
+      ["dashboard.html", "fa-chart-pie", "نسبة الإنجاز الكلية", false],
+      ["indicators.html", "fa-list-check", "المؤشرات والسجلات (العمل)", true],
+      ["report.html", "fa-file-image", "تقرير الشواهد البصرية (إصدار)", true],
+      ["reference.html", "fa-book-open", "المرجع", true]
     ];
     var nav = items.map(function (x) {
-      return '<a href="' + x[0] + '"' + (x[0] === active ? ' aria-current="page"' : "") + '><i class="fa-solid ' + x[1] + '"></i> ' + esc(x[2]) + "</a>"; }).join("");
+      return '<a' + (x[3] ? ' class="ad-only"' : "") + ' href="' + x[0] + '"' + (x[0] === active ? ' aria-current="page"' : "") + '><i class="fa-solid ' + x[1] + '"></i> ' + esc(x[2]) + "</a>"; }).join("");
     el.innerHTML = '<div class="ph-top"><a class="ph-home" href="index.html" title="العودة إلى الصفحة الرئيسية"><i class="fa-solid fa-house"></i> الصفحة الرئيسية</a><span class="ph-sub">مشروع الاعتماد 2026-2027 · الدبلوما الأمريكية (بنين) · مدارس دار الفرسان</span></div>' +
       '<header class="ph-head"><div class="ph-logos"><img src="logo0.png" alt="Diploma 2026"><img src="logo1.png" alt="دار الفرسان"><img src="logo2.png" alt="ETEC"></div></header>' +
       '<nav class="ph-nav" aria-label="التنقل"><div class="ph-links">' + nav + '</div><div class="ph-sync" id="phConn" role="status" aria-live="polite"></div></nav>';

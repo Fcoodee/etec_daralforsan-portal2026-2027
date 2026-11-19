@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=10.0.3"></script>
-<script src="page-gate.js?v=10.0.3" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."></script>
-<script src="admin-only.js?v=10.0.3"></script>
+<script src="shield.js?v=10.0.4"></script>
+<script src="portal-config.js?v=10.0.4"></script>
+<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.0.4" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.0.4"><\/script>');}</script>
 <meta name="robots" content="noindex,nofollow">
 <title>نحو التميز · نسبة الإنجاز الكلية للمشروع — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=10.0.3">
+<link rel="stylesheet" href="phase.css?v=10.0.4">
 <script>/* حارس الإصدار: إن كانت الصفحة محفوظة قديمة في المتصفح تُعاد من الخادم مرة واحدة */
 (function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=10.0.3"></script>
-<script src="portal-role.js?v=10.0.3"></script>
+<script src="portal-meta.js?v=10.0.4"></script>
+<script src="portal-role.js?v=10.0.4"></script>
 <style>
 :root{--d1:#1d4ed8;--d2:#047857;--d3:#b45309;--d4:#7e22ce;--d1b:#eff6ff;--d2b:#ecfdf5;--d3b:#fffbeb;--d4b:#faf5ff}
 .nd-disc{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:8px 14px;font-size:12.8px;line-height:1.9;margin:8px 0 12px}
@@ -111,10 +111,9 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
 <main class="ph-main" id="main" style="max-width:1180px"><div class="ph-empty">جارٍ التحميل…</div></main>
 <div id="rfMod" role="dialog" aria-modal="true" aria-label="عرض الملف"><div class="bar"><span id="rfT"></span><a class="ph-btn sm" id="rfO" target="_blank" rel="noopener">فتح في التخزين السحابي</a><button type="button" class="ph-btn sm" id="rfX">إغلاق</button></div><div class="why">إن ظهرت رسالة «لا تملك صلاحية» فسجّل الدخول بحساب Google المصرّح له بمجلد المشروع.</div><iframe id="rfF" title="عرض الملف" allow="fullscreen"></iframe></div>
 
-<script src="portal-config.js?v=10.0.3"></script>
-<script src="portal-names.js?v=10.0.3"></script>
-<script src="phase-data.js?v=10.0.3"></script>
-<script src="phase-core.js?v=10.0.3"></script>
+<script src="portal-names.js?v=10.0.4"></script>
+<script src="phase-data.js?v=10.0.4"></script>
+<script src="phase-core.js?v=10.0.4"></script>
 <script>
 (function () {
   "use strict";
@@ -147,14 +146,14 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
     }).join("") + "</ul>" + (s.live ? "" : '<p class="rf-sn">الحالة تقريبية حتى اكتمال تحديث قاعدة البيانات.</p>') : '<span class="ph-lead">لا سجلات مرتبطة.</span>';
     var rf = repFile(s);
     var rp = '<div class="rf-rs">' + (rf ? '<span class="ph-chip ok">مرفوع · ' + rf.n + ' صور</span> <button type="button" class="ph-btn sm" data-v="' + E(rf.id) + '" data-vt="' + E("⁦" + i.code + "⁩ · تقرير الشواهد البصرية") + '" aria-label="عرض تقرير الشواهد البصرية"><i class="fa-solid fa-eye"></i> عرض</button>' : '<span class="ph-chip idle">لم يُرفع بعد</span>') +
-      ' <a class="ph-btn sm" href="report.html?code=' + E(i.code) + '"><i class="fa-solid fa-file-image"></i> ' + (rf ? "فتح في مولّد التقارير" : "إصدار التقرير") + "</a></div>" +
+      ' <a class="ph-btn sm ad-only" href="report.html?code=' + E(i.code) + '"><i class="fa-solid fa-file-image"></i> ' + (rf ? "فتح في مولّد التقارير" : "إصدار التقرير") + "</a></div>" +
       '<p class="rf-sn">يُبنى التقرير من سجلات المؤشر المعتمدة ويدعمها؛ ويُحتسب نصف اكتمال المؤشر.</p>';
     var key = i.code;
     return '<details class="rf-ind" id="i-' + E(i.code) + '" data-code="' + E(i.code) + '"' + (openKeep[key] ? " open" : "") + ' style="--c:' + c[0] + ";--cb:" + c[1] + '"><summary><span class="rf-code">' + E(i.code) + '</span><span class="rf-txt">' + E(i.text) +
       "<small>" + (i.dv ? '<span class="rf-chip">سجل متابعة</span>' : '<span class="rf-chip">سجلات رسمية</span>') + "السجل الرئيس: " + E(i.st || "") + " · معتمد " + apN + "/" + rec.length + "</small></span>" +
       '<span class="rf-pp" title="اكتمال المؤشر">' + pc(s.p) + "%</span></summary>" +
       '<div class="rf-body"><div class="rf-box"><h4>السجلات الداعمة (' + rec.length + ")</h4>" + rc + '</div><div class="rf-box"><h4>تقرير الشواهد البصرية</h4>' + rp + "</div></div>" +
-      '<p style="margin:6px 0 0"><a class="ph-btn sm" href="indicators.html?code=' + E(i.code) + '"><i class="fa-solid fa-list-check"></i> مساحة عمل المؤشر (رفع واعتماد)</a></p></details>';
+      '<p class="ad-only" style="margin:6px 0 0"><a class="ph-btn sm" href="indicators.html?code=' + E(i.code) + '"><i class="fa-solid fa-list-check"></i> مساحة عمل المؤشر (رفع واعتماد)</a></p></details>';
   }
 
   function drawTree() {
@@ -277,8 +276,8 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
   P.load(false);
 })();
 </script>
-<script src="page-gate.js?v=10.0.3" data-lazy="1"></script>
-<script src="legal-notice.js?v=10.0.3"></script>
-<script src="content-protect.js?v=10.0.3"></script>
+<script src="page-gate.js?v=10.0.4" data-lazy="1"></script>
+<script src="legal-notice.js?v=10.0.4"></script>
+<script src="content-protect.js?v=10.0.4"></script>
 </body>
 </html>
