@@ -45,8 +45,8 @@ window.ETEC_LEGAL_POLICY = { first: 3, highMinutes: 20, mediumMinutes: 1440, low
    (إخفاء شعار الهيئة من الترويسات: المفتاح showEtecLogo في portal-meta.js — يعمل في كل الصفحات.) */
 window.ETEC_DOMAIN_RESULTS = null;
 window.ETEC_TOOLS_STATUS = { team: null, surveyTeacher: null, surveyLearner: null, surveyFamily: null, obsClass: null, obsEnv: null, interviews: null, docs: null };
-/* لوحة نحو التميز (dashboard.html): true (قرار مدير المشروع 19 نوفمبر 2026) = اللوحة مفتوحة من صفحة الهبوط للزائر للاستعراض فقط؛ وتبقى صفحات العمل وتبويباتها وأزرارها لمدير النظام وحده. false = مقفلة لمدير النظام. */
-window.ETEC_DASH_PUBLIC = true;
+/* لوحة نحو التميز (dashboard.html): false (قرار مدير المشروع 20 نوفمبر 2026، مؤقت) = اللوحة مقفلة لمدير النظام وحده وبطاقتها في الهبوط معطّلة؛ true = مفتوحة من الهبوط للزائر للاستعراض فقط، وتبقى صفحات العمل وأزرارها لمدير النظام وحده. */
+window.ETEC_DASH_PUBLIC = false;
 window.ETEC_STAGES = [
   { id: "primary",      name: "الابتدائي", open: true,  url: "dashboard.html" },
   { id: "intermediate", name: "المتوسط",   open: false, wipUrl: "stage-wip.html?s=intermediate" },
@@ -58,7 +58,7 @@ window.ETEC_DOC_REFS = {};
 // SHORT-LINKS-BEGIN
 window.ETEC_SHORT_LINKS = {};
 // SHORT-LINKS-END
-/* أساس «التقدّم الرسمي» (v10.3.0، قرار مدير المشروع): "mixed" = ينطلق المؤشر من 50% بإنشاء سجلاته كلها، ثم يرتفع 25% بجاهزية السجلات (جاهزة ÷ إجمالي سجلات المؤشر) و25% بجاهزية تقرير الشواهد؛ "uploaded" = الجاهزة فقط (50% سجلات + 50% تقرير)؛ "created" = المنشأة فقط. */
+/* أساس «التقدّم الرسمي» (v10.3.1، قرار مدير المشروع): "mixed" = ينطلق المؤشر من 50% بإنشاء سجلاته كلها، ثم يرتفع 25% بجاهزية السجلات (جاهزة ÷ إجمالي سجلات المؤشر) و25% بجاهزية تقرير الشواهد؛ "uploaded" = الجاهزة فقط (50% سجلات + 50% تقرير)؛ "created" = المنشأة فقط. */
 window.ETEC_PROGRESS_BASIS = "mixed";
 /* عدد صور تقرير الشواهد البصرية لاعتباره «مربوطاً» (مؤقت). */
 window.ETEC_REPORT_TARGET = 6;
