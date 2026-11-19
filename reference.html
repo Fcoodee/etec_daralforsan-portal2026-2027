@@ -45,12 +45,6 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
 .rf-box h4{margin:0 0 4px;font-size:12.5px;font-weight:900;color:#334155}
 .rf-box ol,.rf-box ul{margin:0;padding-inline-start:20px;font-size:12.8px;line-height:1.85}
 .rf-box li{overflow-wrap:anywhere}
-.rf-rl{list-style:none;margin:0;padding:0}
-.rf-rl li{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:1px dashed var(--line);padding:5px 0}
-.rf-rl li:last-child{border-bottom:0}
-.rf-rn{min-width:0;overflow-wrap:anywhere;flex:1 1 150px}
-.rf-rs{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap}
-.rf-sn{font-size:11.5px;color:var(--mut);margin:4px 0 0}
 .rf-en{display:block;color:#475569;font-size:12px;direction:ltr;text-align:left}
 body:not(.en) .rf-en{display:none}
 .rf-chip{display:inline-block;font-size:11.5px;font-weight:700;border:1px solid var(--line);background:#fff;border-radius:999px;padding:0 9px;margin:2px 3px 2px 0}
@@ -88,7 +82,6 @@ mark{background:#fef08a;border-radius:3px}
     <select id="fd" aria-label="المجال"><option value="">كل المجالات</option></select>
     <select id="ft" aria-label="أداة التقويم"><option value="">كل أدوات التقويم</option></select>
     <select id="fs" aria-label="مصدر السجلات"><option value="">كل المؤشرات</option><option value="off">لها سجلات ووثائق رسمية (المدرسة)</option><option value="hl">تدعمها الإضاءات (سجل متابعة مشتق)</option></select>
-    <select id="fa" aria-label="حالة الاعتماد"><option value="">كل الحالات</option><option value="ap">فيها سجل معتمد</option><option value="noap">بلا سجل معتمد</option><option value="rp">تقرير الشواهد البصرية مرفوع</option><option value="norp">بلا تقرير شواهد بصرية</option></select>
     <label><input type="checkbox" id="en"> إظهار الإنجليزية (ترجمة مقترحة غير رسمية)</label>
     <button type="button" class="ph-btn sm" id="ex">فتح الكل</button>
     <span class="rf-cnt" id="cnt" role="status"></span>
@@ -132,7 +125,7 @@ mark{background:#fef08a;border-radius:3px}
   document.getElementById("sum").innerHTML = stat("المجالات", Object.keys(doms).length, "الإدارة المدرسية · التعليم والتعلم · نواتج التعلم · البيئة المدرسية") + stat("المعايير", nCrit, "تحت المجالات الأربعة") + stat("المؤشرات", inds.length, "رمز المؤشر: مجال-معيار-…") + stat("الإضاءات", hlTotal, "«إضاءات نحو تحقيق المؤشر»") + stat("السجلات", recTotal, "مسميات سجلات المنظومة المرتبطة بالمؤشرات");
 
   /* ===== الفلاتر ===== */
-  var fd = document.getElementById("fd"), ft = document.getElementById("ft"), fs = document.getElementById("fs"), fa = document.getElementById("fa"), q = document.getElementById("q"), en = document.getElementById("en"), tree = document.getElementById("tree"), cnt = document.getElementById("cnt"), exb = document.getElementById("ex");
+  var fd = document.getElementById("fd"), ft = document.getElementById("ft"), fs = document.getElementById("fs"), q = document.getElementById("q"), en = document.getElementById("en"), tree = document.getElementById("tree"), cnt = document.getElementById("cnt"), exb = document.getElementById("ex");
   Object.keys(doms).forEach(function (d) { fd.insertAdjacentHTML("beforeend", '<option value="' + d + '">' + E(d + " — " + doms[d].n) + "</option>"); });
   /* خريطة الأدوات: تُحمَّل من data/ إن توفرت، وإلا يُستعمل حقل tool المضمّن */
   function fillTools() {
@@ -145,20 +138,14 @@ mark{background:#fef08a;border-radius:3px}
     var h = HL[i.code] || [], rec = i.recs || [], tk = TOOLS[i.code] || [], dc = DOCS[i.code] || [];
     var c = COL[i.d];
     var hl = h.length ? "<ol>" + h.map(function (x) { return "<li>" + E(x.ar) + (x.en ? '<span class="rf-en">' + E(x.en) + "</span>" : "") + "</li>"; }).join("") + "</ol>" : '<span class="ph-lead">لا إضاءات مدرجة لهذا المؤشر.</span>';
-    var S0 = P.sOf(i), apN = 0;
-    var rc = rec.length ? '<ul class="rf-rl">' + rec.map(function (r) {
-      var k = S0.st[r] || "blank", f = S0.fl && S0.fl[r], ok = !!(f && f[2] && f[0] === 1); if (k === "approved") apN++;
-      return '<li><span class="rf-rn">' + E(r) + enName(I.rec, r) + '</span><span class="rf-rs">' + P.chip(k) + (ok ? ' <button type="button" class="ph-btn sm" data-v="' + E(f[2]) + '" data-vt="' + E("\u2066" + i.code + "\u2069 · " + r) + '" aria-label="عرض: ' + E(r) + '"><i class="fa-solid fa-eye"></i> عرض</button>' : "") + "</span></li>";
-    }).join("") + "</ul>" + (S0.live ? "" : '<p class="rf-sn">الحالة تقريبية حتى اكتمال تحديث قاعدة البيانات.</p>') : '<span class="ph-lead">لا سجلات مرتبطة.</span>';
-    var rf0 = ((S0.rep && S0.rep.files) || []).filter(function (x) { return x.valid && x.n > 0 && x.id; }).sort(function (a, b) { return b.n - a.n; })[0];
-    var rpBox = '<div class="rf-box"><h4>تقرير الشواهد البصرية</h4><div class="rf-rs">' + (rf0 ? '<span class="ph-chip ok">مرفوع · ' + rf0.n + " صور</span> " + '<button type="button" class="ph-btn sm" data-v="' + E(rf0.id) + '" data-vt="' + E("\u2066" + i.code + "\u2069 · تقرير الشواهد البصرية") + '" aria-label="عرض تقرير الشواهد البصرية"><i class="fa-solid fa-eye"></i> عرض</button>' : '<span class="ph-chip idle">لم يُرفع</span>') + "</div></div>";
+    var rc = rec.length ? "<ul>" + rec.map(function (r) { return "<li>" + E(r) + enName(I.rec, r) + "</li>"; }).join("") + "</ul>" : '<span class="ph-lead">لا سجلات مرتبطة.</span>';
     var tl = tk.length ? tk.map(function (t) { return '<span class="rf-chip">' + E(TL[t] || t) + "</span>"; }).join("") : '<span class="ph-lead">غير محدد في الخريطة.</span>';
     var dh = dc.length ? '<div class="rf-box"><h4>وثائق مساندة مقترحة (' + dc.length + ')</h4><ul>' + dc.map(function (x) { return "<li>" + E(x.ar) + (x.en ? '<span class="rf-en">' + E(x.en) + "</span>" : "") + "</li>"; }).join("") + "</ul></div>" : "";
     return '<details class="rf-ind" data-code="' + i.code + '" style="--c:' + c[0] + ";--cb:" + c[1] + '"><summary><span class="rf-code">' + E(i.code) + '</span><span class="rf-txt">' + E(i.text) + enName(I.ind, i.code) + "<small>" + (i.dv ? '<span class="rf-chip">تدعمها الإضاءات</span>' : '<span class="rf-chip">سجلات رسمية</span>') + "السجل الرئيس: " + E(i.st || "") + " · " + rec.length + " سجل · " + h.length + " إضاءة</small></span></summary>" +
-      '<div class="rf-body"><div class="rf-box"><h4>الإضاءات (إضاءات نحو تحقيق المؤشر)</h4>' + hl + '</div><div class="rf-box"><h4>السجلات الداعمة (' + rec.length + ') · معتمد ' + apN + '</h4>' + rc + '</div><div class="rf-box"><h4>أدوات التقويم المرتبطة بالمؤشر</h4>' + tl + (i.dv ? '<p class="ph-lead" style="margin:6px 0 0">مؤشر داعم: سجله الوحيد «سجل متابعة» مشتق من الإضاءات.</p>' : "") + "</div>" + rpBox + dh + "</div></details>";
+      '<div class="rf-body"><div class="rf-box"><h4>الإضاءات (إضاءات نحو تحقيق المؤشر)</h4>' + hl + '</div><div class="rf-box"><h4>مسميات السجلات المرتبطة (' + rec.length + ')</h4>' + rc + '</div><div class="rf-box"><h4>أدوات التقويم المرتبطة بالمؤشر</h4>' + tl + (i.dv ? '<p class="ph-lead" style="margin:6px 0 0">مؤشر داعم: سجله الوحيد «سجل متابعة» مشتق من الإضاءات.</p>' : "") + "</div>" + dh + "</div></details>";
   }
   function draw() {
-    var term = (q.value || "").trim().toLowerCase(), D = fd.value, T = ft.value, F = fs.value, A = fa.value, shown = 0, html = "";
+    var term = (q.value || "").trim().toLowerCase(), D = fd.value, T = ft.value, F = fs.value, shown = 0, html = "";
     Object.keys(doms).forEach(function (d) {
       if (D && D !== d) return;
       var cc = "", dn = 0, c = COL[d];
@@ -167,7 +154,6 @@ mark{background:#fef08a;border-radius:3px}
         cr.l.forEach(function (i) {
           if (F === "off" && i.dv) return; if (F === "hl" && !i.dv) return;
           if (T && (TOOLS[i.code] || []).indexOf(T) < 0) return;
-          if (A) { var sx = P.sOf(i), an = 0, rfx = ((sx.rep && sx.rep.files) || []).some(function (x) { return x.valid && x.n > 0 && x.id; }); i.recs.forEach(function (n) { if (sx.st[n] === "approved") an++; }); if ((A === "ap" && !an) || (A === "noap" && an) || (A === "rp" && !rfx) || (A === "norp" && rfx)) return; }
           if (term) {
             var hay = [i.code, i.text, i.st, (i.recs || []).join(" "), (HL[i.code] || []).map(function (x) { return x.ar + " " + (x.en || ""); }).join(" "), (I.ind || {})[i.code] || ""].join(" ").toLowerCase();
             if (hay.indexOf(term) < 0) return;
@@ -183,7 +169,7 @@ mark{background:#fef08a;border-radius:3px}
     document.body.classList.toggle("en", en.checked);
   }
   var t0; q.addEventListener("input", function () { clearTimeout(t0); t0 = setTimeout(draw, 160); });
-  [fd, ft, fs, fa, en].forEach(function (x) { x.addEventListener("change", draw); });
+  [fd, ft, fs, en].forEach(function (x) { x.addEventListener("change", draw); });
   exb.addEventListener("click", function () { var all = tree.querySelectorAll(".rf-ind"), openAll = exb.dataset.o !== "1"; all.forEach(function (d) { d.open = openAll; }); exb.dataset.o = openAll ? "1" : ""; exb.textContent = openAll ? "طيّ الكل" : "فتح الكل"; });
 
   /* ===== الملاحظات والمراجع ===== */
@@ -218,9 +204,8 @@ mark{background:#fef08a;border-radius:3px}
     return '<div class="rf-pdf"><b>' + E(f[0]) + "</b>" + (f[1] ? "<small>" + E(f[1]) + "</small>" : "") + '<div class="row"><div class="btns"><button type="button" class="ph-btn sm" data-pdf="' + k + '"><i class="fa-solid fa-eye"></i> عرض</button><a class="ph-btn sm" href="' + view + '" target="_blank" rel="noopener"><i class="fa-solid fa-up-right-from-square"></i> التخزين السحابي</a></div><a class="qr" href="' + view + '" target="_blank" rel="noopener" title="رمز QR: يفتح الملف في التخزين السحابي">' + qsvg(view, 84) + "</a></div></div>";
   }).join("");
   var mod = document.getElementById("rfMod"), fr = document.getElementById("rfF"), lastBtn = null;
-  function closeM() { mod.classList.remove("on"); fr.removeAttribute("src"); if (lastBtn && document.body.contains(lastBtn)) lastBtn.focus(); }
+  function closeM() { mod.classList.remove("on"); fr.removeAttribute("src"); if (lastBtn) lastBtn.focus(); }
   document.getElementById("pdfs").addEventListener("click", function (e) { var b = e.target.closest("[data-pdf]"); if (!b) return; var f = PDFS[+b.dataset.pdf]; lastBtn = b; document.getElementById("rfT").textContent = f[0]; document.getElementById("rfO").href = "https://drive.google.com/file/d/" + f[2] + "/view"; fr.src = "https://drive.google.com/file/d/" + f[2] + "/preview"; mod.classList.add("on"); document.getElementById("rfX").focus(); });
-  tree.addEventListener("click", function (e) { var b = e.target.closest("[data-v]"); if (!b) return; e.preventDefault(); var id = b.dataset.v; if (!/^[A-Za-z0-9_-]{10,}$/.test(id)) return; lastBtn = b; document.getElementById("rfT").textContent = b.dataset.vt || "عرض الملف"; document.getElementById("rfO").href = P.fileView(id); fr.src = "https://drive.google.com/file/d/" + id + "/preview"; mod.classList.add("on"); document.getElementById("rfX").focus(); });
   document.getElementById("rfX").addEventListener("click", closeM);
   mod.addEventListener("click", function (e) { if (e.target === mod) closeM(); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && mod.classList.contains("on")) closeM(); });
@@ -228,8 +213,6 @@ mark{background:#fef08a;border-radius:3px}
   /* خريطة الأدوات من data/ (تعمل على الخادم؛ وعند الفتح محلياً بلا خادم تُهمل بهدوء) */
   fetch("data/tools_map_feb2026.json?v=9.15.0").then(function (r) { return r.json(); }).then(function (j) { TOOLS = j || {}; }).catch(function () { TOOLS = {}; }).then(function () { fillTools(); draw(); });
   draw();
-  function redrawKeep() { var o = {}; tree.querySelectorAll(".rf-ind[open]").forEach(function (d) { o[d.dataset.code] = 1; }); draw(); Object.keys(o).forEach(function (c) { var d = tree.querySelector('.rf-ind[data-code="' + c + '"]'); if (d) d.open = true; }); }
-  P.onStatus(redrawKeep); P.load();
 })();
 </script>
 <script src="page-gate.js?v=9.15.0" data-lazy="1"></script>
