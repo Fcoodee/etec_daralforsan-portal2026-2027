@@ -200,6 +200,7 @@
   function tok() { return ($("tok").value || "").trim(); }
   function chip(t, c) { var e = $("upState"); e.textContent = t; e.className = "ph-chip " + c; }
   function post(action, extra) {
+    if (window.PortalRole && PortalRole.get() === "preview") return Promise.reject(new Error("preview")); /* المعاينة: اطلاع فقط */
     var body = Object.assign({ action: action, code: code, token: tok(), who: $("who").value.trim() }, extra || {});
     return fetch(url(), { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) }).then(function (r) { return r.json(); });
   }

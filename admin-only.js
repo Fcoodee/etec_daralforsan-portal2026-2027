@@ -23,6 +23,7 @@
   }
   function check() {
     if (!window.DFGate) { if (tries++ < 40) setTimeout(check, 100); return; }
+    if (window.DFGate.pvOk && window.DFGate.pvOk() && !window.DFGate.isAuth()) { drop(); html.classList.add("adm-ok"); return; } /* وضع المعاينة: اطلاع فقط */
     if (!window.DFGate.isAuth()) { html.classList.remove("adm-ok"); drop(); return; }
     window.DFGate.isAdmin().then(function (ok) {
       if (!window.DFGate.isAuth()) { html.classList.remove("adm-ok"); return; }

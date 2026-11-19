@@ -13,19 +13,20 @@
   "use strict";
   var KEY = "etec.utype.v1";
   var SKEY = "etec.utype.session"; /* احتياطي لتبويب العمل الحالي: portal-meta.js يمسح KEY عند غياب جلسة دخول صالحة */
-  var ORDER = ["admin", "sup", "member", "self"];
+  var ORDER = ["admin", "sup", "member", "self", "preview"];
   var ROLES = {
     admin:  { n: "مدير النظام", ic: "fa-user-shield", hl: "لوحة التحكم", q: "هل المنظومة سليمة؟", home: "home.html?u=admin" },
     sup:    { n: "مشرف فريق السجلات والشواهد", ic: "fa-user-check", hl: "لوحة المراجعة", q: "ما الذي ينتظر مراجعتي؟", home: "home.html?u=sup" },
     member: { n: "عضو فريق السجلات والشواهد", ic: "fa-user-pen", hl: "المؤشرات والسجلات", q: "ماذا أرفع الآن؟", home: "indicators.html?u=member" },
-    self:   { n: "مشرف عمليات التقويم الذاتي", ic: "fa-magnifying-glass-chart", hl: "الفجوات والنسب", q: "أين فجواتنا؟", home: "home.html?u=self" }
+    self:   { n: "مشرف عمليات التقويم الذاتي", ic: "fa-magnifying-glass-chart", hl: "الفجوات والنسب", q: "أين فجواتنا؟", home: "home.html?u=self" },
+    preview:{ n: "معاينة (اطلاع فقط)", ic: "fa-eye", hl: "المعاينة", q: "تصفّح كل التبويبات للاطلاع", home: "home.html?u=preview" }
   };
   /* من يرى أي صفحة. الصفحة خارج نطاق الدور تُعرض مع تنبيه ولا تُحجب (تخصيص عرض لا حماية). */
   var ALL = ORDER.slice();
   var PAGES = {
     /* صفحات مرحلة ما بعد تصحيح المسار (المبنية من جديد): مفتوحة بحسب الدور بلا دخول */
-    "index.html": ALL, "stages.html": ALL, "primary.html": ALL, "home.html": ALL, "indicators.html": ALL, "progress.html": ["admin", "self"], "reference.html": ["admin", "self"],
-    "report.html": ["admin", "sup", "member"]
+    "index.html": ALL, "stages.html": ALL, "primary.html": ALL, "home.html": ALL, "indicators.html": ALL, "progress.html": ["admin", "self", "preview"], "reference.html": ["admin", "self", "preview"],
+    "report.html": ["admin", "sup", "member", "preview"], "committee.html": ["admin", "preview"], "open.html": ["admin", "preview"]
     /* كل ما عداها قديم: لمدير النظام وحده (يُعدّ admin افتراضاً لأي صفحة غير مدرجة أعلاه) */
   };
 
@@ -34,7 +35,8 @@
     admin:  [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["progress.html", "fa-chart-pie", "قراءة التقدّم"]],
     sup:    [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["report.html", "fa-file-image", "تقرير الشواهد"]],
     member: [["report.html", "fa-file-image", "تقرير الشواهد"]],
-    self:   [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["progress.html", "fa-chart-pie", "قراءة التقدّم"]]
+    self:   [["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["progress.html", "fa-chart-pie", "قراءة التقدّم"]],
+    preview:[["indicators.html", "fa-list-check", "المؤشرات والسجلات"], ["committee.html", "fa-user-check", "واجهة اللجنة (نموذج)"]]
   };
 
 
@@ -90,6 +92,8 @@
   /* اختيار دور: الأدوار الثلاثة غير الإدارية فورية بلا رمز؛ مدير النظام يمرّ بنافذة الدخول ثم يُتحقَّق من صلاحيته في access.txt */
   function choose(k, done, o) {
     if (!valid(k)) return;
+    if (k === "preview") { set(k); try { sessionStorage.setItem("etec.pv", "2"); } catch (e) {} if (done) done(k); return; } /* المعاينة: اطلاع فقط بلا دخول ولا كتابة */
+    try { if (sessionStorage.getItem("etec.pv") === "2") sessionStorage.setItem("etec.pv", "1"); } catch (e) {}
     if (k !== "admin") { set(k); if (done) done(k); return; }
     withGate(function () {
       function verify(force) {
@@ -108,9 +112,10 @@
   /* قاعدة التبديل من شريط الدور (قرار مدير المشروع): الانتقال نحو دور أدنى أو مماثل فقط.
      عضو < مشرف فريق < مشرف عمليات < مدير نظام. مدير النظام (وجلسته المصادَقة) يبدّل إلى أي دور.
      هذا تنظيم للعرض لا حماية خادم: الدور اختيار عرض، والحماية الفعلية لدخول المدير وحده. */
-  var RANK = { member: 1, sup: 2, self: 3, admin: 4 };
+  var RANK = { member: 1, sup: 2, self: 3, admin: 4, preview: 0.5 };
   function canSwitch(from, to) {
     if (!valid(to)) return false;
+    if (to === "preview") return !from || from === "admin" || from === "preview"; /* المعاينة تُختار من البوابة فقط، ولا ينتقل إليها عضو أو مشرف من الشريط */
     if (!from || from === "admin" || adminOk()) return true;
     return (RANK[to] || 99) <= (RANK[from] || 0);
   }
@@ -128,6 +133,7 @@
     st.id = "prCss";
     st.textContent =
       ".pr-off{display:none!important}" +
+      "html[data-role=\"preview\"] [data-up],html[data-role=\"preview\"] [data-act],html[data-role=\"preview\"] .ph-rv{display:none!important}" +
       "html:not([data-role=\"admin\"]) [data-admin-only]{display:none!important}" +
       "#prBar{font-family:Cairo,Tahoma,sans-serif;direction:rtl;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:7px max(14px,env(safe-area-inset-right)) 7px max(14px,env(safe-area-inset-left));font-size:12px;line-height:1.7;background:#f0fdfa;border-bottom:1px solid #99f6e4;color:#134e4a;max-width:100%}" +
       "#prBar>*{min-width:0}#prBar select{max-width:100%}" +
@@ -148,7 +154,7 @@
     var els = document.querySelectorAll("[data-roles]");
     for (var i = 0; i < els.length; i++) {
       var ok = (els[i].getAttribute("data-roles") || "").split(",");
-      els[i].classList.toggle("pr-off", !!role && ok.indexOf(role) < 0);
+      els[i].classList.toggle("pr-off", !!role && role !== "preview" && ok.indexOf(role) < 0);
     }
   }
 

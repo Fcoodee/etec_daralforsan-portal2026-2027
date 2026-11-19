@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=9.13.2"></script>
+<script src="shield.js?v=9.14.0"></script>
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#123a63">
 <title>بوابة الاعتماد نحو التميز — واجهة اللجنة (نموذج) — Excellence Accreditation Portal</title>
@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="portal-meta.js?v=9.13.2"></script>
+<script src="portal-meta.js?v=9.14.0"></script>
 <style>
 :root{
   --navy:#123a63;--blue:#1f78c1;--purple:#6a2c91;--teal:#0e8a9d;--gold:#b7791f;--slate:#5f6f80;
@@ -184,12 +184,12 @@ html[dir=ltr] .b2{text-align:left}
   <div class="cm-ft" id="ft"></div>
 </div>
 <div class="cm-mod" id="mod" role="dialog" aria-modal="true"><div class="box"><div class="bar"><b id="modT"></b><a class="cm-btn" id="modO" target="_blank" rel="noopener"></a><button type="button" class="cm-btn" id="modX" aria-label="close"><i class="fa-solid fa-xmark"></i></button></div><iframe id="modF" title="preview" allow="autoplay"></iframe></div></div>
-<script src="portal-config.js?v=9.13.2"></script>
-<script src="portal-names.js?v=9.13.2"></script>
-<script src="phase-data.js?v=9.13.2"></script>
-<script src="report-i18n.js?v=9.13.2"></script>
-<script src="highlights.js?v=9.13.2"></script>
-<script src="phase-core.js?v=9.13.2"></script>
+<script src="portal-config.js?v=9.14.0"></script>
+<script src="portal-names.js?v=9.14.0"></script>
+<script src="phase-data.js?v=9.14.0"></script>
+<script src="report-i18n.js?v=9.14.0"></script>
+<script src="highlights.js?v=9.14.0"></script>
+<script src="phase-core.js?v=9.14.0"></script>
 <script>
 (function () {
   "use strict";
@@ -349,6 +349,11 @@ html[dir=ltr] .b2{text-align:left}
   var tries = 0;
   function check() {
     if (!window.DFGate) return;
+    if (window.DFGate.pvOk && window.DFGate.pvOk() && !window.DFGate.isAuth()) { /* معاينة اطلاع فقط (دور «معاينة») */
+      $("deny").hidden = true; $("app").hidden = false;
+      if (!started) { started = true; bind(); }
+      render(); return;
+    }
     if (!$("app")) { if (window.DFGate.isAuth() && tries++ < 30) setTimeout(check, 100); return; }
     tries = 0;
     if (!window.DFGate.isAuth()) { $("app").hidden = true; $("deny").hidden = true; return; }

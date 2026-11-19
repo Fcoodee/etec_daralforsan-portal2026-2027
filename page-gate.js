@@ -22,6 +22,16 @@
   var MSG = DS.msg || 'هذه الصفحة للتشاور بين فريق العمل والإشراف الأكاديمي للقسم. فضلاً أدخل بيانات الدخول المعتمدة لتتصفحها معنا.';
   var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   var AK = 'df_auth_v1', TTL = 60 * 60 * 1000, TRY = 'df_gate_try', LOCK = 'df_gate_until', CK = 'df_ck';
+  /* ----- وضع «المعاينة» (اطلاع فقط): مفتاح جلسة التبويب etec.pv ؛ 1 = الصفحتان التمهيديتان (المراحل والبوابة) فقط، 2 = كل الصفحات بعد اختيار دور «معاينة» من البوابة.
+     يُضبط 1 من الرابط stages.html?pv=1 فقط؛ والقيمة 2 لا تُقبل من الرابط وتُضبط عند اختيار دور المعاينة. لا يمنح دخولاً ولا صلاحية كتابة (قفل متصفح لا خادم). */
+  var PVK = 'etec.pv', PVR = 'etec.utype.session', PV1 = ['stages.html', 'primary.html'];
+  function pvLevel() { try { return sessionStorage.getItem(PVK) || ''; } catch (e) { return ''; } }
+  try { if (/[?&]pv=1(&|$)/.test(location.search) && PV1.indexOf(PAGE) >= 0 && pvLevel() !== '2') sessionStorage.setItem(PVK, '1'); } catch (e) {}
+  function pvOk() {
+    var l = pvLevel(), full = false;
+    try { full = l === '2' && sessionStorage.getItem(PVR) === 'preview'; } catch (e) {}
+    return full || ((l === '1' || l === '2') && PV1.indexOf(PAGE) >= 0);
+  }
   var html = document.documentElement, frag = null, mark = null, users = [], gates = [], mailers = [], admins = [], loaded = false, locked = false, overlay = null, lastCred = null;
   function S(k, v, del) { try { if (del) sessionStorage.removeItem(k); else if (v === undefined) return sessionStorage.getItem(k); else sessionStorage.setItem(k, v); } catch (e) {} return null; }
   function L(k, v, del) { try { if (del) localStorage.removeItem(k); else if (v === undefined) return localStorage.getItem(k); else localStorage.setItem(k, v); } catch (e) {} return null; }
@@ -39,7 +49,7 @@
   /* ----- انتهاء الجلسة: تُقفل الصفحة المقفلة من جديد دون إعادة تحميل ----- */
   var expT = null;
   function lockAgain(why) {
-    if (!ALWAYS || locked) return;
+    if (!ALWAYS || locked || pvOk()) return;
     locked = true; html.classList.add('pg-locked'); if (DETACH) detach();
     openLogin({ full: true, title: why === 'out' ? 'أُنهيت جلسة العمل' : 'انتهت جلسة العمل', msg: why === 'out' ? 'أُنهيت الجلسة من تبويب آخر. أدخل بيانات الدخول لمتابعة العمل.' : 'انقضت ساعة على الدخول. أدخل بيانات الدخول لمتابعة العمل.' });
   }
@@ -177,7 +187,7 @@
   }
 
   window.DFGate = {
-    _booted: true, isAuth: isAuth, expiresAt: function () { var i = info(); return i ? i.exp : 0; }, user: function () { var i = info(); return i ? i.u : ''; },
+    _booted: true, isAuth: isAuth, pvOk: pvOk, expiresAt: function () { var i = info(); return i ? i.exp : 0; }, user: function () { var i = info(); return i ? i.u : ''; },
     require: function (cb, opts) { if (isAuth() && !(opts && opts.force)) { cb(); return; } openLogin({ onOk: cb, title: (opts && opts.title) || 'دخول بجلسة عمل مصرح بها', msg: (opts && opts.msg) || 'أدخل بيانات الدخول المعتمدة لتسجيل جلسة عمل مصرح بها.' }); },
     logout: function () { clearAuth(); }, unlockContacts: unlockContacts,
     /* صلاحية إرسال الرسائل: إن وُجد في access.txt سطر  #@mail,مستخدم1,مستخدم2  اقتُصر الإرسال عليهم، وإلا فلكل مستخدم مصرح له */
@@ -188,6 +198,7 @@
 
   window.addEventListener('storage', function (e) { if (e.key !== AK) return; if (locked && isAuth()) reveal(info().u); else if (!locked && !isAuth()) lockAgain('out'); else watch(); });
   function boot() {
+    if (pvOk() && !isAuth()) { html.classList.remove('pg-locked'); return; }
     if (isAuth()) { html.classList.remove('pg-locked'); watch(); return; }
     if (LAZY) return;
     if (ALWAYS) { locked = true; if (DETACH) detach(); openLogin({ full: true }); return; }

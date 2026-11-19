@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=9.13.2"></script>
+<script src="shield.js?v=9.14.0"></script>
 <script src="page-gate.js" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."></script>
-<script src="admin-only.js?v=9.13.2"></script>
+<script src="admin-only.js?v=9.14.0"></script>
 <meta name="robots" content="noindex,nofollow">
 <title>المرحلة الابتدائية — بوابة ربط الشواهد بالسجلات — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=9.13.2">
+<link rel="stylesheet" href="phase.css?v=9.14.0">
 <style>
 .wl{max-width:880px;margin:0 auto;padding:0 16px 40px}
 .wl-hero{text-align:center;padding:26px 8px 8px}
@@ -37,8 +37,8 @@
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=9.13.2"></script>
-<script src="portal-role.js?v=9.13.2"></script>
+<script src="portal-meta.js?v=9.14.0"></script>
+<script src="portal-role.js?v=9.14.0"></script>
 </head>
 <body>
 <header class="ph-head" style="padding-top:18px">
@@ -65,7 +65,7 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
   </section>
   <div class="ph-foot">منصة داخلية غير تابعة لهيئة تقويم التعليم والتدريب.</div>
 </main>
-<script src="phase-data.js?v=9.13.2"></script>
+<script src="phase-data.js?v=9.14.0"></script>
 <script>
 (function () {
   var R = window.PortalRole, PH = window.ETEC_PH; if (!R || !PH) return;
@@ -74,11 +74,12 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
     admin:  [["home.html", "fa-user-shield", "لوحة مدير النظام", "صحة المنظومة وأين نقف", 1], ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "كل المؤشرات وحالة كل سجل ومجلده"], ["report.html", "fa-file-image", "تقرير الشواهد", "قالب التقرير: صور وأوصاف وإصدار PDF"]],
     sup:    [["home.html", "fa-user-check", "لوحة المراجعة", "ما ينتظر مراجعتك وتقدّم فريقك", 1], ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "مؤشرات فريقك وحالة سجلاتها"], ["report.html", "fa-file-image", "تقرير الشواهد", "قالب التقرير: صور وأوصاف وإصدار PDF"]],
     member: [["indicators.html", "fa-list-check", "المؤشرات والسجلات", "مساحتك وتقدّمك وتنبيهات المراجعين وسجلاتك", 1], ["report.html", "fa-file-image", "تقرير الشواهد", "اعمل على قالب التقرير وارفع الصور"]],
-    self:   [["home.html", "fa-magnifying-glass-chart", "الفجوات والنسب", "أين فجواتنا وما نسبة كل مجال", 1], ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "كل المؤشرات وحالة كل سجل"]]
+    self:   [["home.html", "fa-magnifying-glass-chart", "الفجوات والنسب", "أين فجواتنا وما نسبة كل مجال", 1], ["indicators.html", "fa-list-check", "المؤشرات والسجلات", "كل المؤشرات وحالة كل سجل"]],
+    preview:[["home.html", "fa-eye", "المعاينة", "تصفّح كل التبويبات للاطلاع فقط", 1], ["committee.html", "fa-user-check", "واجهة اللجنة (نموذج)", "واجهة لجنة التقويم"]]
   };
   var sel = document.getElementById("roleSel"), out = document.getElementById("roleOut"), box = document.getElementById("idBox"), dom = document.getElementById("domSel"), nm = document.getElementById("nameSel"), nt = document.getElementById("nameT");
   var saved = null; try { saved = JSON.parse(localStorage.getItem(ME) || "null"); } catch (e) {}
-  R.order.forEach(function (k) { var o = document.createElement("option"); o.value = k; o.textContent = R.roles[k].n + (k === "admin" ? " (يتطلب دخولاً)" : ""); sel.appendChild(o); });
+  R.order.forEach(function (k) { var o = document.createElement("option"); o.value = k; o.textContent = R.roles[k].n + (k === "admin" ? " (يتطلب دخولاً)" : k === "preview" ? " — بلا دخول" : ""); sel.appendChild(o); });
   [1, 2, 3, 4].forEach(function (d) { var o = document.createElement("option"); o.value = d; o.textContent = DN[d]; dom.appendChild(o); });
   function clearOut() { out.className = "wl-role"; out.innerHTML = ""; }
   function q(k) {
