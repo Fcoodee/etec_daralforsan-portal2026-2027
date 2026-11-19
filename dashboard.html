@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=10.1.0"></script>
-<script src="portal-config.js?v=10.1.0"></script>
-<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.1.0" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.1.0"><\/script>');}</script>
+<script src="shield.js?v=10.1.1"></script>
+<script src="portal-config.js?v=10.1.1"></script>
+<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.1.1" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.1.1"><\/script>');}</script>
 <meta name="robots" content="noindex,nofollow">
 <title>نحو التميز · نسبة الإنجاز الكلية للمشروع — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=10.1.0">
+<link rel="stylesheet" href="phase.css?v=10.1.1">
 <script>/* حارس الإصدار: إن كانت الصفحة محفوظة قديمة في المتصفح تُعاد من الخادم مرة واحدة */
 (function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=10.1.0"></script>
-<script src="portal-role.js?v=10.1.0"></script>
+<script src="portal-meta.js?v=10.1.1"></script>
+<script src="portal-role.js?v=10.1.1"></script>
 <style>
 :root{--d1:#1d4ed8;--d2:#047857;--d3:#b45309;--d4:#7e22ce;--d1b:#eff6ff;--d2b:#ecfdf5;--d3b:#fffbeb;--d4b:#faf5ff}
 .nd-disc{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:8px 14px;font-size:12.8px;line-height:1.9;margin:8px 0 12px}
@@ -111,9 +111,9 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
 <main class="ph-main" id="main" style="max-width:1180px"><div class="ph-empty">جارٍ التحميل…</div></main>
 <div id="rfMod" role="dialog" aria-modal="true" aria-label="عرض الملف"><div class="bar"><span id="rfT"></span><a class="ph-btn sm" id="rfO" target="_blank" rel="noopener">فتح في التخزين السحابي</a><button type="button" class="ph-btn sm" id="rfX">إغلاق</button></div><div class="why">إن ظهرت رسالة «لا تملك صلاحية» فسجّل الدخول بحساب Google المصرّح له بمجلد المشروع.</div><iframe id="rfF" title="عرض الملف" allow="fullscreen"></iframe></div>
 
-<script src="portal-names.js?v=10.1.0"></script>
-<script src="phase-data.js?v=10.1.0"></script>
-<script src="phase-core.js?v=10.1.0"></script>
+<script src="portal-names.js?v=10.1.1"></script>
+<script src="phase-data.js?v=10.1.1"></script>
+<script src="phase-core.js?v=10.1.1"></script>
 <script>
 (function () {
   "use strict";
@@ -150,7 +150,7 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
       '<p class="rf-sn">يُبنى التقرير من سجلات المؤشر المعتمدة ويدعمها؛ ويُحتسب نصف اكتمال المؤشر.</p>';
     var key = i.code;
     return '<details class="rf-ind" id="i-' + E(i.code) + '" data-code="' + E(i.code) + '"' + (openKeep[key] ? " open" : "") + ' style="--c:' + c[0] + ";--cb:" + c[1] + '"><summary><span class="rf-code">' + E(i.code) + '</span><span class="rf-txt">' + E(i.text) +
-      "<small>" + (i.dv ? '<span class="rf-chip">سجل متابعة</span>' : '<span class="rf-chip">سجلات رسمية</span>') + "السجل الرئيس: " + E(i.st || "") + " · معتمد " + apN + "/" + rec.length + "</small></span>" +
+      "<small>" + (i.dv ? '<span class="rf-chip">سجل متابعة</span>' : '<span class="rf-chip">سجلات رسمية</span>') + "السجل الرئيس: " + E(i.st || "") + " · جاهز " + apN + "/" + rec.length + "</small></span>" +
       '<span class="rf-pp" title="اكتمال المؤشر">' + pc(s.p) + "%</span></summary>" +
       '<div class="rf-body"><div class="rf-box"><h4>السجلات الداعمة (' + rec.length + ")</h4>" + rc + '</div><div class="rf-box"><h4>تقرير الشواهد البصرية</h4>' + rp + "</div></div>" +
       '<p class="ad-only" style="margin:6px 0 0"><a class="ph-btn sm" href="indicators.html?code=' + E(i.code) + '"><i class="fa-solid fa-list-check"></i> مساحة عمل المؤشر (رفع واعتماد)</a></p></details>';
@@ -217,7 +217,7 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
     h += '<section class="pg-hero" aria-label="نسبة الإنجاز الكلية"><div class="pg-ring">' + ring(projP, "#0f766e") + '<div class="c"><b dir="ltr">' + pc(projP) + '%</b><small>نسبة الإنجاز الكلية</small></div></div><div>' +
       '<div class="pg-kpis">' +
       kpi("المؤشرات", T.ind, "في 4 مجالات و" + P.critList().length + " معياراً") +
-      kpi("السجلات المرفوعة", T.ap + " / " + T.req, "بعد مراجعة المشرف") +
+      kpi("السجلات الجاهزة", T.ap + " / " + T.req, "معبّأة ومعتمدة") +
       kpi("السجلات المنشأة", T.cr + " / " + T.req, "القوالب موجودة") +
       kpi("معبّأة قيد المراجعة", T.review, "بانتظار المشرفين") +
       kpi("تقارير الشواهد البصرية", T.repDone + " / " + T.ind, "مرفوعة") + "</div>" +
@@ -229,7 +229,7 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
       h += '<button type="button" class="pg-dom" data-dom="' + d + '" style="--c:' + COL[d][0] + ";--cb:" + COL[d][1] + '"><h3>' + E(P.DN[d]) + '</h3><div class="big">' + pc(tot) + "%</div>" +
         '<div class="pg-bar" role="img" aria-label="سجلات ' + pc(rf / 2) + "% وتقارير " + pc(tf / 2) + '% من 100"><i class="r" style="width:' + (rf * 50).toFixed(1) + '%"></i><i class="t" style="width:' + (tf * 50).toFixed(1) + '%"></i></div>' +
         '<div class="pg-leg"><span style="--k:' + COL[d][0] + '">السجلات ' + pc(rf) + '%</span><span style="--k:repeating-linear-gradient(45deg,' + COL[d][0] + "," + COL[d][0] + ' 2px,#fff 2px,#fff 4px)">التقارير ' + pc(tf) + "%</span></div>" +
-        "<ul><li>المؤشرات · المعايير<b>" + l.length + " · " + P.critList(d).length + "</b></li><li>سجلات مرفوعة<b>" + t.ap + " / " + t.req + "</b></li><li>سجلات منشأة<b>" + t.cr + " / " + t.req + "</b></li><li>قيد المراجعة<b>" + t.review + "</b></li><li>تقارير مرفوعة<b>" + t.repDone + " / " + l.length + "</b></li></ul></button>";
+        "<ul><li>المؤشرات · المعايير<b>" + l.length + " · " + P.critList(d).length + "</b></li><li>سجلات جاهزة<b>" + t.ap + " / " + t.req + "</b></li><li>سجلات منشأة<b>" + t.cr + " / " + t.req + "</b></li><li>قيد المراجعة<b>" + t.review + "</b></li><li>تقارير مرفوعة<b>" + t.repDone + " / " + l.length + "</b></li></ul></button>";
     });
     h += "</div>";
 
@@ -239,13 +239,13 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
       return '<div class="pg-crit" style="--c:' + COL[x.d][0] + '"><span class="n">' + E(x.c) + '</span><div class="tr" role="img" aria-label="' + E(x.cn) + " " + pc(p) + '%"><i style="width:' + pc(p) + '%"></i></div><span class="p">' + pc(p) + "%</span><small>" + E(x.cn) + " · " + n + " مؤشر</small></div>";
     }).join("") + '<p class="pg-note">اللون = المجال: أزرق للإدارة المدرسية، أخضر للتعليم والتعلم، عنبري لنواتج التعلم، بنفسجي للبيئة المدرسية.</p></section>' +
       '<section class="pg-box"><h2>حالة السجلات (' + T.req + ')</h2><div class="pg-donut">' + donut([{ v: st.approved, c: "#047857" }, { v: st.review, c: "#d97706" }, { v: st.blank, c: "#94a3b8" }, { v: st.missing, c: "#dc2626" }]) +
-      '<ul><li style="--k:#047857">مرفوعة (معتمدة) <b>' + st.approved + '</b></li><li style="--k:#d97706">معبّأة قيد المراجعة <b>' + st.review + '</b></li><li style="--k:#94a3b8">منشأة بانتظار التعبئة <b>' + st.blank + '</b></li><li style="--k:#dc2626">غير منشأة <b>' + st.missing + "</b></li></ul></div></section></div>";
+      '<ul><li style="--k:#047857">جاهزة (معتمدة) <b>' + st.approved + '</b></li><li style="--k:#d97706">معبّأة قيد المراجعة <b>' + st.review + '</b></li><li style="--k:#94a3b8">منشأة بانتظار التعبئة <b>' + st.blank + '</b></li><li style="--k:#dc2626">غير منشأة <b>' + st.missing + "</b></li></ul></div></section></div>";
 
     h += teamHtml();
 
     h += '<h2 class="ph-h2" style="margin-top:18px">المجال ← المعيار ← المؤشر ← السجلات الداعمة ← تقرير الشواهد البصرية</h2>' +
       '<div class="rf-tools" role="search"><input type="search" id="q" placeholder="ابحث: رمز مؤشر (1-1-1-1) أو كلمة من نص المؤشر أو اسم سجل" aria-label="بحث">' +
-      '<select id="fa" aria-label="تصفية بحالة السجلات"><option value="">كل الحالات</option><option value="ap">فيها سجلات معتمدة</option><option value="rv">فيها سجلات قيد المراجعة</option><option value="bl">فيها سجلات بانتظار التعبئة أو معادة</option><option value="rp">تقريرها البصري مرفوع</option><option value="norp">تقريرها البصري غير مرفوع</option></select>' +
+      '<select id="fa" aria-label="تصفية بحالة السجلات"><option value="">كل الحالات</option><option value="ap">فيها سجلات جاهزة</option><option value="rv">فيها سجلات قيد المراجعة</option><option value="bl">فيها سجلات بانتظار التعبئة أو معادة</option><option value="rp">تقريرها البصري مرفوع</option><option value="norp">تقريرها البصري غير مرفوع</option></select>' +
       '<button type="button" class="ph-btn sm" id="ex">فتح الكل</button><button type="button" class="ph-btn sm" id="clr">إزالة التصفية</button><span class="rf-cnt" id="cnt" role="status"></span></div><div id="tree"></div>';
 
     main.innerHTML = h;
@@ -276,8 +276,8 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
   P.load(false);
 })();
 </script>
-<script src="page-gate.js?v=10.1.0" data-lazy="1"></script>
-<script src="legal-notice.js?v=10.1.0"></script>
-<script src="content-protect.js?v=10.1.0"></script>
+<script src="page-gate.js?v=10.1.1" data-lazy="1"></script>
+<script src="legal-notice.js?v=10.1.1"></script>
+<script src="content-protect.js?v=10.1.1"></script>
 </body>
 </html>

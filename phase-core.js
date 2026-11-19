@@ -11,12 +11,12 @@
     blank:    { t: "منشأ · بانتظار التعبئة",   c: "idle", tip: "نزّل القالب وعبّئه وأعد رفعه بالاسم نفسه." },
     review:   { t: "معبّأ · قيد المراجعة",     c: "wip",  tip: "بانتظار مراجعة المشرف." },
     returned: { t: "أُعيد للتعبئة",             c: "ret",  tip: "أعاده المشرف بملاحظة؛ عدّله وأعد رفعه من زر «رفع»." },
-    approved: { t: "مرفوع (بعد المراجعة)",     c: "ok",   tip: "راجعه المشرف وأقرّه." }
+    approved: { t: "جاهز",                      c: "ok",   tip: "جاهز: معبّأ ومعتمد." }
   };
   /* أساس النسبة الرسمية: created (المنشأة) أو uploaded (المرفوعة بعد المراجعة) — إعداد ETEC_PROGRESS_BASIS في portal-config.js */
   function basis() { return window.ETEC_PROGRESS_BASIS === "uploaded" ? "uploaded" : "created"; }
   function gl(txt, on) { return on ? '<span class="ph-gl">' + txt + "</span>" : txt; }
-  function basisTxt() { return basis() === "uploaded" ? "المرفوعة بعد المراجعة" : "السجلات المنشأة"; }
+  function basisTxt() { return basis() === "uploaded" ? "السجلات الجاهزة (المعبّأة والمعتمدة)" : "السجلات المنشأة"; }
   function target() { return +window.ETEC_REPORT_TARGET || 6; }
 
   var ST = { live: false, asof: "", gen: "", ver: "", errors: [], ind: {}, loaded: false, failed: false };
@@ -107,7 +107,7 @@
   /* ===== مكوّنات العرض ===== */
   function bar(p, cls) { return '<span class="ph-bar ' + (cls || "") + '" role="img" aria-label="' + pct(p) + '%"><i style="width:' + pct(p) + '%"></i></span>'; }
   /* شريط بلونين: داكن = مرفوعة (بعد المراجعة)، فاتح = منشأة */
-  function bar2(pu, pc) { return '<span class="ph-bar ph-bar2" role="img" aria-label="منشأة ' + pct(pc) + '٪ · مرفوعة ' + pct(pu) + '٪"><i class="c" style="width:' + pct(pc) + '%"></i><i class="u" style="width:' + pct(pu) + '%"></i></span>'; }
+  function bar2(pu, pc) { return '<span class="ph-bar ph-bar2" role="img" aria-label="منشأة ' + pct(pc) + '٪ · جاهزة ' + pct(pu) + '٪"><i class="c" style="width:' + pct(pc) + '%"></i><i class="u" style="width:' + pct(pu) + '%"></i></span>'; }
   function chip(state, label) { var m = STATE[state] || STATE.blank; return '<span class="ph-chip ' + m.c + '" title="' + esc(m.tip) + '">' + esc(label || m.t) + "</span>"; }
   /* بطاقة مؤشر: العنوان والتقدّم وحالة كل سجل وروابط المجلد والتقرير */
   function card(i, o) {
@@ -132,11 +132,11 @@
       '<button type="button" class="ph-card-h" aria-expanded="' + open + '" data-toggle>' +
       '<span class="ph-code" dir="ltr">' + esc(i.code) + "</span>" +
       '<span class="ph-card-t"><b>' + esc(i.st) + "</b><small>" + esc(DN[i.d]) + " · " + esc(i.cn) + (o.owner === false ? "" : " · " + esc(me)) + "</small></span>" + tag +
-      '<span class="ph-card-p" title="اكتمال المؤشر = 50% سجلات + 50% تقرير الشواهد البصرية · الرقم: سجلات مرفوعة / مطلوبة · الفاتح = منشأة"><b dir="ltr">' + s.ap + "/" + s.req + "</b>" + bar2(s.pu, s.pc) + "</span></button>" +
+      '<span class="ph-card-p" title="اكتمال المؤشر = 50% سجلات + 50% تقرير الشواهد البصرية · الرقم: سجلات جاهزة / مطلوبة · الفاتح = منشأة"><b dir="ltr">' + s.ap + "/" + s.req + "</b>" + bar2(s.pu, s.pc) + "</span></button>" +
       '<div class="ph-card-b"' + (open ? "" : " hidden") + ">" +
       '<p class="ph-stmt">' + esc(i.text) + "</p>" +
       table +
-      '<div class="ph-row"><span class="ph-chip idle">منشأة ' + gl(s.cr + "/" + s.req, s.cr) + '</span><span class="ph-chip ' + (s.ap ? "ok" : "idle") + '">مرفوعة (بعد المراجعة) ' + s.ap + "/" + s.req + "</span>" + (s.review ? '<span class="ph-chip wip">معبّأة قيد المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
+      '<div class="ph-row"><span class="ph-chip idle">منشأة ' + gl(s.cr + "/" + s.req, s.cr) + '</span><span class="ph-chip ' + (s.ap ? "ok" : "idle") + '">جاهزة ' + s.ap + "/" + s.req + "</span>" + (s.review ? '<span class="ph-chip wip">معبّأة قيد المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
       '<div class="ph-actions"><a class="ph-btn pri" href="' + folderUrl(i) + '" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> مجلد المؤشر في التخزين السحابي</a>' +
       '</div>' +
       "</div></article>";

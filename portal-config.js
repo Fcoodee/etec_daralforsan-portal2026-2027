@@ -58,7 +58,7 @@ window.ETEC_DOC_REFS = {};
 // SHORT-LINKS-BEGIN
 window.ETEC_SHORT_LINKS = {};
 // SHORT-LINKS-END
-/* أساس «التقدّم الرسمي»: "created" = السجلات المنشأة (الأساس الحالي بقرار مدير المشروع)، "uploaded" = المرفوعة بعد المراجعة (يُبدَّل لاحقاً). */
-window.ETEC_PROGRESS_BASIS = "created";
+/* أساس «التقدّم الرسمي»: "uploaded" = السجلات الجاهزة (معبّأة ومعتمدة) — الأساس الحالي منذ v10.1.1 بعد بدء تعبئة السجلات؛ "created" = السجلات المنشأة (قوالب فارغة، الأساس السابق). */
+window.ETEC_PROGRESS_BASIS = "uploaded";
 /* عدد صور تقرير الشواهد البصرية لاعتباره «مربوطاً» (مؤقت). */
 window.ETEC_REPORT_TARGET = 6;
