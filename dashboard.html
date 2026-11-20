@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=10.4.2"></script>
-<script src="portal-config.js?v=10.4.2"></script>
-<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.4.2" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.4.2"><\/script>');}</script>
+<script src="shield.js?v=10.4.3"></script>
+<script src="portal-config.js?v=10.4.3"></script>
+<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.4.3" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.4.3"><\/script>');}</script>
 <meta name="robots" content="noindex,nofollow">
 <title>نحو التميز · نسبة الإنجاز الكلية للمشروع — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=10.4.2">
+<link rel="stylesheet" href="phase.css?v=10.4.3">
 <script>/* حارس الإصدار: إن كانت الصفحة محفوظة قديمة في المتصفح تُعاد من الخادم مرة واحدة */
 (function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=10.4.2"></script>
-<script src="portal-role.js?v=10.4.2"></script>
+<script src="portal-meta.js?v=10.4.3"></script>
+<script src="portal-role.js?v=10.4.3"></script>
 <style>
 :root{--d1:#1d4ed8;--d2:#047857;--d3:#b45309;--d4:#7e22ce;--d1b:#eff6ff;--d2b:#ecfdf5;--d3b:#fffbeb;--d4b:#faf5ff}
 .nd-disc{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:8px 14px;font-size:12.8px;line-height:1.9;margin:8px 0 12px}
@@ -33,7 +33,8 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
 .pg-kpi .s{font-size:11px;color:var(--mut)}
 .pg-formula{margin:10px 0 0;font-size:12.5px;color:#334155}
 .pg-doms{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:14px 0}
-.pg-dom{border:1px solid var(--line);border-top:6px solid var(--c);border-radius:14px;background:var(--cb);padding:12px 14px;text-align:start}
+.pg-dom{border:1px solid var(--line);border-top:6px solid var(--c);border-radius:14px;background:var(--cb);padding:12px 14px;cursor:pointer;text-align:start;font:inherit;color:inherit}
+.pg-dom:focus-visible{outline:3px solid var(--c);outline-offset:2px}
 .pg-dom h3{margin:0;font-size:15px;font-weight:900;color:var(--c)}
 .pg-dom .big{font-size:34px;font-weight:900;color:var(--c);line-height:1.2;direction:ltr;text-align:right}
 .pg-bar{display:flex;height:12px;border-radius:999px;background:#fff;border:1px solid var(--line);overflow:hidden}
@@ -58,6 +59,7 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
 .pg-cf{grid-column:1/-1;margin:2px 0 4px}
 .pg-cf>summary{cursor:pointer;font-size:12px;font-weight:700;color:var(--c)}
 .pg-cf .rf-rl{margin-top:4px}
+html.sh-admin:not(.pv-vis) .pg-dom{cursor:default;pointer-events:none}
 .pg-donut{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center}
 .pg-donut svg{width:150px;height:150px;transform:rotate(-90deg)}
 .pg-donut ul{list-style:none;margin:0;padding:0;font-size:12.5px}
@@ -73,10 +75,38 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
 .nd-tm{border:1px solid var(--line);border-inline-start:5px solid var(--c);border-radius:12px;background:var(--cb);padding:8px 12px;font-size:12.8px;line-height:1.9}
 .nd-tm h4{margin:0;font-size:13px;font-weight:900;color:var(--c)}
 .nd-tm .ld{font-weight:800}
+/* الأداة والشجرة */
+.rf-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:10px 0}
+.rf-tools input[type=search],.rf-tools select{font:inherit;font-size:16px;border:1px solid var(--line);border-radius:10px;padding:7px 10px;min-width:0;background:#fff}
+.rf-tools input[type=search]{flex:1 1 220px}
+.rf-cnt{font-size:12px;color:var(--mut);margin-inline-start:auto}
+.rf-dom{border:1px solid var(--line);border-top:6px solid var(--c);border-radius:14px;background:#fff;margin:14px 0;overflow:hidden}
+.rf-dom>summary{cursor:pointer;list-style:none;padding:12px 14px;background:var(--cb);display:flex;flex-direction:column;gap:2px}
+.rf-dom>summary::-webkit-details-marker{display:none}
+.rf-dom>summary b{font-size:16px;color:var(--c);font-weight:900}
+.rf-dom>summary small{font-size:12px;color:#334155}
+.rf-crit{margin:0;border-top:1px solid var(--line)}
+.rf-crit>summary{cursor:pointer;list-style:none;padding:9px 14px;font-weight:800;font-size:14px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.rf-crit>summary::-webkit-details-marker{display:none}
+.rf-crit>summary .n{direction:ltr;color:var(--c);font-weight:900}
+.rf-crit>summary small{color:var(--mut);font-weight:600}
+.rf-ind{border-top:1px dashed var(--line);padding:8px 14px}
+.rf-ind>summary{cursor:pointer;list-style:none;display:flex;gap:8px;align-items:flex-start}
+.rf-ind>summary::-webkit-details-marker{display:none}
+.rf-code{direction:ltr;font-weight:900;color:var(--c);background:var(--cb);border:1px solid var(--line);border-radius:8px;padding:0 8px;font-size:12.5px;white-space:nowrap}
+.rf-txt{font-size:13.5px;font-weight:700;min-width:0;overflow-wrap:anywhere;flex:1}
+.rf-txt small{display:block;color:var(--mut);font-weight:600;font-size:12px}
+.rf-pp{direction:ltr;font-weight:900;font-size:13px;color:var(--c);min-width:42px;text-align:left}
+.rf-body{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin:10px 0 4px}
+.rf-box{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px 12px;min-width:0}
+.rf-box h4{margin:0 0 4px;font-size:12.5px;font-weight:900;color:#334155}
 .rf-rl{list-style:none;margin:0;padding:0}
 .rf-rl li{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap;border-bottom:1px dashed var(--line);padding:5px 0;font-size:12.8px}
 .rf-rl li:last-child{border-bottom:0}
 .rf-rn{font-weight:700;overflow-wrap:anywhere;min-width:0}
+.rf-rs{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap}
+.rf-sn{font-size:11.5px;color:var(--mut);margin:6px 0 0}
+.rf-chip{display:inline-block;font-size:11.5px;font-weight:700;border:1px solid var(--line);background:#fff;border-radius:999px;padding:0 9px;margin:2px 3px 2px 0}
 #rfMod{position:fixed;inset:0;z-index:2147483000;background:rgba(15,23,42,.72);display:none;flex-direction:column;padding:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}
 #rfMod.on{display:flex}
 #rfMod .bar{display:flex;gap:8px;align-items:center;background:#fff;border-radius:12px 12px 0 0;padding:8px 12px;font-weight:800;font-size:13px}
@@ -91,9 +121,9 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
 <main class="ph-main" id="main" style="max-width:1180px"><div class="ph-empty">جارٍ التحميل…</div></main>
 <div id="rfMod" role="dialog" aria-modal="true" aria-label="عرض الملف"><div class="bar"><span id="rfT"></span><a class="ph-btn sm" id="rfO" target="_blank" rel="noopener">فتح في التخزين السحابي</a><button type="button" class="ph-btn sm" id="rfX">إغلاق</button></div><div class="why">إن ظهرت رسالة «لا تملك صلاحية» فسجّل الدخول بحساب Google المصرّح له بمجلد المشروع.</div><iframe id="rfF" title="عرض الملف" allow="fullscreen"></iframe></div>
 
-<script src="portal-names.js?v=10.4.2"></script>
-<script src="phase-data.js?v=10.4.2"></script>
-<script src="phase-core.js?v=10.4.2"></script>
+<script src="portal-names.js?v=10.4.3"></script>
+<script src="phase-data.js?v=10.4.3"></script>
+<script src="phase-core.js?v=10.4.3"></script>
 <script>
 (function () {
   "use strict";
@@ -115,7 +145,62 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
   function kpi(l, v, s) { return '<div class="pg-kpi"><div class="l">' + l + '</div><div class="v">' + v + '</div><div class="s">' + s + "</div></div>"; }
   function repFile(s) { return ((s.rep && s.rep.files) || []).filter(function (x) { return x.valid && x.n > 0 && x.id; }).sort(function (a, b) { return b.n - a.n; })[0]; }
 
-  var lastST = null;
+  var tree = null, cnt = null, fdSel = "", lastST = null, openKeep = {};
+
+  /* ===== بطاقة المؤشر داخل الشجرة ===== */
+  function indHtml(i) {
+    var s = P.sOf(i), rec = i.recs || [], apN = 0, c = COL[i.d];
+    var rc = rec.length ? '<ul class="rf-rl">' + rec.map(function (r) {
+      var k = s.st[r] || "blank", f = s.fl && s.fl[r], ok = !!(f && f[2] && f[0] === 1); if (k === "approved") apN++;
+      return '<li><span class="rf-rn">' + E(r) + '</span><span class="rf-rs">' + P.chip(k) + (ok ? ' <button type="button" class="ph-btn sm" data-v="' + E(f[2]) + '" data-vt="' + E("⁦" + i.code + "⁩ · " + r) + '" aria-label="عرض: ' + E(r) + '"><i class="fa-solid fa-eye"></i> عرض</button>' : "") + "</span></li>";
+    }).join("") + "</ul>" + (s.live ? "" : '<p class="rf-sn">الحالة تقريبية حتى اكتمال تحديث قاعدة البيانات.</p>') : '<span class="ph-lead">لا سجلات مرتبطة.</span>';
+    var rf = repFile(s);
+    var rp = '<div class="rf-rs">' + (rf ? '<span class="ph-chip ok">مرفوع · ' + rf.n + ' صور</span> <button type="button" class="ph-btn sm" data-v="' + E(rf.id) + '" data-vt="' + E("⁦" + i.code + "⁩ · تقرير الشواهد البصرية") + '" aria-label="عرض تقرير الشواهد البصرية"><i class="fa-solid fa-eye"></i> عرض</button>' : '<span class="ph-chip idle">لم يُرفع بعد</span>') +
+      ' <a class="ph-btn sm ad-only" href="report.html?code=' + E(i.code) + '"><i class="fa-solid fa-file-image"></i> ' + (rf ? "فتح في مولّد التقارير" : "إصدار التقرير") + "</a></div>" +
+      '<p class="rf-sn">يُبنى التقرير من سجلات المؤشر المعتمدة ويدعمها؛ ويُحتسب نصف اكتمال المؤشر.</p>';
+    var key = i.code;
+    return '<details class="rf-ind" id="i-' + E(i.code) + '" data-code="' + E(i.code) + '"' + (openKeep[key] ? " open" : "") + ' style="--c:' + c[0] + ";--cb:" + c[1] + '"><summary><span class="rf-code">' + E(i.code) + '</span><span class="rf-txt">' + E(i.text) +
+      "<small>" + (i.dv ? '<span class="rf-chip">سجل متابعة</span>' : '<span class="rf-chip">سجلات رسمية</span>') + "السجل الرئيس: " + E(i.st || "") + " · جاهز " + apN + "/" + rec.length + "</small></span>" +
+      '<span class="rf-pp" title="اكتمال المؤشر">' + pc(s.p) + "%</span></summary>" +
+      '<div class="rf-body"><div class="rf-box"><h4>السجلات الداعمة (' + rec.length + ")</h4>" + rc + '</div><div class="rf-box"><h4>تقرير الشواهد البصرية</h4>' + rp + "</div></div>" +
+      '<p class="ad-only" style="margin:6px 0 0"><a class="ph-btn sm" href="indicators.html?code=' + E(i.code) + '"><i class="fa-solid fa-list-check"></i> مساحة عمل المؤشر (رفع واعتماد)</a></p></details>';
+  }
+
+  function drawTree() {
+    if (!tree) return;
+    var A = document.getElementById("fa").value, term = (document.getElementById("q").value || "").trim().toLowerCase(), D = fdSel, shown = 0, html = "";
+    tree.querySelectorAll(".rf-ind[open]").forEach(function (d) { openKeep[d.dataset.code] = 1; });
+    tree.querySelectorAll(".rf-ind:not([open])").forEach(function (d) { delete openKeep[d.dataset.code]; });
+    var by = {};
+    PH.inds.forEach(function (i) { (by[i.d] = by[i.d] || {}); (by[i.d][i.c] = by[i.d][i.c] || { n: i.cn, l: [] }).l.push(i); });
+    [1, 2, 3, 4].forEach(function (d) {
+      if (D && String(D) !== String(d) || !by[d]) return;
+      var cc = "", dn = 0, c = COL[d];
+      Object.keys(by[d]).forEach(function (k) {
+        var cr = by[d][k], ih = "", n = 0;
+        cr.l.forEach(function (i) {
+          var s = P.sOf(i), st = {}; i.recs.forEach(function (r) { st[s.st[r] || "blank"] = 1; });
+          var rep = !!repFile(s);
+          if (A === "ap" && !st.approved) return; if (A === "rv" && !st.review) return; if (A === "bl" && !(st.blank || st.missing || st.returned)) return;
+          if (A === "rp" && !rep) return; if (A === "norp" && rep) return;
+          if (term && [i.code, i.text, i.st, i.recs.join(" ")].join(" ").toLowerCase().indexOf(term) < 0) return;
+          n++; ih += indHtml(i);
+        });
+        if (n) { dn += n; cc += '<details class="rf-crit" open style="--c:' + c[0] + '"><summary><span class="n">' + E(k) + "</span> " + E(cr.n) + "<small>" + n + " مؤشر · " + pc(P.critP(k, null)) + "%</small></summary>" + ih + "</details>"; }
+      });
+      if (dn) { shown += dn; html += '<details class="rf-dom" id="dom-' + d + '" open style="--c:' + c[0] + ";--cb:" + c[1] + '"><summary><b>المجال ' + d + " — " + E(P.DN[d]) + "</b><small>" + dn + " مؤشر ضمن النتائج</small></summary>" + cc + "</details>"; }
+    });
+    tree.innerHTML = html || '<div class="ph-empty">لا نتائج مطابقة.</div>';
+    cnt.textContent = shown + " من " + PH.inds.length + " مؤشراً";
+  }
+
+  function openInd(code) {
+    var d = document.getElementById("i-" + code);
+    if (!d) { document.getElementById("fa").value = ""; document.getElementById("q").value = ""; fdSel = ""; drawTree(); d = document.getElementById("i-" + code); }
+    if (!d) return;
+    var p = d.parentNode; while (p && p !== tree) { if (p.tagName === "DETAILS") p.open = true; p = p.parentNode; }
+    d.open = true; d.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
 
   /* ===== ملفات المعيار: سجلات معتمدة وتقارير مرفوعة فقط، بزر عرض (بلا شجرة) ===== */
   function vbtn(id, t, lbl) { return '<button type="button" class="ph-btn sm" data-v="' + E(id) + '" data-vt="' + E(t) + '" aria-label="' + E(lbl) + '"><i class="fa-solid fa-eye"></i> عرض</button>'; }
@@ -130,7 +215,7 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
       var rf = repFile(s);
       if (rf) rows.push('<li><span class="rf-rn"><b dir="ltr">' + E(i.code) + "</b> · تقرير الشواهد البصرية</span>" + vbtn(rf.id, "⁦" + i.code + "⁩ · تقرير الشواهد البصرية", "عرض تقرير الشواهد البصرية") + "</li>");
     });
-    return rows.length ? '<details class="pg-cf"><summary>سجلات وتقارير للعرض (' + rows.length + ')</summary><ul class="rf-rl">' + rows.join("") + "</ul></details>" : "";
+    return rows.length ? '<details class="pg-cf ad-only"><summary>سجلات وتقارير للعرض (' + rows.length + ')</summary><ul class="rf-rl">' + rows.join("") + "</ul></details>" : "";
   }
 
   /* المشرف الأكاديمي للقسم: بطاقة منفصلة أعلى فريق العمل */
@@ -151,6 +236,7 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
     var projP = P.projP(), live = ST && ST.live, asof = (ST && ST.asof) || (window.ETEC_SNAPSHOT || {}).asof || "";
     var st = { approved: 0, review: 0, blank: 0, missing: 0 };
     S.forEach(function (x) { x.i.recs.forEach(function (n) { var k = x.s.st[n] || "blank"; if (k === "returned") k = "blank"; st[k] = (st[k] || 0) + 1; }); });
+    var keepQ = document.getElementById("q") ? document.getElementById("q").value : "", keepA = document.getElementById("fa") ? document.getElementById("fa").value : "";
 
     var h = '<h1 class="ph-h1">نحو التميز · نسبة الإنجاز الكلية للمشروع</h1>' +
       '<p class="ph-lead"><b class="vis-only">وضع الاستعراض · للاطلاع فقط</b><b class="ad-only">وضع العمل · مدير النظام</b> · من المجال إلى المعيار فالمؤشر فالسجلات الداعمة وتقرير الشواهد البصرية · ' + (live ? "حالة محدّثة" : "آخر لقطة محفوظة") + (asof ? " · " + E(asof) : "") + "</p>" +
@@ -165,13 +251,13 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
       kpi("تقارير الشواهد البصرية", T.repDone + " / " + T.ind, "مرفوعة") + "</div>" +
       '<p class="pg-formula"><b>كيف تُقرأ النسبة؟</b> الأساس الحالي: ' + E(P.basisTxt()) + ". ثم يُؤخذ المتوسط على المعايير فالمجالات فالمشروع.</p></div></section>";
 
-    h += '<h2 class="ph-h2">المجالات</h2><div class="pg-doms">';
+    h += '<h2 class="ph-h2">المجالات <small class="vis-only" style="font-weight:600;color:var(--mut)">(اضغط مجالاً لتصفية الشجرة)</small></h2><div class="pg-doms">';
     [1, 2, 3, 4].forEach(function (d) {
       var l = S.filter(function (x) { return x.i.d === d; }), t = P.totals(l.map(function (x) { return x.i; })), ba = avg(l.map(function (x) { return x.s.pa; })), bb = avg(l.map(function (x) { return x.s.pb; })), br = avg(l.map(function (x) { return x.s.pr; })), tot = ba + bb + br, tf = l.length ? t.repDone / l.length : 0;
-      h += '<div class="pg-dom" style="--c:' + COL[d][0] + ";--cb:" + COL[d][1] + '"><h3>' + E(P.DN[d]) + '</h3><div class="big">' + pc(tot) + "%</div>" +
+      h += '<button type="button" class="pg-dom" data-dom="' + d + '" style="--c:' + COL[d][0] + ";--cb:" + COL[d][1] + '"><h3>' + E(P.DN[d]) + '</h3><div class="big">' + pc(tot) + "%</div>" +
         '<div class="pg-bar" role="img" aria-label="منشأة ' + pc(ba) + "% وجاهزة " + pc(bb) + "% وتقارير " + pc(br) + '% من 100"><i class="b" style="width:' + (ba * 100).toFixed(1) + '%"></i><i class="r" style="width:' + (bb * 100).toFixed(1) + '%"></i><i class="t" style="width:' + (br * 100).toFixed(1) + '%"></i></div>' +
         '<div class="pg-leg"><span style="--k:color-mix(in srgb,' + COL[d][0] + ' 40%,#fff)">منشأة ' + pc(ba) + '%</span><span style="--k:' + COL[d][0] + '">جاهزة ' + pc(bb) + '%</span><span style="--k:repeating-linear-gradient(45deg,' + COL[d][0] + "," + COL[d][0] + ' 2px,#fff 2px,#fff 4px)">التقارير ' + pc(br) + "%</span></div>" +
-        "<ul><li>المؤشرات · المعايير<b>" + l.length + " · " + P.critList(d).length + "</b></li><li>سجلات جاهزة<b>" + t.ap + " / " + t.req + "</b></li><li>سجلات منشأة<b>" + t.cr + " / " + t.req + "</b></li><li>قيد المراجعة<b>" + t.review + "</b></li><li>تقارير مرفوعة<b>" + t.repDone + " / " + l.length + "</b></li></ul></div>";
+        "<ul><li>المؤشرات · المعايير<b>" + l.length + " · " + P.critList(d).length + "</b></li><li>سجلات جاهزة<b>" + t.ap + " / " + t.req + "</b></li><li>سجلات منشأة<b>" + t.cr + " / " + t.req + "</b></li><li>قيد المراجعة<b>" + t.review + "</b></li><li>تقارير مرفوعة<b>" + t.repDone + " / " + l.length + "</b></li></ul></button>";
     });
     h += "</div>";
 
@@ -185,26 +271,41 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
 
     h += teamHtml();
 
+    h += '<div class="vis-only"><h2 class="ph-h2" style="margin-top:18px">المجال ← المعيار ← المؤشر ← السجلات الداعمة ← تقرير الشواهد البصرية</h2>' +
+      '<div class="rf-tools" role="search"><input type="search" id="q" placeholder="ابحث: رمز مؤشر (1-1-1-1) أو كلمة من نص المؤشر أو اسم سجل" aria-label="بحث">' +
+      '<select id="fa" aria-label="تصفية بحالة السجلات"><option value="">كل الحالات</option><option value="ap">فيها سجلات جاهزة</option><option value="rv">فيها سجلات قيد المراجعة</option><option value="bl">فيها سجلات بانتظار التعبئة أو معادة</option><option value="rp">تقريرها البصري مرفوع</option><option value="norp">تقريرها البصري غير مرفوع</option></select>' +
+      '<button type="button" class="ph-btn sm" id="ex">فتح الكل</button><button type="button" class="ph-btn sm" id="clr">إزالة التصفية</button><span class="rf-cnt" id="cnt" role="status"></span></div><div id="tree"></div></div>';
+
     main.innerHTML = h;
+    tree = document.getElementById("tree"); cnt = document.getElementById("cnt");
+    document.getElementById("q").value = keepQ; document.getElementById("fa").value = keepA;
+    drawTree();
   }
 
   /* ===== تفاعل ثابت (تفويض أحداث) ===== */
-  var mod = document.getElementById("rfMod"), fr = document.getElementById("rfF"), lastBtn = null;
+  var mod = document.getElementById("rfMod"), fr = document.getElementById("rfF"), lastBtn = null, t0;
   function closeM() { mod.classList.remove("on"); fr.removeAttribute("src"); if (lastBtn && document.body.contains(lastBtn)) lastBtn.focus(); }
   document.getElementById("rfX").addEventListener("click", closeM);
   mod.addEventListener("click", function (e) { if (e.target === mod) closeM(); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && mod.classList.contains("on")) closeM(); });
+  main.addEventListener("input", function (e) { if (e.target.id === "q") { clearTimeout(t0); t0 = setTimeout(drawTree, 160); } });
+  main.addEventListener("change", function (e) { if (e.target.id === "fa") drawTree(); });
   main.addEventListener("click", function (e) {
     var b = e.target.closest("[data-v]");
-    if (b) { lastBtn = b; var id = b.dataset.v; document.getElementById("rfT").textContent = b.dataset.vt || ""; document.getElementById("rfO").href = "https://drive.google.com/file/d/" + id + "/view"; fr.src = "https://drive.google.com/file/d/" + id + "/preview"; mod.classList.add("on"); document.getElementById("rfX").focus(); }
+    if (b) { lastBtn = b; var id = b.dataset.v; document.getElementById("rfT").textContent = b.dataset.vt || ""; document.getElementById("rfO").href = "https://drive.google.com/file/d/" + id + "/view"; fr.src = "https://drive.google.com/file/d/" + id + "/preview"; mod.classList.add("on"); document.getElementById("rfX").focus(); return; }
+    var d = e.target.closest("[data-dom]");
+    if (d) { fdSel = String(fdSel) === d.dataset.dom ? "" : d.dataset.dom; drawTree(); var t = document.getElementById("tree"); if (t) t.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+    if (e.target.closest("#clr")) { fdSel = ""; document.getElementById("q").value = ""; document.getElementById("fa").value = ""; drawTree(); return; }
+    var x = e.target.closest("#ex");
+    if (x) { var open = x.dataset.o !== "1"; tree.querySelectorAll(".rf-ind").forEach(function (n) { n.open = open; }); x.dataset.o = open ? "1" : ""; x.textContent = open ? "طيّ الكل" : "فتح الكل"; }
   });
 
   P.onStatus(render);
   P.load(false);
 })();
 </script>
-<script src="page-gate.js?v=10.4.2" data-lazy="1"></script>
-<script src="legal-notice.js?v=10.4.2"></script>
-<script src="content-protect.js?v=10.4.2"></script>
+<script src="page-gate.js?v=10.4.3" data-lazy="1"></script>
+<script src="legal-notice.js?v=10.4.3"></script>
+<script src="content-protect.js?v=10.4.3"></script>
 </body>
 </html>
