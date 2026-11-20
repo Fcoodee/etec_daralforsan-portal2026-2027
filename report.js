@@ -163,7 +163,9 @@
   $("btnPrint").addEventListener("click", function () {
     var n = count(); if (n < 1) { msg("saveMsg", "أضف صورة واحدة على الأقل.", "bad"); return; }
     var old = document.title; document.title = fname().replace(/\.pdf$/, "");
-    var back = function () { document.title = old; window.removeEventListener("afterprint", back); }; window.addEventListener("afterprint", back);
+    /* استثناء ضيّق: طباعة التقرير لجلسة مدير النظام وحدها (الصنف rp-print يُزال بعد الطباعة؛ بقية الصفحات والزوار محجوبون كما كانوا) */
+    var de = document.documentElement; de.classList.add("rp-print");
+    var back = function () { document.title = old; de.classList.remove("rp-print"); window.removeEventListener("afterprint", back); }; window.addEventListener("afterprint", back);
     window.print();
   });
   $("btnCopy").addEventListener("click", function () { try { navigator.clipboard.writeText(fname()); msg("saveMsg", "نُسخ الاسم.", "ok"); } catch (e) { msg("saveMsg", "تعذّر النسخ؛ انسخه يدوياً.", "bad"); } });

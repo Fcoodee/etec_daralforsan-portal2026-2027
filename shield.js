@@ -13,7 +13,7 @@
     "background:#0b1f3a;background:rgba(11,31,58,.985);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);color:#fff;font-family:Cairo,Tahoma,Arial,sans-serif;direction:rtl}" +
     "#sh-veil b{font-size:18px}#sh-veil span{font-size:12px;opacity:.75;direction:ltr}" +
     "html.sh-on:not(.sh-admin) #sh-veil{display:flex}" +
-    "@media print{html,body{display:none!important;visibility:hidden!important}}";
+    "@media print{html:not(.sh-admin.rp-print),html:not(.sh-admin.rp-print) body{display:none!important;visibility:hidden!important}}";
   var st = d.createElement("style"); st.id = "sh-css"; st.appendChild(d.createTextNode(css));
   (d.head || de).appendChild(st);
 
