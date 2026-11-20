@@ -76,7 +76,7 @@
       '<div class="pt" dir="auto">' + ptText(s) + "</div></div></div>";
   }
   function regSlotHtml(name, url, k) {
-    return '<div class="slot reg"><div class="ph" aria-label="Approved register">' + qrSvg(url, 150) + '<span class="num">R' + (k + 1) + "</span></div>" +
+    return '<div class="slot reg"><div class="ph" aria-label="Approved register"><a class="rq" href="' + E(url) + '" target="_blank" rel="noopener" title="Open the approved record (PDF)">' + qrSvg(url, 150) + '</a><span class="num">R' + (k + 1) + "</span></div>" +
       '<div class="meta"><div class="pt" style="display:block" dir="auto">Approved register: ' + E(name) + '<br><small>Scan to open the approved record (PDF)</small></div></div></div>';
   }
   function ptText(s) { var a = []; if (s.cap) a.push(E(s.cap)); var m = []; if (s.date) m.push(E(s.date)); if (s.src) m.push(E(s.src)); if (m.length) a.push("<small>" + m.join(" · ") + "</small>"); return a.join("<br>"); }
@@ -97,7 +97,7 @@
   function render() {
     var i = ind(), now = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     /* قرار مدير المشروع: الرسمي (المجال/المعيار/المؤشر/الإضاءات) بلغتين؛ وما يخص القسم (السجلات والوثائق) بالإنجليزية فقط */
-    /* v10.6.0: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
+    /* v10.6.1: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
     var regs = i.recs.map(function (r, k) { return regSlotHtml(I.rec[r] || r, qrUrl("rec", k), k); });
     var dl = (window.ETEC_DOCS && window.ETEC_DOCS[i.code]) || [];
     var docs = dl.length ? dl.map(function (x) { return '<li class="rec-q"><div class="bi"><div class="en">' + E(x.en) + "</div></div>" + qrBox(x.u, 64, "Scan: open this document") + "</li>"; })
