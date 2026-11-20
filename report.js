@@ -1,10 +1,13 @@
-/* report.js — v9.2.0 — صفحة العمل على قالب تقرير الشواهد البصرية: خانات صور وأوصاف، مسودة محلية، إصدار PDF بالاسم الصحيح، ورفع/مسودة مركزية عبر Apps Script. */
+/* report.js — v10.7.0 — محرّر حي لمدير النظام: تحميل المسودة المركزية تلقائياً، استبدال صورة بنقرة، مؤشر التزامن، ثم حفظ مركزي ← PDF ← رفع.
+   (أصله v9.2.0: صفحة العمل على قالب تقرير الشواهد البصرية: خانات صور وأوصاف، مسودة محلية، إصدار PDF بالاسم الصحيح، ورفع/مسودة مركزية عبر Apps Script.) */
 (function () {
   "use strict";
   var P = window.PHC; if (!P) return;
   var E = P.esc, DEF = 6, MAXS = 12, TK = "etec.tok.v1", WK = "etec.who.v1";
   var $ = function (id) { return document.getElementById(id); };
-  var code = "", slots = [], saveT = null, ready = false, db = null, upOK = false;
+  var code = "", slots = [], saveT = null, ready = false, db = null, upOK = false, dirty = false, localTs = 0, pulled = "", repIdx = -1;
+  function sync(t, c) { var e = $("syncState"); if (!e) return; e.textContent = t; e.className = "ph-chip " + (c || "idle"); }
+  function setDirty(v) { dirty = v; sync(v ? "تغييرات غير محفوظة مركزياً" : "محفوظ مركزياً", v ? "wip" : "ok"); }
 
   function ind() { return P.byCode(code); }
   function blank() { return { img: "", link: "", cap: "", date: "", src: "" }; }
@@ -38,8 +41,8 @@
     });
   }
   function save() {
-    if (!ready) return; clearTimeout(saveT);
-    saveT = setTimeout(function () { dbPut(code, { slots: slots, updated: Date.now() }).then(function (ok) { msg("saveMsg", ok ? "حُفظت المسودة على هذا الجهاز " + new Date().toLocaleTimeString("ar-SA") : "تعذّر الحفظ على الجهاز (المساحة ممتلئة)؛ صدّر المسودة ملفاً.", ok ? "ok" : "bad"); }); }, 400);
+    if (!ready) return; clearTimeout(saveT); setDirty(true);
+    saveT = setTimeout(function () { localTs = Date.now(); dbPut(code, { slots: slots, updated: localTs }).then(function (ok) { msg("saveMsg", ok ? "حُفظت المسودة على هذا الجهاز " + new Date().toLocaleTimeString("ar-SA") : "تعذّر الحفظ على الجهاز (المساحة ممتلئة)؛ صدّر المسودة ملفاً.", ok ? "ok" : "bad"); }); }, 400);
   }
   function fit() { while (slots.length < DEF) slots.push(blank()); }
 
@@ -69,7 +72,7 @@
     var h = has(s), src = s.img || driveImg(s.link);
     return '<div class="slot' + (h ? "" : " empty") + '" data-i="' + i + '"><div class="ph" data-pick tabindex="0" role="button" aria-label="Upload photo for slot ' + (i + 1) + '">' +
       (h ? '<img alt="Evidence ' + (i + 1) + '" src="' + E(src) + '">' : '<span class="hint"><i class="fa-regular fa-image" style="font-size:26px"></i><br>Click to choose a photo or drop it here</span>') +
-      '<span class="num">' + (i + 1) + "</span>" + (h ? '<button type="button" class="x" data-rm title="Remove photo" aria-label="Remove">×</button>' : "") + "</div>" +
+      '<span class="num">' + (i + 1) + "</span>" + (h ? '<button type="button" class="x" data-rm title="Remove photo" aria-label="Remove">×</button><button type="button" class="rep noprint" data-rep title="Replace this photo (keeps the description)">استبدال</button>' : "") + "</div>" +
       '<div class="meta"><textarea class="in" data-f="cap" dir="auto" rows="2" placeholder="Evidence description: what does it show, and which activity?">' + E(s.cap) + '</textarea>' +
       '<div class="in" style="display:grid;grid-template-columns:1fr 1fr;gap:5px"><input type="date" data-f="date" value="' + E(s.date) + '" aria-label="Date"><input type="text" dir="auto" data-f="src" value="' + E(s.src) + '" placeholder="Record / source" aria-label="Source"></div>' +
       '<input class="in" type="text" dir="ltr" data-f="link" value="' + E(s.link) + '" placeholder="Or paste an image link (Cloud Storage or other)" aria-label="Image link">' +
@@ -97,7 +100,7 @@
   function render() {
     var i = ind(), now = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     /* قرار مدير المشروع: الرسمي (المجال/المعيار/المؤشر/الإضاءات) بلغتين؛ وما يخص القسم (السجلات والوثائق) بالإنجليزية فقط */
-    /* v10.6.4: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
+    /* v10.7.0: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
     var regs = i.recs.map(function (r, k) { return regSlotHtml(I.rec[r] || r, qrUrl("rec", k), k); });
     var dl = (window.ETEC_DOCS && window.ETEC_DOCS[i.code]) || [];
     var docs = dl.length ? dl.map(function (x) { return '<li class="rec-q"><div class="bi"><div class="en">' + E(x.en) + "</div></div>" + qrBox(x.u, 64, "Scan: open this document") + "</li>"; })
@@ -119,7 +122,7 @@
       listSec("Highlights toward achieving the indicator", "إضاءات نحو تحقيق المؤشر", hl, "Official highlights will be added here.").replace('<section class="sec">', '<section class="sec' + (hl.length ? "" : " noprint") + '">') +
       "</div>" +
       '<div class="sh-foot"><span>Evidence photos: <b>' + count() + "</b> · Unofficial English translation — the Arabic text is the reference.</span><span>Internal platform — not affiliated with the Education and Training Evaluation Commission (ETEC).</span></div>";
-    /* v10.6.4: الصور الطولية (ملصقات/لقطات جوال) تُعرض بإطار أطول بدل شريط عريض صغير */
+    /* v10.7.0: الصور الطولية (ملصقات/لقطات جوال) تُعرض بإطار أطول بدل شريط عريض صغير */
     Array.prototype.forEach.call(document.querySelectorAll("#sheet .slot:not(.reg) .ph img"), function (im) {
       var f = function () { if (im.naturalHeight > im.naturalWidth * 1.15) im.parentNode.classList.add("tall"); };
       if (im.complete) f(); else im.addEventListener("load", f);
@@ -141,6 +144,7 @@
   var fileIn = document.createElement("input"); fileIn.type = "file"; fileIn.accept = "image/*"; fileIn.multiple = true; var target = 0;
   fileIn.addEventListener("change", function () {
     var fl = Array.prototype.slice.call(fileIn.files || []), i = target;
+    if (repIdx >= 0) { var ri = repIdx; repIdx = -1; if (fl[0]) setImg(ri, fl[0]); fileIn.value = ""; return; }
     fl.forEach(function (f, k) {
       var j = i; while (j < slots.length && has(slots[j]) && j < MAXS) j++;
       if (j >= slots.length && slots.length < MAXS) { slots.push(blank()); }
@@ -152,6 +156,7 @@
   grid.addEventListener("click", function (e) {
     var sl = e.target.closest(".slot"); if (!sl) return; var i = +sl.dataset.i;
     if (e.target.closest("[data-rm]")) { slots[i].img = ""; slots[i].link = ""; render(); save(); return; }
+    if (e.target.closest("[data-rep]")) { repIdx = i; fileIn.click(); return; }
     if (e.target.closest("[data-pick]") && !has(slots[i])) { target = i; fileIn.click(); }
   });
   grid.addEventListener("keydown", function (e) { if ((e.key === "Enter" || e.key === " ") && e.target.matches("[data-pick]")) { e.preventDefault(); e.target.click(); } });
@@ -217,12 +222,28 @@
     return fetch(url(), { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) }).then(function (r) { return r.json(); });
   }
   function upEnable(on) { ["btnUp", "btnSaveC", "btnLoadC"].forEach(function (id) { $(id).disabled = !on; }); }
+  /* v10.7.0: عند فتح المؤشر تُجلب المسودة المركزية؛ الأحدث (المركزية أم المحلية) هي المعتمدة، ولا يُكتب فوق عمل أحدث */
+  function autoPull() {
+    if (pulled === code) return; var c0 = code; pulled = c0;
+    post("loadDraft").then(function (o) {
+      if (c0 !== code || !o || !o.ok) return;
+      if (!o.draft) { if (count()) setDirty(true); else sync("لا مسودة مركزية بعد", "idle"); return; }
+      var ct = Date.parse(o.saved) || 0;
+      if (!count() || ct > localTs) {
+        var d; try { d = JSON.parse(o.draft); } catch (e) { return; }
+        slots = (d.slots || []).slice(0, MAXS).map(function (x) { return { img: x.img || "", link: x.link || "", cap: x.cap || "", date: x.date || "", src: x.src || "" }; }); fit(); render();
+        dbPut(code, { slots: slots, updated: ct }); localTs = ct; setDirty(false);
+        msg("saveMsg", "حُمّلت المسودة المركزية (" + new Date(ct).toLocaleString("ar-SA") + ").", "ok");
+      } else if (localTs > ct + 2000) { setDirty(true); msg("saveMsg", "النسخة على هذا الجهاز أحدث من المركزية؛ احفظ مركزياً.", "bad"); }
+      else setDirty(false);
+    }).catch(function () {});
+  }
   function ping() {
     upOK = false; upEnable(false);
     if (!url()) { chip("غير مفعّل", "idle"); msg("upMsg", "رابط السكربت غير مضبوط.", "bad"); return; }
     chip("يتحقق…", "wip");
     post("ping").then(function (r) {
-      if (r && r.ok) { upOK = true; upEnable(true); chip("جاهز", "ok"); msg("upMsg", "متصل بالسكربت " + (r.v || ""), "ok"); try { localStorage.setItem(TK, tok()); localStorage.setItem(WK, $("who").value.trim()); } catch (e) {} }
+      if (r && r.ok) { upOK = true; upEnable(true); chip("جاهز", "ok"); autoPull(); msg("upMsg", "متصل بالسكربت " + (r.v || ""), "ok"); try { localStorage.setItem(TK, tok()); localStorage.setItem(WK, $("who").value.trim()); } catch (e) {} }
       else { chip("غير جاهز", "bad"); msg("upMsg", (r && r.error) || "تعذّر التحقق.", "bad"); }
     }).catch(function () { chip("غير متاح", "bad"); msg("upMsg", "تعذّر الاتصال بالسكربت.", "bad"); });
   }
@@ -244,7 +265,7 @@
     r.readAsDataURL(f);
   });
   $("btnSaveC").addEventListener("click", function () {
-    msg("upMsg", "جارٍ الحفظ…"); post("saveDraft", { draft: JSON.stringify({ code: code, slots: slots, v: "9.2.0" }) }).then(function (o) { msg("upMsg", o && o.ok ? "حُفظت المسودة مركزياً." : (o && o.error) || "فشل الحفظ.", o && o.ok ? "ok" : "bad"); }).catch(function () { msg("upMsg", "تعذّر الاتصال.", "bad"); });
+    msg("upMsg", "جارٍ الحفظ…"); post("saveDraft", { draft: JSON.stringify({ code: code, slots: slots, v: "9.2.0" }) }).then(function (o) { if (o && o.ok) setDirty(false); msg("upMsg", o && o.ok ? "حُفظت المسودة مركزياً." : (o && o.error) || "فشل الحفظ.", o && o.ok ? "ok" : "bad"); }).catch(function () { msg("upMsg", "تعذّر الاتصال.", "bad"); });
   });
   $("btnLoadC").addEventListener("click", function () {
     post("loadDraft").then(function (o) {
@@ -258,9 +279,9 @@
   /* ===== تشغيل ===== */
   function rpLink() { var i = ind(), s = i && P.sOf(i), a = $("lnkRp"); if (s && s.fo && s.fo.rp) { a.href = P.subUrl(s.fo.rp); a.hidden = false; } else { a.href = P.subUrl ? P.folderUrl(i) : "#"; a.hidden = false; a.textContent = "مجلد المؤشر"; } }
   function open(c) {
-    code = c; ready = false; slots = []; try { history.replaceState(null, "", "report.html?code=" + encodeURIComponent(c)); } catch (e) {}
+    code = c; ready = false; slots = []; localTs = 0; dirty = false; pulled = ""; sync("…", "idle"); try { history.replaceState(null, "", "report.html?code=" + encodeURIComponent(c)); } catch (e) {}
     $("indSel").value = c; document.title = "تقرير الشواهد البصرية " + c;
-    return dbGet(c).then(function (d) { slots = d && Array.isArray(d.slots) ? d.slots.slice(0, MAXS) : []; fit(); render(); ready = true; loadRefs(); rpLink(); if (d) msg("saveMsg", "استُرجعت مسودتك المحفوظة على هذا الجهاز.", "ok"); else msg("saveMsg", ""); if (tok().length >= 8) ping(); });
+    return dbGet(c).then(function (d) { slots = d && Array.isArray(d.slots) ? d.slots.slice(0, MAXS) : []; localTs = d && d.updated || 0; fit(); render(); ready = true; loadRefs(); rpLink(); if (d) msg("saveMsg", "استُرجعت مسودتك المحفوظة على هذا الجهاز.", "ok"); else msg("saveMsg", ""); if (tok().length >= 8) ping(); });
   }
   function init() {
     P.chrome("report.html");
@@ -284,5 +305,8 @@
     P.onStatus(function () { if (ready) rpLink(); });
     P.load();
   }
+  /* شريط العمل: ثلاث خطوات تستدعي الأزرار الأصلية */
+  [["tbSave", "btnSaveC"], ["tbPrint", "btnPrint"], ["tbUp", "btnUp"]].forEach(function (p) { var a = $(p[0]); if (a) a.addEventListener("click", function () { var b = $(p[1]); if (b && !b.disabled) b.click(); else msg("saveMsg", p[0] === "tbPrint" ? "أضف صورة واحدة على الأقل." : "السكربت غير جاهز بعد؛ انتظر لحظة.", "bad"); }); });
+  window.addEventListener("beforeunload", function (e) { if (dirty && count()) { e.preventDefault(); e.returnValue = ""; } });
   init();
 })();
