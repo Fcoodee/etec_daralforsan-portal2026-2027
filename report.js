@@ -1,4 +1,4 @@
-/* report.js — v10.7.0 — محرّر حي لمدير النظام: تحميل المسودة المركزية تلقائياً، استبدال صورة بنقرة، مؤشر التزامن، ثم حفظ مركزي ← PDF ← رفع.
+/* report.js — v10.7.1 — محرّر حي لمدير النظام: تحميل المسودة المركزية تلقائياً، استبدال صورة بنقرة، مؤشر التزامن، ثم حفظ مركزي ← PDF ← رفع.
    (أصله v9.2.0: صفحة العمل على قالب تقرير الشواهد البصرية: خانات صور وأوصاف، مسودة محلية، إصدار PDF بالاسم الصحيح، ورفع/مسودة مركزية عبر Apps Script.) */
 (function () {
   "use strict";
@@ -100,7 +100,7 @@
   function render() {
     var i = ind(), now = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     /* قرار مدير المشروع: الرسمي (المجال/المعيار/المؤشر/الإضاءات) بلغتين؛ وما يخص القسم (السجلات والوثائق) بالإنجليزية فقط */
-    /* v10.7.0: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
+    /* v10.7.1: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
     var regs = i.recs.map(function (r, k) { return regSlotHtml(I.rec[r] || r, qrUrl("rec", k), k); });
     var dl = (window.ETEC_DOCS && window.ETEC_DOCS[i.code]) || [];
     var docs = dl.length ? dl.map(function (x) { return '<li class="rec-q"><div class="bi"><div class="en">' + E(x.en) + "</div></div>" + qrBox(x.u, 64, "Scan: open this document") + "</li>"; })
@@ -122,7 +122,7 @@
       listSec("Highlights toward achieving the indicator", "إضاءات نحو تحقيق المؤشر", hl, "Official highlights will be added here.").replace('<section class="sec">', '<section class="sec' + (hl.length ? "" : " noprint") + '">') +
       "</div>" +
       '<div class="sh-foot"><span>Evidence photos: <b>' + count() + "</b> · Unofficial English translation — the Arabic text is the reference.</span><span>Internal platform — not affiliated with the Education and Training Evaluation Commission (ETEC).</span></div>";
-    /* v10.7.0: الصور الطولية (ملصقات/لقطات جوال) تُعرض بإطار أطول بدل شريط عريض صغير */
+    /* v10.7.1: الصور الطولية (ملصقات/لقطات جوال) تُعرض بإطار أطول بدل شريط عريض صغير */
     Array.prototype.forEach.call(document.querySelectorAll("#sheet .slot:not(.reg) .ph img"), function (im) {
       var f = function () { if (im.naturalHeight > im.naturalWidth * 1.15) im.parentNode.classList.add("tall"); };
       if (im.complete) f(); else im.addEventListener("load", f);
@@ -222,7 +222,7 @@
     return fetch(url(), { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) }).then(function (r) { return r.json(); });
   }
   function upEnable(on) { ["btnUp", "btnSaveC", "btnLoadC"].forEach(function (id) { $(id).disabled = !on; }); }
-  /* v10.7.0: عند فتح المؤشر تُجلب المسودة المركزية؛ الأحدث (المركزية أم المحلية) هي المعتمدة، ولا يُكتب فوق عمل أحدث */
+  /* v10.7.1: عند فتح المؤشر تُجلب المسودة المركزية؛ الأحدث (المركزية أم المحلية) هي المعتمدة، ولا يُكتب فوق عمل أحدث */
   function autoPull() {
     if (pulled === code) return; var c0 = code; pulled = c0;
     post("loadDraft").then(function (o) {
@@ -244,8 +244,8 @@
     chip("يتحقق…", "wip");
     post("ping").then(function (r) {
       if (r && r.ok) { upOK = true; upEnable(true); chip("جاهز", "ok"); autoPull(); msg("upMsg", "متصل بالسكربت " + (r.v || ""), "ok"); try { localStorage.setItem(TK, tok()); localStorage.setItem(WK, $("who").value.trim()); } catch (e) {} }
-      else { chip("غير جاهز", "bad"); msg("upMsg", (r && r.error) || "تعذّر التحقق.", "bad"); }
-    }).catch(function () { chip("غير متاح", "bad"); msg("upMsg", "تعذّر الاتصال بالسكربت.", "bad"); });
+      else { sync("السكربت غير جاهز", "bad"); chip("غير جاهز", "bad"); msg("upMsg", (r && r.error) || "تعذّر التحقق.", "bad"); }
+    }).catch(function () { sync("تعذّر الاتصال بالسكربت", "bad"); chip("غير متاح", "bad"); msg("upMsg", "تعذّر الاتصال بالسكربت.", "bad"); });
   }
   $("tok").addEventListener("change", ping); $("who").addEventListener("change", function () { try { localStorage.setItem(WK, this.value.trim()); } catch (e) {} });
   $("btnUp").addEventListener("click", function () { if (upOK) $("pdfIn").click(); });
@@ -277,11 +277,19 @@
   });
 
   /* ===== تشغيل ===== */
+  /* عرض التقرير المرفوع حالياً من التخزين السحابي (لا يعتمد على سكربت المسودات) */
+  function curRep() {
+    var i = ind(), st = i && P.sOf ? P.sOf(i) : null, fl = st && st.rep && st.rep.files || [];
+    var rf = fl.filter(function (x) { return x.valid && x.n > 0 && x.id; }).sort(function (x, y) { return y.n - x.n; })[0];
+    var b = $("curBody"), sm = $("curSum"); if (!b) return;
+    if (rf) { sm.textContent = "التقرير المرفوع حالياً — " + rf.n + " صور"; b.innerHTML = '<iframe loading="lazy" title="التقرير المرفوع" src="https://drive.google.com/file/d/' + E(rf.id) + '/preview"></iframe><p class="none">هذا هو الملف المحفوظ الآن في مجلد المؤشر. للتعديل استعمل الخانات أدناه ثم «② إصدار PDF» و«③ رفع PDF».</p>'; }
+    else { sm.textContent = "التقرير المرفوع حالياً"; b.innerHTML = '<p class="none">لا يوجد تقرير مرفوع لهذا المؤشر بعد (أو أن حالة قاعدة البيانات لم تكتمل تحديثها).</p>'; }
+  }
   function rpLink() { var i = ind(), s = i && P.sOf(i), a = $("lnkRp"); if (s && s.fo && s.fo.rp) { a.href = P.subUrl(s.fo.rp); a.hidden = false; } else { a.href = P.subUrl ? P.folderUrl(i) : "#"; a.hidden = false; a.textContent = "مجلد المؤشر"; } }
   function open(c) {
     code = c; ready = false; slots = []; localTs = 0; dirty = false; pulled = ""; sync("…", "idle"); try { history.replaceState(null, "", "report.html?code=" + encodeURIComponent(c)); } catch (e) {}
     $("indSel").value = c; document.title = "تقرير الشواهد البصرية " + c;
-    return dbGet(c).then(function (d) { slots = d && Array.isArray(d.slots) ? d.slots.slice(0, MAXS) : []; localTs = d && d.updated || 0; fit(); render(); ready = true; loadRefs(); rpLink(); if (d) msg("saveMsg", "استُرجعت مسودتك المحفوظة على هذا الجهاز.", "ok"); else msg("saveMsg", ""); if (tok().length >= 8) ping(); });
+    return dbGet(c).then(function (d) { slots = d && Array.isArray(d.slots) ? d.slots.slice(0, MAXS) : []; localTs = d && d.updated || 0; fit(); render(); ready = true; loadRefs(); rpLink(); curRep(); if (d) msg("saveMsg", "استُرجعت مسودتك المحفوظة على هذا الجهاز.", "ok"); else msg("saveMsg", ""); if (tok().length >= 8) ping(); });
   }
   function init() {
     P.chrome("report.html");
@@ -302,7 +310,7 @@
     try { $("tok").value = localStorage.getItem(TK) || ""; $("who").value = localStorage.getItem(WK) || (me && me.idx >= 0 ? P.PH.teams[me.d].mem[me.idx] : ""); } catch (e) {}
     var first = P.byCode(q) && allowed(q) ? q : (scope ? (scope[0] ? scope[0].code : P.PH.inds[0].code) : P.PH.inds[0].code);
     openDb().then(function () { return open(first); }).then(function () { ping(); });
-    P.onStatus(function () { if (ready) rpLink(); });
+    P.onStatus(function () { if (ready) { rpLink(); curRep(); } });
     P.load();
   }
   /* شريط العمل: ثلاث خطوات تستدعي الأزرار الأصلية */

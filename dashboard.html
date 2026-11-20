@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=10.7.0"></script>
-<script src="portal-config.js?v=10.7.0"></script>
-<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.7.0" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.7.0"><\/script>');}</script>
+<script src="shield.js?v=10.7.1"></script>
+<script src="portal-config.js?v=10.7.1"></script>
+<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.7.1" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.7.1"><\/script>');}</script>
 <meta name="robots" content="noindex,nofollow">
 <title>نحو التميز · نسبة الإنجاز الكلية للمشروع — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=10.7.0">
+<link rel="stylesheet" href="phase.css?v=10.7.1">
 <script>/* حارس الإصدار: إن كانت الصفحة محفوظة قديمة في المتصفح تُعاد من الخادم مرة واحدة */
 (function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=10.7.0"></script>
-<script src="portal-role.js?v=10.7.0"></script>
+<script src="portal-meta.js?v=10.7.1"></script>
+<script src="portal-role.js?v=10.7.1"></script>
 <style>
 :root{--d1:#1d4ed8;--d2:#047857;--d3:#b45309;--d4:#7e22ce;--d1b:#eff6ff;--d2b:#ecfdf5;--d3b:#fffbeb;--d4b:#faf5ff}
 .nd-disc{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:8px 14px;font-size:12.8px;line-height:1.9;margin:8px 0 12px}
@@ -59,7 +59,17 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
 .pg-cf{grid-column:1/-1;margin:2px 0 4px}
 .pg-cf>summary{cursor:pointer;font-size:12px;font-weight:700;color:var(--c)}
 .pg-cf .rf-rl{margin-top:4px}
-html.sh-admin:not(.pv-vis) .pg-dom{cursor:default;pointer-events:none}
+html.sh-admin:not(.pv-vis) .pg-dom{cursor:default}
+.pg-dom{position:relative;overflow:hidden;transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s,border-color .22s,background .22s}
+.pg-dom::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(-120%);pointer-events:none}
+.pg-dom:hover,.pg-dom:focus-visible{transform:translateY(-5px) scale(1.02);box-shadow:0 14px 30px -10px color-mix(in srgb,var(--c) 55%,transparent),0 3px 8px rgba(15,23,42,.08);border-color:var(--c)}
+.pg-dom:hover::after{transform:translateX(120%);transition:transform .8s ease}
+.pg-dom .big{display:inline-block;transition:transform .25s cubic-bezier(.3,1.6,.5,1);transform-origin:right center}
+.pg-dom:hover .big{transform:scale(1.14)}
+.pg-dom:hover .pg-bar{box-shadow:0 0 0 2px color-mix(in srgb,var(--c) 30%,transparent)}
+.pg-dom li{transition:padding .18s,background .18s}.pg-dom li:hover{background:color-mix(in srgb,var(--c) 10%,transparent);padding-inline:6px;border-radius:6px}
+.pg-dom:active{transform:translateY(-2px) scale(.995)}
+@media (prefers-reduced-motion:reduce){.pg-dom,.pg-dom *{transition:none!important}.pg-dom:hover{transform:none}.pg-dom::after{display:none}}
 .pg-donut{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center}
 .pg-donut svg{width:150px;height:150px;transform:rotate(-90deg)}
 .pg-donut ul{list-style:none;margin:0;padding:0;font-size:12.5px}
@@ -121,9 +131,9 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default;pointer-events:none}
 <main class="ph-main" id="main" style="max-width:1180px"><div class="ph-empty">جارٍ التحميل…</div></main>
 <div id="rfMod" role="dialog" aria-modal="true" aria-label="عرض الملف"><div class="bar"><span id="rfT"></span><a class="ph-btn sm" id="rfO" target="_blank" rel="noopener">فتح في التخزين السحابي</a><button type="button" class="ph-btn sm" id="rfX">إغلاق</button></div><div class="why">إن ظهرت رسالة «لا تملك صلاحية» فسجّل الدخول بحساب Google المصرّح له بمجلد المشروع.</div><iframe id="rfF" title="عرض الملف" allow="fullscreen"></iframe></div>
 
-<script src="portal-names.js?v=10.7.0"></script>
-<script src="phase-data.js?v=10.7.0"></script>
-<script src="phase-core.js?v=10.7.0"></script>
+<script src="portal-names.js?v=10.7.1"></script>
+<script src="phase-data.js?v=10.7.1"></script>
+<script src="phase-core.js?v=10.7.1"></script>
 <script>
 (function () {
   "use strict";
@@ -294,6 +304,7 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default;pointer-events:none}
     var b = e.target.closest("[data-v]");
     if (b) { lastBtn = b; var id = b.dataset.v; document.getElementById("rfT").textContent = b.dataset.vt || ""; document.getElementById("rfO").href = "https://drive.google.com/file/d/" + id + "/view"; fr.src = "https://drive.google.com/file/d/" + id + "/preview"; mod.classList.add("on"); document.getElementById("rfX").focus(); return; }
     var d = e.target.closest("[data-dom]");
+    if (d && document.documentElement.classList.contains("sh-admin") && !document.documentElement.classList.contains("pv-vis")) return;
     if (d) { fdSel = String(fdSel) === d.dataset.dom ? "" : d.dataset.dom; drawTree(); var t = document.getElementById("tree"); if (t) t.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
     if (e.target.closest("#clr")) { fdSel = ""; document.getElementById("q").value = ""; document.getElementById("fa").value = ""; drawTree(); return; }
     var x = e.target.closest("#ex");
@@ -304,8 +315,8 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default;pointer-events:none}
   P.load(false);
 })();
 </script>
-<script src="page-gate.js?v=10.7.0" data-lazy="1"></script>
-<script src="legal-notice.js?v=10.7.0"></script>
-<script src="content-protect.js?v=10.7.0"></script>
+<script src="page-gate.js?v=10.7.1" data-lazy="1"></script>
+<script src="legal-notice.js?v=10.7.1"></script>
+<script src="content-protect.js?v=10.7.1"></script>
 </body>
 </html>

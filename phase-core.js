@@ -236,7 +236,39 @@
   }
   function fmtT(t) { try { return new Date(t).toLocaleString("ar-SA-u-ca-gregory", { dateStyle: "medium", timeStyle: "short" }); } catch (e) { return t; } }
   var syncTimer = null, syncT0 = 0;
+  /* v10.7.1: شاشة «الرجاء الانتظار ... جاري التحديث» بأيقونة الدبلوما (حركات بهلوانية) أثناء تحديث قاعدة البيانات */
+  function loader(on) {
+    var e = document.getElementById("phLoad");
+    if (!e) {
+      if (!on || !document.body) return;
+      e = document.createElement("div"); e.id = "phLoad"; e.setAttribute("role", "status"); e.setAttribute("aria-live", "polite");
+      e.innerHTML = '<div class="bx"><div class="stage"><img src="logo0.png" alt="" aria-hidden="true"><span class="shadow"></span></div><h2>الرجاء الانتظار ...</h2><p>جاري التحديث<span class="dots" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span></p></div>';
+      document.body.appendChild(e);
+    }
+    e.classList.toggle("on", !!on);
+  }
+  /* v10.7.1: أشرطة التقدم تتحرك ذهاباً وإياباً ثم تستقر عند النسبة المطلوبة */
+  var BAR_SEL = ".ph-bar i,.pg-bar i,.pg-crit .tr i", barT = null;
+  function animBars(root) {
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+    Array.prototype.forEach.call((root || document).querySelectorAll(BAR_SEL), function (el) {
+      if (el.dataset.an || !el.animate) return; el.dataset.an = "1";
+      var par = el.parentNode, pw = par && par.getBoundingClientRect().width, w = el.getBoundingClientRect().width;
+      if (!pw || w < 1) return;
+      var t = Math.max(0.02, w / pw), rtl = getComputedStyle(par).direction === "rtl";
+      el.style.transformOrigin = rtl ? "right center" : "left center";
+      var k = [{ transform: "scaleX(0)", offset: 0 }, { transform: "scaleX(" + (1 / t).toFixed(3) + ")", offset: .38 }, { transform: "scaleX(0)", offset: .72 }, { transform: "scaleX(1)", offset: 1 }];
+      try { el.animate(k, { duration: 2600, easing: "ease-in-out", delay: Math.min(400, el.getBoundingClientRect().top > innerHeight ? 0 : 0) }); } catch (x) {}
+    });
+  }
+  function watchBars() {
+    if (barT !== null || !window.MutationObserver || !document.body) return; barT = 0;
+    new MutationObserver(function () { clearTimeout(barT); barT = setTimeout(function () { animBars(document); }, 80); }).observe(document.body, { childList: true, subtree: true });
+    animBars(document);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", watchBars); else watchBars();
   function connChip() {
+    loader(ST.loading);
     var c = document.getElementById("phConn"); if (!c) return;
     var role = window.PortalRole ? PortalRole.get() : "", live = ST.live && !ST.failed, when = live ? fmtT(ST.gen) : (ST.asof || "");
     var txt = live ? "آخر تحديث للحالة: " + when : ST.failed ? "جاري تحديث قاعدة البيانات ..." + (when ? " · الأرقام المعروضة حتى " + when : "") : (role === "admin" ? "لقطة " + when + " · جاري تحديث قاعدة البيانات ..." : "الأرقام حتى " + when);
@@ -250,5 +282,5 @@
   }
 
   window.PHC = { PH: PH, DN: DN, STATE: STATE, ST: ST, esc: esc, pct: pct, avg: avg, byCode: byCode, folderUrl: folderUrl, fileDl: fileDl, fileView: fileView, subUrl: subUrl, rootUrl: rootUrl, sOf: sOf, critP: critP, critList: critList, domP: domP, projP: projP, totals: totals, ownerName: ownerName,
-    bar2: bar2, basis: basis, basisTxt: basisTxt, gl: gl, target: target, me: { get: meGet, set: meSet, clear: meClear }, load: load, onStatus: onStatus, bar: bar, chip: chip, card: card, bindCards: bindCards, chrome: chrome, fmtT: fmtT };
+    bar2: bar2, basis: basis, basisTxt: basisTxt, gl: gl, target: target, me: { get: meGet, set: meSet, clear: meClear }, load: load, onStatus: onStatus, bar: bar, chip: chip, card: card, bindCards: bindCards, chrome: chrome, fmtT: fmtT, animBars: animBars, loader: loader };
 })();
