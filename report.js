@@ -75,6 +75,10 @@
       '<input class="in" type="text" dir="ltr" data-f="link" value="' + E(s.link) + '" placeholder="Or paste an image link (Cloud Storage or other)" aria-label="Image link">' +
       '<div class="pt" dir="auto">' + ptText(s) + "</div></div></div>";
   }
+  function regSlotHtml(name, url, k) {
+    return '<div class="slot reg"><div class="ph" aria-label="Approved register">' + qrSvg(url, 150) + '<span class="num">R' + (k + 1) + "</span></div>" +
+      '<div class="meta"><div class="pt" style="display:block" dir="auto">Approved register: ' + E(name) + '<br><small>Scan to open the approved record (PDF)</small></div></div></div>';
+  }
   function ptText(s) { var a = []; if (s.cap) a.push(E(s.cap)); var m = []; if (s.date) m.push(E(s.date)); if (s.src) m.push(E(s.src)); if (m.length) a.push("<small>" + m.join(" · ") + "</small>"); return a.join("<br>"); }
   function listSec(en, ar, items, empty) {
     return '<section class="sec"><h2 class="sec-t"><span>' + en + "</span>" + (ar ? '<span dir="rtl" lang="ar">' + ar + "</span>" : "") + "</h2>" +
@@ -93,8 +97,11 @@
   function render() {
     var i = ind(), now = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     /* قرار مدير المشروع: الرسمي (المجال/المعيار/المؤشر/الإضاءات) بلغتين؛ وما يخص القسم (السجلات والوثائق) بالإنجليزية فقط */
-    var recs = i.recs.map(function (r, k) { return '<li class="rec-q"><div class="bi"><div class="en">' + E(I.rec[r] || r) + "</div></div>" + qrBox(qrUrl("rec", k), 64, "Scan: open this record") + "</li>"; });
-    var docs = (I.docs[i.code] || []).map(function (x) { return '<li><div class="bi"><div class="en">' + E(x.en) + "</div></div></li>"; });
+    /* v10.5.0: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
+    var regs = i.recs.map(function (r, k) { return regSlotHtml(I.rec[r] || r, qrUrl("rec", k), k); });
+    var dl = (window.ETEC_DOCS && window.ETEC_DOCS[i.code]) || [];
+    var docs = dl.length ? dl.map(function (x) { return '<li class="rec-q"><div class="bi"><div class="en">' + E(x.en) + "</div></div>" + qrBox(x.u, 64, "Scan: open this document") + "</li>"; })
+      : (I.docs[i.code] || []).map(function (x) { return '<li><div class="bi"><div class="en">' + E(x.en) + "</div></div></li>"; });
     var hl = (HL[i.code] || []).map(function (x) { return "<li>" + bi(x.en, x.ar) + "</li>"; });
     $("sheet").innerHTML =
       '<div class="sh-head"><div class="logos"><img src="logo1.png" alt="Dar Al-Forsan Schools"><img src="logo0.png" alt="American Diploma"></div>' +
@@ -105,10 +112,9 @@
         '<div><span class="lb">Criterion</span>' + bi(I.crit[i.c], i.cn) + "</div></div>" +
       '<div class="sh-ic"><span class="c">' + E(i.code) + '</span><span class="lb">Indicator</span></div>' + bi(I.ind[i.code], i.text, "ind") +
       '<div class="sh-meta">Date: ' + E(now) + "</div></div>" +
-      '<h2 class="sec-t one"><span>Evidence Photos</span></h2>' +
-      '<div class="sh-grid" id="grid">' + slots.map(slotHtml).join("") + "</div>" +
+      '<h2 class="sec-t one"><span>Evidence</span><span class="sec-s">Photos and approved registers</span></h2>' +
+      '<div class="sh-grid" id="grid">' + slots.map(slotHtml).join("") + regs.join("") + "</div>" +
       '<div class="pg2">' +
-      listSec("Records", "", recs, "No records are defined for this indicator.") +
       listSec("Documents", "", docs, "No supporting documents are proposed for this indicator.") +
       listSec("Highlights toward achieving the indicator", "إضاءات نحو تحقيق المؤشر", hl, "Official highlights will be added here.").replace('<section class="sec">', '<section class="sec' + (hl.length ? "" : " noprint") + '">') +
       "</div>" +
