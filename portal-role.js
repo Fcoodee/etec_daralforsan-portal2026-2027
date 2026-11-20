@@ -75,7 +75,7 @@
   }
   function withGate(cb) {
     if (window.DFGate) { cb(); return; }
-    var sc = document.createElement("script"); sc.src = "page-gate.js?v=10.5.0"; sc.dataset.lazy = "1";
+    var sc = document.createElement("script"); sc.src = "page-gate.js?v=10.6.0"; sc.dataset.lazy = "1";
     sc.onload = cb; sc.onerror = function () { alert("تعذّر تحميل نافذة الدخول؛ أعد تحميل الصفحة."); };
     document.head.appendChild(sc);
   }
@@ -121,15 +121,15 @@
     st.textContent =
       ".pr-off{display:none!important}" +
       "html:not([data-role=\"admin\"]) [data-admin-only]{display:none!important}" +
-      "#prBar{font-family:Cairo,Tahoma,sans-serif;direction:rtl;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:7px max(14px,env(safe-area-inset-right)) 7px max(14px,env(safe-area-inset-left));font-size:12px;line-height:1.7;background:#f0fdfa;border-bottom:1px solid #99f6e4;color:#134e4a;max-width:100%}" +
+      "#prBar{font-family:Tajawal,Tahoma,sans-serif;direction:rtl;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:7px max(14px,env(safe-area-inset-right)) 7px max(14px,env(safe-area-inset-left));font-size:12px;line-height:1.7;background:#f0fdfa;border-bottom:1px solid #99f6e4;color:#134e4a;max-width:100%}" +
       "#prBar>*{min-width:0}#prBar select{max-width:100%}" +
       "@media (pointer:coarse){#prBar{font-size:13px}#prBar select{min-height:40px;font-size:16px;padding:4px 10px}#prBar a{min-height:40px;display:inline-flex;align-items:center;padding:4px 14px}}" +
       "@media (max-width:640px){#prBar{gap:6px 8px;padding-block:4px}#prBar .rn{display:none}#prBar select{flex:1 1 150px}}" +
       "#prBar.warn{background:#fffbeb;border-bottom-color:#fcd34d;color:#78350f}" +
       "#prBar.none{background:#eff6ff;border-bottom-color:#bfdbfe;color:#1e3a8a}" +
-      "#prBar b{font-weight:800}" +
+      "#prBar b{font-weight:700}" +
       "#prBar select{font:inherit;font-size:12px;padding:2px 8px;border:1px solid #94a3b8;border-radius:8px;background:#fff;color:#0f172a}" +
-      "#prBar a{font-weight:800;text-decoration:none;padding:2px 10px;border-radius:999px;background:#0f766e;color:#fff}" +
+      "#prBar a{font-weight:700;text-decoration:none;padding:2px 10px;border-radius:999px;background:#0f766e;color:#fff}" +
       "#prBar a:hover{background:#115e59}" +
       "#prBar .sp{flex:1}" +
       "@media print{#prBar,#roleHome{display:none!important}}";
@@ -200,10 +200,10 @@
     var hs = document.createElement("style"); hs.id = "rolGateCss"; hs.textContent = "html.rol-lock body>*:not(#rolGate):not(#pg-overlay){display:none!important}"; document.head.appendChild(hs);
     document.documentElement.classList.add("rol-lock");
     var d = document.createElement("div"); d.id = "rolGate";
-    d.style.cssText = "position:fixed;inset:0;z-index:2147483100;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;font-family:Cairo,Tahoma,sans-serif;background:linear-gradient(160deg,#002a2a,#0f172a)";
+    d.style.cssText = "position:fixed;inset:0;z-index:2147483100;display:flex;align-items:center;justify-content:center;padding:16px;direction:rtl;font-family:Tajawal,Tahoma,sans-serif;background:linear-gradient(160deg,#002a2a,#0f172a)";
     var names = list.map(function (k) { return ROLES[k].n; }).join("، ");
     d.innerHTML = '<div style="background:#fff;border-radius:20px;max-width:420px;width:100%;padding:26px;text-align:right;border-top:6px solid #c29b38"><h2 style="margin:0 0 8px;font-size:17px;font-weight:900;color:#003d3d">' + (adminOnly ? "هذه الصفحة لمدير النظام" : "هذه الصفحة خارج مساحة دورك") + '</h2><p style="margin:0 0 14px;font-size:13px;line-height:1.9;color:#475569">' + (adminOnly ? "يحتاج مدير النظام وحده إلى رمز مستخدم وكلمة مرور." : "تُفتح لهذه الأدوار: " + esc(names) + ".") + '</p>' +
-      (adminOnly ? '<button id="rolGo" type="button" style="width:100%;border:0;border-radius:12px;background:#006666;color:#fff;font:800 14px Cairo,Tahoma,sans-serif;padding:12px;cursor:pointer">دخول مدير النظام</button>' : "") +
+      (adminOnly ? '<button id="rolGo" type="button" style="width:100%;border:0;border-radius:12px;background:#006666;color:#fff;font:700 14px Tajawal,Tahoma,sans-serif;padding:12px;cursor:pointer">دخول مدير النظام</button>' : "") +
       '<a href="index.html" style="display:block;text-align:center;margin-top:12px;font-size:12px;color:#006666">العودة إلى الصفحة الرئيسية</a></div>';
     document.body.appendChild(d);
     var go = document.getElementById("rolGo");

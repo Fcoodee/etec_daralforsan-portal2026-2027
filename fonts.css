@@ -1,0 +1,12 @@
+/* fonts.css — الهوية الرقمية المعتمدة: Cairo للعناوين، Tajawal للنصوص (SIL OFL 1.1، الملفات مستضافة محلياً بجانب index.html) */
+@font-face{font-family:'Cairo';font-weight:400;font-style:normal;font-display:swap;src:url('Cairo-400.woff') format('woff')}
+@font-face{font-family:'Cairo';font-weight:600;font-style:normal;font-display:swap;src:url('Cairo-600.woff') format('woff')}
+@font-face{font-family:'Cairo';font-weight:700;font-style:normal;font-display:swap;src:url('Cairo-700.woff') format('woff')}
+@font-face{font-family:'Cairo';font-weight:900;font-style:normal;font-display:swap;src:url('Cairo-900.woff') format('woff')}
+@font-face{font-family:'Tajawal';font-weight:400;font-style:normal;font-display:swap;src:url('Tajawal-400.woff') format('woff')}
+@font-face{font-family:'Tajawal';font-weight:500;font-style:normal;font-display:swap;src:url('Tajawal-500.woff') format('woff')}
+@font-face{font-family:'Tajawal';font-weight:700;font-style:normal;font-display:swap;src:url('Tajawal-700.woff') format('woff')}
+@font-face{font-family:'Tajawal';font-weight:900;font-style:normal;font-display:swap;src:url('Tajawal-900.woff') format('woff')}
+:root{--font-head:'Cairo','Segoe UI',Tahoma,sans-serif;--font-body:'Tajawal','Segoe UI',Tahoma,sans-serif}
+body{font-family:var(--font-body)}
+h1,h2,h3,h4,h5,h6,.sec-t,.ph-h1,.ph-h2,.ph-title,[class*="-title"],[class*="title-"],.hero h1{font-family:var(--font-head)}

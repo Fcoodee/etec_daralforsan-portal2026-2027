@@ -45,7 +45,7 @@
             color: #fff; font-size: 11px; font-weight: 700;
             padding: 10px 14px; border-radius: 9999px;
             box-shadow: 0 4px 14px rgba(0,0,0,.25);
-            cursor: pointer; font-family: 'Cairo', sans-serif;
+            cursor: pointer; font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
         }
         #df-logout-btn:hover { filter: brightness(1.1); }
 
@@ -53,7 +53,7 @@
             position: fixed; inset: 0; z-index: 10000;
             background: rgba(0,10,10,0.72);
             display: none; align-items: center; justify-content: center;
-            padding: 16px; font-family: 'Cairo', sans-serif;
+            padding: 16px; font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
         }
         #df-lock-overlay.df-show { display: flex; }
         #df-lock-modal {
@@ -67,7 +67,7 @@
             display: flex; align-items: center; justify-content: center;
             color: #fff; font-size: 22px; margin-bottom: 14px;
         }
-        #df-lock-modal h3 { font-size: 15px; font-weight: 800; color: #0f172a; margin-bottom: 8px; }
+        #df-lock-modal h3 { font-size: 15px; font-weight:700; color: #0f172a; margin-bottom: 8px; }
         #df-lock-modal p.df-notice {
             font-size: 11px; line-height: 1.9; color: #78716c;
             background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px;
@@ -76,7 +76,7 @@
         #df-lock-modal input {
             width: 100%; box-sizing: border-box; font-size: 13px;
             padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 10px;
-            margin-bottom: 10px; font-family: 'Cairo', sans-serif;
+            margin-bottom: 10px; font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
         }
         #df-lock-modal input:focus { outline: none; border-color: #006666; }
         #df-lock-error {
@@ -87,14 +87,14 @@
         #df-lock-actions { display: flex; gap: 8px; margin-top: 6px; }
         #df-lock-submit {
             flex: 1; background: #006666; color: #fff; border: none;
-            padding: 11px; border-radius: 10px; font-weight: 800; font-size: 12px;
-            cursor: pointer; font-family: 'Cairo', sans-serif;
+            padding: 11px; border-radius: 10px; font-weight:700; font-size: 12px;
+            cursor: pointer; font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
         }
         #df-lock-submit:hover { background: #005252; }
         #df-lock-cancel {
             background: #f1f5f9; color: #475569; border: none;
             padding: 11px 16px; border-radius: 10px; font-weight: 700; font-size: 12px;
-            cursor: pointer; font-family: 'Cairo', sans-serif;
+            cursor: pointer; font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
         }
         #df-lock-cancel:hover { background: #e2e8f0; }
     `;

@@ -10,7 +10,7 @@
     "img,svg,a{-webkit-user-drag:none;user-drag:none}" +
     "#df-lock-btn,#df-logout-btn{display:none!important}" +
     "#sh-veil{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2147483647;display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;text-align:center;padding:24px;" +
-    "background:#0b1f3a;background:rgba(11,31,58,.985);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);color:#fff;font-family:Cairo,Tahoma,Arial,sans-serif;direction:rtl}" +
+    "background:#0b1f3a;background:rgba(11,31,58,.985);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);color:#fff;font-family:Tajawal,Tahoma,Arial,sans-serif;direction:rtl}" +
     "#sh-veil b{font-size:18px}#sh-veil span{font-size:12px;opacity:.75;direction:ltr}" +
     "html.sh-on:not(.sh-admin) #sh-veil{display:flex}" +
     "@media print{html:not(.sh-admin.rp-print),html:not(.sh-admin.rp-print) body{display:none!important;visibility:hidden!important}}";
