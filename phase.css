@@ -202,3 +202,10 @@ select,input,textarea,button{max-width:100%}
 /* عناصر العمل (رفع/اعتماد/إصدار) تظهر لجلسة مدير النظام الصالحة فقط (يضع shield.js الصنف sh-admin على html) */
 html:not(.sh-admin) .ad-only{display:none!important}
 html.sh-admin .vis-only{display:none!important}
+
+/* معاينة الزائر (مؤقتة، لمدير النظام): تُظهر اللوحة كما يراها الزائر ولا تغيّر أي صلاحية */
+html.pv-vis .ad-only{display:none!important}
+html.sh-admin.pv-vis .vis-only{display:inline!important}
+.ph-tmp{border:1px dashed #b45309!important;color:#b45309!important;background:#fffbeb!important}
+.pv-bar{position:sticky;top:0;z-index:50;background:#fffbeb;border-bottom:2px solid #b45309;color:#7c2d12;font-size:13px;font-weight:800;text-align:center;padding:6px 10px}
+.pv-bar a{color:#7c2d12;margin-inline-start:10px}
