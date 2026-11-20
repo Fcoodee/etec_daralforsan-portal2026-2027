@@ -97,7 +97,7 @@
   function render() {
     var i = ind(), now = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     /* قرار مدير المشروع: الرسمي (المجال/المعيار/المؤشر/الإضاءات) بلغتين؛ وما يخص القسم (السجلات والوثائق) بالإنجليزية فقط */
-    /* v10.6.3: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
+    /* v10.6.4: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
     var regs = i.recs.map(function (r, k) { return regSlotHtml(I.rec[r] || r, qrUrl("rec", k), k); });
     var dl = (window.ETEC_DOCS && window.ETEC_DOCS[i.code]) || [];
     var docs = dl.length ? dl.map(function (x) { return '<li class="rec-q"><div class="bi"><div class="en">' + E(x.en) + "</div></div>" + qrBox(x.u, 64, "Scan: open this document") + "</li>"; })
@@ -119,6 +119,11 @@
       listSec("Highlights toward achieving the indicator", "إضاءات نحو تحقيق المؤشر", hl, "Official highlights will be added here.").replace('<section class="sec">', '<section class="sec' + (hl.length ? "" : " noprint") + '">') +
       "</div>" +
       '<div class="sh-foot"><span>Evidence photos: <b>' + count() + "</b> · Unofficial English translation — the Arabic text is the reference.</span><span>Internal platform — not affiliated with the Education and Training Evaluation Commission (ETEC).</span></div>";
+    /* v10.6.4: الصور الطولية (ملصقات/لقطات جوال) تُعرض بإطار أطول بدل شريط عريض صغير */
+    Array.prototype.forEach.call(document.querySelectorAll("#sheet .slot:not(.reg) .ph img"), function (im) {
+      var f = function () { if (im.naturalHeight > im.naturalWidth * 1.15) im.parentNode.classList.add("tall"); };
+      if (im.complete) f(); else im.addEventListener("load", f);
+    });
     info(); $("addSlot").disabled = slots.length >= MAXS;
   }
   function info() {
