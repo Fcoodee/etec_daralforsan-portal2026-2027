@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<link rel="stylesheet" href="fonts.css?v=10.8.3">
-<script src="shield.js?v=10.8.3"></script>
-<script src="fx.js?v=10.8.3"></script>
-<script src="page-gate.js?v=10.8.3" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."></script>
-<script src="admin-only.js?v=10.8.3"></script>
+<link rel="stylesheet" href="fonts.css?v=10.8.4">
+<script src="shield.js?v=10.8.4"></script>
+<script src="fx.js?v=10.8.4"></script>
+<script src="page-gate.js?v=10.8.4" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."></script>
+<script src="admin-only.js?v=10.8.4"></script>
 <meta name="robots" content="noindex,nofollow">
 <title>تقرير الشواهد البصرية — بوابة الاعتماد المدرسي والتميز</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=10.8.3">
+<link rel="stylesheet" href="phase.css?v=10.8.4">
 <style>
 .rp-wrap{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px;align-items:start}
 @media(max-width:980px){.rp-wrap{grid-template-columns:1fr}}
@@ -89,18 +89,18 @@
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=10.8.3"></script>
-<script src="portal-role.js?v=10.8.3"></script>
+<script src="portal-meta.js?v=10.8.4"></script>
+<script src="portal-role.js?v=10.8.4"></script>
 </head>
 <body>
 <div id="chrome" class="noprint"></div>
 <main class="ph-main" style="max-width:1180px">
   <h1 class="ph-h1 noprint">تقرير الشواهد البصرية</h1>
-  <p class="ph-lead noprint">محرّر حي لمدير النظام: تُفتح المسودة المركزية للمؤشر تلقائياً؛ استبدل أي صورة بزر «استبدال» في خانتها، ثم ① احفظ مركزياً ② أصدر PDF ③ ارفعه إلى مجلد المؤشر.</p>
+  <p class="ph-lead noprint">محرّر حي لمدير النظام: تُفتح المسودة المركزية للمؤشر تلقائياً؛ استبدل أي صورة بزر «استبدال» في خانتها، ثم ① احفظ مركزياً ② انسخ اسم الملف ③ أصدر PDF ④ ارفعه إلى مجلد المؤشر.</p>
   <div class="rp-wrap">
     <section aria-label="قالب التقرير">
       <div class="rp-bar noprint" role="toolbar" aria-label="خطوات الحفظ"><span class="st">التزامن: <span class="ph-chip idle" id="syncState">…</span></span>
-        <button type="button" class="pri" id="tbSave">① حفظ مركزياً</button><button type="button" id="tbPrint">② إصدار PDF</button><button type="button" id="tbUp">③ رفع PDF</button></div>
+        <button type="button" class="pri" id="tbSave">① حفظ مركزياً</button><button type="button" id="tbCopy">② نسخ الاسم</button><button type="button" id="tbPrint">③ إصدار PDF</button><button type="button" id="tbUp">④ رفع PDF</button></div>
       <details class="rp-cur noprint" id="curBox"><summary id="curSum">التقرير المرفوع حالياً</summary><div id="curBody"></div></details>
       <div class="sheet" id="sheet"></div>
       <div class="rp-actions noprint">
@@ -117,7 +117,7 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
       <div class="rp-box"><h3>إصدار التقرير</h3>
         اسم الملف:<div class="rp-name" id="fname"></div>
         <div class="btns"><button type="button" class="pri" id="btnPrint"><i class="fa-solid fa-file-pdf"></i> إصدار PDF</button><button type="button" id="btnCopy">نسخ الاسم</button></div>
-        <p style="margin:8px 0 0;color:#475569">في نافذة الطباعة اختر «حفظ بصيغة PDF» (الهوامش: افتراضي، الرسومات الخلفية: مفعّلة)، ثم اضغط «③ رفع PDF» واختر الملف.</p></div>
+        <p style="margin:8px 0 0;color:#475569">في نافذة الطباعة اختر «حفظ بصيغة PDF» (الهوامش: افتراضي، الرسومات الخلفية: مفعّلة)، ثم اضغط «④ رفع PDF» واختر الملف.</p></div>
       <div class="rp-box"><h3>رفع التقرير <span class="ph-chip idle" id="upState">غير مفعّل</span></h3>
         <input type="hidden" id="who"><input type="hidden" id="tok">
         <div class="btns"><input type="file" id="pdfIn" accept="application/pdf" hidden><button type="button" class="pri" id="btnUp" disabled><i class="fa-solid fa-cloud-arrow-up"></i> رفع ملف PDF</button>
@@ -129,17 +129,17 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
     </aside>
   </div>
 </main>
-<script src="portal-config.js?v=10.8.3"></script>
-<script src="portal-names.js?v=10.8.3"></script>
-<script src="phase-data.js?v=10.8.3"></script>
-<script src="report-i18n.js?v=10.8.3"></script>
-<script src="highlights.js?v=10.8.3"></script>
-<script src="phase-core.js?v=10.8.3"></script>
-<script src="qrcode-lib.js?v=10.8.3"></script>
-<script src="report-docs.js?v=10.8.3"></script>
-<script src="report.js?v=10.8.3"></script>
-<script src="page-gate.js?v=10.8.3" data-lazy="1"></script>
-<script src="legal-notice.js?v=10.8.3"></script>
-<script src="content-protect.js?v=10.8.3"></script>
+<script src="portal-config.js?v=10.8.4"></script>
+<script src="portal-names.js?v=10.8.4"></script>
+<script src="phase-data.js?v=10.8.4"></script>
+<script src="report-i18n.js?v=10.8.4"></script>
+<script src="highlights.js?v=10.8.4"></script>
+<script src="phase-core.js?v=10.8.4"></script>
+<script src="qrcode-lib.js?v=10.8.4"></script>
+<script src="report-docs.js?v=10.8.4"></script>
+<script src="report.js?v=10.8.4"></script>
+<script src="page-gate.js?v=10.8.4" data-lazy="1"></script>
+<script src="legal-notice.js?v=10.8.4"></script>
+<script src="content-protect.js?v=10.8.4"></script>
 </body>
 </html>
