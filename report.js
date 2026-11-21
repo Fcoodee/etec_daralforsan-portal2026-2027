@@ -1,4 +1,4 @@
-/* report.js — v10.8.1 — محرّر حي لمدير النظام: تحميل المسودة المركزية تلقائياً، استبدال صورة بنقرة، مؤشر التزامن، ثم حفظ مركزي ← PDF ← رفع.
+/* report.js — v10.8.2 — محرّر حي لمدير النظام: تحميل المسودة المركزية تلقائياً، استبدال صورة بنقرة، مؤشر التزامن، ثم حفظ مركزي ← PDF ← رفع.
    (أصله v9.2.0: صفحة العمل على قالب تقرير الشواهد البصرية: خانات صور وأوصاف، مسودة محلية، إصدار PDF بالاسم الصحيح، ورفع/مسودة مركزية عبر Apps Script.) */
 (function () {
   "use strict";
@@ -100,7 +100,7 @@
   function render() {
     var i = ind(), now = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     /* قرار مدير المشروع: الرسمي (المجال/المعيار/المؤشر/الإضاءات) بلغتين؛ وما يخص القسم (السجلات والوثائق) بالإنجليزية فقط */
-    /* v10.8.1: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
+    /* v10.8.2: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
     var regs = i.recs.map(function (r, k) { return regSlotHtml(I.rec[r] || r, qrUrl("rec", k), k); });
     var dl = (window.ETEC_DOCS && window.ETEC_DOCS[i.code]) || [];
     var docs = dl.length ? dl.map(function (x) { return '<li class="rec-q"><div class="bi"><div class="en">' + E(x.en) + "</div></div>" + qrBox(x.u, 64, "Scan: open this document") + "</li>"; })
@@ -122,7 +122,7 @@
       listSec("Highlights toward achieving the indicator", "إضاءات نحو تحقيق المؤشر", hl, "Official highlights will be added here.").replace('<section class="sec">', '<section class="sec' + (hl.length ? "" : " noprint") + '">') +
       "</div>" +
       '<div class="sh-foot"><span>Evidence photos: <b>' + count() + "</b> · Unofficial English translation — the Arabic text is the reference.</span><span>Internal platform — not affiliated with the Education and Training Evaluation Commission (ETEC).</span></div>";
-    /* v10.8.1: الصور الطولية (ملصقات/لقطات جوال) تُعرض بإطار أطول بدل شريط عريض صغير */
+    /* v10.8.2: الصور الطولية (ملصقات/لقطات جوال) تُعرض بإطار أطول بدل شريط عريض صغير */
     Array.prototype.forEach.call(document.querySelectorAll("#sheet .slot:not(.reg) .ph img"), function (im) {
       var f = function () { if (im.naturalHeight > im.naturalWidth * 1.15) im.parentNode.classList.add("tall"); };
       if (im.complete) f(); else im.addEventListener("load", f);
@@ -222,11 +222,12 @@
     return fetch(url(), { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) }).then(function (r) { return r.json(); });
   }
   function upEnable(on) { ["btnUp", "btnSaveC", "btnLoadC"].forEach(function (id) { $(id).disabled = !on; }); }
-  /* v10.8.1: عند فتح المؤشر تُجلب المسودة المركزية؛ الأحدث (المركزية أم المحلية) هي المعتمدة، ولا يُكتب فوق عمل أحدث */
+  /* v10.8.2: عند فتح المؤشر تُجلب المسودة المركزية؛ الأحدث (المركزية أم المحلية) هي المعتمدة، ولا يُكتب فوق عمل أحدث */
   function autoPull() {
     if (pulled === code) return; var c0 = code; pulled = c0;
     post("loadDraft").then(function (o) {
-      if (c0 !== code || !o || !o.ok) return;
+      if (c0 !== code) return;
+      if (!o || !o.ok) { sync("تعذّر جلب المسودة المركزية", "bad"); msg("saveMsg", "المسودة المركزية: " + ((o && o.error) || "ردّ غير متوقع من السكربت (قد يكون الإصدار المنشور أقدم من v9.5.0)"), "bad"); pulled = ""; return; }
       if (!o.draft) { if (count()) setDirty(true); else sync("لا مسودة مركزية بعد", "idle"); return; }
       var ct = Date.parse(o.saved) || 0;
       if (!count() || ct > localTs) {
@@ -236,7 +237,7 @@
         msg("saveMsg", "حُمّلت المسودة المركزية (" + new Date(ct).toLocaleString("ar-SA") + ").", "ok");
       } else if (localTs > ct + 2000) { setDirty(true); msg("saveMsg", "النسخة على هذا الجهاز أحدث من المركزية؛ احفظ مركزياً.", "bad"); }
       else setDirty(false);
-    }).catch(function () {});
+    }).catch(function (e) { sync("تعذّر الاتصال لجلب المسودة", "bad"); msg("saveMsg", "تعذّر جلب المسودة المركزية: " + (e && e.message || e), "bad"); pulled = ""; });
   }
   function ping() {
     upOK = false; upEnable(false);
