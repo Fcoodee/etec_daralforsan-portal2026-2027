@@ -1,4 +1,4 @@
-/* fx.js — حركات شعار الدبلوما (v10.8.5): (1) شعار وحده بحركات بهلوانية من بدء تحميل صفحة الهبوط، بلا صندوق ولا خلفية
+/* fx.js — حركات شعار الدبلوما (v10.8.6): (1) شعار وحده بحركات بهلوانية من بدء تحميل صفحة الهبوط، بلا صندوق ولا خلفية
    (2) شعار صغير يرافق كل ضغطة ماوس/لمس لثوانٍ. لا يعتمد على أي ملف آخر، ويحترم «تقليل الحركة». */
 (function () {
   "use strict";
@@ -52,6 +52,7 @@
         try { busyEl.querySelector(".lg").animate(ACRO, { duration: 2800, iterations: Infinity, easing: "cubic-bezier(.45,.05,.3,1)" }); } catch (e) {}
       }
       busyEl.querySelector(".tx").textContent = txt || "الرجاء الانتظار ...";
+      clearTimeout(window.PortalFX._t); window.PortalFX._t = setTimeout(function () { busyN = 0; if (busyEl && busyEl.parentNode) busyEl.parentNode.removeChild(busyEl); busyEl = null; }, 120000); /* سقف أمان: لا يبقى الغطاء أكثر من دقيقتين */
     },
     idle: function () { busyN = Math.max(0, busyN - 1); if (busyN === 0 && busyEl) { if (busyEl.parentNode) busyEl.parentNode.removeChild(busyEl); busyEl = null; } }
   };

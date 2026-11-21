@@ -1,4 +1,4 @@
-/* report.js — v10.8.5 — محرّر حي لمدير النظام: تحميل المسودة المركزية تلقائياً، استبدال صورة بنقرة، مؤشر التزامن، ثم حفظ مركزي ← PDF ← رفع.
+/* report.js — v10.8.6 — محرّر حي لمدير النظام: تحميل المسودة المركزية تلقائياً، استبدال صورة بنقرة، مؤشر التزامن، ثم حفظ مركزي ← PDF ← رفع.
    (أصله v9.2.0: صفحة العمل على قالب تقرير الشواهد البصرية: خانات صور وأوصاف، مسودة محلية، إصدار PDF بالاسم الصحيح، ورفع/مسودة مركزية عبر Apps Script.) */
 (function () {
   "use strict";
@@ -49,7 +49,7 @@
   /* ===== معالجة الصورة: تصغير وإعادة ترميز (يحذف EXIF) ===== */
   function proc(file) {
     return new Promise(function (res, rej) {
-      if (!/^image\//.test(file.type)) { rej(new Error("الملف ليس صورة")); return; }
+      if (!/^image\//.test(file.type) && !/\.(jpe?g|png|webp|gif|bmp|jfif|avif)$/i.test(file.name || "")) { rej(new Error("الملف ليس صورة مدعومة (JPG/PNG/WebP). إن كانت HEIC فحوّلها إلى JPG أولاً.")); return; }
       var r = new FileReader();
       r.onload = function () {
         var im = new Image();
@@ -100,7 +100,7 @@
   function render() {
     var i = ind(), now = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     /* قرار مدير المشروع: الرسمي (المجال/المعيار/المؤشر/الإضاءات) بلغتين؛ وما يخص القسم (السجلات والوثائق) بالإنجليزية فقط */
-    /* v10.8.5: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
+    /* v10.8.6: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
     var regs = i.recs.map(function (r, k) { return regSlotHtml(I.rec[r] || r, qrUrl("rec", k), k); });
     var dl = (window.ETEC_DOCS && window.ETEC_DOCS[i.code]) || [];
     var docs = dl.length ? dl.map(function (x) { return '<li class="rec-q"><div class="bi"><div class="en">' + E(x.en) + "</div></div>" + qrBox(x.u, 64, "Scan: open this document") + "</li>"; })
@@ -122,7 +122,7 @@
       listSec("Highlights toward achieving the indicator", "إضاءات نحو تحقيق المؤشر", hl, "Official highlights will be added here.").replace('<section class="sec">', '<section class="sec' + (hl.length ? "" : " noprint") + '">') +
       "</div>" +
       '<div class="sh-foot"><span>Evidence photos: <b>' + count() + "</b> · Unofficial English translation — the Arabic text is the reference.</span><span>Internal platform — not affiliated with the Education and Training Evaluation Commission (ETEC).</span></div>";
-    /* v10.8.5: الصور الطولية (ملصقات/لقطات جوال) تُعرض بإطار أطول بدل شريط عريض صغير */
+    /* v10.8.6: الصور الطولية (ملصقات/لقطات جوال) تُعرض بإطار أطول بدل شريط عريض صغير */
     Array.prototype.forEach.call(document.querySelectorAll("#sheet .slot:not(.reg) .ph img"), function (im) {
       var f = function () { if (im.naturalHeight > im.naturalWidth * 1.15) im.parentNode.classList.add("tall"); };
       if (im.complete) f(); else im.addEventListener("load", f);
@@ -139,9 +139,10 @@
 
   /* ===== الأحداث ===== */
   function setImg(i, file) {
-    proc(file).then(function (u) { slots[i].img = u; slots[i].link = ""; render(); save(); }).catch(function (e) { msg("saveMsg", e.message, "bad"); });
+    proc(file).then(function (u) { slots[i].img = u; slots[i].link = ""; render(); save(); }).catch(function (e) { msg("saveMsg", "تعذّر استبدال/إضافة الصورة: " + (e && e.message || e), "bad"); msg("upMsg", "تعذّر استبدال/إضافة الصورة: " + (e && e.message || e), "bad"); });
   }
   var fileIn = document.createElement("input"); fileIn.type = "file"; fileIn.accept = "image/*"; fileIn.multiple = true; var target = 0;
+  fileIn.addEventListener("cancel", function () { repIdx = -1; });
   fileIn.addEventListener("change", function () {
     var fl = Array.prototype.slice.call(fileIn.files || []), i = target;
     if (repIdx >= 0) { var ri = repIdx; repIdx = -1; if (fl[0]) setImg(ri, fl[0]); fileIn.value = ""; return; }
@@ -222,7 +223,7 @@
     return fetch(url(), { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) }).then(function (r) { return r.json(); });
   }
   function upEnable(on) { ["btnUp", "btnSaveC", "btnLoadC"].forEach(function (id) { $(id).disabled = !on; }); }
-  /* v10.8.5: عند فتح المؤشر تُجلب المسودة المركزية؛ الأحدث (المركزية أم المحلية) هي المعتمدة، ولا يُكتب فوق عمل أحدث */
+  /* v10.8.6: عند فتح المؤشر تُجلب المسودة المركزية؛ الأحدث (المركزية أم المحلية) هي المعتمدة، ولا يُكتب فوق عمل أحدث */
   function autoPull() {
     if (pulled === code) return; var c0 = code; pulled = c0;
     post("loadDraft").then(function (o) {
