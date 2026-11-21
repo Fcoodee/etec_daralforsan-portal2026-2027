@@ -236,7 +236,7 @@
   }
   function fmtT(t) { try { return new Date(t).toLocaleString("ar-SA-u-ca-gregory", { dateStyle: "medium", timeStyle: "short" }); } catch (e) { return t; } }
   var syncTimer = null, syncT0 = 0;
-  /* v10.7.3: شاشة «الرجاء الانتظار ... جاري التحديث» بأيقونة الدبلوما (حركات بهلوانية) أثناء تحديث قاعدة البيانات */
+  /* v10.8.0: شاشة «الرجاء الانتظار ... جاري التحديث» بأيقونة الدبلوما (حركات بهلوانية) أثناء تحديث قاعدة البيانات */
   function loader(on) {
     var e = document.getElementById("phLoad");
     if (!e) {
@@ -247,7 +247,7 @@
     }
     e.classList.toggle("on", !!on);
   }
-  /* v10.7.3: أشرطة التقدم تتحرك ذهاباً وإياباً ثم تستقر عند النسبة المطلوبة */
+  /* v10.8.0: أشرطة التقدم تتحرك ذهاباً وإياباً ثم تستقر عند النسبة المطلوبة */
   var BAR_SEL = ".ph-bar i,.pg-bar i,.pg-crit .tr i", barT = null;
   function animBars(root) {
     if (window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches) return;
@@ -261,10 +261,21 @@
       try { el.animate(k, { duration: 2600, easing: "ease-in-out", delay: Math.min(400, el.getBoundingClientRect().top > innerHeight ? 0 : 0) }); } catch (x) {}
     });
   }
+  /* حلقة التقدم الكلي: ترسم ذهاباً وإياباً ثم تستقر عند النسبة */
+  function animRings(root) {
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+    Array.prototype.forEach.call((root || document).querySelectorAll(".pg-ring svg circle[stroke-dasharray]"), function (el) {
+      if (el.dataset.an || !el.animate) return; el.dataset.an = "1";
+      var da = el.getAttribute("stroke-dasharray") || "", m = da.split(/[ ,]+/), a = parseFloat(m[0]), b = parseFloat(m[1]);
+      if (!isFinite(a) || !isFinite(b) || b <= 0) return;
+      var full = b, f = function (x) { return x.toFixed(2) + " " + full.toFixed(2); };
+      try { el.animate([{ strokeDasharray: f(0), offset: 0 }, { strokeDasharray: f(full), offset: .38 }, { strokeDasharray: f(0), offset: .72 }, { strokeDasharray: f(a), offset: 1 }], { duration: 2600, easing: "ease-in-out" }); } catch (x) {}
+    });
+  }
   function watchBars() {
     if (barT !== null || !window.MutationObserver || !document.body) return; barT = 0;
-    new MutationObserver(function () { clearTimeout(barT); barT = setTimeout(function () { animBars(document); }, 80); }).observe(document.body, { childList: true, subtree: true });
-    animBars(document);
+    new MutationObserver(function () { clearTimeout(barT); barT = setTimeout(function () { animBars(document); animRings(document); }, 80); }).observe(document.body, { childList: true, subtree: true });
+    animBars(document); animRings(document);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", watchBars); else watchBars();
   function connChip() {
