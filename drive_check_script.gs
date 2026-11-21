@@ -48,7 +48,7 @@ var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word ف�
 var COUNT_DOC_EXT  = ["docx", "pdf"]; // الصيغ التي تُحتسب «معبّأة/معتمدة» عند الفحص؛ الرفع من البطاقة يبقى docx فقط (ACCEPT_DOC_EXT). PDF = النسخة المعتمدة للعرض ولا قالب PDF فارغ يُقارَن به
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.7.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.7.1";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5349,16 +5349,20 @@ function upReport_(folder, req) {
   if (bytes.length > UP_MAX_PDF_BYTES) return { ok: false, error: "الملف أكبر من 20 ميغابايت؛ اضغط الصور وأعد الإصدار." };
   if (!(bytes[0] === 37 && bytes[1] === 80 && bytes[2] === 68 && bytes[3] === 70)) return { ok: false, error: "الملف ليس PDF." };
   var rp = treeChild_(folder, TREE_REPORT); if (!rp) return { ok: false, error: "لا يوجد مجلد " + TREE_REPORT + " لهذا المؤشر." };
-  var trashed = 0, it = rp.getFiles(), f, nm;
+  var trashed = 0, stale = [], it = rp.getFiles(), f, nm;
   while (it.hasNext()) {
     f = it.next(); nm = f.getName();
     /* الهيكل الفارغ (0صور) يُستبدل بالتقرير الحقيقي؛ والتقرير السابق بالاسم نفسه يذهب إلى السلة */
-    if (nm === req.name || (n > 0 && upName_(req.code, nm) === 0)) { f.setTrashed(true); trashed++; }
+    if (nm === req.name || (n > 0 && upName_(req.code, nm) === 0)) {
+      /* v9.7.1: ملف مملوك لحساب آخر (مثل الهياكل 0صور) لا يُسقط الرفع كله؛ نجرّب السلة ثم إعادة التسمية ثم نتجاوزه */
+      try { f.setTrashed(true); trashed++; }
+      catch (e1) { try { f.setName("_مستبدل_" + Date.now() + "_" + nm); trashed++; } catch (e2) { stale.push(nm); } }
+    }
   }
   var file = rp.createFile(Utilities.newBlob(bytes, "application/pdf", req.name));
   try { file.setDescription("رُفع عبر البوابة بواسطة: " + String(req.who || "غير محدد").slice(0, 60) + " — " + new Date().toISOString()); } catch (x) {}
   cacheDel_(CACHE_KEY_TREE);
-  return { ok: true, id: file.getId(), url: file.getUrl(), photos: n, replaced: trashed };
+  return { ok: true, id: file.getId(), url: file.getUrl(), photos: n, replaced: trashed, notReplaced: stale };
 }
 /* رفع سجل معبّأ (v9.3.0): يحدَّد السجل باسمه (req.rec)، والاسم النهائي يحدده السكربت فلا يخطئ المستخدم.
    يُستبدل ملف السجل في 1_قيد_المراجعة (القديم إلى السلة)، ويُرفض إن كان السجل معتمداً في 2_معتمد. Word (docx) فقط. */
