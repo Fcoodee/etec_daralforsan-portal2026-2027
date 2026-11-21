@@ -1,4 +1,4 @@
-/* report.js — v10.8.4 — محرّر حي لمدير النظام: تحميل المسودة المركزية تلقائياً، استبدال صورة بنقرة، مؤشر التزامن، ثم حفظ مركزي ← PDF ← رفع.
+/* report.js — v10.8.5 — محرّر حي لمدير النظام: تحميل المسودة المركزية تلقائياً، استبدال صورة بنقرة، مؤشر التزامن، ثم حفظ مركزي ← PDF ← رفع.
    (أصله v9.2.0: صفحة العمل على قالب تقرير الشواهد البصرية: خانات صور وأوصاف، مسودة محلية، إصدار PDF بالاسم الصحيح، ورفع/مسودة مركزية عبر Apps Script.) */
 (function () {
   "use strict";
@@ -100,7 +100,7 @@
   function render() {
     var i = ind(), now = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     /* قرار مدير المشروع: الرسمي (المجال/المعيار/المؤشر/الإضاءات) بلغتين؛ وما يخص القسم (السجلات والوثائق) بالإنجليزية فقط */
-    /* v10.8.4: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
+    /* v10.8.5: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
     var regs = i.recs.map(function (r, k) { return regSlotHtml(I.rec[r] || r, qrUrl("rec", k), k); });
     var dl = (window.ETEC_DOCS && window.ETEC_DOCS[i.code]) || [];
     var docs = dl.length ? dl.map(function (x) { return '<li class="rec-q"><div class="bi"><div class="en">' + E(x.en) + "</div></div>" + qrBox(x.u, 64, "Scan: open this document") + "</li>"; })
@@ -122,7 +122,7 @@
       listSec("Highlights toward achieving the indicator", "إضاءات نحو تحقيق المؤشر", hl, "Official highlights will be added here.").replace('<section class="sec">', '<section class="sec' + (hl.length ? "" : " noprint") + '">') +
       "</div>" +
       '<div class="sh-foot"><span>Evidence photos: <b>' + count() + "</b> · Unofficial English translation — the Arabic text is the reference.</span><span>Internal platform — not affiliated with the Education and Training Evaluation Commission (ETEC).</span></div>";
-    /* v10.8.4: الصور الطولية (ملصقات/لقطات جوال) تُعرض بإطار أطول بدل شريط عريض صغير */
+    /* v10.8.5: الصور الطولية (ملصقات/لقطات جوال) تُعرض بإطار أطول بدل شريط عريض صغير */
     Array.prototype.forEach.call(document.querySelectorAll("#sheet .slot:not(.reg) .ph img"), function (im) {
       var f = function () { if (im.naturalHeight > im.naturalWidth * 1.15) im.parentNode.classList.add("tall"); };
       if (im.complete) f(); else im.addEventListener("load", f);
@@ -222,12 +222,12 @@
     return fetch(url(), { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) }).then(function (r) { return r.json(); });
   }
   function upEnable(on) { ["btnUp", "btnSaveC", "btnLoadC"].forEach(function (id) { $(id).disabled = !on; }); }
-  /* v10.8.4: عند فتح المؤشر تُجلب المسودة المركزية؛ الأحدث (المركزية أم المحلية) هي المعتمدة، ولا يُكتب فوق عمل أحدث */
+  /* v10.8.5: عند فتح المؤشر تُجلب المسودة المركزية؛ الأحدث (المركزية أم المحلية) هي المعتمدة، ولا يُكتب فوق عمل أحدث */
   function autoPull() {
     if (pulled === code) return; var c0 = code; pulled = c0;
     post("loadDraft").then(function (o) {
       if (c0 !== code) return;
-      if (!o || !o.ok) { sync("تعذّر جلب المسودة المركزية", "bad"); msg("saveMsg", "المسودة المركزية: " + ((o && o.error) || "ردّ غير متوقع من السكربت (قد يكون الإصدار المنشور أقدم من v9.5.0)"), "bad"); pulled = ""; return; }
+      if (!o || !o.ok) { sync("تعذّر جلب المسودة المركزية", "bad"); msg("saveMsg", "المسودة المركزية: " + driveErr((o && o.error) || "ردّ غير متوقع من السكربت (قد يكون الإصدار المنشور أقدم من v9.5.0)"), "bad"); pulled = ""; return; }
       if (!o.draft) { if (count()) setDirty(true); else sync("لا مسودة مركزية بعد", "idle"); return; }
       var ct = Date.parse(o.saved) || 0;
       if (!count() || ct > localTs) {
@@ -239,12 +239,16 @@
       else setDirty(false);
     }).catch(function (e) { sync("تعذّر الاتصال لجلب المسودة", "bad"); msg("saveMsg", "تعذّر جلب المسودة المركزية: " + (e && e.message || e), "bad"); pulled = ""; });
   }
+  function driveErr(m) { return /DriveApp|Access denied|Authorization|permission/i.test(String(m || "")) ? "السكربت المنشور لا يملك صلاحية Drive. في محرر Apps Script شغّل authorizeDrive مرة واحدة ووافق على الصلاحيات، ثم نشر ← إدارة عمليات النشر ← تعديل ← إصدار جديد (تنفيذ بصفة: أنا — الوصول: أي شخص)." : (m || ""); }
+  function busy(t) { try { window.PortalFX && PortalFX.busy(t); } catch (e) {} }
+  function idle() { try { window.PortalFX && PortalFX.idle(); } catch (e) {} }
   function ping() {
     upOK = false; upEnable(false);
     if (!url()) { chip("غير مفعّل", "idle"); msg("upMsg", "رابط السكربت غير مضبوط.", "bad"); return; }
     chip("يتحقق…", "wip");
     post("ping").then(function (r) {
-      if (r && r.ok) { upOK = true; upEnable(true); chip("جاهز", "ok"); autoPull(); msg("upMsg", "متصل بالسكربت " + (r.v || ""), "ok"); try { localStorage.setItem(TK, tok()); localStorage.setItem(WK, $("who").value.trim()); } catch (e) {} }
+      if (r && r.ok && r.drive === false) { upOK = false; upEnable(false); sync("السكربت بلا صلاحية Drive", "bad"); chip("يلزم تفويض Drive", "bad"); msg("upMsg", driveErr("DriveApp " + (r.driveMsg || "")), "bad"); }
+      else if (r && r.ok) { upOK = true; upEnable(true); chip("جاهز", "ok"); autoPull(); msg("upMsg", "متصل بالسكربت " + (r.v || ""), "ok"); try { localStorage.setItem(TK, tok()); localStorage.setItem(WK, $("who").value.trim()); } catch (e) {} }
       else { sync("السكربت غير جاهز", "bad"); chip("غير جاهز", "bad"); msg("upMsg", (r && r.error) || "تعذّر التحقق.", "bad"); }
     }).catch(function () { sync("تعذّر الاتصال بالسكربت", "bad"); chip("غير متاح", "bad"); msg("upMsg", "تعذّر الاتصال بالسكربت.", "bad"); });
   }
@@ -259,22 +263,22 @@
     if (!confirm("سيُرفع الملف إلى مجلد التقرير باسم:\n" + nm + "\n(عدد الصور حسب القالب الحالي: " + count() + ")\nويُنقل الهيكل الفارغ إلى سلة التخزين السحابي. متابعة؟")) return;
     var r = new FileReader(); msg("upMsg", "جارٍ الرفع…");
     r.onload = function () {
-      post("uploadReport", { name: nm, pdf: String(r.result).split(",")[1] }).then(function (o) {
-        if (o && o.ok) { msg("upMsg", "تم الرفع (" + o.photos + " صور)" + (o.replaced ? " واستُبدل " + o.replaced + " ملف" : "") + ". حدّث الحالة بعد دقيقة.", "ok"); P.load(true); } else msg("upMsg", (o && o.error) || "فشل الرفع.", "bad");
-      }).catch(function () { msg("upMsg", "تعذّر الاتصال بالسكربت.", "bad"); });
+      busy("جاري رفع التقرير مركزياً ..."); post("uploadReport", { name: nm, pdf: String(r.result).split(",")[1] }).then(function (o) { idle();
+        if (o && o.ok) { msg("upMsg", "تم الرفع (" + o.photos + " صور)" + (o.replaced ? " واستُبدل " + o.replaced + " ملف" : "") + ". حدّث الحالة بعد دقيقة.", "ok"); P.load(true); } else msg("upMsg", driveErr((o && o.error) || "فشل الرفع."), "bad");
+      }).catch(function () { idle(); msg("upMsg", "تعذّر الاتصال بالسكربت.", "bad"); });
     };
     r.readAsDataURL(f);
   });
   $("btnSaveC").addEventListener("click", function () {
-    msg("upMsg", "جارٍ الحفظ…"); post("saveDraft", { draft: JSON.stringify({ code: code, slots: slots, v: "9.2.0" }) }).then(function (o) { if (o && o.ok) setDirty(false); msg("upMsg", o && o.ok ? "حُفظت المسودة مركزياً." : (o && o.error) || "فشل الحفظ.", o && o.ok ? "ok" : "bad"); }).catch(function () { msg("upMsg", "تعذّر الاتصال.", "bad"); });
+    msg("upMsg", "جارٍ الحفظ…"); busy("جاري حفظ التقرير مركزياً ..."); post("saveDraft", { draft: JSON.stringify({ code: code, slots: slots, v: "9.2.0" }) }).then(function (o) { idle(); if (o && o.ok) setDirty(false); msg("upMsg", o && o.ok ? "حُفظت المسودة مركزياً." : driveErr((o && o.error) || "فشل الحفظ."), o && o.ok ? "ok" : "bad"); }).catch(function () { idle(); msg("upMsg", "تعذّر الاتصال.", "bad"); });
   });
   $("btnLoadC").addEventListener("click", function () {
-    post("loadDraft").then(function (o) {
-      if (!o || !o.ok) { msg("upMsg", (o && o.error) || "فشل الاسترجاع.", "bad"); return; }
+    busy("جاري استرجاع المسودة المركزية ..."); post("loadDraft").then(function (o) {
+      idle(); if (!o || !o.ok) { msg("upMsg", driveErr((o && o.error) || "فشل الاسترجاع."), "bad"); return; }
       if (!o.draft) { msg("upMsg", "لا توجد مسودة مركزية لهذا المؤشر.", "bad"); return; }
       if (!confirm("استبدال الخانات الحالية بالمسودة المركزية؟")) return;
       var d = JSON.parse(o.draft); slots = (d.slots || []).slice(0, MAXS); fit(); render(); save(); msg("upMsg", "استُرجعت المسودة المركزية.", "ok");
-    }).catch(function () { msg("upMsg", "تعذّر الاتصال.", "bad"); });
+    }).catch(function () { idle(); msg("upMsg", "تعذّر الاتصال.", "bad"); });
   });
 
   /* ===== تشغيل ===== */

@@ -1,4 +1,4 @@
-/* fx.js — حركات شعار الدبلوما (v10.8.4): (1) شعار وحده بحركات بهلوانية من بدء تحميل صفحة الهبوط، بلا صندوق ولا خلفية
+/* fx.js — حركات شعار الدبلوما (v10.8.5): (1) شعار وحده بحركات بهلوانية من بدء تحميل صفحة الهبوط، بلا صندوق ولا خلفية
    (2) شعار صغير يرافق كل ضغطة ماوس/لمس لثوانٍ. لا يعتمد على أي ملف آخر، ويحترم «تقليل الحركة». */
 (function () {
   "use strict";
@@ -39,6 +39,22 @@
     if (document.readyState === "complete") ready(); else window.addEventListener("load", ready);
     setTimeout(hide, 6000); /* سقف أمان */
   }
+  /* (1b) شاشة انتظار العمليات (رفع/حفظ مركزي): الشعار بالحركة الأكروباتية + رسالة؛ PortalFX.busy("...") ثم PortalFX.idle() */
+  var busyEl = null, busyN = 0;
+  window.PortalFX = {
+    busy: function (txt) {
+      busyN++;
+      if (!busyEl) {
+        busyEl = document.createElement("div"); busyEl.id = "fxBusy"; busyEl.setAttribute("role", "status"); busyEl.setAttribute("aria-live", "polite");
+        busyEl.style.cssText = "position:fixed;inset:0;z-index:2147483001;display:flex;flex-direction:column;align-items:center;justify-content:center;background:transparent;pointer-events:auto;cursor:progress";
+        busyEl.innerHTML = '<img class="lg" src="' + LOGO + '" alt="" aria-hidden="true" style="width:130px;height:130px;object-fit:contain;filter:drop-shadow(0 10px 8px rgba(15,23,42,.28))"><div class="tx" style="margin-top:10px;font:800 16px/1.6 Tajawal,\'Segoe UI\',Tahoma,sans-serif;color:#123a63;text-align:center;text-shadow:0 0 6px #fff,0 0 12px #fff,0 0 18px #fff"></div>';
+        de.appendChild(busyEl);
+        try { busyEl.querySelector(".lg").animate(ACRO, { duration: 2800, iterations: Infinity, easing: "cubic-bezier(.45,.05,.3,1)" }); } catch (e) {}
+      }
+      busyEl.querySelector(".tx").textContent = txt || "الرجاء الانتظار ...";
+    },
+    idle: function () { busyN = Math.max(0, busyN - 1); if (busyN === 0 && busyEl) { if (busyEl.parentNode) busyEl.parentNode.removeChild(busyEl); busyEl = null; } }
+  };
   /* (2) شعار يرافق كل ضغطة: يظهر مع حركة لثوانٍ ثم يتلاشى */
   var live = 0;
   function pop(x, y) {

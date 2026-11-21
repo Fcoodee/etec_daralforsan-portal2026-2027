@@ -48,7 +48,7 @@ var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word ف�
 var COUNT_DOC_EXT  = ["docx", "pdf"]; // الصيغ التي تُحتسب «معبّأة/معتمدة» عند الفحص؛ الرفع من البطاقة يبقى docx فقط (ACCEPT_DOC_EXT). PDF = النسخة المعتمدة للعرض ولا قالب PDF فارغ يُقارَن به
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.5.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.6.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5290,7 +5290,12 @@ function doPost(e) {
   var tk = upTokenOk_(req.token);
   if (tk === "off") return upJson_({ ok: false, error: "الرفع الآلي غير مفعّل بعد: يضبط مدير النظام UPLOAD_TOKEN في خصائص السكربت.", off: true });
   if (tk !== "ok") return upJson_({ ok: false, error: "رمز الرفع غير صحيح." });
-  if (req.action === "ping") return upJson_({ ok: true, v: SCRIPT_VERSION });
+  if (req.action === "ping") {
+    /* v9.6.0: فحص صلاحية Drive فعلياً حتى لا يفاجأ المستخدم عند الرفع */
+    var dv = true, dm = "";
+    try { DriveApp.getRootFolder().getId(); } catch (pe) { dv = false; dm = String(pe && pe.message || pe); }
+    return upJson_({ ok: true, v: SCRIPT_VERSION, drive: dv, driveMsg: dm });
+  }
   var ent = TREE[req.code];
   if (!ent) return upJson_({ ok: false, error: "رمز المؤشر غير معروف." });
   var lock = LockService.getScriptLock();
@@ -5428,4 +5433,18 @@ function placeShells() {
   }
   try { CacheService.getScriptCache().remove(CACHE_KEY_TREE); } catch (e) {}
   Logger.log("نُقل " + moved + " — موجود مسبقاً " + skipped.length + " — بلا مطابقة " + miss.length + (miss.length ? "\n" + miss.join("\n") : ""));
+}
+
+
+/**
+ * authorizeDrive() — شغّلها مرة واحدة يدوياً من المحرر (زر ▶ Run) ثم وافق على الصلاحيات.
+ * سبب الخطأ «Access denied: DriveApp» أن النشر الجديد لم تُمنح له صلاحية Drive، أو أنه منشور بصيغة
+ * «تنفيذ بصفة: المستخدم الذي يصل إلى التطبيق». الحل: بعد التفويض → نشر ← إدارة عمليات النشر ← تعديل ← الإصدار: جديد،
+ * تنفيذ بصفة: أنا (Me)، من لديه صلاحية الوصول: أي شخص.
+ */
+function authorizeDrive() {
+  var r = DriveApp.getRootFolder();
+  var f = DriveApp.getFolderById(Object.keys(TREE).length ? TREE[Object.keys(TREE)[0]].f : r.getId());
+  SpreadsheetApp.getActive;
+  Logger.log("تم التفويض. مجلد الاختبار: " + f.getName());
 }
