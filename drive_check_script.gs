@@ -48,7 +48,7 @@ var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word ف�
 var COUNT_DOC_EXT  = ["docx", "pdf"]; // الصيغ التي تُحتسب «معبّأة/معتمدة» عند الفحص؛ الرفع من البطاقة يبقى docx فقط (ACCEPT_DOC_EXT). PDF = النسخة المعتمدة للعرض ولا قالب PDF فارغ يُقارَن به
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.6.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.6.1";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5157,7 +5157,7 @@ function refreshTree_() {
   var out = { schema: "tree-v2", version: SCRIPT_VERSION, generatedAt: new Date().toISOString(), asof: new Date().toISOString().slice(0, 10), required: req, uploaded: up, ready: ready, approved: ap, created: ready, done: ap, repCreated: repC, repLinked: repL, repTarget: REPORT_TARGET, ind: ind, errors: errors, partial: partial,
     basis: "منشأة = ملف السجل موجود في مجلد المؤشر (فارغاً أو معبّأ)؛ مرفوعة = ملف معبّأ يختلف عن قالبه داخل 2_معتمد بعد مراجعة المشرف؛ معبّأة قيد المراجعة = معبّأ في 1_قيد_المراجعة (لا تُحتسب)؛ تقرير الشواهد: منشأ = ملف PDF موجود، ومربوط = عدد الصور في اسمه ≥ الهدف" };
   var json = JSON.stringify(out);
-  try { CacheService.getScriptCache().put(CACHE_KEY_TREE, json, CACHE_SECONDS); } catch (e) {}
+  cachePut_(CACHE_KEY_TREE, json);
   return json;
 }
 /* تشغيل يدوي لفحص الشجرة: يطبع الملخص في السجل ولا يغيّر شيئاً */
@@ -5169,6 +5169,34 @@ function verifyTree() {
 }
 
 /* ========== 2) تحديث الحالة ========== */
+
+/* v9.6.1: كاش مقسَّم — CacheService يرفض أي قيمة تتجاوز ~100KB (ويفشل بصمت)، فكانت الحالة الكبيرة لا تُخزَّن
+   ويُعاد مسح Drive كاملاً مع كل زيارة فتبدو اللوحة «متوقفة». نقسم JSON إلى أجزاء ≤ 90,000 حرف. */
+function cachePut_(key, json) {
+  try {
+    var c = CacheService.getScriptCache(), n = Math.ceil(json.length / 90000), o = {};
+    o[key + "_n"] = String(n);
+    for (var i = 0; i < n; i++) o[key + "_" + i] = json.substr(i * 90000, 90000);
+    c.putAll(o, CACHE_SECONDS);
+  } catch (e) {}
+}
+function cacheGet_(key) {
+  try {
+    var c = CacheService.getScriptCache(), n = parseInt(c.get(key + "_n") || "0", 10);
+    if (!n) return null;
+    var ks = []; for (var i = 0; i < n; i++) ks.push(key + "_" + i);
+    var m = c.getAll(ks), out = "";
+    for (var j = 0; j < n; j++) { if (m[key + "_" + j] == null) return null; out += m[key + "_" + j]; }
+    return out;
+  } catch (e) { return null; }
+}
+function cacheDel_(key) {
+  try {
+    var c = CacheService.getScriptCache(), n = parseInt(c.get(key + "_n") || "0", 10), ks = [key + "_n"];
+    for (var i = 0; i < Math.max(n, 1); i++) ks.push(key + "_" + i);
+    c.removeAll(ks);
+  } catch (e) {}
+}
 function refreshStatus() {
   var lock = LockService.getScriptLock();
   if (!lock.tryLock(30000)) throw new Error("تحديث آخر قيد التنفيذ؛ أعد المحاولة بعد قليل.");
@@ -5253,7 +5281,7 @@ function installTrigger() {
 /* ========== 4) واجهة الويب ========== */
 function doGet(e) {
   var p = (e && e.parameter) || {}, json = null;
-  if (p.refresh !== "1") json = CacheService.getScriptCache().get(TREE_MODE ? CACHE_KEY_TREE : CACHE_KEY);
+  if (p.refresh !== "1") json = TREE_MODE ? cacheGet_(CACHE_KEY_TREE) : CacheService.getScriptCache().get(CACHE_KEY);
   if (!json) {
     try { json = refreshStatus(); }
     catch (err) { json = JSON.stringify({ generatedAt: new Date().toISOString(), errors: [{ key: "refresh", error: err.message }], partial: true }); }
@@ -5328,7 +5356,7 @@ function upReport_(folder, req) {
   }
   var file = rp.createFile(Utilities.newBlob(bytes, "application/pdf", req.name));
   try { file.setDescription("رُفع عبر البوابة بواسطة: " + String(req.who || "غير محدد").slice(0, 60) + " — " + new Date().toISOString()); } catch (x) {}
-  try { CacheService.getScriptCache().remove(CACHE_KEY_TREE); } catch (x) {}
+  cacheDel_(CACHE_KEY_TREE);
   return { ok: true, id: file.getId(), url: file.getUrl(), photos: n, replaced: trashed };
 }
 /* رفع سجل معبّأ (v9.3.0): يحدَّد السجل باسمه (req.rec)، والاسم النهائي يحدده السكربت فلا يخطئ المستخدم.
@@ -5364,7 +5392,7 @@ function upRecord_(folder, req) {
   try { file.setDescription("رُفع عبر البوابة بواسطة: " + String(req.who || "غير محدد").slice(0, 60) + " — " + new Date().toISOString()); } catch (x) {}
   /* علامة «قُدّم للمراجعة»: يرثها الملف حين ينقله المشرف إلى 2_معتمد (المعرّف نفسه) */
   try { PropertiesService.getScriptProperties().setProperty("S_" + file.getId(), new Date().toISOString()); } catch (x) {}
-  try { CacheService.getScriptCache().remove(CACHE_KEY_TREE); } catch (x) {}
+  cacheDel_(CACHE_KEY_TREE);
   return { ok: true, id: file.getId(), name: name, replaced: old.length };
 }
 /* مراجعة سجل (v9.4.0): اعتماد = نقله إلى 2_معتمد؛ إعادة للتعبئة = يبقى في 1_قيد_المراجعة بعلامة R_ وملاحظة يراها العضو.
@@ -5399,7 +5427,7 @@ function reviewRecord_(folder, req, mode) {
     try { PropertiesService.getScriptProperties().setProperty("R_" + file.getId(), JSON.stringify({ n: note.slice(0, 160), w: who, t: now.slice(0, 10) })); } catch (e) { return { ok: false, error: "تعذّر حفظ الملاحظة: " + e.message }; }
     try { file.setDescription("أُعيد للتعبئة بواسطة: " + who + " — " + now + " — " + note.slice(0, 120)); } catch (e) {}
   }
-  try { CacheService.getScriptCache().remove(CACHE_KEY_TREE); } catch (e) {}
+  cacheDel_(CACHE_KEY_TREE);
   return { ok: true, mode: mode, name: file.getName() };
 }
 function upDraftName_(code) { return "مسودة_تقرير_" + code + ".json"; }
@@ -5431,7 +5459,7 @@ function placeShells() {
     if (rp.getFilesByName(f.getName()).hasNext()) { skipped.push(f.getName()); continue; }
     f.moveTo(rp); moved++;
   }
-  try { CacheService.getScriptCache().remove(CACHE_KEY_TREE); } catch (e) {}
+  cacheDel_(CACHE_KEY_TREE);
   Logger.log("نُقل " + moved + " — موجود مسبقاً " + skipped.length + " — بلا مطابقة " + miss.length + (miss.length ? "\n" + miss.join("\n") : ""));
 }
 
