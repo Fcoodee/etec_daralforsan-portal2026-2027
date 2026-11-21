@@ -236,7 +236,7 @@
   }
   function fmtT(t) { try { return new Date(t).toLocaleString("ar-SA-u-ca-gregory", { dateStyle: "medium", timeStyle: "short" }); } catch (e) { return t; } }
   var syncTimer = null, syncT0 = 0;
-  /* v10.8.6: شاشة «الرجاء الانتظار ... جاري التحديث» بأيقونة الدبلوما (حركات بهلوانية) أثناء تحديث قاعدة البيانات */
+  /* v10.8.7: شاشة «الرجاء الانتظار ... جاري التحديث» بأيقونة الدبلوما (حركات بهلوانية) أثناء تحديث قاعدة البيانات */
   function loader(on) {
     var e = document.getElementById("phLoad");
     if (!e) {
@@ -247,7 +247,7 @@
     }
     e.classList.toggle("on", !!on);
   }
-  /* v10.8.6: أشرطة التقدم تتحرك ذهاباً وإياباً ثم تستقر عند النسبة المطلوبة */
+  /* v10.8.7: أشرطة التقدم تتحرك ذهاباً وإياباً ثم تستقر عند النسبة المطلوبة */
   var BAR_SEL = ".ph-bar i,.pg-bar i,.pg-crit .tr i", barT = null;
   function animBars(root) {
     if (window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches) return;

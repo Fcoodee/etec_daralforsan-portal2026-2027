@@ -48,7 +48,7 @@ var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word ف�
 var COUNT_DOC_EXT  = ["docx", "pdf"]; // الصيغ التي تُحتسب «معبّأة/معتمدة» عند الفحص؛ الرفع من البطاقة يبقى docx فقط (ACCEPT_DOC_EXT). PDF = النسخة المعتمدة للعرض ولا قالب PDF فارغ يُقارَن به
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.6.1";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.7.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5324,6 +5324,7 @@ function doPost(e) {
     try { DriveApp.getRootFolder().getId(); } catch (pe) { dv = false; dm = String(pe && pe.message || pe); }
     return upJson_({ ok: true, v: SCRIPT_VERSION, drive: dv, driveMsg: dm });
   }
+  if (req.action === "viewFile") return upJson_(upView_(req.id));
   var ent = TREE[req.code];
   if (!ent) return upJson_({ ok: false, error: "رمز المؤشر غير معروف." });
   var lock = LockService.getScriptLock();
@@ -5475,4 +5476,27 @@ function authorizeDrive() {
   var f = DriveApp.getFolderById(Object.keys(TREE).length ? TREE[Object.keys(TREE)[0]].f : r.getId());
   SpreadsheetApp.getActive;
   Logger.log("تم التفويض. مجلد الاختبار: " + f.getName());
+}
+
+
+/* v9.7.0: عرض الملف داخل الصفحة بلا اشتراط حساب Google عند المشاهد.
+   يعمل السكربت بصفة مالكه ويُرجع محتوى PDF/صورة (base64) لملفات المشروع فقط (المعرّفات الواردة في الحالة المخزّنة)،
+   للقراءة فقط وبحد أقصى 12MB. ملف Word يُعرض عبر نسخة PDF بجانبه إن وُجدت. */
+function upView_(id) {
+  id = String(id || "");
+  if (!/^[A-Za-z0-9_-]{20,60}$/.test(id)) return { ok: false, error: "معرّف الملف غير صالح." };
+  var st = cacheGet_(CACHE_KEY_TREE);
+  if (!st) { try { st = refreshStatus(); } catch (e) { return { ok: false, error: "الحالة غير جاهزة بعد؛ أعد المحاولة." }; } }
+  if (st.indexOf(id) < 0) return { ok: false, error: "الملف ليس من ملفات المشروع." };
+  try {
+    var f = DriveApp.getFileById(id), mt = f.getMimeType();
+    if (mt !== "application/pdf" && mt.indexOf("image/") !== 0) {
+      var base = f.getName().replace(/\.[^.]+$/, ""), pars = f.getParents(), alt = null;
+      if (pars.hasNext()) { var it = pars.next().getFilesByName(base + ".pdf"); if (it.hasNext()) alt = it.next(); }
+      if (!alt) return { ok: false, error: "لا توجد نسخة PDF لهذا الملف للمعاينة؛ افتحه من التخزين السحابي.", name: f.getName() };
+      f = alt; mt = "application/pdf";
+    }
+    if (f.getSize() > 12 * 1024 * 1024) return { ok: false, error: "الملف أكبر من 12MB؛ افتحه من التخزين السحابي." };
+    return { ok: true, name: f.getName(), mime: mt, b64: Utilities.base64Encode(f.getBlob().getBytes()) };
+  } catch (e) { return { ok: false, error: "تعذّر قراءة الملف: " + e.message }; }
 }
