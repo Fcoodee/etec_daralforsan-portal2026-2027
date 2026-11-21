@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=10.8.10"></script>
-<script src="fx.js?v=10.8.10"></script>
-<script src="portal-config.js?v=10.8.10"></script>
-<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.8.10" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.8.10"><\/script>');}</script>
+<script src="shield.js?v=10.8.11"></script>
+<script src="fx.js?v=10.8.11"></script>
+<script src="portal-config.js?v=10.8.11"></script>
+<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.8.11" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.8.11"><\/script>');}</script>
 <meta name="robots" content="noindex,nofollow">
 <title>نحو التميز · نسبة الإنجاز الكلية للمشروع — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=10.8.10">
+<link rel="stylesheet" href="phase.css?v=10.8.11">
 <script>/* حارس الإصدار: إن كانت الصفحة محفوظة قديمة في المتصفح تُعاد من الخادم مرة واحدة */
 (function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=10.8.10"></script>
-<script src="portal-role.js?v=10.8.10"></script>
+<script src="portal-meta.js?v=10.8.11"></script>
+<script src="portal-role.js?v=10.8.11"></script>
 <style>
 :root{--d1:#1d4ed8;--d2:#047857;--d3:#b45309;--d4:#7e22ce;--d1b:#eff6ff;--d2b:#ecfdf5;--d3b:#fffbeb;--d4b:#faf5ff}
 .nd-disc{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:8px 14px;font-size:12.8px;line-height:1.9;margin:8px 0 12px}
@@ -130,11 +130,11 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default}
 <body>
 <div id="chrome"></div>
 <main class="ph-main" id="main" style="max-width:1180px"><div class="ph-empty">جارٍ التحميل…</div></main>
-<div id="rfMod" role="dialog" aria-modal="true" aria-label="عرض الملف"><div class="bar"><span id="rfT"></span><a class="ph-btn sm" id="rfO" target="_blank" rel="noopener">فتح في التخزين السحابي</a><button type="button" class="ph-btn sm" id="rfX">إغلاق</button></div><div class="why">إن ظهرت رسالة «لا تملك صلاحية» فسجّل الدخول بحساب Google المصرّح له بمجلد المشروع.</div><iframe id="rfF" title="عرض الملف" allow="fullscreen"></iframe></div>
+<div id="rfMod" role="dialog" aria-modal="true" aria-label="عرض الملف"><div class="bar"><span id="rfT"></span><a class="ph-btn sm" id="rfO" target="_blank" rel="noopener">فتح في التخزين السحابي</a><button type="button" class="ph-btn sm" id="rfX">إغلاق</button></div><iframe id="rfF" title="عرض الملف" allow="fullscreen"></iframe></div>
 
-<script src="portal-names.js?v=10.8.10"></script>
-<script src="phase-data.js?v=10.8.10"></script>
-<script src="phase-core.js?v=10.8.10"></script>
+<script src="portal-names.js?v=10.8.11"></script>
+<script src="phase-data.js?v=10.8.11"></script>
+<script src="phase-core.js?v=10.8.11"></script>
 <script>
 (function () {
   "use strict";
@@ -164,11 +164,10 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default}
     var rc = rec.length ? '<ul class="rf-rl">' + rec.map(function (r) {
       var k = s.st[r] || "blank", f = s.fl && s.fl[r], ok = !!(f && f[2] && f[0] === 1); if (k === "approved") apN++;
       return '<li><span class="rf-rn">' + E(r) + '</span><span class="rf-rs">' + P.chip(k) + (ok ? ' <button type="button" class="ph-btn sm" data-v="' + E(f[2]) + '" data-vt="' + E("⁦" + i.code + "⁩ · " + r) + '" aria-label="عرض: ' + E(r) + '"><i class="fa-solid fa-eye"></i> عرض</button>' : "") + "</span></li>";
-    }).join("") + "</ul>" + (s.live ? "" : '<p class="rf-sn">الحالة تقريبية حتى اكتمال تحديث قاعدة البيانات.</p>') : '<span class="ph-lead">لا سجلات مرتبطة.</span>';
+    }).join("") + "</ul>" + "" : '<span class="ph-lead">لا سجلات مرتبطة.</span>';
     var rf = repFile(s);
     var rp = '<div class="rf-rs">' + (rf ? '<span class="ph-chip ok">مرفوع · ' + rf.n + ' صور</span> <button type="button" class="ph-btn sm" data-v="' + E(rf.id) + '" data-vt="' + E("⁦" + i.code + "⁩ · تقرير الشواهد البصرية") + '" aria-label="عرض تقرير الشواهد البصرية"><i class="fa-solid fa-eye"></i> عرض</button>' : '<span class="ph-chip idle">لم يُرفع بعد</span>') +
-      ' <a class="ph-btn sm ad-only" href="report.html?code=' + E(i.code) + '"><i class="fa-solid fa-file-image"></i> ' + (rf ? "فتح في مولّد التقارير" : "إصدار التقرير") + "</a></div>" +
-      '<p class="rf-sn">يُبنى التقرير من سجلات المؤشر المعتمدة ويدعمها؛ ويُحتسب نصف اكتمال المؤشر.</p>';
+      ' <a class="ph-btn sm ad-only" href="report.html?code=' + E(i.code) + '"><i class="fa-solid fa-file-image"></i> ' + (rf ? "فتح في مولّد التقارير" : "إصدار التقرير") + "</a></div>";
     var key = i.code;
     return '<details class="rf-ind" id="i-' + E(i.code) + '" data-code="' + E(i.code) + '"' + (openKeep[key] ? " open" : "") + ' style="--c:' + c[0] + ";--cb:" + c[1] + '"><summary><span class="rf-code">' + E(i.code) + '</span><span class="rf-txt">' + E(i.text) +
       "<small>" + (i.dv ? '<span class="rf-chip">سجل متابعة</span>' : '<span class="rf-chip">سجلات رسمية</span>') + "السجل الرئيس: " + E(i.st || "") + " · جاهز " + apN + "/" + rec.length + "</small></span>" +
@@ -260,7 +259,7 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default}
       kpi("السجلات المنشأة", T.cr + " / " + T.req, "القوالب موجودة") +
       kpi("معبّأة قيد المراجعة", T.review, "بانتظار المشرفين") +
       kpi("تقارير الشواهد البصرية", T.repDone + " / " + T.ind, "مرفوعة") + "</div>" +
-      '<p class="pg-formula"><b>كيف تُقرأ النسبة؟</b> الأساس الحالي: ' + E(P.basisTxt()) + ". ثم يُؤخذ المتوسط على المعايير فالمجالات فالمشروع.</p></div></section>";
+      "</div></section>";
 
     h += '<h2 class="ph-h2">المجالات <small class="vis-only" style="font-weight:600;color:var(--mut)">(اضغط مجالاً لتصفية الشجرة)</small></h2><div class="pg-doms">';
     [1, 2, 3, 4].forEach(function (d) {
@@ -276,7 +275,7 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default}
     h += '<div class="pg-two"><section class="pg-box"><h2>المعايير الأحد عشر</h2>' + crits.map(function (x) {
       var p = P.critP(x.c, null), n = all.filter(function (i) { return i.c === x.c; }).length;
       return '<div class="pg-crit" style="--c:' + COL[x.d][0] + '"><span class="n">' + E(x.c) + '</span><div class="tr" role="img" aria-label="' + E(x.cn) + " " + pc(p) + '%"><i style="width:' + pc(p) + '%"></i></div><span class="p">' + pc(p) + "%</span><small>" + E(x.cn) + " · " + n + " مؤشر</small>" + critFiles(x.c) + "</div>";
-    }).join("") + '<p class="pg-note">اللون = المجال: أزرق للإدارة المدرسية، أخضر للتعليم والتعلم، عنبري لنواتج التعلم، بنفسجي للبيئة المدرسية.</p></section>' +
+    }).join("") + "</section>" +
       '<section class="pg-box"><h2>حالة السجلات (' + T.req + ')</h2><div class="pg-donut">' + donut([{ v: st.approved, c: "#047857" }, { v: st.review, c: "#d97706" }, { v: st.blank, c: "#94a3b8" }, { v: st.missing, c: "#dc2626" }]) +
       '<ul><li style="--k:#047857">جاهزة (معتمدة) <b>' + st.approved + '</b></li><li style="--k:#d97706">معبّأة قيد المراجعة <b>' + st.review + '</b></li><li style="--k:#94a3b8">منشأة بانتظار التعبئة <b>' + st.blank + '</b></li><li style="--k:#dc2626">غير منشأة <b>' + st.missing + "</b></li></ul></div></section></div>";
 
@@ -337,8 +336,8 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default}
   P.load(false);
 })();
 </script>
-<script src="page-gate.js?v=10.8.10" data-lazy="1"></script>
-<script src="legal-notice.js?v=10.8.10"></script>
-<script src="content-protect.js?v=10.8.10"></script>
+<script src="page-gate.js?v=10.8.11" data-lazy="1"></script>
+<script src="legal-notice.js?v=10.8.11"></script>
+<script src="content-protect.js?v=10.8.11"></script>
 </body>
 </html>
