@@ -1,4 +1,4 @@
-/* report.js — v10.7.2 — محرّر حي لمدير النظام: تحميل المسودة المركزية تلقائياً، استبدال صورة بنقرة، مؤشر التزامن، ثم حفظ مركزي ← PDF ← رفع.
+/* report.js — v10.7.3 — محرّر حي لمدير النظام: تحميل المسودة المركزية تلقائياً، استبدال صورة بنقرة، مؤشر التزامن، ثم حفظ مركزي ← PDF ← رفع.
    (أصله v9.2.0: صفحة العمل على قالب تقرير الشواهد البصرية: خانات صور وأوصاف، مسودة محلية، إصدار PDF بالاسم الصحيح، ورفع/مسودة مركزية عبر Apps Script.) */
 (function () {
   "use strict";
@@ -100,7 +100,7 @@
   function render() {
     var i = ind(), now = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
     /* قرار مدير المشروع: الرسمي (المجال/المعيار/المؤشر/الإضاءات) بلغتين؛ وما يخص القسم (السجلات والوثائق) بالإنجليزية فقط */
-    /* v10.7.2: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
+    /* v10.7.3: السجلات المعتمدة تظهر ضمن خانات الشواهد برمز QR (لا تُحسب صوراً)، والوثائق قسم مستقل برموز QR */
     var regs = i.recs.map(function (r, k) { return regSlotHtml(I.rec[r] || r, qrUrl("rec", k), k); });
     var dl = (window.ETEC_DOCS && window.ETEC_DOCS[i.code]) || [];
     var docs = dl.length ? dl.map(function (x) { return '<li class="rec-q"><div class="bi"><div class="en">' + E(x.en) + "</div></div>" + qrBox(x.u, 64, "Scan: open this document") + "</li>"; })
@@ -122,7 +122,7 @@
       listSec("Highlights toward achieving the indicator", "إضاءات نحو تحقيق المؤشر", hl, "Official highlights will be added here.").replace('<section class="sec">', '<section class="sec' + (hl.length ? "" : " noprint") + '">') +
       "</div>" +
       '<div class="sh-foot"><span>Evidence photos: <b>' + count() + "</b> · Unofficial English translation — the Arabic text is the reference.</span><span>Internal platform — not affiliated with the Education and Training Evaluation Commission (ETEC).</span></div>";
-    /* v10.7.2: الصور الطولية (ملصقات/لقطات جوال) تُعرض بإطار أطول بدل شريط عريض صغير */
+    /* v10.7.3: الصور الطولية (ملصقات/لقطات جوال) تُعرض بإطار أطول بدل شريط عريض صغير */
     Array.prototype.forEach.call(document.querySelectorAll("#sheet .slot:not(.reg) .ph img"), function (im) {
       var f = function () { if (im.naturalHeight > im.naturalWidth * 1.15) im.parentNode.classList.add("tall"); };
       if (im.complete) f(); else im.addEventListener("load", f);
@@ -222,7 +222,7 @@
     return fetch(url(), { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) }).then(function (r) { return r.json(); });
   }
   function upEnable(on) { ["btnUp", "btnSaveC", "btnLoadC"].forEach(function (id) { $(id).disabled = !on; }); }
-  /* v10.7.2: عند فتح المؤشر تُجلب المسودة المركزية؛ الأحدث (المركزية أم المحلية) هي المعتمدة، ولا يُكتب فوق عمل أحدث */
+  /* v10.7.3: عند فتح المؤشر تُجلب المسودة المركزية؛ الأحدث (المركزية أم المحلية) هي المعتمدة، ولا يُكتب فوق عمل أحدث */
   function autoPull() {
     if (pulled === code) return; var c0 = code; pulled = c0;
     post("loadDraft").then(function (o) {
@@ -311,7 +311,9 @@
     var first = P.byCode(q) && allowed(q) ? q : (scope ? (scope[0] ? scope[0].code : P.PH.inds[0].code) : P.PH.inds[0].code);
     openDb().then(function () { return open(first); }).then(function () { ping(); });
     P.onStatus(function () { if (ready) { rpLink(); curRep(); } });
-    P.load();
+    /* الحالة قد تأتي من كاش السكربت (ملفات استُبدلت أو أُضيفت بعد آخر مسح): نفرض مسحاً طازجاً مرة لكل جلسة */
+    var fr = false; try { fr = sessionStorage.getItem("rpFresh") === "1"; sessionStorage.setItem("rpFresh", "1"); } catch (e) {}
+    P.load(!fr);
   }
   /* شريط العمل: ثلاث خطوات تستدعي الأزرار الأصلية */
   [["tbSave", "btnSaveC"], ["tbPrint", "btnPrint"], ["tbUp", "btnUp"]].forEach(function (p) { var a = $(p[0]); if (a) a.addEventListener("click", function () { var b = $(p[1]); if (b && !b.disabled) b.click(); else msg("saveMsg", p[0] === "tbPrint" ? "أضف صورة واحدة على الأقل." : "السكربت غير جاهز بعد؛ انتظر لحظة.", "bad"); }); });
