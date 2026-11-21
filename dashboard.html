@@ -299,20 +299,24 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default}
   var blobUrl = "";
   function openFile(id) {
     if (blobUrl) { try { URL.revokeObjectURL(blobUrl); } catch (e) {} blobUrl = ""; }
-    var fallback = function (why) { if (why) document.getElementById("rfT").textContent += " — " + why; fr.src = "https://drive.google.com/file/d/" + id + "/preview"; };
+    try { window.PortalFX && PortalFX.idle(); } catch (e) {}
+    var tok = (openFile.n = (openFile.n || 0) + 1), done = false, rfT = document.getElementById("rfT"), base = rfT.textContent;
+    var fallback = function (why) { if (done || tok !== openFile.n) return; done = true; rfT.textContent = base + (why ? " — " + why : ""); fr.src = "https://drive.google.com/file/d/" + id + "/preview"; };
     if (!window.ETEC_STATUS_URL) { fallback(); return; }
-    fr.removeAttribute("src"); try { window.PortalFX && PortalFX.busy("جاري تحميل الملف ..."); } catch (e) {}
+    fr.removeAttribute("src"); rfT.textContent = base + " — جاري تحميل الملف ...";
+    var tm = setTimeout(function () { fallback("تأخر التحميل"); }, 20000);
     fetch(window.ETEC_STATUS_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "viewFile", id: id }) })
       .then(function (r) { return r.json(); })
       .then(function (o) {
-        try { window.PortalFX && PortalFX.idle(); } catch (e) {}
+        clearTimeout(tm); if (done || tok !== openFile.n) return;
         if (!o || !o.ok) { fallback(o && o.error); return; }
+        done = true; rfT.textContent = base;
         var bin = atob(o.b64), u8 = new Uint8Array(bin.length); for (var k = 0; k < bin.length; k++) u8[k] = bin.charCodeAt(k);
         blobUrl = URL.createObjectURL(new Blob([u8], { type: o.mime })); fr.src = blobUrl;
       })
-      .catch(function () { try { window.PortalFX && PortalFX.idle(); } catch (e) {} fallback(); });
+      .catch(function () { clearTimeout(tm); fallback(); });
   }
-  function closeM() { mod.classList.remove("on"); fr.removeAttribute("src"); if (lastBtn && document.body.contains(lastBtn)) lastBtn.focus(); }
+  function closeM() { openFile.n = (openFile.n || 0) + 1; mod.classList.remove("on"); fr.removeAttribute("src"); if (lastBtn && document.body.contains(lastBtn)) lastBtn.focus(); }
   document.getElementById("rfX").addEventListener("click", closeM);
   mod.addEventListener("click", function (e) { if (e.target === mod) closeM(); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && mod.classList.contains("on")) closeM(); });
