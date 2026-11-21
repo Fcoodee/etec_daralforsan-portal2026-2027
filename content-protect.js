@@ -21,7 +21,8 @@
             -ms-user-select: none !important;
             user-select: none !important;
         }
-        body.df-locked img { -webkit-user-drag: none; pointer-events: auto; }
+        body.df-locked img { -webkit-user-drag: none; }
+        #etecWM, #etecWM img, img.fxClick { pointer-events: none !important; }
 
         #df-lock-btn {
             position: fixed; top: 64px; left: 14px; z-index: 9999;
