@@ -62,11 +62,11 @@
 .sh-foot{margin-top:12px;font-size:11px;color:#64748b;display:flex;justify-content:space-between;gap:8px;border-top:1px solid #e2e8f0;padding-top:8px}
 .rp-actions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
 @media print{
-  @page{size:A4 portrait;margin:11mm 0}
-  body{background:#fff!important}
+  @page{size:A4 portrait;margin:0}
+  body{background:#fff!important;padding:0!important}
   #chrome,.noprint,.rp-side,#prBar,#etecMetaBox,#pg-out,#df-lock-btn,#dfl-sess,.slot .x,.slot .meta .in,.slot .ph .hint{display:none!important}
   .rp-wrap{display:block}
-  .sheet{border:0;box-shadow:0;padding:0;max-width:none}
+  .sheet{border:0;box-shadow:0;padding:11mm 0!important;max-width:none;box-decoration-break:clone;-webkit-box-decoration-break:clone}
   .sheet.sheet>*{margin-left:11mm;margin-right:11mm}
   .sheet>.sh-head{margin-top:0}
   .pg2{padding-top:0}

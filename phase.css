@@ -257,3 +257,7 @@ html.sh-admin.pv-vis .vis-only{display:revert!important}
  100%{-webkit-transform:translateY(0) rotate(0) scale(1)}}
 @-webkit-keyframes phSh{0%,34%,54%,80%,100%{-webkit-transform:scaleX(1);opacity:.9}18%,46%,88%{-webkit-transform:scaleX(.55);opacity:.4}62%,72%{-webkit-transform:scaleX(.7);opacity:.55}}
 @-webkit-keyframes phDot{0%,80%,100%{opacity:.2;-webkit-transform:translateY(0)}40%{opacity:1;-webkit-transform:translateY(-4px)}}
+
+/* طباعة بلا ترويسة/تذييل المتصفح (العنوان والرابط والتاريخ): هامش الصفحة صفر والتباعد داخل المحتوى */
+@page{margin:0}
+@media print{body{padding:10mm;box-decoration-break:clone;-webkit-box-decoration-break:clone}}
