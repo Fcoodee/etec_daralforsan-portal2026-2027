@@ -20,7 +20,7 @@
   /* من يرى أي صفحة. الصفحة خارج نطاق الدور تُعرض مع تنبيه ولا تُحجب (تخصيص عرض لا حماية). */
   var ALL = ORDER.slice();
   var PAGES = {
-    "index.html": ALL, "stages.html": ALL, "primary.html": ALL, "dashboard.html": ALL, "indicators.html": ALL, "reference.html": ALL, "sources.html": ALL, "docs.html": ALL, "report.html": ALL, "open.html": ALL, "home.html": ALL
+    "index.html": ALL, "stages.html": ALL, "dashboard.html": ALL, "indicators.html": ALL, "reference.html": ALL, "sources.html": ALL, "docs.html": ALL, "report.html": ALL, "open.html": ALL
     /* كل ما عداها قديم: لمدير النظام وحده */
   };
 
@@ -147,7 +147,7 @@
   function bar() {
     var pg = pageKey();
     if (true) return; /* مدير نظام واحد: لا شريط أدوار */
-    if (document.getElementById("utChip") || pg === "login.html" || pg === "index.html" || pg === "stages.html" || pg === "primary.html") return; /* evidence-link لها شريطها، وصفحة الدخول بلا شريط */
+    if (document.getElementById("utChip") || pg === "login.html" || pg === "index.html" || pg === "stages.html") return; /* evidence-link لها شريطها، وصفحة الدخول بلا شريط */
     var old = document.getElementById("prBar"); if (old) old.remove();
     var b = document.createElement("div");
     b.id = "prBar";
@@ -170,7 +170,6 @@
       if (!canSwitch(role, v)) { s.value = role || ""; return; }
       /* الانتقال إلى مساحة الدور الجديد مباشرة (عضو ← صفحة العضو وسجلاته، وهكذا) */
       /* عضو/مشرف: يُختار المجال والاسم صراحةً من البوابة (لا يُعاد الاسم السابق تلقائياً) */
-      if (v === "member" || v === "sup") { location.href = "primary.html?pick=" + v; return; }
       choose(v, function () { location.href = ROLES[v].home; });
       s.value = role || "";
     });
