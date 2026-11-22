@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=10.8.46"></script>
-<script src="fx.js?v=10.8.46"></script>
-<script src="portal-config.js?v=10.8.46"></script>
-<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.8.46" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.8.46"><\/script>');}</script>
-<script src="reference-official.js?v=10.8.46"></script>
+<script src="shield.js?v=10.8.47"></script>
+<script src="fx.js?v=10.8.47"></script>
+<script src="portal-config.js?v=10.8.47"></script>
+<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.8.47" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.8.47"><\/script>');}</script>
+<script src="reference-official.js?v=10.8.47"></script>
 <meta name="robots" content="noindex,nofollow">
 <title>المرجع: المجالات والمعايير والمؤشرات والإضاءات والسجلات — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=10.8.46">
+<link rel="stylesheet" href="phase.css?v=10.8.47">
 <script>/* حارس الإصدار */
 (function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=10.8.46"></script>
-<script src="portal-role.js?v=10.8.46"></script>
+<script src="portal-meta.js?v=10.8.47"></script>
+<script src="portal-role.js?v=10.8.47"></script>
 <style>
 :root{--d1:#1d4ed8;--d2:#047857;--d3:#b45309;--d4:#7e22ce;--d1b:#eff6ff;--d2b:#ecfdf5;--d3b:#fffbeb;--d4b:#faf5ff}
 .rf-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:10px 0}
@@ -77,7 +77,7 @@ mark{background:#fef08a;border-radius:3px}
 <div id="chrome"></div>
 <main class="ph-main" style="max-width:1180px">
   <h1 class="ph-h1">المرجع: المجالات والمعايير والمؤشرات والإضاءات والسجلات</h1>
-  <p class="ph-lead">للقراءة فقط · لمدير النظام ومشرف عمليات التقويم الذاتي · المرجعية: «معايير التقويم والاعتماد المدرسي لمدارس التعليم العام 2026 (إصدار فبراير)» الصادرة عن هيئة تقويم التعليم والتدريب.</p>
+  <p class="ph-lead">للقراءة فقط · المرجعية: «معايير التقويم والاعتماد المدرسي لمدارس التعليم العام 2026 (إصدار فبراير)» الصادرة عن هيئة تقويم التعليم والتدريب.</p>
   <div class="ph-grid" id="sum"></div>
   <div class="rf-tools" role="search">
     <input type="search" id="q" placeholder="ابحث: رمز مؤشر (1-1-1-1) أو كلمة من نص المؤشر أو الإضاءة أو اسم سجل" aria-label="بحث">
@@ -89,15 +89,26 @@ mark{background:#fef08a;border-radius:3px}
     <span class="rf-cnt" id="cnt" role="status"></span>
   </div>
   <div id="tree"></div>
-  <section class="rf-src" aria-label="الملفات المرجعية" id="pdfSec">
+  <section class="rf-src ad-only" aria-label="الملفات المرجعية" id="pdfSec">
     <h2>الملفات المرجعية (PDF) من مجلد المشروع في التخزين السحابي</h2>
     <p class="ph-lead" style="margin:0 0 4px">اضغط «عرض» لفتح الملف في نافذة داخل الصفحة، أو امسح رمز QR من جهاز ذكي. الملفات خاصة بحساب المشروع: يفتحها من له صلاحية على المجلد فقط.</p>
     <div class="rf-pdfs" id="pdfs"></div>
   </section>
-  <section class="rf-src ad-only" aria-label="روابط رسمية متحقق منها" id="offSec">
-    <h2>روابط رسمية متحقق منها (لمدير النظام فقط)</h2>
-    <p class="ph-lead" style="margin:0 0 4px">فُتحت فعليًا وقُرئ محتواها بتاريخ 22/11/2026. لا تثبت أي صفحة منها اعتراف الوزارة أو الهيئة بجهة اعتماد أجنبية (AIAAsc غير متحقق). وثيقة المعايير 2026 وأدلة الشواهد: لا رابط عام؛ تُطلب عبر منصة «تميز» أو الدعم 19925.</p>
+  <section class="rf-src" aria-label="المراجع الرسمية" id="offSec">
+    <h2>المراجع الرسمية</h2>
+    <p class="ph-lead" style="margin:0 0 6px">روابط رسمية فُتحت وقُرئ محتواها بتاريخ التحقق المذكور أمام كل رابط. لا تُعدّ دليلاً على اعتراف الوزارة أو الهيئة بأي جهة اعتماد أجنبية. وثيقة المعايير 2026 وأدلة الشواهد لا رابط عام لها؛ تُطلب عبر منصة «تميز» أو الدعم 19925.</p>
+    <div class="rf-tools" role="search" style="margin:4px 0 8px">
+      <select id="ok" aria-label="نوع المرجع"><option value="">كل الأنواع</option></select>
+      <select id="od" aria-label="المجال المرتبط"><option value="">كل المجالات</option><option value="g">عام (غير مرتبط بمجال)</option><option value="1">1 · الإدارة المدرسية</option><option value="2">2 · التعليم والتعلم</option><option value="3">3 · نواتج التعلم</option><option value="4">4 · البيئة المدرسية</option></select>
+      <span class="rf-cnt" id="ocnt" role="status"></span>
+    </div>
     <div id="offs"></div>
+    <details id="offCtx" style="margin-top:10px"><summary style="cursor:pointer;font-weight:800;font-size:13.5px">مراجع سياقية <span id="ctxN"></span></summary><p class="ph-lead" style="margin:4px 0">للاطلاع على السياق فقط: أخبار وصفحات عامة أو قديمة أو ضعيفة الصلة المباشرة بمعايير الهيئة.</p><div id="offsCtx"></div></details>
+  </section>
+  <section class="rf-src ad-only" aria-label="ملاحظات التحقق" id="admNotes">
+    <h2>ملاحظات التحقق <small style="font-weight:600;color:var(--mut)">(لمدير النظام وحده)</small></h2>
+    <p class="ph-lead" style="margin:0 0 4px">استدراكات داخلية على الروابط أعلاه: ما لم يثبت، وما قد يكون له إصدار أحدث. لا تُعرض للمطّلع.</p>
+    <ol id="admList"></ol>
   </section>
   <div class="rf-note" id="notes"></div>
   <section class="rf-src" aria-label="المراجع">
@@ -106,12 +117,12 @@ mark{background:#fef08a;border-radius:3px}
   </section>
 </main>
 <div id="rfMod" role="dialog" aria-modal="true" aria-label="عرض الملف"><div class="bar"><span id="rfT"></span><a class="ph-btn sm" id="rfO" target="_blank" rel="noopener">فتح في التخزين السحابي</a><button type="button" class="ph-btn sm" id="rfX">إغلاق</button></div><div class="why">إن ظهرت رسالة «لا تملك صلاحية» فسجّل الدخول بحساب Google المصرّح له، أو استعمل «فتح في التخزين السحابي».</div><iframe id="rfF" title="عرض الملف" referrerpolicy="no-referrer"></iframe></div>
-<script src="portal-names.js?v=10.8.46"></script>
-<script src="phase-data.js?v=10.8.46"></script>
-<script src="report-i18n.js?v=10.8.46"></script>
-<script src="highlights.js?v=10.8.46"></script>
-<script src="phase-core.js?v=10.8.46"></script>
-<script src="qrcode-lib.js?v=10.8.46"></script>
+<script src="portal-names.js?v=10.8.47"></script>
+<script src="phase-data.js?v=10.8.47"></script>
+<script src="report-i18n.js?v=10.8.47"></script>
+<script src="highlights.js?v=10.8.47"></script>
+<script src="phase-core.js?v=10.8.47"></script>
+<script src="qrcode-lib.js?v=10.8.47"></script>
 <script>
 (function () {
   "use strict";
@@ -193,7 +204,26 @@ mark{background:#fef08a;border-radius:3px}
     ["Requirements for applying school accreditation in public schools in light of ETEC standards — هاني الغامدي، مجلة جامعة أم القرى للعلوم التربوية والنفسية (2025)", "https://uqu.edu.sa/en/jep/152093", "دراسة وصفية مسحية على 536 مديراً؛ تتقاطع مع المجالات الأربعة وتُعدّ مرجعاً أكاديمياً داعماً لا مصدراً للمعايير."],
     ["Improving education in Saudi Arabia through evaluation and assessment — البنك الدولي (6 نوفمبر 2025)", "https://blogs.worldbank.org/en/arabvoices/improving-education-in-saudi-arabia-through-evaluation-and-assessment", "سياق دولي: برنامج تقويم المدارس بدأ بتقويم ذاتي ثم مراجعة خارجية عبر أربعة مجالات؛ ومنصة «تميز» الرقمية؛ ونافس ضمن مجال نواتج التعلم."]
   ];
-  document.getElementById("offs").innerHTML = (window.ETEC_OFFICIAL_REFS || []).map(function (g) { return "<h3 style=\"font-size:14px;margin:10px 0 2px;color:#003d3d\">" + E(g[0]) + "</h3><ol>" + g[1].map(function (s) { return '<li><a href="' + E(s[1]) + '" target="_blank" rel="noopener noreferrer">' + E(s[0]) + "</a><small>" + E(s[2]) + "</small></li>"; }).join("") + "</ol>"; }).join("");
+  /* v10.8.47: مراجع رسمية بوسوم (النوع، المجال، تاريخ التحقق) — أساسية ظاهرة وسياقية مطويّة؛ ملاحظات التحقق لمدير النظام وحده */
+  (function () {
+    var G = window.ETEC_OFFICIAL_REFS || [], VD = window.ETEC_OFFICIAL_V || "", DN = { 1: "الإدارة المدرسية", 2: "التعليم والتعلم", 3: "نواتج التعلم", 4: "البيئة المدرسية" }, all = [];
+    G.forEach(function (g) { g[1].forEach(function (s) { s.g = g[0]; all.push(s); }); });
+    var kinds = {}; all.forEach(function (s) { kinds[s.k] = 1; });
+    var okSel = document.getElementById("ok"), odSel = document.getElementById("od");
+    Object.keys(kinds).forEach(function (k) { okSel.insertAdjacentHTML("beforeend", '<option value="' + E(k) + '">' + E(k) + "</option>"); });
+    function li(s) { return '<li><span class="rf-chip">' + E(s.k) + '</span><span class="rf-chip">' + (s.d.length ? s.d.map(function (x) { return E(DN[x]); }).join("، ") : "عام") + '</span> <a href="' + E(s.u) + '" target="_blank" rel="noopener noreferrer">' + E(s.t) + "</a><small>" + E(s.n) + (VD ? " · تحقق: <bdi>" + E(VD.split("-").reverse().join("/")) + "</bdi>" : "") + "</small></li>"; }
+    function pass(s) { var k = okSel.value, d = odSel.value; return (!k || s.k === k) && (!d || (d === "g" ? !s.d.length : s.d.indexOf(+d) >= 0)); }
+    function box(list) { var by = {}; list.forEach(function (s) { (by[s.g] = by[s.g] || []).push(s); }); return Object.keys(by).map(function (g) { return '<h3 style="font-size:14px;margin:10px 0 2px;color:#003d3d">' + E(g) + "</h3><ol>" + by[g].map(li).join("") + "</ol>"; }).join(""); }
+    function drawOff() {
+      var core = all.filter(function (s) { return s.c === "core" && pass(s); }), ctx = all.filter(function (s) { return s.c !== "core" && pass(s); });
+      document.getElementById("offs").innerHTML = core.length ? box(core) : '<p class="ph-lead">لا مراجع أساسية مطابقة للتصفية.</p>';
+      document.getElementById("offsCtx").innerHTML = ctx.length ? box(ctx) : '<p class="ph-lead">لا مراجع سياقية مطابقة.</p>';
+      document.getElementById("ctxN").textContent = "(" + ctx.length + ")";
+      document.getElementById("ocnt").textContent = core.length + " أساسي · " + ctx.length + " سياقي";
+    }
+    okSel.addEventListener("change", drawOff); odSel.addEventListener("change", drawOff); drawOff();
+    document.getElementById("admList").innerHTML = all.filter(function (s) { return s.a; }).map(function (s) { return "<li><b>" + E(s.t) + "</b><small>" + E(s.a) + "</small></li>"; }).join("");
+  })();
   document.getElementById("srcs").innerHTML = S.map(function (s) { return "<li>" + (s[1] ? '<a href="' + E(s[1]) + '" target="_blank" rel="noopener noreferrer">' + E(s[0]) + "</a>" : "<b>" + E(s[0]) + "</b>") + "<small>" + E(s[2]) + "</small></li>"; }).join("");
 
 
@@ -218,12 +248,12 @@ mark{background:#fef08a;border-radius:3px}
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && mod.classList.contains("on")) closeM(); });
 
   /* خريطة الأدوات من data/ (تعمل على الخادم؛ وعند الفتح محلياً بلا خادم تُهمل بهدوء) */
-  fetch("data/tools_map_feb2026.json?v=10.8.46").then(function (r) { return r.json(); }).then(function (j) { TOOLS = j || {}; }).catch(function () { TOOLS = {}; }).then(function () { fillTools(); draw(); });
+  fetch("data/tools_map_feb2026.json?v=10.8.47").then(function (r) { return r.json(); }).then(function (j) { TOOLS = j || {}; }).catch(function () { TOOLS = {}; }).then(function () { fillTools(); draw(); });
   draw();
 })();
 </script>
-<script src="page-gate.js?v=10.8.46" data-lazy="1"></script>
-<script src="legal-notice.js?v=10.8.46"></script>
-<script src="content-protect.js?v=10.8.46"></script>
+<script src="page-gate.js?v=10.8.47" data-lazy="1"></script>
+<script src="legal-notice.js?v=10.8.47"></script>
+<script src="content-protect.js?v=10.8.47"></script>
 </body>
 </html>
