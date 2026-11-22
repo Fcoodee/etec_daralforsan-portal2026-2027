@@ -266,7 +266,7 @@
     r.onload = function () {
       busy("جاري رفع التقرير مركزياً ..."); post("uploadReport", { name: nm, pdf: String(r.result).split(",")[1] }).then(function (o) { idle();
         if (o && o.ok) {
-          /* v10.8.38: التقرير المرفوع والمسودة المركزية شيء واحد — بعد نجاح الرفع تُحفظ المسودة تلقائياً بالصور الحالية */
+          /* v10.8.39: التقرير المرفوع والمسودة المركزية شيء واحد — بعد نجاح الرفع تُحفظ المسودة تلقائياً بالصور الحالية */
           var okMsg = "تم الرفع (" + o.photos + " صور)" + (o.replaced ? " واستُبدل " + o.replaced + " ملف" : "") + ". حدّث الحالة بعد دقيقة."; P.load(true);
           busy("جاري حفظ المسودة المركزية ...");
           post("saveDraft", { draft: JSON.stringify({ code: code, slots: slots, v: "9.2.0" }) }).then(function (d) { idle(); if (d && d.ok) { setDirty(false); msg("upMsg", okMsg + " وحُفظت المسودة المركزية مطابقة للتقرير.", "ok"); } else msg("upMsg", okMsg + " لكن تعذّر حفظ المسودة المركزية: " + driveErr((d && d.error) || "") + " — اضغط «حفظ مركزياً».", "bad"); }).catch(function () { idle(); msg("upMsg", okMsg + " لكن تعذّر حفظ المسودة المركزية؛ اضغط «حفظ مركزياً».", "bad"); });

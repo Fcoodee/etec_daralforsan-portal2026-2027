@@ -48,7 +48,7 @@ var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word ف�
 var COUNT_DOC_EXT  = ["docx", "pdf"]; // الصيغ التي تُحتسب «معبّأة/معتمدة» عند الفحص؛ الرفع من البطاقة يبقى docx فقط (ACCEPT_DOC_EXT). PDF = النسخة المعتمدة للعرض ولا قالب PDF فارغ يُقارَن به
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.9.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.9.1";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5464,7 +5464,11 @@ function upSaveDraft_(folder, req) {
   var s = String(req.draft || ""); if (!s || s.length > UP_MAX_DRAFT_CHARS) return { ok: false, error: "المسودة فارغة أو أكبر من الحد." };
   try { JSON.parse(s); } catch (x) { return { ok: false, error: "المسودة ليست JSON صالحاً." }; }
   var nm = upDraftName_(req.code), f = upBestDraft_(folder, req.code);
-  if (f) f.setContent(s); else f = folder.createFile(nm, s, "application/json");
+  if (f) {
+    /* v9.9.1: المسودة المعبّأة قد تكون مملوكة لحساب آخر فيفشل setContent؛ حينئذ نُقصي القديمة (سلة أو إعادة تسمية) وننشئ نسخة جديدة، والأحدث تُعتمد دائماً */
+    try { f.setContent(s); }
+    catch (e0) { try { f.setTrashed(true); } catch (e1) { try { f.setName("_مستبدل_" + Date.now() + "_" + nm); } catch (e2) {} } f = folder.createFile(nm, s, "application/json"); }
+  } else f = folder.createFile(nm, s, "application/json");
   return { ok: true, saved: new Date().toISOString(), size: s.length };
 }
 function upLoadDraft_(folder, req) {

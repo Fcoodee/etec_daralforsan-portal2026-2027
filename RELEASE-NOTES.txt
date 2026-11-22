@@ -1,3 +1,4 @@
+v10.8.39 (2026-11-22): script v9.9.1 — saving a central draft no longer fails when the existing draft file is owned by another account (replaced by a new newest file); 11 draft files backfilled for domain-1 reports
 v10.8.38 (2026-11-22): central draft = the report itself — after «رفع PDF» the draft is saved automatically with the same photos; script v9.9.0 picks the newest draft and trashes same-name duplicates; clearer message when no draft exists (redeploy Apps Script v9.9.0)
 v10.8.37 (2026-11-22): record 2-1-1-1 «سجل متابعة المؤشر – فرص تعلم متكافئة» (PDF approved + Word) + source entry
 v10.8.36 (2026-11-22): 24 generic "سجل متابعة المؤشر" records renamed to include the indicator short title (record name, file name pattern, script TREE m/n, sources); Drive files + templates renamed
