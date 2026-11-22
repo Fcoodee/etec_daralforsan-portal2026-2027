@@ -5,9 +5,13 @@
   if (window.__etecFx) return; window.__etecFx = 1;
   var de = document.documentElement, LOGO = "logo0.png";
   var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches;
-  var css = "#fxSplash{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;background:transparent;transition:opacity .45s ease}" +
+  var css = "#fxSplash{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;background:rgba(248,250,252,.72);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);transition:opacity .45s ease}" +
+    ".fxCard{background:#fff;border:1px solid #e2e8f0;border-top:6px solid #c29b38;border-radius:18px;box-shadow:0 18px 40px -12px rgba(15,23,42,.28);padding:18px 26px 22px;text-align:center;width:min(380px,90vw);box-sizing:border-box;direction:rtl}" +
+    ".fxStage{height:180px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px}" +
+    ".fxCard .fxBar{height:6px;background:#dbeafe;border-radius:999px;overflow:hidden;margin:14px 0 0}.fxCard .fxBar i{display:block;height:100%;width:35%;background:#2563eb;border-radius:999px;animation:fxBar 1.2s ease-in-out infinite}@keyframes fxBar{0%{margin-inline-start:-35%}100%{margin-inline-start:100%}}" +
+    "@media (prefers-reduced-motion:reduce){.fxCard .fxBar i{animation:none;width:100%;opacity:.5}}" + +
     "#fxSplash.out{opacity:0}#fxSplash .lg{width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 10px 8px rgba(15,23,42,.28));will-change:transform}" +
-    "#fxSplash .tx{margin-top:10px;font:800 16px/1.5 'Tajawal','Segoe UI',Tahoma,sans-serif;color:#123a63;text-shadow:0 0 6px #fff,0 0 12px #fff,0 0 18px #fff}" +
+    "#fxSplash .tx{margin-top:10px;font:800 16px/1.5 'Tajawal','Segoe UI',Tahoma,sans-serif;color:#003d3d}" +
     ".fxClick{position:fixed;z-index:2147483001;width:64px;height:64px;margin:-32px 0 0 -32px;object-fit:contain;pointer-events:none;opacity:0;filter:drop-shadow(0 6px 5px rgba(15,23,42,.3));will-change:transform,opacity}";
   var st = document.createElement("style"); st.textContent = css; (document.head || de).appendChild(st);
   /* حركة بهلوانية: قفز + دوران + قلب (نفس لغة شاشة التحديث) */
@@ -30,7 +34,7 @@
   /* (1) شاشة البداية: على صفحة الهبوط فقط، من أول لحظة تحميل */
   if (isLanding && !reduce) {
     var sp = document.createElement("div"); sp.id = "fxSplash"; sp.setAttribute("role", "status"); sp.setAttribute("aria-label", "الرجاء الانتظار");
-    sp.innerHTML = '<img class="lg" src="' + LOGO + '" alt="" aria-hidden="true"><div class="tx">الرجاء الانتظار ...</div>';
+    sp.innerHTML = '<div class="fxCard"><div class="fxStage"><img class="lg" src="' + LOGO + '" alt="" aria-hidden="true" style="width:120px;height:120px;object-fit:contain"></div><div class="tx">الرجاء الانتظار ...</div><div class="fxBar" aria-hidden="true"><i></i></div></div>';
     de.appendChild(sp);
     var lg = sp.querySelector(".lg"), t0 = Date.now(), gone = false;
     try { lg.animate(ACRO, { duration: 2800, iterations: Infinity, easing: "cubic-bezier(.45,.05,.3,1)" }); } catch (e) {}
@@ -46,8 +50,8 @@
       busyN++;
       if (!busyEl) {
         busyEl = document.createElement("div"); busyEl.id = "fxBusy"; busyEl.setAttribute("role", "status"); busyEl.setAttribute("aria-live", "polite");
-        busyEl.style.cssText = "position:fixed;inset:0;z-index:2147483001;display:flex;flex-direction:column;align-items:center;justify-content:center;background:transparent;pointer-events:auto;cursor:progress";
-        busyEl.innerHTML = '<img class="lg" src="' + LOGO + '" alt="" aria-hidden="true" style="width:130px;height:130px;object-fit:contain;filter:drop-shadow(0 10px 8px rgba(15,23,42,.28))"><div class="tx" style="margin-top:10px;font:800 16px/1.6 Tajawal,\'Segoe UI\',Tahoma,sans-serif;color:#123a63;text-align:center;text-shadow:0 0 6px #fff,0 0 12px #fff,0 0 18px #fff"></div>';
+        busyEl.style.cssText = "position:fixed;inset:0;z-index:2147483001;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(248,250,252,.72);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);pointer-events:auto;cursor:progress";
+        busyEl.innerHTML = '<div class="fxCard"><div class="fxStage"><img class="lg" src="' + LOGO + '" alt="" aria-hidden="true" style="width:110px;height:110px;object-fit:contain;filter:drop-shadow(0 10px 8px rgba(15,23,42,.28))"></div><div class="tx" style="margin-top:8px;font:800 16px/1.6 Tajawal,\'Segoe UI\',Tahoma,sans-serif;color:#003d3d;text-align:center"></div><div class="fxBar" aria-hidden="true"><i></i></div></div>';
         de.appendChild(busyEl);
         try { busyEl.querySelector(".lg").animate(ACRO, { duration: 2800, iterations: Infinity, easing: "cubic-bezier(.45,.05,.3,1)" }); } catch (e) {}
       }

@@ -262,7 +262,7 @@
     if (!e) {
       if (!on || !document.body) return;
       e = document.createElement("div"); e.id = "phLoad"; e.setAttribute("role", "status"); e.setAttribute("aria-live", "polite");
-      e.innerHTML = '<div class="bx"><div class="stage"><img src="logo0.png" alt="" aria-hidden="true"><span class="shadow"></span></div><h2>الرجاء الانتظار ...</h2><p>جاري التحديث<span class="dots" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span></p></div>';
+      e.innerHTML = '<div class="bx"><div class="stage"><img src="logo0.png" alt="" aria-hidden="true"><span class="shadow"></span></div><h2>الرجاء الانتظار ...</h2><p>جاري التحديث<span class="dots" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span></p><div class="bar" aria-hidden="true"><i></i></div></div>';
       document.body.appendChild(e);
     }
     e.classList.toggle("on", !!on);
