@@ -96,15 +96,19 @@
     else { ST.failed = true; }
     ST.loaded = true; notify();
   }
+  var stopLoad = null;
+  /* v10.8.53: Esc يوقف انتظار التحديث ويُبقي الأرقام المعروضة كما هي */
+  document.addEventListener("keydown", function (ev) { if ((ev.key === "Escape" || ev.key === "Esc") && ST.loading && stopLoad) { if (stopLoad()) ev.preventDefault(); } });
   function load(force) {
     var url = window.ETEC_STATUS_URL || "";
     if (!url) { ST.loaded = true; ST.asof = (window.ETEC_SNAPSHOT || {}).asof || ""; notify(); return; }
-    ST.loading = true; notify();
+    ST.loading = true; ST.stopped = false; notify();
     var cb = "__phStatus" + Date.now(), s = document.createElement("script"), done = false;
     var timer = setTimeout(function () { if (done) return; done = true; ST.loading = false; ST.failed = true; ST.loaded = true; cleanup(); notify(); }, 90000);
     function cleanup() { clearTimeout(timer); try { delete window[cb]; } catch (e) { window[cb] = undefined; } if (s.parentNode) s.parentNode.removeChild(s); }
-    window[cb] = function (d) { if (done) return; done = true; ST.loading = false; cleanup(); apply(d); };
+    window[cb] = function (d) { if (done) return; done = true; ST.loading = false; ST.stopped = false; cleanup(); apply(d); };
     s.onerror = function () { if (done) return; done = true; ST.loading = false; ST.failed = true; ST.loaded = true; cleanup(); notify(); };
+    stopLoad = function () { if (done) return false; done = true; ST.loading = false; ST.stopped = true; cleanup(); window[cb] = function () {}; notify(); return true; };
     s.src = url + (url.indexOf("?") >= 0 ? "&" : "?") + "callback=" + cb + (force ? "&refresh=1" : "");
     document.body.appendChild(s);
   }
@@ -262,7 +266,7 @@
     if (!e) {
       if (!on || !document.body) return;
       e = document.createElement("div"); e.id = "phLoad"; e.setAttribute("role", "status"); e.setAttribute("aria-live", "polite");
-      e.innerHTML = '<div class="bx"><div class="stage"><img src="logo0.png" alt="" aria-hidden="true"><span class="shadow"></span></div><h2>الرجاء الانتظار ...</h2><p>جاري التحديث<span class="dots" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span></p><div class="bar" aria-hidden="true"><i></i></div></div>';
+      e.innerHTML = '<div class="bx"><div class="stage"><img src="logo0.png" alt="" aria-hidden="true"><span class="shadow"></span></div><h2>الرجاء الانتظار ...</h2><p>جاري التحديث<span class="dots" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span></p><div class="bar" aria-hidden="true"><i></i></div><small class="esc">للإيقاف اضغط <kbd>Esc</kbd></small></div>';
       document.body.appendChild(e);
     }
     e.classList.toggle("on", !!on);
@@ -316,7 +320,7 @@
     var c = document.getElementById("phConn"); if (!c) return;
     var role = window.PortalRole ? PortalRole.get() : "", live = ST.live && !ST.failed, when = live ? fmtT(ST.gen) : (ST.asof || "");
     var ag = live ? ageTxt(ST.gen) : { s: "", stale: false };
-    var txt = live ? "آخر تحديث للحالة: " + when + (ag.s ? " (" + ag.s + ")" : "") + (ag.stale ? " · قديمة — اضغط «تحديث الآن»" : "") : ST.failed ? "جاري تحديث قاعدة البيانات ..." + (when ? " · الأرقام المعروضة حتى " + when : "") : (role === "admin" ? "لقطة " + when + " · جاري تحديث قاعدة البيانات ..." : "الأرقام حتى " + when);
+    var txt = ST.stopped ? "أُوقف التحديث (Esc) · الأرقام المعروضة حتى " + (when || "آخر لقطة") + " — اضغط «تحديث الآن» للمحاولة من جديد" : live ? "آخر تحديث للحالة: " + when + (ag.s ? " (" + ag.s + ")" : "") + (ag.stale ? " · قديمة — اضغط «تحديث الآن»" : "") : ST.failed ? "جاري تحديث قاعدة البيانات ..." + (when ? " · الأرقام المعروضة حتى " + when : "") : (role === "admin" ? "لقطة " + when + " · جاري تحديث قاعدة البيانات ..." : "الأرقام حتى " + when);
     c.className = "ph-sync " + (ST.loading ? "load" : live ? (ag.stale ? "off" : "ok") : "off");
     c.innerHTML = '<div class="ph-sync-row"><i class="fa-solid ' + (ST.loading ? "fa-rotate fa-spin" : live && !ag.stale ? "fa-circle-check" : "fa-circle-exclamation") + '"></i><span class="ph-sync-t" id="phSyncT">' + (ST.loading ? "جاري تحديث قاعدة البيانات ... انتظر: <b id=\"phSyncS\">0</b> ثانية · قد يستغرق حتى دقيقة" : esc(txt)) + '</span>' +
       '<button type="button" id="phRef" class="ph-ref"' + (ST.loading ? " disabled" : "") + ' aria-label="تحديث الحالة الآن"><i class="fa-solid fa-arrows-rotate"></i> ' + (ST.loading ? "جارٍ التحديث" : "تحديث الآن") + '</button></div>' +
