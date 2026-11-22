@@ -261,3 +261,12 @@ html.sh-admin.pv-vis .vis-only{display:revert!important}
 /* طباعة بلا ترويسة/تذييل المتصفح (العنوان والرابط والتاريخ): هامش الصفحة صفر والتباعد داخل المحتوى */
 @page{margin:0}
 @media print{body{padding:10mm;box-decoration-break:clone;-webkit-box-decoration-break:clone}}
+
+/* v10.8.43: قسم «إدارة» المطويّ */
+.ph-adm{position:relative;display:inline-block}
+.ph-adm>summary{list-style:none;cursor:pointer;font-size:13px;font-weight:700;color:#334155;border:1px dashed var(--line);border-radius:999px;padding:5px 14px;background:#fff}
+.ph-adm>summary::-webkit-details-marker{display:none}
+.ph-adm[open]>summary{background:var(--t7);color:#fff;border-color:var(--t7)}
+.ph-adm-b{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+@media(min-width:721px){.ph-adm-b{position:absolute;top:100%;inset-inline-start:0;z-index:9;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;box-shadow:0 6px 18px rgba(0,0,0,.12);flex-direction:column;min-width:200px}}
+@media(max-width:720px){.ph-adm{flex:none}.ph-adm-b{flex-wrap:nowrap}}
