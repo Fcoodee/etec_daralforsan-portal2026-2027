@@ -48,7 +48,7 @@ var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word ف�
 var COUNT_DOC_EXT  = ["docx", "pdf"]; // الصيغ التي تُحتسب «معبّأة/معتمدة» عند الفحص؛ الرفع من البطاقة يبقى docx فقط (ACCEPT_DOC_EXT). PDF = النسخة المعتمدة للعرض ولا قالب PDF فارغ يُقارَن به
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.7.1";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.8.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5332,6 +5332,7 @@ function doPost(e) {
   try {
     var folder = DriveApp.getFolderById(ent.f);
     if (req.action === "uploadReport") return upJson_(upReport_(folder, req));
+    if (req.action === "getRecordDoc") return upJson_(upGetRecord_(folder, req));
     if (req.action === "uploadRecord") return upJson_(upRecord_(folder, req));
     if (req.action === "approveRecord") return upJson_(reviewRecord_(folder, req, "approve"));
     if (req.action === "returnRecord") return upJson_(reviewRecord_(folder, req, "return"));
@@ -5363,6 +5364,19 @@ function upReport_(folder, req) {
   try { file.setDescription("رُفع عبر البوابة بواسطة: " + String(req.who || "غير محدد").slice(0, 60) + " — " + new Date().toISOString()); } catch (x) {}
   cacheDel_(CACHE_KEY_TREE);
   return { ok: true, id: file.getId(), url: file.getUrl(), photos: n, replaced: trashed, notReplaced: stale };
+}
+/* سواقة الوثائق والسجلات (docs_driver) — v9.8.0: جلب ملف السجل الحالي (docx) من 1_قيد_المراجعة ليُعبَّأ في المتصفح ثم يُرفع بالإجراء uploadRecord.
+   قراءة فقط؛ لا يغيّر شيئاً في Drive. إن وُجدت عدة إصدارات للسجل يُعاد أحدثها تعديلاً. */
+function upGetRecord_(folder, req) {
+  var ent = TREE[req.code], rec = null;
+  ent.r.forEach(function (x) { if (x.n === req.rec) rec = x; });
+  if (!rec) return { ok: false, error: "السجل غير معروف لهذا المؤشر." };
+  var rv = treeChild_(folder, TREE_REVIEW); if (!rv) return { ok: false, error: "لا يوجد مجلد " + TREE_REVIEW + " لهذا المؤشر." };
+  var it = rv.getFiles(), f, best = null;
+  while (it.hasNext()) { f = it.next(); if (splitName_(f.getName()).ext === "docx" && treeMatch_(f.getName(), req.code, rec)) { if (!best || f.getLastUpdated() > best.getLastUpdated()) best = f; } }
+  if (!best) return { ok: false, error: "لا يوجد ملف Word لهذا السجل في 1_قيد_المراجعة." };
+  if (best.getSize() > 9 * 1024 * 1024) return { ok: false, error: "ملف السجل كبير؛ افتحه من التخزين السحابي." };
+  return { ok: true, name: best.getName(), updated: best.getLastUpdated().toISOString(), file: Utilities.base64Encode(best.getBlob().getBytes()) };
 }
 /* رفع سجل معبّأ (v9.3.0): يحدَّد السجل باسمه (req.rec)، والاسم النهائي يحدده السكربت فلا يخطئ المستخدم.
    يُستبدل ملف السجل في 1_قيد_المراجعة (القديم إلى السلة)، ويُرفض إن كان السجل معتمداً في 2_معتمد. Word (docx) فقط. */

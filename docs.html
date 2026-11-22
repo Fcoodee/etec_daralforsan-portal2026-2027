@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" style="color-scheme:light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script src="shield.js?v=10.8.12"></script>
+<script src="fx.js?v=10.8.12"></script>
+<script src="page-gate.js?v=10.8.12" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."></script>
+<script src="admin-only.js?v=10.8.12"></script>
+<meta name="robots" content="noindex,nofollow">
+<title>سواقة الوثائق والسجلات — مدارس دار الفرسان</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="phase.css?v=10.8.12">
+<script src="portal-meta.js?v=10.8.12"></script>
+<script src="portal-role.js?v=10.8.12"></script>
+<style>.dd-g{overflow-x:auto;border:1px solid #e2e8f0;border-radius:12px;background:#fff;margin:8px 0}.dd-g table{border-collapse:collapse;width:100%;min-width:640px;font-size:13px}.dd-g th{background:#f1f5f9;padding:6px 8px;text-align:right;white-space:nowrap}.dd-g td{border-top:1px solid #eef2f7;padding:3px}.dd-g input{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:6px;padding:5px 6px;font:inherit;font-size:13px;direction:ltr;text-align:left}.dd-g input[readonly]{background:#f8fafc;text-align:center}
+.dd-r{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}.dd-m{font-weight:700;font-size:13px;min-height:20px}.dd-m.ok{color:#047857}.dd-m.bad{color:#b91c1c}.dd-w{font-size:12.5px;color:#475569;line-height:1.8;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:8px 12px;margin:8px 0}textarea.dd-n{width:100%;box-sizing:border-box;min-height:56px;border:1px solid #cbd5e1;border-radius:8px;padding:6px 8px;font:inherit;font-size:13px;direction:ltr}</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+<div id="chrome"></div>
+<main class="ph-main">
+  <h1 class="ph-h1">سواقة الوثائق والسجلات <small style="font-weight:600;color:var(--mut);font-size:14px;direction:ltr">· docs_driver</small></h1>
+  <p class="ph-lead">افتح سجلًا من «قيد المراجعة»، عبّئ جدوله، ثم أرفعه للمراجعة. الاعتماد للمشرف وحده من صفحة «المؤشرات والسجلات».</p>
+  <div class="ph-filters">
+    <select id="ci" aria-label="المؤشر"></select>
+    <select id="cr" aria-label="السجل"></select>
+    <button type="button" class="ph-btn" id="op"><i class="fa-solid fa-folder-open"></i> فتح السجل</button>
+  </div>
+  <div id="ed" hidden>
+    <div class="dd-w">يُعدَّل <b>جدول التعبئة فقط</b>؛ الترويسة وشاهد المصدر وخانات الاعتماد لا تُمس. نص «لا يوجد مصدر» في الوثيقة يبقى كما هو ما لم تكتب ملاحظة جديدة أدناه، وتأكد أنها صحيحة. ملف PDF المختوم (العلامة المائية ورمز QR) لا تنشئه هذه الصفحة.</div>
+    <div class="dd-g"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div>
+    <div class="dd-r"><button type="button" class="ph-btn sm" id="ad"><i class="fa-solid fa-plus"></i> إضافة صف</button><button type="button" class="ph-btn sm" id="dl"><i class="fa-solid fa-minus"></i> حذف آخر صف</button></div>
+    <label for="nt" class="sr-n">ملاحظة جديدة تحل محل سطر «No Diploma Section source…» (اختياري، بالإنجليزية كبقية الوثيقة)</label>
+    <textarea class="dd-n" id="nt" placeholder="مثال: Source: signed acknowledgement forms, Term 1."></textarea>
+    <div class="dd-r"><input id="who" type="text" placeholder="اسم المعبِّئ" aria-label="اسم المعبِّئ" style="min-width:200px"><button type="button" class="ph-btn" id="up"><i class="fa-solid fa-cloud-arrow-up"></i> رفع للمراجعة</button><button type="button" class="ph-btn sm" id="dw"><i class="fa-solid fa-download"></i> تنزيل Word</button></div>
+  </div>
+  <div class="dd-m" id="ms" role="status" aria-live="polite"></div>
+</main>
+<script src="portal-config.js?v=10.8.12"></script>
+<script src="portal-names.js?v=10.8.12"></script>
+<script src="phase-data.js?v=10.8.12"></script>
+<script src="phase-core.js?v=10.8.12"></script>
+<script src="docs-driver.js?v=10.8.12"></script>
+<script>
+(function () {
+  "use strict";
+  var P = window.PHC, E = P.esc, URL_ = window.ETEC_STATUS_URL || "";
+  P.chrome("docs.html");
+  var $ = function (i) { return document.getElementById(i); }, zip = null, srcName = "", hdr = [];
+  function say(t, c) { $("ms").textContent = t; $("ms").className = "dd-m " + (c || ""); }
+  P.PH.inds.forEach(function (i) { $("ci").insertAdjacentHTML("beforeend", '<option value="' + E(i.code) + '">' + E(i.code + " — " + i.st) + "</option>"); });
+  function recs() { var i = P.byCode ? P.byCode(this_code()) : null; i = i || P.PH.inds.filter(function (x) { return x.code === this_code(); })[0]; $("cr").innerHTML = (i ? i.recs : []).map(function (n) { return '<option value="' + E(n) + '">' + E(n) + "</option>"; }).join(""); }
+  function this_code() { return $("ci").value; }
+  $("ci").addEventListener("change", recs); recs();
+  function call(body) { return fetch(URL_, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) }).then(function (r) { return r.json(); }); }
+  function row(vals, n) {
+    var tr = document.createElement("tr");
+    for (var k = 0; k < hdr.length; k++) { var td = document.createElement("td"), inp = document.createElement("input"); inp.value = k === 0 ? String(n) : (vals[k] == null ? "" : vals[k]); if (k === 0) inp.readOnly = true; td.appendChild(inp); tr.appendChild(td); }
+    $("tb").appendChild(tr);
+  }
+  function renum() { Array.prototype.forEach.call($("tb").rows, function (tr, i) { tr.cells[0].firstChild.value = String(i + 1); }); }
+  function grid() { return Array.prototype.map.call($("tb").rows, function (tr) { return Array.prototype.map.call(tr.cells, function (td) { return td.firstChild.value; }); }); }
+  $("ad").addEventListener("click", function () { row([], $("tb").rows.length + 1); });
+  $("dl").addEventListener("click", function () { if ($("tb").rows.length > 1) $("tb").removeChild($("tb").lastChild); renum(); });
+  function build() { return zip.file("word/document.xml").async("string").then(function (xml) { zip.file("word/document.xml", window.DocsCore.apply(xml, grid(), $("nt").value)); return zip.generateAsync({ type: "base64", compression: "DEFLATE" }); }); }
+  $("op").addEventListener("click", function () {
+    if (!URL_) { say("الربط غير مهيّأ.", "bad"); return; }
+    if (!window.JSZip) { say("تعذّر تحميل مكتبة الضغط؛ تأكد من الاتصال بالإنترنت.", "bad"); return; }
+    say("جارٍ فتح السجل…"); $("ed").hidden = true;
+    call({ action: "getRecordDoc", code: $("ci").value, rec: $("cr").value }).then(function (o) {
+      if (!o || !o.ok) { say((o && o.error) || "تعذّر فتح السجل. إن كان الخطأ «إجراء غير معروف» فانشر نسخة السكربت الجديدة (v9.8.0).", "bad"); return; }
+      srcName = o.name; return JSZip.loadAsync(o.file, { base64: true }).then(function (z) { zip = z; return z.file("word/document.xml").async("string"); }).then(function (xml) {
+        var t = window.DocsCore.read(xml); hdr = t.header;
+        $("th").innerHTML = "<tr>" + hdr.map(function (h) { return "<th>" + E(h) + "</th>"; }).join("") + "</tr>"; $("tb").innerHTML = "";
+        t.rows.forEach(function (r, i) { row(r, i + 1); }); $("nt").value = ""; $("ed").hidden = false; say("فُتح: " + srcName, "ok");
+      });
+    }).catch(function (e) { say("تعذّر الاتصال أو قراءة الملف: " + (e && e.message || e), "bad"); });
+  });
+  $("up").addEventListener("click", function () {
+    var who = $("who").value.trim(); if (who.length < 2) { say("اكتب اسم المعبِّئ أولًا.", "bad"); $("who").focus(); return; }
+    $("up").disabled = true; say("جارٍ التوليد والرفع…");
+    build().then(function (b64) { return call({ action: "uploadRecord", code: $("ci").value, rec: $("cr").value, name: srcName, file: b64, who: who }); })
+      .then(function (o) { $("up").disabled = false; if (o && o.ok) say("تم الرفع ✔ ويظهر «قيد المراجعة» بعد دقيقة. يعتمده المشرف من «المؤشرات والسجلات».", "ok"); else say((o && o.error) || "فشل الرفع.", "bad"); })
+      .catch(function (e) { $("up").disabled = false; say("تعذّر الرفع: " + (e && e.message || e), "bad"); });
+  });
+  $("dw").addEventListener("click", function () {
+    build().then(function (b64) { var a = document.createElement("a"); a.href = "data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64," + b64; a.download = srcName || "record.docx"; document.body.appendChild(a); a.click(); a.remove(); }).catch(function (e) { say("تعذّر التوليد: " + (e && e.message || e), "bad"); });
+  });
+})();
+</script>
+</body>
+</html>
