@@ -48,7 +48,7 @@ var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word ف�
 var COUNT_DOC_EXT  = ["docx", "pdf"]; // الصيغ التي تُحتسب «معبّأة/معتمدة» عند الفحص؛ الرفع من البطاقة يبقى docx فقط (ACCEPT_DOC_EXT). PDF = النسخة المعتمدة للعرض ولا قالب PDF فارغ يُقارَن به
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.8.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.9.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5450,17 +5450,27 @@ function reviewRecord_(folder, req, mode) {
   return { ok: true, mode: mode, name: file.getName() };
 }
 function upDraftName_(code) { return "مسودة_تقرير_" + code + ".json"; }
+/* v9.9.0: المسودة المركزية = نسخة التقرير نفسه. إن وُجدت عدة ملفات بالاسم نفسه تُعتمد الأحدث وتُنقل الأقدم إلى السلة (أو تُعاد تسميتها إن كانت مملوكة لحساب آخر). */
+function upBestDraft_(folder, code) {
+  var nm = upDraftName_(code), it = folder.getFilesByName(nm), best = null, all = [], f;
+  while (it.hasNext()) { f = it.next(); all.push(f); if (!best || f.getLastUpdated() > best.getLastUpdated()) best = f; }
+  all.forEach(function (x) {
+    if (x === best || (best && x.getId() === best.getId())) return;
+    try { x.setTrashed(true); } catch (e1) { try { x.setName("_مكرر_" + Date.now() + "_" + nm); } catch (e2) {} }
+  });
+  return best;
+}
 function upSaveDraft_(folder, req) {
   var s = String(req.draft || ""); if (!s || s.length > UP_MAX_DRAFT_CHARS) return { ok: false, error: "المسودة فارغة أو أكبر من الحد." };
   try { JSON.parse(s); } catch (x) { return { ok: false, error: "المسودة ليست JSON صالحاً." }; }
-  var nm = upDraftName_(req.code), it = folder.getFilesByName(nm), f;
-  if (it.hasNext()) { f = it.next(); f.setContent(s); } else f = folder.createFile(nm, s, "application/json");
+  var nm = upDraftName_(req.code), f = upBestDraft_(folder, req.code);
+  if (f) f.setContent(s); else f = folder.createFile(nm, s, "application/json");
   return { ok: true, saved: new Date().toISOString(), size: s.length };
 }
 function upLoadDraft_(folder, req) {
-  var it = folder.getFilesByName(upDraftName_(req.code));
-  if (!it.hasNext()) return { ok: true, draft: null };
-  var f = it.next(); return { ok: true, draft: f.getBlob().getDataAsString(), saved: f.getLastUpdated().toISOString() };
+  var f = upBestDraft_(folder, req.code);
+  if (!f) return { ok: true, draft: null };
+  return { ok: true, draft: f.getBlob().getDataAsString(), saved: f.getLastUpdated().toISOString() };
 }
 
 /* ========== 4) توزيع هياكل تقارير الشواهد (مرة واحدة) — v9.2.2 ==========

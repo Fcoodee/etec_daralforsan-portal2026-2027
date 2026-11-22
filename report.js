@@ -229,7 +229,7 @@
     post("loadDraft").then(function (o) {
       if (c0 !== code) return;
       if (!o || !o.ok) { sync("تعذّر جلب المسودة المركزية", "bad"); msg("saveMsg", "المسودة المركزية: " + driveErr((o && o.error) || "ردّ غير متوقع من السكربت (قد يكون الإصدار المنشور أقدم من v9.5.0)"), "bad"); pulled = ""; return; }
-      if (!o.draft) { if (count()) setDirty(true); else sync("لا مسودة مركزية بعد", "idle"); return; }
+      if (!o.draft) { if (count()) setDirty(true); else { sync("لا مسودة مركزية لهذا التقرير", "idle"); msg("saveMsg", "لا توجد مسودة مركزية محفوظة. إن كان للمؤشر تقرير مرفوع (PDF) فأضف صوره في الخانات ثم «رفع PDF»؛ سيُحفظ التقرير ومسودته معاً.", "ok"); } return; }
       var ct = Date.parse(o.saved) || 0;
       if (!count() || ct > localTs) {
         var d; try { d = JSON.parse(o.draft); } catch (e) { return; }
@@ -265,7 +265,12 @@
     var r = new FileReader(); msg("upMsg", "جارٍ الرفع…");
     r.onload = function () {
       busy("جاري رفع التقرير مركزياً ..."); post("uploadReport", { name: nm, pdf: String(r.result).split(",")[1] }).then(function (o) { idle();
-        if (o && o.ok) { msg("upMsg", "تم الرفع (" + o.photos + " صور)" + (o.replaced ? " واستُبدل " + o.replaced + " ملف" : "") + ". حدّث الحالة بعد دقيقة.", "ok"); P.load(true); } else msg("upMsg", driveErr((o && o.error) || "فشل الرفع."), "bad");
+        if (o && o.ok) {
+          /* v10.8.38: التقرير المرفوع والمسودة المركزية شيء واحد — بعد نجاح الرفع تُحفظ المسودة تلقائياً بالصور الحالية */
+          var okMsg = "تم الرفع (" + o.photos + " صور)" + (o.replaced ? " واستُبدل " + o.replaced + " ملف" : "") + ". حدّث الحالة بعد دقيقة."; P.load(true);
+          busy("جاري حفظ المسودة المركزية ...");
+          post("saveDraft", { draft: JSON.stringify({ code: code, slots: slots, v: "9.2.0" }) }).then(function (d) { idle(); if (d && d.ok) { setDirty(false); msg("upMsg", okMsg + " وحُفظت المسودة المركزية مطابقة للتقرير.", "ok"); } else msg("upMsg", okMsg + " لكن تعذّر حفظ المسودة المركزية: " + driveErr((d && d.error) || "") + " — اضغط «حفظ مركزياً».", "bad"); }).catch(function () { idle(); msg("upMsg", okMsg + " لكن تعذّر حفظ المسودة المركزية؛ اضغط «حفظ مركزياً».", "bad"); });
+        } else msg("upMsg", driveErr((o && o.error) || "فشل الرفع."), "bad");
       }).catch(function () { idle(); msg("upMsg", "تعذّر الاتصال بالسكربت.", "bad"); });
     };
     r.readAsDataURL(f);

@@ -1,3 +1,4 @@
+v10.8.38 (2026-11-22): central draft = the report itself — after «رفع PDF» the draft is saved automatically with the same photos; script v9.9.0 picks the newest draft and trashes same-name duplicates; clearer message when no draft exists (redeploy Apps Script v9.9.0)
 v10.8.37 (2026-11-22): record 2-1-1-1 «سجل متابعة المؤشر – فرص تعلم متكافئة» (PDF approved + Word) + source entry
 v10.8.36 (2026-11-22): 24 generic "سجل متابعة المؤشر" records renamed to include the indicator short title (record name, file name pattern, script TREE m/n, sources); Drive files + templates renamed
 v10.8.35 (2026-11-22): verified 1-1-1-2 source texts (5); guidance + guidance-committee source aliases for 1-2-1-x, 1-3-1-2/3
