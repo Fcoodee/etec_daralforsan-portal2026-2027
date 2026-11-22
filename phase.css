@@ -146,9 +146,10 @@ table.ph-t{width:100%;border-collapse:collapse;background:#fff;border:1px solid 
 .ph-sync .ph-ref{font:inherit;font-size:13px;font-weight:900;border:0;border-radius:999px;background:#006666;color:#fff;padding:5px 16px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .ph-sync .ph-ref:hover:not(:disabled){background:#004d4d}.ph-sync .ph-ref:disabled{opacity:.6;cursor:wait}
 .ph-sync-bar{height:6px;background:#dbeafe;border-radius:999px;overflow:hidden;margin-top:6px}
-.ph-sync-bar i{display:block;height:100%;width:35%;background:#2563eb;border-radius:999px;animation:phSlide 1.2s ease-in-out infinite}
-@keyframes phSlide{0%{margin-inline-start:-35%}100%{margin-inline-start:100%}}
-@media (prefers-reduced-motion:reduce){.ph-sync-bar i{animation:none;width:100%;opacity:.6}}
+.ph-sync-bar i{display:block;height:100%;width:35%;background:#2563eb;border-radius:999px;-webkit-animation:phSlide 1.2s ease-in-out infinite;animation:phSlide 1.2s ease-in-out infinite;will-change:transform}
+@-webkit-keyframes phSlide{0%{-webkit-transform:translateX(100%)}100%{-webkit-transform:translateX(-285%)}}
+@keyframes phSlide{0%{transform:translateX(100%)}100%{transform:translateX(-285%)}}
+/* قرار مدير النظام: شريط الانتظار يعمل دائماً حتى مع «تقليل الحركة» */
 
 a.ph-mc{text-decoration:none;color:inherit;display:block;transition:box-shadow .15s,border-color .15s}a.ph-mc:hover,a.ph-mc:focus-visible{border-color:#006666;box-shadow:0 2px 8px rgba(0,102,102,.18)}
 .ph-mc-go{margin-top:8px;font-size:12px;font-weight:700;color:#006666}
@@ -211,18 +212,19 @@ html.sh-admin.pv-vis .vis-only{display:revert!important}
 .pv-bar a{color:#7c2d12;margin-inline-start:10px}
 
 /* v10.7.1: شاشة التحديث بأيقونة الدبلوما */
-#phLoad{position:fixed;inset:0;z-index:2147480000;display:none;align-items:center;justify-content:center;background:rgba(248,250,252,.72);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);pointer-events:none;direction:rtl}
+#phLoad{position:fixed;inset:0;z-index:2147480000;display:none;align-items:center;justify-content:center;background:rgba(248,250,252,.88);pointer-events:none;direction:rtl}
 #phLoad.on{display:flex}
-#phLoad .bx{background:#fff;border:1px solid #e2e8f0;border-top:6px solid #c29b38;border-radius:18px;box-shadow:0 18px 40px -12px rgba(15,23,42,.28);padding:18px 26px 22px;text-align:center;width:min(380px,90vw);box-sizing:border-box}
+#phLoad .bx{background:#fff;border:1px solid #e2e8f0;border-top:6px solid #c29b38;border-radius:18px;box-shadow:0 18px 40px -12px rgba(15,23,42,.28);padding:18px 26px 22px;text-align:center;width:380px;max-width:90vw;box-sizing:border-box}
 #phLoad .stage{height:190px;width:150px;margin:0 auto;position:relative;perspective:600px}
 #phLoad .stage img{position:absolute;left:25px;top:65px;width:100px;height:100px;object-fit:contain;transform-origin:50% 50%;animation:phAcro 5.6s cubic-bezier(.45,.05,.3,1) infinite;filter:drop-shadow(0 8px 6px rgba(15,23,42,.25))}
 #phLoad .shadow{position:absolute;left:35px;right:35px;bottom:2px;height:10px;border-radius:50%;background:rgba(15,23,42,.22);animation:phSh 5.6s ease-in-out infinite}
 #phLoad h2{margin:6px 0 2px;font-size:18px;font-weight:900;color:#003d3d}
 #phLoad p{margin:0;font-size:13px;color:#475569;font-weight:800}
 #phLoad .esc{display:block;margin-top:10px;font-size:11.5px;color:#64748b;font-weight:700}#phLoad kbd{font:700 11px monospace;background:#f1f5f9;border:1px solid #cbd5e1;border-bottom-width:2px;border-radius:5px;padding:0 6px}
-#phLoad .bar{height:6px;background:#dbeafe;border-radius:999px;overflow:hidden;margin:14px 0 0}#phLoad .bar i{display:block;height:100%;width:35%;background:#2563eb;border-radius:999px;animation:phBar 1.2s ease-in-out infinite}
-@keyframes phBar{0%{margin-inline-start:-35%}100%{margin-inline-start:100%}}
-@media (prefers-reduced-motion:reduce){#phLoad .bar i{animation:none;width:100%;opacity:.5}}
+#phLoad .bar{height:6px;background:#dbeafe;border-radius:999px;overflow:hidden;margin:14px 0 0}#phLoad .bar i{display:block;height:100%;width:35%;background:#2563eb;border-radius:999px;-webkit-animation:phBar 1.2s ease-in-out infinite;animation:phBar 1.2s ease-in-out infinite;will-change:transform}
+@-webkit-keyframes phBar{0%{-webkit-transform:translateX(100%)}100%{-webkit-transform:translateX(-285%)}}
+@keyframes phBar{0%{transform:translateX(100%)}100%{transform:translateX(-285%)}}
+/* قرار مدير النظام: شريط الانتظار يعمل دائماً حتى مع «تقليل الحركة» */
 #phLoad .dots span{display:inline-block;animation:phDot 1.2s infinite}#phLoad .dots span:nth-child(2){animation-delay:.2s}#phLoad .dots span:nth-child(3){animation-delay:.4s}
 @keyframes phAcro{
  0%{transform:translateY(0) rotate(0) scale(1)}
