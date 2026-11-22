@@ -8,7 +8,7 @@
   if (window.ETEC_META) return;
   /* showEtecLogo: false لإخفاء شعار هيئة تقويم التعليم والتدريب من ترويسات الصفحات.
      السياسات (1445هـ، ص26) تمنع المدرسة المعتمدة من استخدام شعار الهيئة أو المركز في منشوراتها؛ والافتراضي true إلى أن تقرّر إدارة المدرسة وضعها من الاعتماد. */
-  var META = { version: 'v10.8.55', updated: '2026-11-22', updatedText: '22 نوفمبر 2026', showEtecLogo: true };
+  var META = { version: 'v10.8.56', updated: '2026-11-22', updatedText: '22 نوفمبر 2026', showEtecLogo: true };
   window.ETEC_META = META;
   var UK = 'etec.utype.v1', AK = 'df_auth_v1';
   var NAMES = { admin: 'مدير النظام', sup: 'مشرف فريق السجلات والشواهد', member: 'عضو فريق السجلات والشواهد', self: 'مشرف عمليات التقويم الذاتي' };
@@ -26,15 +26,20 @@
     '#etecMetaVer{font:600 11px/1.4 Tajawal,Tahoma,Arial,sans-serif;color:#64748b;background:rgba(255,255,255,.94);border:1px solid #e2e8f0;border-radius:999px;padding:2px 9px;box-shadow:0 1px 3px rgba(0,0,0,.06);max-width:100%}' +
     '#etecMetaUser{font:700 11px/1.4 Tajawal,Tahoma,Arial,sans-serif;color:#0f5f5a;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:999px;padding:3px 11px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 1px 3px rgba(0,0,0,.08)}' +
     '#etecWM{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.10;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+    '#etecWM2{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.10;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+    '#etecWM2 img{position:absolute;left:50%;top:87%;width:min(52vmin,420px);height:auto;transform:translate(-50%,-50%)}' +
+    'html.lp-wm #etecWM img{top:40%;width:min(60vmin,480px)}' +
     '#etecWM img{position:absolute;left:50%;top:56%;width:min(74vmin,620px);height:auto;transform:translate(-50%,-50%);-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
-    '@media (max-width:640px){#etecWM{opacity:.09}#etecWM img{width:min(88vw,460px);top:58%}}' +
-    '@media print{#etecMetaBox{display:none!important}#etecWM{opacity:.10}#etecWM img{width:125mm;top:50%}}';
+    '@media (max-width:640px){#etecWM2{opacity:.09}#etecWM2 img{width:min(72vw,340px);top:91%}html.lp-wm #etecWM img{top:42%;width:min(70vw,360px)}#etecWM{opacity:.09}#etecWM img{width:min(88vw,460px);top:58%}}' +
+    '@media print{#etecWM2{display:none!important}#etecMetaBox{display:none!important}#etecWM{opacity:.10}#etecWM img{width:125mm;top:50%}}';
   var box, ver, usr;
   function mount() {
     if (!document.body || box) return;
     document.head.appendChild(css);
     /* علامة مائية: شعار قسم الدبلوما بخطوط خارجية فقط (logo-outline.svg) خلف كل الصفحات؛ لا تلتقط نقراً ولا تُقرأ لقارئ الشاشة */
     var wm = document.createElement('div'); wm.id = 'etecWM'; wm.setAttribute('aria-hidden', 'true'); wm.setAttribute('data-gate-keep', ''); var wi = document.createElement('img'); wi.src = 'logo-outline.svg?v=9.14.1'; wi.alt = ''; wi.setAttribute('aria-hidden', 'true'); wi.draggable = false; wm.appendChild(wi); document.body.appendChild(wm);
+    /* صفحة الهبوط فقط: علامة مائية ثانية لشعار هيئة تقويم التعليم والتدريب بخطوط خارجية (logo-etec-outline.svg) بالأسلوب نفسه */
+    if (/(^|\/)(index\.html)?$/.test(location.pathname)) { var w2 = document.createElement('div'); w2.id = 'etecWM2'; w2.setAttribute('aria-hidden', 'true'); w2.setAttribute('data-gate-keep', ''); var i2 = document.createElement('img'); i2.src = 'logo-etec-outline.svg?v=10.8.56'; i2.alt = ''; i2.setAttribute('aria-hidden', 'true'); i2.draggable = false; w2.appendChild(i2); document.body.appendChild(w2); document.documentElement.classList.add('lp-wm'); }
     box = document.createElement('div'); box.id = 'etecMetaBox';
     ver = document.createElement('div'); ver.id = 'etecMetaVer'; ver.setAttribute('aria-label', 'رقم الإصدار وتاريخ آخر تحديث');
     ver.textContent = 'الإصدار ' + META.version + ' · آخر تحديث ' + META.updatedText;
