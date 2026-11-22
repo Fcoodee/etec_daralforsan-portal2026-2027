@@ -280,3 +280,13 @@ html.sh-admin.pv-vis .vis-only{display:revert!important}
 .ph-role.adm{background:#ecfdf5;color:#065f46;border-color:#a7f3d0}
 .ph-role.vis{background:#eff6ff;color:#1e3a8a;border-color:#bfdbfe}
 @media print{.ph-role{display:none}}
+
+/* v10.8.60: بطاقات المجالات في كل المنصة — هوية شعار الدبلوما (أزرق ‹ بنفسجي) + وميض خفيف للدلالة على أنها قيد العمل */
+.pg-doms .pg-dom,.rf-dom{border-top-color:transparent!important;background-image:linear-gradient(90deg,#1f78c1,#6a2c91)!important;background-size:100% 6px!important;background-repeat:no-repeat!important;background-origin:border-box!important;background-clip:border-box!important}
+.rf-dom{position:relative}
+.nd-tm{position:relative;overflow:hidden;border-inline-start-color:transparent!important;background-image:linear-gradient(180deg,#1f78c1,#6a2c91)!important;background-size:5px 100%!important;background-repeat:no-repeat!important;background-position:100% 0!important;background-origin:border-box!important;background-clip:border-box!important}
+.pg-dom::before,.rf-dom::after,.nd-tm::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(110deg,transparent 38%,rgba(106,44,145,.10) 50%,transparent 62%);transform:translateX(-130%);animation:domWip 6s ease-in-out infinite}
+.pg-dom:nth-child(2)::before{animation-delay:.6s}.pg-dom:nth-child(3)::before{animation-delay:1.2s}.pg-dom:nth-child(4)::before{animation-delay:1.8s}
+@keyframes domWip{0%,60%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+@media (prefers-reduced-motion:reduce){.pg-dom::before,.rf-dom::after,.nd-tm::after{animation:none;display:none}}
+@media print{.pg-dom::before,.rf-dom::after,.nd-tm::after{display:none}}
