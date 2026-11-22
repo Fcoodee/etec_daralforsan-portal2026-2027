@@ -1,3 +1,4 @@
+v10.8.25 (2026-11-22): 1-4-1-4 professional licence and growth records
 v10.8.24 (2026-11-22): 1-4-1-3 financial records (policies, plan ratios, budget cycle, fee collection aggregates, fee form, fund team, website) without personal data
 v10.8.23 — سجلات 1-4-1-2 الأربعة (أحوال الموظفين، بيانات الكادر الإداري، التكاليف، الوصف الوظيفي) ومصدر سجل اللجنة الإدارية، وتقرير الشواهد البصرية (22 نوفمبر 2026).
 
