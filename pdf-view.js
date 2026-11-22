@@ -36,7 +36,20 @@
           doc.getPage(idx).then(function (pg) {
             var cw = width(), vp0 = pg.getViewport({ scale: 1 }), sc = cw / vp0.width, dpr = Math.min(window.devicePixelRatio || 1, 2.5), vp = pg.getViewport({ scale: sc * dpr });
             var cv = document.createElement("canvas"); cv.width = Math.floor(vp.width); cv.height = Math.floor(vp.height); cv.style.width = cw + "px"; cv.style.height = Math.floor(vp0.height * sc) + "px";
-            return pg.render({ canvasContext: cv.getContext("2d"), viewport: vp }).promise.then(function () { if (cur !== st) return; o.el.innerHTML = ""; o.el.style.height = cv.style.height; o.el.appendChild(cv); o.done = true; });
+            return pg.render({ canvasContext: cv.getContext("2d"), viewport: vp }).promise.then(function () {
+              if (cur !== st) return; o.el.innerHTML = ""; o.el.style.height = cv.style.height; o.el.appendChild(cv); o.done = true;
+              /* الروابط داخل الملف (مثل رمز QR) قابلة للضغط: طبقة وصلات شفافة فوق الصفحة */
+              return pg.getAnnotations({ intent: "display" }).then(function (an) {
+                var v1 = pg.getViewport({ scale: sc });
+                an.forEach(function (a) {
+                  var u = a.url || a.unsafeUrl; if (a.subtype !== "Link" || !u || !/^https?:\/\//i.test(u) || !a.rect) return;
+                  var r = v1.convertToViewportRectangle(a.rect), l = Math.min(r[0], r[2]), t = Math.min(r[1], r[3]), w = Math.abs(r[2] - r[0]), h = Math.abs(r[3] - r[1]);
+                  var k = document.createElement("a"); k.href = u; k.target = "_blank"; k.rel = "noopener noreferrer"; k.className = "pv-lk"; k.setAttribute("aria-label", "فتح الرابط");
+                  k.style.cssText = "position:absolute;left:" + l + "px;top:" + t + "px;width:" + Math.max(w, 28) + "px;height:" + Math.max(h, 28) + "px;display:block;-webkit-tap-highlight-color:rgba(26,115,232,.25)";
+                  o.el.appendChild(k);
+                });
+              });
+            });
           }).catch(function () {}).then(function () { o.busy = false; });
         }
         function observe() {
