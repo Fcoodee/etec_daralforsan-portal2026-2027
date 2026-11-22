@@ -8,7 +8,7 @@
   if (window.ETEC_META) return;
   /* showEtecLogo: false لإخفاء شعار هيئة تقويم التعليم والتدريب من ترويسات الصفحات.
      السياسات (1445هـ، ص26) تمنع المدرسة المعتمدة من استخدام شعار الهيئة أو المركز في منشوراتها؛ والافتراضي true إلى أن تقرّر إدارة المدرسة وضعها من الاعتماد. */
-  var META = { version: 'v10.8.57', updated: '2026-11-22', updatedText: '22 نوفمبر 2026', showEtecLogo: true };
+  var META = { version: 'v10.8.58', updated: '2026-11-22', updatedText: '22 نوفمبر 2026', showEtecLogo: true };
   window.ETEC_META = META;
   var UK = 'etec.utype.v1', AK = 'df_auth_v1';
   var NAMES = { admin: 'مدير النظام', sup: 'مشرف فريق السجلات والشواهد', member: 'عضو فريق السجلات والشواهد', self: 'مشرف عمليات التقويم الذاتي' };
@@ -39,7 +39,7 @@
     /* علامة مائية: شعار قسم الدبلوما بخطوط خارجية فقط (logo-outline.svg) خلف كل الصفحات؛ لا تلتقط نقراً ولا تُقرأ لقارئ الشاشة */
     var wm = document.createElement('div'); wm.id = 'etecWM'; wm.setAttribute('aria-hidden', 'true'); wm.setAttribute('data-gate-keep', ''); var wi = document.createElement('img'); wi.src = 'logo-outline.svg?v=9.14.1'; wi.alt = ''; wi.setAttribute('aria-hidden', 'true'); wi.draggable = false; wm.appendChild(wi); document.body.appendChild(wm);
     /* صفحة الهبوط فقط: علامة مائية ثانية لشعار هيئة تقويم التعليم والتدريب بخطوط خارجية (logo-etec-outline.svg) بالأسلوب نفسه */
-    if (/(^|\/)(index\.html)?$/.test(location.pathname)) { var w2 = document.createElement('div'); w2.id = 'etecWM2'; w2.setAttribute('aria-hidden', 'true'); w2.setAttribute('data-gate-keep', ''); var i2 = document.createElement('img'); i2.src = 'logo-etec-outline.svg?v=10.8.57'; i2.alt = ''; i2.setAttribute('aria-hidden', 'true'); i2.draggable = false; w2.appendChild(i2); document.body.appendChild(w2); document.documentElement.classList.add('lp-wm'); }
+    if (/(^|\/)(index\.html)?$/.test(location.pathname)) { var w2 = document.createElement('div'); w2.id = 'etecWM2'; w2.setAttribute('aria-hidden', 'true'); w2.setAttribute('data-gate-keep', ''); var i2 = document.createElement('img'); i2.src = 'logo-etec-outline.svg?v=10.8.58'; i2.alt = ''; i2.setAttribute('aria-hidden', 'true'); i2.draggable = false; w2.appendChild(i2); document.body.appendChild(w2); document.documentElement.classList.add('lp-wm'); }
     box = document.createElement('div'); box.id = 'etecMetaBox';
     ver = document.createElement('div'); ver.id = 'etecMetaVer'; ver.setAttribute('aria-label', 'رقم الإصدار وتاريخ آخر تحديث');
     ver.textContent = 'الإصدار ' + META.version + ' · آخر تحديث ' + META.updatedText;
@@ -73,4 +73,42 @@
   window.addEventListener('storage', function () { if (box) tick(); });
   window.addEventListener('etec:utchange', function () { if (box) tick(); });
   window.addEventListener('df-auth', function () { if (box) setTimeout(admChk, 80); });
+})();
+
+/* v10.8.58: كل إشارة نصية إلى هيئة تقويم التعليم والتدريب (ETEC) تُميَّز بألوان شعارها (أخضر · سماوي · أزرق · بنفسجي) في كل الصفحات، ما يشمل النصوص المولّدة بالجافاسكربت. العرض فقط: لا يغيّر النص ولا الروابط. */
+(function () {
+  'use strict';
+  var RE = /(هيئة تقويم التعليم والتدريب|Education\s*(?:&amp;|&|and)\s*Training Evaluation Commission|\bETEC\b(?![_\-]?\w))/g;
+  var SKIP = /^(SCRIPT|STYLE|TEXTAREA|INPUT|SELECT|OPTION|TITLE|NOSCRIPT|CODE|PRE|SVG|CANVAS|IFRAME|BUTTON)$/;
+  var css = document.createElement('style');
+  css.textContent = '.etec-ref{font-weight:800;color:#1892cf;background:linear-gradient(90deg,#3fa85f 0%,#12afc3 38%,#1892cf 66%,#44368c 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;-webkit-box-decoration-break:clone;box-decoration-break:clone;white-space:normal}' +
+    '.etec-ref.on-dark{color:#8fe6c0;background-image:linear-gradient(90deg,#9ff0b8 0%,#7fe6f2 38%,#9fd2ff 66%,#d2c9ff 100%)}' +
+    '@media print{.etec-ref{background:none!important;-webkit-text-fill-color:currentColor;color:#1892cf!important}.etec-ref.on-dark{color:#334155!important}}' +
+    '@media (forced-colors:active){.etec-ref{background:none;-webkit-text-fill-color:currentColor;color:inherit}}';
+  (document.head || document.documentElement).appendChild(css);
+  function lum(c) { var m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(c || ''); if (!m) return 0; return (0.2126 * m[1] + 0.7152 * m[2] + 0.0722 * m[3]) / 255; }
+  function scan(root) {
+    if (!root || !document.body) return;
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: function (n) {
+      var p = n.parentNode; if (!p || p.nodeType !== 1) return NodeFilter.FILTER_REJECT;
+      if (SKIP.test(p.nodeName) || p.isContentEditable || (p.closest && p.closest('.etec-ref,[data-no-etec],svg'))) return NodeFilter.FILTER_REJECT;
+      RE.lastIndex = 0; return RE.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT; } });
+    var list = [], n; while ((n = w.nextNode())) list.push(n);
+    list.forEach(function (t) {
+      var txt = t.nodeValue, frag = document.createDocumentFragment(), last = 0, m, dark = false;
+      try { dark = lum(getComputedStyle(t.parentNode).color) > 0.62; } catch (e) {}
+      RE.lastIndex = 0;
+      while ((m = RE.exec(txt))) {
+        if (m.index > last) frag.appendChild(document.createTextNode(txt.slice(last, m.index)));
+        var s = document.createElement('span'); s.className = 'etec-ref' + (dark ? ' on-dark' : ''); s.textContent = m[0]; frag.appendChild(s);
+        last = m.index + m[0].length;
+      }
+      if (last < txt.length) frag.appendChild(document.createTextNode(txt.slice(last)));
+      t.parentNode.replaceChild(frag, t);
+    });
+  }
+  var tmr = null;
+  function later() { clearTimeout(tmr); tmr = setTimeout(function () { if (document.body) scan(document.body); }, 120); }
+  function start() { scan(document.body); if (window.MutationObserver) new MutationObserver(later).observe(document.body, { childList: true, subtree: true, characterData: true }); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
