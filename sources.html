@@ -15,7 +15,13 @@
 <script src="portal-role.js?v=10.8.12"></script>
 <style>.sr-ok{color:#047857;font-weight:700}.sr-ca{color:#b45309;font-weight:700}.sr-se{color:#1d4ed8;font-weight:700}.sr-no{color:#b91c1c;font-weight:700}.sr-n{font-size:12px;color:#475569;line-height:1.6}
 .sr-k{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.sr-k div{flex:1;min-width:130px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;padding:8px 12px}.sr-k b{display:block;font-size:22px}.sr-k small{color:#475569;font-weight:700}
-.sr-d{font-size:12.5px;color:#334155;margin:4px 0 10px;line-height:1.9}.sr-d span{display:inline-block;margin-inline-end:14px}.sr-act{margin:8px 0;display:flex;gap:8px;flex-wrap:wrap}.sr-pr{display:none;font-size:13px;color:#334155}@media print{.sr-act{display:none!important}.sr-pr{display:block}.ph-tw{overflow:visible;border:0}.ph-rt{min-width:0;font-size:11px}.sr-k div{break-inside:avoid}tr{break-inside:avoid}}</style>
+.sr-d{font-size:12.5px;color:#334155;margin:4px 0 10px;line-height:1.9}.sr-d span{display:inline-block;margin-inline-end:14px}.sr-act{margin:8px 0;display:flex;gap:8px;flex-wrap:wrap}
+.sr-ph{display:none}
+.sr-rt{width:100%;border-collapse:collapse;background:#fff;font-size:13px}.sr-rt th,.sr-rt td{border:1px solid #e2e8f0;padding:6px 8px;vertical-align:top;text-align:right}.sr-rt thead th{background:#003d3d;color:#fff;font-weight:800}
+.sr-rt .dm td{background:#006666;color:#fff;font-weight:900;font-size:14px}.sr-rt .cr td{background:#f0f7f7;color:#003d3d;font-weight:800;border-inline-start:4px solid #c29b38}
+.sr-rt .ic{background:#fafcfc;min-width:170px}.sr-rt .ic b{color:#003d3d}.sr-rt .ic small{display:block;color:#475569;font-size:12px;line-height:1.5}
+@page{size:A4 landscape;margin:12mm}
+@media print{html,body{background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}#chrome,.sr-act,.ph-filters,#sum,.ph-top,.ph-nav{display:none!important}.sr-ph{display:block;margin-bottom:8px}.sr-ph .lg{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:3px solid #c29b38;padding-bottom:6px}.sr-ph img{height:44px}.sr-ph h2{margin:6px 0 0;font-size:16px;color:#003d3d}.sr-ph p{margin:2px 0;font-size:11px;color:#334155}.ph-main{max-width:none!important;padding:0!important}.ph-h1,.ph-lead{display:none}.ph-tw{overflow:visible;border:0}.sr-rt{font-size:10.5px}.sr-k div{break-inside:avoid}.sr-rt tr{break-inside:avoid}.sr-rt thead{display:table-header-group}}</style>
 </head>
 <body>
 <div id="chrome"></div>
@@ -23,7 +29,7 @@
   <h1 class="ph-h1">تتبع الوثائق ومصادر بيانات السجلات</h1>
   <p class="ph-lead">حالة مصدر البيانات لكل سجل، وتطور العمل على إيجاد مصادر تغذّيه. تُحدَّث الصفحة بالتزامن مع العمل.</p>
   <div class="sr-act ad-only"><button type="button" class="ph-btn" id="exPdf"><i class="fa-solid fa-file-pdf"></i> تصدير تقرير للإدارة (PDF / طباعة)</button> <button type="button" class="ph-btn" id="exCsv"><i class="fa-solid fa-file-csv"></i> تصدير CSV</button></div>
-  <p class="sr-pr" id="pr"></p>
+  <div class="sr-ph"><div class="lg"><img src="logo2.png" alt="ETEC"><img src="logo0.png" alt="Diploma 2026"><img src="logo1.png" alt="دار الفرسان"></div><h2>تقرير تتبع الوثائق ومصادر بيانات السجلات</h2><p id="pr"></p></div>
   <div id="kp" class="sr-k"></div>
   <div id="dm" class="sr-d"></div>
   <div class="ph-filters" role="search">
@@ -32,7 +38,7 @@
     <select id="fd" aria-label="المجال"><option value="">كل المجالات</option></select>
   </div>
   <div id="sum" class="ph-lead" role="status" aria-live="polite"></div>
-  <div class="ph-tw"><table class="ph-rt"><caption class="sr">مصادر بيانات السجلات</caption>
+  <div class="ph-tw"><table class="sr-rt"><caption class="sr">مصادر بيانات السجلات</caption>
     <thead><tr><th scope="col">المؤشر</th><th scope="col">السجل</th><th scope="col">حالة المصدر</th><th scope="col">حالة السجل</th><th scope="col">المصدر / التنويه</th><th scope="col">آخر تحديث</th></tr></thead>
     <tbody id="tb"></tbody></table></div>
 </main>
@@ -60,8 +66,14 @@
     var c = cnt(function () { return true; });
     kp.innerHTML = ["ok", "candidate", "searching", "none"].map(function (k) { return '<div><b class="' + L[k][1] + '">' + c[k] + "</b><small>" + L[k][0] + "</small></div>"; }).join("") + '<div><b>' + rows.length + "</b><small>إجمالي السجلات</small></div>";
     dm.innerHTML = [1, 2, 3, 4].map(function (d) { var x = cnt(function (r) { return r.d === d; }), n = x.ok + x.candidate + x.searching + x.none; return "<span><b>" + E(P.DN[d]) + ":</b> " + x.ok + " مكتمل من " + n + "</span>"; }).join("");
-    tb.innerHTML = v.map(function (r) {
-      return "<tr><td>" + E(r.code) + '<div class="sr-n">' + E(r.st) + '</div></td><th scope="row" class="ph-rn">' + E(r.n) + '</th><td class="' + L[r.s][1] + '">' + L[r.s][0] + '</td><td>' + P.chip(r.rs) + '</td><td class="sr-n">' + E(r.t) + (r.l ? ' <a href="' + E(r.l) + '" target="_blank" rel="noopener">المرشّح</a>' : "") + '</td><td class="sr-n">' + E(r.u || "—") + "</td></tr>"; }).join("");
+    var html = "", cd = 0, cc = "", groups = {};
+    v.forEach(function (r) { (groups[r.code] = groups[r.code] || []).push(r); });
+    P.PH.inds.forEach(function (i) { var g = groups[i.code]; if (!g) return;
+      if (i.d !== cd) { cd = i.d; cc = ""; html += '<tr class="dm"><td colspan="6">المجال ' + cd + " — " + E(P.DN[cd]) + "</td></tr>"; }
+      if (i.c !== cc) { cc = i.c; html += '<tr class="cr"><td colspan="6">المعيار ' + E(i.c) + " — " + E(i.cn) + "</td></tr>"; }
+      g.forEach(function (r, k) {
+        html += "<tr>" + (k === 0 ? '<td class="ic" rowspan="' + g.length + '"><b>' + E(i.code) + "</b><small>" + E(i.st) + "</small></td>" : "") + '<th scope="row" class="ph-rn">' + E(r.n) + '</th><td class="' + L[r.s][1] + '">' + L[r.s][0] + "</td><td>" + P.chip(r.rs) + '</td><td class="sr-n">' + E(r.t) + (r.l ? ' <a href="' + E(r.l) + '" target="_blank" rel="noopener">المرشّح</a>' : "") + '</td><td class="sr-n">' + E(r.u || "—") + "</td></tr>"; }); });
+    tb.innerHTML = html;
     sum.textContent = "المعروض: " + v.length + " من " + rows.length;
   }
   function csv() {
@@ -70,7 +82,11 @@
     var txt = "\ufeff" + out.map(function (a) { return a.map(function (c) { return '"' + String(c == null ? "" : c).replace(/"/g, '""') + '"'; }).join(","); }).join("\r\n");
     var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([txt], { type: "text/csv;charset=utf-8" })); a.download = "تتبع_مصادر_السجلات_" + new Date().toISOString().slice(0, 10) + ".csv"; document.body.appendChild(a); a.click(); a.remove();
   }
-  document.getElementById("exPdf").addEventListener("click", function () { window.print(); });
+  document.getElementById("exPdf").addEventListener("click", function () {
+    var de = document.documentElement, old = document.title; de.classList.add("rp-print"); document.title = "تتبع_مصادر_السجلات_" + new Date().toISOString().slice(0, 10);
+    var back = function () { document.title = old; de.classList.remove("rp-print"); window.removeEventListener("afterprint", back); }; window.addEventListener("afterprint", back);
+    setTimeout(function () { window.print(); }, 60);
+  });
   document.getElementById("exCsv").addEventListener("click", csv);
   P.onStatus(function () { build(); draw(); });
   q.addEventListener("input", draw); fs.addEventListener("change", draw); fd.addEventListener("change", draw); draw();

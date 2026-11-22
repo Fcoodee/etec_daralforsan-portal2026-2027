@@ -7,6 +7,7 @@
 <script src="fx.js?v=10.8.12"></script>
 <script src="page-gate.js?v=10.8.12" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."></script>
 <script src="admin-only.js?v=10.8.12"></script>
+<script src="reference-official.js?v=10.8.12"></script>
 <meta name="robots" content="noindex,nofollow">
 <title>المرجع: المجالات والمعايير والمؤشرات والإضاءات والسجلات — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -92,6 +93,11 @@ mark{background:#fef08a;border-radius:3px}
     <h2>الملفات المرجعية (PDF) من مجلد المشروع في التخزين السحابي</h2>
     <p class="ph-lead" style="margin:0 0 4px">اضغط «عرض» لفتح الملف في نافذة داخل الصفحة، أو امسح رمز QR من جهاز ذكي. الملفات خاصة بحساب المشروع: يفتحها من له صلاحية على المجلد فقط.</p>
     <div class="rf-pdfs" id="pdfs"></div>
+  </section>
+  <section class="rf-src ad-only" aria-label="روابط رسمية متحقق منها" id="offSec">
+    <h2>روابط رسمية متحقق منها (لمدير النظام فقط)</h2>
+    <p class="ph-lead" style="margin:0 0 4px">فُتحت فعليًا وقُرئ محتواها بتاريخ 22/11/2026. لا تثبت أي صفحة منها اعتراف الوزارة أو الهيئة بجهة اعتماد أجنبية (AIAAsc غير متحقق). وثيقة المعايير 2026 وأدلة الشواهد: لا رابط عام؛ تُطلب عبر منصة «تميز» أو الدعم 19925.</p>
+    <div id="offs"></div>
   </section>
   <div class="rf-note" id="notes"></div>
   <section class="rf-src" aria-label="المراجع">
@@ -188,6 +194,7 @@ mark{background:#fef08a;border-radius:3px}
     ["Requirements for applying school accreditation in public schools in light of ETEC standards — هاني الغامدي، مجلة جامعة أم القرى للعلوم التربوية والنفسية (2025)", "https://uqu.edu.sa/en/jep/152093", "دراسة وصفية مسحية على 536 مديراً؛ تتقاطع مع المجالات الأربعة وتُعدّ مرجعاً أكاديمياً داعماً لا مصدراً للمعايير."],
     ["Improving education in Saudi Arabia through evaluation and assessment — البنك الدولي (6 نوفمبر 2025)", "https://blogs.worldbank.org/en/arabvoices/improving-education-in-saudi-arabia-through-evaluation-and-assessment", "سياق دولي: برنامج تقويم المدارس بدأ بتقويم ذاتي ثم مراجعة خارجية عبر أربعة مجالات؛ ومنصة «تميز» الرقمية؛ ونافس ضمن مجال نواتج التعلم."]
   ];
+  document.getElementById("offs").innerHTML = (window.ETEC_OFFICIAL_REFS || []).map(function (g) { return "<h3 style=\"font-size:14px;margin:10px 0 2px;color:#003d3d\">" + E(g[0]) + "</h3><ol>" + g[1].map(function (s) { return '<li><a href="' + E(s[1]) + '" target="_blank" rel="noopener noreferrer">' + E(s[0]) + "</a><small>" + E(s[2]) + "</small></li>"; }).join("") + "</ol>"; }).join("");
   document.getElementById("srcs").innerHTML = S.map(function (s) { return "<li>" + (s[1] ? '<a href="' + E(s[1]) + '" target="_blank" rel="noopener noreferrer">' + E(s[0]) + "</a>" : "<b>" + E(s[0]) + "</b>") + "<small>" + E(s[2]) + "</small></li>"; }).join("");
 
 
