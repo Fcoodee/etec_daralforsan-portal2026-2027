@@ -48,7 +48,7 @@ var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word ف�
 var COUNT_DOC_EXT  = ["docx", "pdf"]; // الصيغ التي تُحتسب «معبّأة/معتمدة» عند الفحص؛ الرفع من البطاقة يبقى docx فقط (ACCEPT_DOC_EXT). PDF = النسخة المعتمدة للعرض ولا قالب PDF فارغ يُقارَن به
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.11.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.11.1";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -354,10 +354,6 @@ var TREE = {
     "m": "سجل اللجنة الإدارية"
    },
    {
-    "n": "سجل توزيع الأنصبة",
-    "m": "سجل توزيع الأنصبة"
-   },
-   {
     "n": "الجدول المدرسي",
     "m": "الجدول المدرسي"
    },
@@ -368,6 +364,10 @@ var TREE = {
    {
     "n": "توزيع الأنصبة",
     "m": "توزيع الأنصبة"
+   },
+   {
+    "n": "سجل الهيكل الأكاديمي",
+    "m": "سجل الهيكل الأكاديمي"
    }
   ]
  },
@@ -5106,12 +5106,13 @@ function treeScanIndicator_(code, ent, sizes, errors) {
     /* السجل المشتق قالبه باسم «قالب_سجل متابعة المؤشر <الرمز>_v1.docx»؛ أما الرسمي فـ«قالب_<السجل>_v1.docx» */
     var tplSize = sizes[norm_("قالب_" + rec.m + "_v1.docx")];
     if (tplSize == null) tplSize = sizes[norm_("قالب_" + rec.m + " " + code + "_v1.docx")];
-    if (tplSize == null) errors.push({ key: code, error: "لا يوجد قالب في 01_القوالب للسجل «" + rec.n + "» فلا يمكن التمييز بين الفارغ والمعبّأ" });
     var placed = false, filled = false, approved = false;
     function isFilled(x) { var pr = splitName_(x.name); if (COUNT_DOC_EXT.indexOf(pr.ext) < 0) return false; if (x.size < MIN_BYTES.doc) return false; if (pr.ext === "pdf") return true; /* PDF لا قالب فارغ له: وجوده بحجم صالح = معبّأ */ if (SUBMITTED_[x.id]) return true; /* مرفوع من البطاقة = قُدّم للمراجعة (v9.3.1) */ return tplSize == null ? false : x.size !== tplSize; }
     var pick = null, retInfo = null;
     rvFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) { filled = true; if (RETURNED_[x.id]) retInfo = RETURNED_[x.id]; } if (!pick || (filled && !pick[0])) pick = [isFilled(x) ? 1 : 0, "rv", x.id]; } });
     apFiles.forEach(function (x) { if (treeMatch_(x.name, code, rec)) { placed = true; out.files.push(x.name); if (isFilled(x)) { filled = true; approved = true; } var xPdf = splitName_(x.name).ext === "pdf"; /* للعرض: يُفضَّل PDF المعتمد على docx متى وُجد (الاحتساب لا يتأثر) */ if (!pick || pick[1] === "rv" || (xPdf && isFilled(x)) || (isFilled(x) && !pick[3])) pick = [isFilled(x) ? 1 : 0, "ap", x.id, xPdf && isFilled(x) ? 1 : 0]; } });
+    /* v9.11.1: غياب القالب لا يُبلَّغ خطأً إن وُجد PDF مطابق للسجل (PDF لا يحتاج قالباً للتمييز) */
+    if (tplSize == null && !rvFiles.concat(apFiles).some(function (x) { return splitName_(x.name).ext === "pdf" && treeMatch_(x.name, code, rec); })) errors.push({ key: code, error: "لا يوجد قالب في 01_القوالب للسجل «" + rec.n + "» فلا يمكن التمييز بين الفارغ والمعبّأ" });
     if (pick) out.fl[rec.n] = pick.slice(0, 3);
     if (placed) out.ready++;
     if (filled) { out.up++; out.docs.push(rec.n); } else if (placed) out.blank.push(rec.n); else out.missing.push(rec.n);
