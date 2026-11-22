@@ -270,7 +270,8 @@
   /* v10.8.7: أشرطة التقدم تتحرك ذهاباً وإياباً ثم تستقر عند النسبة المطلوبة */
   var BAR_SEL = ".ph-bar i,.pg-bar i,.pg-crit .tr i", barT = null;
   function animBars(root) {
-    if (window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+    var n = 0;
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches) return n;
     Array.prototype.forEach.call((root || document).querySelectorAll(BAR_SEL), function (el) {
       if (el.dataset.an || !el.animate) return; el.dataset.an = "1";
       var par = el.parentNode, pw = par && par.getBoundingClientRect().width, w = el.getBoundingClientRect().width;
@@ -278,24 +279,34 @@
       var t = Math.max(0.02, w / pw), rtl = getComputedStyle(par).direction === "rtl";
       el.style.transformOrigin = rtl ? "right center" : "left center";
       var k = [{ transform: "scaleX(0)", offset: 0 }, { transform: "scaleX(" + (1 / t).toFixed(3) + ")", offset: .38 }, { transform: "scaleX(0)", offset: .72 }, { transform: "scaleX(1)", offset: 1 }];
-      try { el.animate(k, { duration: 2600, easing: "ease-in-out", delay: Math.min(400, el.getBoundingClientRect().top > innerHeight ? 0 : 0) }); } catch (x) {}
+      try { el.animate(k, { duration: 2600, easing: "ease-in-out" }); n++; } catch (x) {}
     });
+    return n;
   }
   /* حلقة التقدم الكلي: ترسم ذهاباً وإياباً ثم تستقر عند النسبة */
   function animRings(root) {
-    if (window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+    var n = 0;
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches) return n;
     Array.prototype.forEach.call((root || document).querySelectorAll(".pg-ring svg circle[stroke-dasharray]"), function (el) {
       if (el.dataset.an || !el.animate) return; el.dataset.an = "1";
       var da = el.getAttribute("stroke-dasharray") || "", m = da.split(/[ ,]+/), a = parseFloat(m[0]), b = parseFloat(m[1]);
       if (!isFinite(a) || !isFinite(b) || b <= 0) return;
       var full = b, f = function (x) { return x.toFixed(2) + " " + full.toFixed(2); };
-      try { el.animate([{ strokeDasharray: f(0), offset: 0 }, { strokeDasharray: f(full), offset: .38 }, { strokeDasharray: f(0), offset: .72 }, { strokeDasharray: f(a), offset: 1 }], { duration: 2600, easing: "ease-in-out" }); } catch (x) {}
+      try { el.animate([{ strokeDasharray: f(0), offset: 0 }, { strokeDasharray: f(full), offset: .38 }, { strokeDasharray: f(0), offset: .72 }, { strokeDasharray: f(a), offset: 1 }], { duration: 2600, easing: "ease-in-out" }); n++; } catch (x) {}
     });
+    return n;
+  }
+  /* v10.8.50: حركة الدخول (ذهاباً وإياباً) تُعرض مرة واحدة فقط عند أول عرض للصفحة؛ ولا تتكرر عند «تحديث الآن» أو إعادة الرسم أثناء الانتظار (كانت تتحرك مع تغيّر الأرقام فتبدو مضطربة) */
+  var ANIM_DONE = false;
+  function animOnce(root) {
+    if (ANIM_DONE || ST.loading) return;
+    var n = animBars(root) + animRings(root);
+    if (n > 0) ANIM_DONE = true;
   }
   function watchBars() {
     if (barT !== null || !window.MutationObserver || !document.body) return; barT = 0;
-    new MutationObserver(function () { clearTimeout(barT); barT = setTimeout(function () { animBars(document); animRings(document); }, 80); }).observe(document.body, { childList: true, subtree: true });
-    animBars(document); animRings(document);
+    new MutationObserver(function () { clearTimeout(barT); barT = setTimeout(function () { animOnce(document); }, 80); }).observe(document.body, { childList: true, subtree: true });
+    animOnce(document);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", watchBars); else watchBars();
   /* v10.8.43: عمر اللقطة (يُحسب من generatedAt عند العرض) — «قبل 12 دقيقة»، وتحذير بعد 90 دقيقة */
