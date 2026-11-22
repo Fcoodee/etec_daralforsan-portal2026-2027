@@ -221,8 +221,7 @@
     var items = [
       ["dashboard.html", "fa-chart-pie", "نسبة الإنجاز الكلية", false],
       ["indicators.html", "fa-list-check", "المؤشرات والسجلات (العمل)", true],
-      ["sources.html", "fa-link", "تتبع الوثائق ومصادر البيانات", true],
-      ["docs.html", "fa-pen-to-square", "سواقة الوثائق والسجلات", true],
+      ["sources.html", "fa-folder-open", "الوثائق والمصادر", true],
       ["report.html", "fa-file-image", "تقرير الشواهد البصرية (إصدار)", true],
       ["reference.html", "fa-book-open", "المرجع", true]
     ];

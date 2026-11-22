@@ -3,17 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=10.8.41"></script>
-<script src="fx.js?v=10.8.41"></script>
-<script src="page-gate.js?v=10.8.41" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."></script>
-<script src="admin-only.js?v=10.8.41"></script>
+<script src="shield.js?v=10.8.42"></script>
+<script src="fx.js?v=10.8.42"></script>
+<script src="page-gate.js?v=10.8.42" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."></script>
+<script src="admin-only.js?v=10.8.42"></script>
 <meta name="robots" content="noindex,nofollow">
-<title>تتبع الوثائق ومصادر بيانات السجلات — مدارس دار الفرسان</title>
+<title>الوثائق والمصادر — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=10.8.41">
-<script src="portal-meta.js?v=10.8.41"></script>
-<script src="portal-role.js?v=10.8.41"></script>
-<style>.sr-ok{color:#047857;font-weight:700}.sr-ca{color:#b45309;font-weight:700}.sr-se{color:#1d4ed8;font-weight:700}.sr-no{color:#b91c1c;font-weight:700}.sr-n{font-size:12px;color:#475569;line-height:1.6}
+<link rel="stylesheet" href="phase.css?v=10.8.42">
+<script src="portal-meta.js?v=10.8.42"></script>
+<script src="portal-role.js?v=10.8.42"></script>
+<style>.sr-tabs{display:flex;gap:8px;margin:6px 0 12px;border-bottom:2px solid #e2e8f0}.sr-tabs button{border:0;background:none;font:inherit;font-weight:800;font-size:14px;color:#475569;padding:8px 16px;border-bottom:3px solid transparent;margin-bottom:-2px;cursor:pointer}.sr-tabs button[aria-selected=true]{color:#003d3d;border-bottom-color:#c29b38}#tab-docs[hidden],#tab-src[hidden]{display:none}@media print{.sr-tabs,#tab-docs{display:none!important}}.dd-g{overflow-x:auto;border:1px solid #e2e8f0;border-radius:12px;background:#fff;margin:8px 0}.dd-g table{border-collapse:collapse;width:100%;min-width:640px;font-size:13px}.dd-g th{background:#f1f5f9;padding:6px 8px;text-align:right;white-space:nowrap}.dd-g td{border-top:1px solid #eef2f7;padding:3px}.dd-g input{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:6px;padding:5px 6px;font:inherit;font-size:13px;direction:ltr;text-align:left}.dd-g input[readonly]{background:#f8fafc;text-align:center}
+.dd-r{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}.dd-m{font-weight:700;font-size:13px;min-height:20px}.dd-m.ok{color:#047857}.dd-m.bad{color:#b91c1c}.dd-w{font-size:12.5px;color:#475569;line-height:1.8;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:8px 12px;margin:8px 0}textarea.dd-n{width:100%;box-sizing:border-box;min-height:56px;border:1px solid #cbd5e1;border-radius:8px;padding:6px 8px;font:inherit;font-size:13px;direction:ltr}
+.sr-ok{color:#047857;font-weight:700}.sr-ca{color:#b45309;font-weight:700}.sr-se{color:#1d4ed8;font-weight:700}.sr-no{color:#b91c1c;font-weight:700}.sr-n{font-size:12px;color:#475569;line-height:1.6}
 .sr-k{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.sr-k div{flex:1;min-width:130px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;padding:8px 12px}.sr-k b{display:block;font-size:22px}.sr-k small{color:#475569;font-weight:700}
 .sr-d{font-size:12.5px;color:#334155;margin:4px 0 10px;line-height:1.9}.sr-d span{display:inline-block;margin-inline-end:14px}.sr-act{margin:8px 0;display:flex;gap:8px;flex-wrap:wrap}
 .sr-ph{display:none}
@@ -22,11 +24,14 @@
 .sr-rt .ic{background:#fafcfc;min-width:150px}.sr-rt .c-st{min-width:104px;max-width:130px}.sr-rt .c-rs{min-width:96px}.sr-rt .c-dc{min-width:112px}.sr-rt td.c-dc{color:#003d3d;font-weight:700;font-size:12.5px}.sr-rt .c-nt{min-width:260px}.sr-rt .c-dt{white-space:nowrap}.sr-rt td.c-dt{font-size:12px;color:#475569}.sr-dcn{font-size:12px;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:6px 10px;margin:6px 0}.sr-rt .ic b{color:#003d3d}.sr-rt .ic small{display:block;color:#475569;font-size:12px;line-height:1.5}
 @page{size:A4 landscape;margin:0}
 @media print{html,body{background:#fff!important;padding:0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}#chrome,.sr-act,.ph-filters,#sum,.ph-top,.ph-nav{display:none!important}.sr-ph{display:block;margin-bottom:8px}.sr-ph .lg{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:3px solid #c29b38;padding-bottom:6px}.sr-ph img{height:44px}.sr-ph h2{margin:6px 0 0;font-size:16px;color:#003d3d}.sr-ph p{margin:2px 0;font-size:11px;color:#334155}.ph-main{max-width:none!important;padding:12mm!important;box-decoration-break:clone;-webkit-box-decoration-break:clone}.ph-h1,.ph-lead{display:none}.ph-tw{overflow:visible;border:0}.sr-rt{font-size:10.5px}.sr-k div{break-inside:avoid}.sr-rt tr{break-inside:avoid}.sr-rt thead{display:table-header-group}}</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 <body>
 <div id="chrome"></div>
 <main class="ph-main">
-  <h1 class="ph-h1">تتبع الوثائق ومصادر بيانات السجلات</h1>
+  <h1 class="ph-h1">الوثائق والمصادر</h1>
+  <div class="sr-tabs" role="tablist" aria-label="أقسام الصفحة"><button type="button" role="tab" id="tb-src" aria-selected="true" aria-controls="tab-src">تتبع مصادر السجلات</button><button type="button" role="tab" id="tb-docs" aria-selected="false" aria-controls="tab-docs">سواقة الوثائق</button></div>
+<div id="tab-src" role="tabpanel">
   <p class="ph-lead">حالة مصدر البيانات لكل سجل، وتطور العمل على إيجاد مصادر تغذّيه. تُحدَّث الصفحة بالتزامن مع العمل.</p>
   <div class="sr-act ad-only"><button type="button" class="ph-btn" id="exPdf"><i class="fa-solid fa-file-pdf"></i> تصدير تقرير للإدارة (PDF / طباعة)</button> <button type="button" class="ph-btn" id="exCsv"><i class="fa-solid fa-file-csv"></i> تصدير CSV</button></div>
   <div class="sr-ph"><div class="lg"><img src="logo2.png" alt="ETEC"><img src="logo0.png" alt="Diploma 2026"><img src="logo1.png" alt="دار الفرسان"></div><h2>تقرير تتبع الوثائق ومصادر بيانات السجلات</h2><p id="pr"></p></div>
@@ -42,12 +47,31 @@
   <div class="ph-tw"><table class="sr-rt"><caption class="sr">مصادر بيانات السجلات</caption>
     <thead><tr><th scope="col">المؤشر</th><th scope="col">السجل</th><th scope="col" class="c-st">حالة المصدر</th><th scope="col" class="c-rs">حالة السجل</th><th scope="col" class="c-dc" title="الجهة المخوّلة بقرار/اعتماد السجل">مصدر القرار الرسمي</th><th scope="col" class="c-nt">المصدر / التنويه</th><th scope="col" class="c-dt">آخر تحديث</th></tr></thead>
     <tbody id="tb"></tbody></table></div>
+</div>
+<div id="tab-docs" role="tabpanel" hidden>
+  <p class="ph-lead">افتح سجلًا من «قيد المراجعة»، عبّئ جدوله، ثم أرفعه للمراجعة. الاعتماد للمشرف وحده من صفحة «المؤشرات والسجلات».</p>
+  <div class="ph-filters">
+    <select id="ci" aria-label="المؤشر"></select>
+    <select id="cr" aria-label="السجل"></select>
+    <button type="button" class="ph-btn" id="op"><i class="fa-solid fa-folder-open"></i> فتح السجل</button>
+  </div>
+  <div id="ed" hidden>
+    <div class="dd-w">يُعدَّل <b>جدول التعبئة فقط</b>؛ الترويسة وشاهد المصدر وخانات الاعتماد لا تُمس. نص «لا يوجد مصدر» في الوثيقة يبقى كما هو ما لم تكتب ملاحظة جديدة أدناه، وتأكد أنها صحيحة. ملف PDF المختوم (العلامة المائية ورمز QR) لا تنشئه هذه الصفحة.</div>
+    <div class="dd-g"><table><thead id="dth"></thead><tbody id="dtb"></tbody></table></div>
+    <div class="dd-r"><button type="button" class="ph-btn sm" id="ad"><i class="fa-solid fa-plus"></i> إضافة صف</button><button type="button" class="ph-btn sm" id="dl"><i class="fa-solid fa-minus"></i> حذف آخر صف</button></div>
+    <label for="nt" class="sr-n">ملاحظة جديدة تحل محل سطر «No Diploma Section source…» (اختياري، بالإنجليزية كبقية الوثيقة)</label>
+    <textarea class="dd-n" id="nt" placeholder="مثال: Source: signed acknowledgement forms, Term 1."></textarea>
+    <div class="dd-r"><input id="who" type="text" placeholder="اسم المعبِّئ" aria-label="اسم المعبِّئ" style="min-width:200px"><button type="button" class="ph-btn" id="up"><i class="fa-solid fa-cloud-arrow-up"></i> رفع للمراجعة</button><button type="button" class="ph-btn sm" id="dw"><i class="fa-solid fa-download"></i> تنزيل Word</button></div>
+  </div>
+  <div class="dd-m" id="ms" role="status" aria-live="polite"></div>
+</div>
 </main>
-<script src="portal-config.js?v=10.8.41"></script>
-<script src="portal-names.js?v=10.8.41"></script>
-<script src="phase-data.js?v=10.8.41"></script>
-<script src="record-sources.js?v=10.8.41"></script>
-<script src="phase-core.js?v=10.8.41"></script>
+<script src="portal-config.js?v=10.8.42"></script>
+<script src="portal-names.js?v=10.8.42"></script>
+<script src="phase-data.js?v=10.8.42"></script>
+<script src="record-sources.js?v=10.8.42"></script>
+<script src="phase-core.js?v=10.8.42"></script>
+<script src="docs-driver.js?v=10.8.42"></script>
 <script>
 (function () {
   "use strict";
@@ -91,6 +115,61 @@
   document.getElementById("exCsv").addEventListener("click", csv);
   P.onStatus(function () { build(); draw(); });
   q.addEventListener("input", draw); fs.addEventListener("change", draw); fd.addEventListener("change", draw); draw();
+})();
+</script>
+<script>
+(function () {
+  "use strict";
+  var P = window.PHC, E = P.esc, URL_ = window.ETEC_STATUS_URL || "";
+  var $ = function (i) { return document.getElementById(i); }, zip = null, srcName = "", hdr = [];
+  function say(t, c) { $("ms").textContent = t; $("ms").className = "dd-m " + (c || ""); }
+  P.PH.inds.forEach(function (i) { $("ci").insertAdjacentHTML("beforeend", '<option value="' + E(i.code) + '">' + E(i.code + " — " + i.st) + "</option>"); });
+  function recs() { var i = P.byCode ? P.byCode(this_code()) : null; i = i || P.PH.inds.filter(function (x) { return x.code === this_code(); })[0]; $("cr").innerHTML = (i ? i.recs : []).map(function (n) { return '<option value="' + E(n) + '">' + E(n) + "</option>"; }).join(""); }
+  function this_code() { return $("ci").value; }
+  $("ci").addEventListener("change", recs); recs();
+  function call(body) { return fetch(URL_, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) }).then(function (r) { return r.json(); }); }
+  function row(vals, n) {
+    var tr = document.createElement("tr");
+    for (var k = 0; k < hdr.length; k++) { var td = document.createElement("td"), inp = document.createElement("input"); inp.value = k === 0 ? String(n) : (vals[k] == null ? "" : vals[k]); if (k === 0) inp.readOnly = true; td.appendChild(inp); tr.appendChild(td); }
+    $("dtb").appendChild(tr);
+  }
+  function renum() { Array.prototype.forEach.call($("dtb").rows, function (tr, i) { tr.cells[0].firstChild.value = String(i + 1); }); }
+  function grid() { return Array.prototype.map.call($("dtb").rows, function (tr) { return Array.prototype.map.call(tr.cells, function (td) { return td.firstChild.value; }); }); }
+  $("ad").addEventListener("click", function () { row([], $("dtb").rows.length + 1); });
+  $("dl").addEventListener("click", function () { if ($("dtb").rows.length > 1) $("dtb").removeChild($("dtb").lastChild); renum(); });
+  function build() { return zip.file("word/document.xml").async("string").then(function (xml) { zip.file("word/document.xml", window.DocsCore.apply(xml, grid(), $("nt").value)); return zip.generateAsync({ type: "base64", compression: "DEFLATE" }); }); }
+  $("op").addEventListener("click", function () {
+    if (!URL_) { say("الربط غير مهيّأ.", "bad"); return; }
+    if (!window.JSZip) { say("تعذّر تحميل مكتبة الضغط؛ تأكد من الاتصال بالإنترنت.", "bad"); return; }
+    say("جارٍ فتح السجل…"); $("ed").hidden = true;
+    call({ action: "getRecordDoc", code: $("ci").value, rec: $("cr").value }).then(function (o) {
+      if (!o || !o.ok) { say((o && o.error) || "تعذّر فتح السجل. إن كان الخطأ «إجراء غير معروف» فانشر نسخة السكربت الجديدة (v9.8.0).", "bad"); return; }
+      srcName = o.name; return JSZip.loadAsync(o.file, { base64: true }).then(function (z) { zip = z; return z.file("word/document.xml").async("string"); }).then(function (xml) {
+        var t = window.DocsCore.read(xml); hdr = t.header;
+        $("dth").innerHTML = "<tr>" + hdr.map(function (h) { return "<th>" + E(h) + "</th>"; }).join("") + "</tr>"; $("dtb").innerHTML = "";
+        t.rows.forEach(function (r, i) { row(r, i + 1); }); $("nt").value = ""; $("ed").hidden = false; say("فُتح: " + srcName, "ok");
+      });
+    }).catch(function (e) { say("تعذّر الاتصال أو قراءة الملف: " + (e && e.message || e), "bad"); });
+  });
+  $("up").addEventListener("click", function () {
+    var who = $("who").value.trim(); if (who.length < 2) { say("اكتب اسم المعبِّئ أولًا.", "bad"); $("who").focus(); return; }
+    $("up").disabled = true; say("جارٍ التوليد والرفع…");
+    build().then(function (b64) { return call({ action: "uploadRecord", code: $("ci").value, rec: $("cr").value, name: srcName, file: b64, who: who }); })
+      .then(function (o) { $("up").disabled = false; if (o && o.ok) say("تم الرفع ✔ ويظهر «قيد المراجعة» بعد دقيقة. يعتمده المشرف من «المؤشرات والسجلات».", "ok"); else say((o && o.error) || "فشل الرفع.", "bad"); })
+      .catch(function (e) { $("up").disabled = false; say("تعذّر الرفع: " + (e && e.message || e), "bad"); });
+  });
+  $("dw").addEventListener("click", function () {
+    build().then(function (b64) { var a = document.createElement("a"); a.href = "data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64," + b64; a.download = srcName || "record.docx"; document.body.appendChild(a); a.click(); a.remove(); }).catch(function (e) { say("تعذّر التوليد: " + (e && e.message || e), "bad"); });
+  });
+})();
+</script>
+<script>
+(function () {
+  "use strict";
+  var b1 = document.getElementById("tb-src"), b2 = document.getElementById("tb-docs"), p1 = document.getElementById("tab-src"), p2 = document.getElementById("tab-docs");
+  function show(w) { var d = w === "docs"; p1.hidden = d; p2.hidden = !d; b1.setAttribute("aria-selected", d ? "false" : "true"); b2.setAttribute("aria-selected", d ? "true" : "false"); try { history.replaceState(null, "", d ? "#docs" : location.pathname + location.search); } catch (e) {} }
+  b1.addEventListener("click", function () { show("src"); }); b2.addEventListener("click", function () { show("docs"); });
+  if (location.hash === "#docs") show("docs");
 })();
 </script>
 </body>

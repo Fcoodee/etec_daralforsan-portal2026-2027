@@ -20,7 +20,7 @@
   /* من يرى أي صفحة. الصفحة خارج نطاق الدور تُعرض مع تنبيه ولا تُحجب (تخصيص عرض لا حماية). */
   var ALL = ORDER.slice();
   var PAGES = {
-    "index.html": ALL, "stages.html": ALL, "dashboard.html": ALL, "indicators.html": ALL, "reference.html": ALL, "sources.html": ALL, "docs.html": ALL, "report.html": ALL, "open.html": ALL
+    "index.html": ALL, "stages.html": ALL, "dashboard.html": ALL, "indicators.html": ALL, "reference.html": ALL, "sources.html": ALL, "report.html": ALL, "open.html": ALL
     /* كل ما عداها قديم: لمدير النظام وحده */
   };
 
