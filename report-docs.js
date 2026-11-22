@@ -14,5 +14,13 @@ window.ETEC_DOCS = {
     { en: "Daily Student Behavioural Incident Form (Diploma reference document)", u: "https://drive.google.com/file/d/1qWL-MySD5o7frRrfOltCV8l7ghLThS2r/view?usp=drivesdk" },
     { en: "Behavioural Referral Form (Diploma reference document)", u: "https://drive.google.com/file/d/1xUKeAwQJiXnB0U0hd4SzAbItlfmKdWJG/view?usp=drivesdk" },
     { en: "Behaviour and Attendance Regulation awareness session report, 3 Sep 2025 (source document)", u: "https://drive.google.com/file/d/11P0gQ8QqhOhuh5nJ64lWB1eZsBJyBC9f/view?usp=drivesdk" }
+  ],
+  "1-2-1-4": [
+    { en: "Student Behaviour Violations - Procedure Cards, Degrees 1-5 (Diploma reference document)", u: "https://drive.google.com/file/d/1cDwsxWc3i4NQgLVD0RkXBbxnno8nHPl2/view?usp=drivesdk" },
+    { en: "Primary-stage Student Guidance Plan 2026-2027, positive behaviour programmes (extract of the approved operational plan)", u: "https://drive.google.com/file/d/1Wa2FWelKz_ylEWtelFcJVkTuV6gmcMUS/view?usp=drivesdk" }
+  ],
+  "1-2-1-5": [
+    { en: "Operational Plan 2026-2027 (approved PDF)", u: "https://drive.google.com/file/d/1K8f2lGA0P2MNzqrqbm80ljQqRq1vKsCq/view?usp=drivesdk" },
+    { en: "Gifted students list (source document)", u: "https://drive.google.com/file/d/1i2yWjEXYX6AgZ7L_i5kPpxIDoroC642m/view?usp=drivesdk" }
   ]
 };
