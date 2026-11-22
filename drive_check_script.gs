@@ -48,7 +48,7 @@ var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word ف�
 var COUNT_DOC_EXT  = ["docx", "pdf"]; // الصيغ التي تُحتسب «معبّأة/معتمدة» عند الفحص؛ الرفع من البطاقة يبقى docx فقط (ACCEPT_DOC_EXT). PDF = النسخة المعتمدة للعرض ولا قالب PDF فارغ يُقارَن به
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.11.1";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.11.2";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -64,7 +64,7 @@ var TIME_LIMIT_MS  = 5 * 60 * 1000;
  */
 var TREE_ROOT_ID = "1sSYgHcq4Fejp2V3Y6TtY0dMpP_2Osu0_"; // Diploma_ETEC2026
 var TREE_TEMPLATES = "01_القوالب", TREE_REVIEW = "1_قيد_المراجعة", TREE_APPROVED = "2_معتمد", TREE_REPORT = "3_تقرير_الشواهد";
-var REPORT_TARGET = 6;              // مؤقت: عدد صور تقرير الشواهد لاعتباره «مربوطاً» (قرار مدير المشروع لاحقاً)
+var REPORT_TARGET = 4;              // قرار FD (22 نوفمبر): القاعدة 19 = من 4 إلى 6 صور؛ يُعدّ التقرير «مربوطاً» من 4 صور
 var TREE_MODE = true;               // true: doGet/refreshStatus يقرآن الشجرة الجديدة ويُخرجان schema:"tree-v2"
 var CACHE_KEY_TREE = "evidence_tree_v1";
 var TREE = {

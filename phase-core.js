@@ -17,7 +17,7 @@
   function basis() { var b = window.ETEC_PROGRESS_BASIS; return b === "uploaded" ? "uploaded" : b === "created" ? "created" : "mixed"; }
   function gl(txt, on) { return on ? '<span class="ph-gl">' + txt + "</span>" : txt; }
   function basisTxt() { var b = basis(); return b === "uploaded" ? "السجلات الجاهزة (المعبّأة والمعتمدة)" : b === "created" ? "السجلات المنشأة" : "الانطلاق من 50% بإنشاء السجلات ثم الجاهزة (25%) والتقرير (25%)"; }
-  function target() { return +window.ETEC_REPORT_TARGET || 6; }
+  function target() { return +window.ETEC_REPORT_TARGET || 4; }
 
   var ST = { live: false, asof: "", gen: "", ver: "", errors: [], ind: {}, loaded: false, failed: false };
   var listeners = [];
