@@ -15,7 +15,7 @@
  * الوظائف:
  *   verifyIndex()     ← فحص سلامة الفهرس (وجود كل مجلد ومطابقة اسمه)؛ تقرير فقط ولا تعديل. شغّله أولاً.
  *   refreshStatus()   ← تحدّث الحالة وتكتبها في ورقة «الحالة» (يدوياً أو بمشغّل زمني).
- *   installTrigger()  ← اختياري: تحديث تلقائي كل ساعة.
+ *   installTrigger()  ← (v9.11.0) مشغّلان: تحديث كامل كل 3 ساعات + refreshIfChanged كل 10 دقائق، ويكتب اللقطة الأولى. شغّله مرة واحدة بعد النشر.
  *   applyRenames()    ← تطبّق الأسماء المقترحة التي وُضعت عليها علامة «طبّق الاسم» في ورقة «التحقق» (تحترم DRY_RUN).
  *   doGet(e)          ← واجهة JSON/JSONP لصفحة evidence-link.html (?refresh=1 لإجبار التحديث).
  *
@@ -48,7 +48,7 @@ var ACCEPT_DOC_EXT = ["docx"]; // سياسة المسار الدولي: Word ف�
 var COUNT_DOC_EXT  = ["docx", "pdf"]; // الصيغ التي تُحتسب «معبّأة/معتمدة» عند الفحص؛ الرفع من البطاقة يبقى docx فقط (ACCEPT_DOC_EXT). PDF = النسخة المعتمدة للعرض ولا قالب PDF فارغ يُقارَن به
 var REPORT_FOLDER  = "تقرير الشواهد";      // داخل كل مؤشر
 var PHOTOS_FOLDER  = "صور";                // داخل «تقرير الشواهد»: الصور ولقطات الوثائق (ست على الأقل)
-var SCRIPT_VERSION = "v9.9.1";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
+var SCRIPT_VERSION = "v9.11.0";       // يظهر في ناتج JSON ليُطابَق مع إصدار الموقع
 var CACHE_KEY      = "evidence_status_v6";
 var CACHE_SECONDS  = 21600;
 var TIME_LIMIT_MS  = 5 * 60 * 1000;
@@ -5154,10 +5154,11 @@ function refreshTree_() {
     ind[c] = r; req += r.req; up += r.up; ready += r.ready; ap += r.ap;
     if (r.rep && r.rep.n > 0) repC++; if (r.rep && r.rep.photos >= REPORT_TARGET) repL++;
   }
-  var out = { schema: "tree-v2", version: SCRIPT_VERSION, generatedAt: new Date().toISOString(), asof: new Date().toISOString().slice(0, 10), required: req, uploaded: up, ready: ready, approved: ap, created: ready, done: ap, repCreated: repC, repLinked: repL, repTarget: REPORT_TARGET, ind: ind, errors: errors, partial: partial,
+  var out = { schema: "tree-v2", version: SCRIPT_VERSION, startedAt: new Date(t0).toISOString(), generatedAt: new Date().toISOString(), asof: new Date().toISOString().slice(0, 10), required: req, uploaded: up, ready: ready, approved: ap, created: ready, done: ap, repCreated: repC, repLinked: repL, repTarget: REPORT_TARGET, ind: ind, errors: errors, partial: partial,
     basis: "منشأة = ملف السجل موجود في مجلد المؤشر (فارغاً أو معبّأ)؛ مرفوعة = ملف معبّأ يختلف عن قالبه داخل 2_معتمد بعد مراجعة المشرف؛ معبّأة قيد المراجعة = معبّأ في 1_قيد_المراجعة (لا تُحتسب)؛ تقرير الشواهد: منشأ = ملف PDF موجود، ومربوط = عدد الصور في اسمه ≥ الهدف" };
   var json = JSON.stringify(out);
   cachePut_(CACHE_KEY_TREE, json);
+  if (!partial) snapPut_(json, t0);   // v9.11.0: لقطة دائمة (لا تُكتب إن كان الفحص جزئياً حتى لا تحلّ محل لقطة سليمة)
   return json;
 }
 /* تشغيل يدوي لفحص الشجرة: يطبع الملخص في السجل ولا يغيّر شيئاً */
@@ -5191,11 +5192,82 @@ function cacheGet_(key) {
   } catch (e) { return null; }
 }
 function cacheDel_(key) {
+  if (key === CACHE_KEY_TREE) snapDirty_(true);   // v9.11.0: الرفع/المراجعة تعني أن اللقطة قديمة؛ يلتقطها مشغّل فحص التغيّر
   try {
     var c = CacheService.getScriptCache(), n = parseInt(c.get(key + "_n") || "0", 10), ks = [key + "_n"];
     for (var i = 0; i < Math.max(n, 1); i++) ks.push(key + "_" + i);
     c.removeAll(ks);
   } catch (e) {}
+}
+/* ========== v9.11.0: اللقطة الدائمة + فحص التغيّر ==========
+   المشكلة: الكاش ينتهي (6 ساعات) أو يُطرد، فيعيد doGet مسح Drive كاملاً (80–90 ث) والواجهة تنتهي مهلتها (90 ث).
+   الحل: ملف JSON دائم على Drive («_status_snapshot.json» في جذر الشجرة) تكتبه المشغّلات الزمنية فقط؛ doGet يقرؤه ولا يحسب.
+   - ختم الطزاجة: startedAt/generatedAt داخل اللقطة، ويضيف doGet الحقول ageMin وstale وsnap عند التقديم.
+   - فحص التغيّر (refreshIfChanged كل 10 دقائق): استعلام واحد عن ملفات عُدّلت بعد بدء آخر لقطة؛ إن لا تغيّر ينتهي بثوانٍ.
+   - تحديث كامل مضمون كل 3 ساعات (refreshStatus) لالتقاط الحذف الذي قد لا يُرى في الاستعلام.
+   - زر «تحديث الآن» (refresh=1) يبقى للاستعجال. */
+var SNAP_NAME = "_status_snapshot.json";
+var SNAP_STALE_MIN = 90;          // بعد هذا العمر تُظهر الواجهة تحذير «قديمة»
+var CHANGE_MIN_GAP_MIN = 30;      // أدنى فاصل بين تحديثين كاملين سببه التغيّر (حماية حصة المشغّلات)
+var CHANGE_MAX_HITS = 200;        // فوق هذا العدد من الملفات المعدّلة نعدّه تغيّراً دون فحص كل ملف
+function snapFile_() {
+  var props = PropertiesService.getScriptProperties(), id = props.getProperty("SNAP_ID");
+  if (id) { try { var f = DriveApp.getFileById(id); if (!f.isTrashed()) return f; } catch (e) {} }
+  var it = DriveApp.getFolderById(TREE_ROOT_ID).getFilesByName(SNAP_NAME);
+  if (it.hasNext()) { var g = it.next(); props.setProperty("SNAP_ID", g.getId()); return g; }
+  return null;
+}
+function snapPut_(json, t0) {
+  try {
+    var f = snapFile_();
+    if (f) f.setContent(json);
+    else { var n = DriveApp.getFolderById(TREE_ROOT_ID).createFile(SNAP_NAME, json, MimeType.PLAIN_TEXT); PropertiesService.getScriptProperties().setProperty("SNAP_ID", n.getId()); }
+    var dv = parseInt(PropertiesService.getScriptProperties().getProperty("SNAP_DIRTY") || "0", 10);
+    if (!dv || dv <= t0) snapDirty_(false);   // علامة وُضعت أثناء الفحص تبقى للدورة التالية
+  } catch (e) {}
+}
+function snapGet_() { try { var f = snapFile_(); return f ? f.getBlob().getDataAsString("UTF-8") : null; } catch (e) { return null; } }
+function snapDirty_(on) { try { var p = PropertiesService.getScriptProperties(); if (on) p.setProperty("SNAP_DIRTY", String(Date.now())); else p.deleteProperty("SNAP_DIRTY"); } catch (e) {} }
+/* يضيف ختم الطزاجة عند التقديم دون تغيير المحتوى المحسوب */
+function stampServed_(json, src) {
+  try {
+    var o = JSON.parse(json), g = Date.parse(o.generatedAt || "");
+    o.snap = src; o.servedAt = new Date().toISOString();
+    if (!isNaN(g)) { o.ageMin = Math.max(0, Math.round((Date.now() - g) / 60000)); o.stale = o.ageMin > SNAP_STALE_MIN; }
+    return JSON.stringify(o);
+  } catch (e) { return json; }
+}
+/* هل الملف داخل شجرة المؤشرات؟ نصعد بالآباء حتى الجذر (حدّ 7 مستويات) */
+function inTree_(file) {
+  var cur = file;
+  for (var d = 0; d < 7; d++) {
+    var it = cur.getParents(); if (!it.hasNext()) return false;
+    var par = it.next(); if (par.getId() === TREE_ROOT_ID) return true; cur = par;
+  }
+  return false;
+}
+/* true إن عُدّل/أُضيف ملف داخل الشجرة منذ بدء آخر لقطة. الحذف لا يُلتقط هنا (يغطيه التحديث الكامل كل 3 ساعات). */
+function treeChanged_(sinceIso) {
+  var q = "modifiedDate > '" + sinceIso + "' and trashed = false", it = DriveApp.searchFiles(q), n = 0;
+  while (it.hasNext()) {
+    var f = it.next(); n++;
+    if (f.getName() === SNAP_NAME) continue;
+    if (n > CHANGE_MAX_HITS) return true;
+    if (inTree_(f)) return true;
+  }
+  return false;
+}
+/* مشغّل كل 10 دقائق: يحدّث اللقطة فقط عند وجود تغيّر (أو علامة «قديمة» من الرفع/المراجعة) */
+function refreshIfChanged() {
+  var snap = snapGet_(), o = null;
+  try { o = snap ? JSON.parse(snap) : null; } catch (e) {}
+  var dirty = !!PropertiesService.getScriptProperties().getProperty("SNAP_DIRTY");
+  var since = o && (o.startedAt || o.generatedAt);
+  var why = !o ? "لا لقطة" : dirty ? "علامة رفع/مراجعة" : (treeChanged_(since) ? "ملفات معدّلة" : "");
+  if (!why) return { changed: false };
+  if (o && Date.now() - Date.parse(o.generatedAt) < CHANGE_MIN_GAP_MIN * 60000 && why !== "علامة رفع/مراجعة") return { changed: true, skipped: "ضمن فاصل الحماية" };
+  refreshStatus();
+  return { changed: true, why: why };
 }
 function refreshStatus() {
   var lock = LockService.getScriptLock();
@@ -5273,19 +5345,29 @@ function applyRenames() {
 /* ========== 3) مشغّل زمني اختياري ========== */
 function installTrigger() {
   ScriptApp.getProjectTriggers().forEach(function (t) {
-    if (t.getHandlerFunction() === "refreshStatus") ScriptApp.deleteTrigger(t);
+    var h = t.getHandlerFunction();
+    if (h === "refreshStatus" || h === "refreshIfChanged") ScriptApp.deleteTrigger(t);
   });
-  ScriptApp.newTrigger("refreshStatus").timeBased().everyHours(1).create();
+  ScriptApp.newTrigger("refreshStatus").timeBased().everyHours(3).create();     // تحديث كامل مضمون (يلتقط الحذف)
+  ScriptApp.newTrigger("refreshIfChanged").timeBased().everyMinutes(10).create(); // فحص تغيّر رخيص
+  refreshStatus();   // ينشئ اللقطة الأولى الآن
 }
 
 /* ========== 4) واجهة الويب ========== */
 function doGet(e) {
-  var p = (e && e.parameter) || {}, json = null;
-  if (p.refresh !== "1") json = TREE_MODE ? cacheGet_(CACHE_KEY_TREE) : CacheService.getScriptCache().get(CACHE_KEY);
-  if (!json) {
-    try { json = refreshStatus(); }
+  var p = (e && e.parameter) || {}, json = null, src = "";
+  if (p.refresh === "1") {                       // تحديث يدوي عاجل: وحده يحسب (80–90 ث)
+    try { json = refreshStatus(); src = "live"; }
+    catch (err) { json = null; }
+  }
+  if (!json && TREE_MODE) { json = cacheGet_(CACHE_KEY_TREE); src = "cache"; }
+  if (!json && TREE_MODE) { json = snapGet_(); src = "snapshot"; }   // v9.11.0: لا إعادة حساب عند الزيارة العادية
+  if (!json && !TREE_MODE) json = CacheService.getScriptCache().get(CACHE_KEY);
+  if (!json) {                                    // لا لقطة بعد (قبل installTrigger): نحسب مرة واحدة كاحتياط
+    try { json = refreshStatus(); src = "live"; }
     catch (err) { json = JSON.stringify({ generatedAt: new Date().toISOString(), errors: [{ key: "refresh", error: err.message }], partial: true }); }
   }
+  json = stampServed_(json, src);
   if (p.callback && /^[A-Za-z_$][\w$]*$/.test(p.callback)) {
     return ContentService.createTextOutput(p.callback + "(" + json + ");").setMimeType(ContentService.MimeType.JAVASCRIPT);
   }

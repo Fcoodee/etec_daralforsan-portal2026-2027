@@ -92,7 +92,7 @@
   /* ===== تحميل الحالة ===== */
   function notify() { listeners.forEach(function (f) { try { f(ST); } catch (e) {} }); }
   function apply(d) {
-    if (d && d.schema === "tree-v2" && d.ind) { ST.live = true; ST.ind = d.ind; ST.gen = d.generatedAt || ""; ST.asof = d.asof || ""; ST.ver = d.version || ""; ST.errors = d.errors || []; ST.partial = !!d.partial; ST.failed = false; }
+    if (d && d.schema === "tree-v2" && d.ind) { ST.live = true; ST.ind = d.ind; ST.gen = d.generatedAt || ""; ST.asof = d.asof || ""; ST.ver = d.version || ""; ST.errors = d.errors || []; ST.partial = !!d.partial; ST.snap = d.snap || ""; ST.failed = false; }
     else { ST.failed = true; }
     ST.loaded = true; notify();
   }
@@ -285,13 +285,16 @@
     animBars(document); animRings(document);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", watchBars); else watchBars();
+  /* v10.8.43: عمر اللقطة (يُحسب من generatedAt عند العرض) — «قبل 12 دقيقة»، وتحذير بعد 90 دقيقة */
+  function ageTxt(t) { var g = Date.parse(t); if (isNaN(g)) return { s: "", stale: false }; var m = Math.max(0, Math.round((Date.now() - g) / 60000)), s = m < 1 ? "الآن" : m < 60 ? "قبل " + m + " دقيقة" : m < 1440 ? "قبل " + Math.floor(m / 60) + " ساعة" : "قبل " + Math.floor(m / 1440) + " يوم"; return { s: s, stale: m > 90 }; }
   function connChip() {
     loader(ST.loading);
     var c = document.getElementById("phConn"); if (!c) return;
     var role = window.PortalRole ? PortalRole.get() : "", live = ST.live && !ST.failed, when = live ? fmtT(ST.gen) : (ST.asof || "");
-    var txt = live ? "آخر تحديث للحالة: " + when : ST.failed ? "جاري تحديث قاعدة البيانات ..." + (when ? " · الأرقام المعروضة حتى " + when : "") : (role === "admin" ? "لقطة " + when + " · جاري تحديث قاعدة البيانات ..." : "الأرقام حتى " + when);
-    c.className = "ph-sync " + (ST.loading ? "load" : live ? "ok" : "off");
-    c.innerHTML = '<div class="ph-sync-row"><i class="fa-solid ' + (ST.loading ? "fa-rotate fa-spin" : live ? "fa-circle-check" : "fa-circle-exclamation") + '"></i><span class="ph-sync-t" id="phSyncT">' + (ST.loading ? "جاري تحديث قاعدة البيانات ... انتظر: <b id=\"phSyncS\">0</b> ثانية · قد يستغرق حتى دقيقة" : esc(txt)) + '</span>' +
+    var ag = live ? ageTxt(ST.gen) : { s: "", stale: false };
+    var txt = live ? "آخر تحديث للحالة: " + when + (ag.s ? " (" + ag.s + ")" : "") + (ag.stale ? " · قديمة — اضغط «تحديث الآن»" : "") : ST.failed ? "جاري تحديث قاعدة البيانات ..." + (when ? " · الأرقام المعروضة حتى " + when : "") : (role === "admin" ? "لقطة " + when + " · جاري تحديث قاعدة البيانات ..." : "الأرقام حتى " + when);
+    c.className = "ph-sync " + (ST.loading ? "load" : live ? (ag.stale ? "off" : "ok") : "off");
+    c.innerHTML = '<div class="ph-sync-row"><i class="fa-solid ' + (ST.loading ? "fa-rotate fa-spin" : live && !ag.stale ? "fa-circle-check" : "fa-circle-exclamation") + '"></i><span class="ph-sync-t" id="phSyncT">' + (ST.loading ? "جاري تحديث قاعدة البيانات ... انتظر: <b id=\"phSyncS\">0</b> ثانية · قد يستغرق حتى دقيقة" : esc(txt)) + '</span>' +
       '<button type="button" id="phRef" class="ph-ref"' + (ST.loading ? " disabled" : "") + ' aria-label="تحديث الحالة الآن"><i class="fa-solid fa-arrows-rotate"></i> ' + (ST.loading ? "جارٍ التحديث" : "تحديث الآن") + '</button></div>' +
       (ST.loading ? '<div class="ph-sync-bar" role="progressbar" aria-label="جارٍ التحديث"><i></i></div>' : "");
     if (syncTimer) { clearInterval(syncTimer); syncTimer = null; }
