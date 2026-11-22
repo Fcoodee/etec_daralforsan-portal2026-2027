@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=10.8.50"></script>
-<script src="fx.js?v=10.8.50"></script>
-<script src="portal-config.js?v=10.8.50"></script>
-<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.8.50" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.8.50"><\/script>');}</script>
+<script src="shield.js?v=10.8.51"></script>
+<script src="fx.js?v=10.8.51"></script>
+<script src="portal-config.js?v=10.8.51"></script>
+<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.8.51" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.8.51"><\/script>');}</script>
 <meta name="robots" content="noindex,nofollow">
 <title>نحو التميز · نسبة الإنجاز الكلية للمشروع — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=10.8.50">
+<link rel="stylesheet" href="phase.css?v=10.8.51">
 <script>/* حارس الإصدار: إن كانت الصفحة محفوظة قديمة في المتصفح تُعاد من الخادم مرة واحدة */
 (function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=10.8.50"></script>
-<script src="portal-role.js?v=10.8.50"></script>
+<script src="portal-meta.js?v=10.8.51"></script>
+<script src="portal-role.js?v=10.8.51"></script>
 <style>
 :root{--d1:#1d4ed8;--d2:#047857;--d3:#b45309;--d4:#7e22ce;--d1b:#eff6ff;--d2b:#ecfdf5;--d3b:#fffbeb;--d4b:#faf5ff}
 .nd-disc{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:8px 14px;font-size:12.8px;line-height:1.9;margin:8px 0 12px}
@@ -46,6 +46,7 @@ if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("et
 .pg-dom ul{list-style:none;margin:8px 0 0;padding:0;font-size:12.5px;color:#334155}
 .pg-dom li{display:flex;justify-content:space-between;border-bottom:1px dashed var(--line);padding:2px 0}
 .pg-dom li b{direction:ltr}
+.pg-dom li.rv-on{background:#fef3c7;color:#92400e;font-weight:800;border-radius:6px;border-bottom-color:transparent;padding-inline:6px}.pg-dom li.rv-on::before{content:"●";color:#d97706;margin-inline-end:5px}.pg-dom li.rv-on b{color:#92400e}
 .pg-leg{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:#334155;margin:6px 0 0}
 .pg-leg span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-inline-end:5px;vertical-align:-2px;background:var(--k)}
 .pg-two{display:grid;grid-template-columns:1.6fr 1fr;gap:14px}
@@ -132,9 +133,9 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default}
 <main class="ph-main" id="main" style="max-width:1180px"><div class="ph-empty">جارٍ التحميل…</div></main>
 <div id="rfMod" role="dialog" aria-modal="true" aria-label="عرض الملف"><div class="bar"><span id="rfT"></span><a class="ph-btn sm" id="rfO" target="_blank" rel="noopener">فتح في التخزين السحابي</a><button type="button" class="ph-btn sm" id="rfX">إغلاق</button></div><iframe id="rfF" title="عرض الملف" allow="fullscreen"></iframe></div>
 
-<script src="portal-names.js?v=10.8.50"></script>
-<script src="phase-data.js?v=10.8.50"></script>
-<script src="phase-core.js?v=10.8.50"></script>
+<script src="portal-names.js?v=10.8.51"></script>
+<script src="phase-data.js?v=10.8.51"></script>
+<script src="phase-core.js?v=10.8.51"></script>
 <script>
 (function () {
   "use strict";
@@ -266,7 +267,7 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default}
       h += '<button type="button" class="pg-dom" data-dom="' + d + '" style="--c:' + COL[d][0] + ";--cb:" + COL[d][1] + '"><h3>' + E(P.DN[d]) + '</h3><div class="big">' + pc(tot) + "%</div>" +
         '<div class="pg-bar" role="img" aria-label="منشأة ' + pc(ba) + "% وجاهزة " + pc(bb) + "% وتقارير " + pc(br) + '% من 100"><i class="b" style="width:' + (ba * 100).toFixed(1) + '%"></i><i class="r" style="width:' + (bb * 100).toFixed(1) + '%"></i><i class="t" style="width:' + (br * 100).toFixed(1) + '%"></i></div>' +
         '<div class="pg-leg"><span style="--k:color-mix(in srgb,' + COL[d][0] + ' 40%,#fff)">منشأة ' + pc(ba) + '%</span><span style="--k:' + COL[d][0] + '">جاهزة ' + pc(bb) + '%</span><span style="--k:repeating-linear-gradient(45deg,' + COL[d][0] + "," + COL[d][0] + ' 2px,#fff 2px,#fff 4px)">التقارير ' + pc(br) + "%</span></div>" +
-        "<ul><li>المؤشرات · المعايير<b>" + l.length + " · " + P.critList(d).length + "</b></li><li>سجلات جاهزة<b>" + t.ap + " / " + t.req + "</b></li><li>سجلات منشأة<b>" + t.cr + " / " + t.req + "</b></li><li>قيد المراجعة<b>" + t.review + "</b></li><li>تقارير مرفوعة<b>" + t.repDone + " / " + l.length + "</b></li></ul></button>";
+        "<ul><li>المؤشرات · المعايير<b>" + l.length + " · " + P.critList(d).length + "</b></li><li>سجلات جاهزة<b>" + t.ap + " / " + t.req + "</b></li><li>سجلات منشأة<b>" + t.cr + " / " + t.req + "</b></li><li" + (t.review > 0 ? ' class="rv-on" title="بانتظار مراجعة المشرفين"' : "") + ">قيد المراجعة<b>" + t.review + "</b></li><li>تقارير مرفوعة<b>" + t.repDone + " / " + l.length + "</b></li></ul></button>";
     });
     h += "</div>";
 
@@ -335,8 +336,8 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default}
   P.load(false);
 })();
 </script>
-<script src="page-gate.js?v=10.8.50" data-lazy="1"></script>
-<script src="legal-notice.js?v=10.8.50"></script>
-<script src="content-protect.js?v=10.8.50"></script>
+<script src="page-gate.js?v=10.8.51" data-lazy="1"></script>
+<script src="legal-notice.js?v=10.8.51"></script>
+<script src="content-protect.js?v=10.8.51"></script>
 </body>
 </html>
