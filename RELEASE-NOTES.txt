@@ -1,3 +1,4 @@
+v10.8.40 (2026-11-22): «تتبع الوثائق ومصادر بيانات السجلات» — إصلاح انضغاط عمودي «حالة المصدر» و«آخر تحديث»؛ إضافة عمود «مصدر القرار الرسمي» (مقترح من طبيعة السجل ولم يُعتمد بعد)؛ إدراج 22 سجل «متابعة المؤشر» للمجالات 2–4 بحالة «جارٍ البحث» مع ملاحظاتها (لا تغيير في Apps Script)
 v10.8.39 (2026-11-22): script v9.9.1 — saving a central draft no longer fails when the existing draft file is owned by another account (replaced by a new newest file); 11 draft files backfilled for domain-1 reports
 v10.8.38 (2026-11-22): central draft = the report itself — after «رفع PDF» the draft is saved automatically with the same photos; script v9.9.0 picks the newest draft and trashes same-name duplicates; clearer message when no draft exists (redeploy Apps Script v9.9.0)
 v10.8.37 (2026-11-22): record 2-1-1-1 «سجل متابعة المؤشر – فرص تعلم متكافئة» (PDF approved + Word) + source entry

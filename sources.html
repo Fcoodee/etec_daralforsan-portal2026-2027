@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=10.8.39"></script>
-<script src="fx.js?v=10.8.39"></script>
-<script src="page-gate.js?v=10.8.39" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."></script>
-<script src="admin-only.js?v=10.8.39"></script>
+<script src="shield.js?v=10.8.40"></script>
+<script src="fx.js?v=10.8.40"></script>
+<script src="page-gate.js?v=10.8.40" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."></script>
+<script src="admin-only.js?v=10.8.40"></script>
 <meta name="robots" content="noindex,nofollow">
 <title>تتبع الوثائق ومصادر بيانات السجلات — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=10.8.39">
-<script src="portal-meta.js?v=10.8.39"></script>
-<script src="portal-role.js?v=10.8.39"></script>
+<link rel="stylesheet" href="phase.css?v=10.8.40">
+<script src="portal-meta.js?v=10.8.40"></script>
+<script src="portal-role.js?v=10.8.40"></script>
 <style>.sr-ok{color:#047857;font-weight:700}.sr-ca{color:#b45309;font-weight:700}.sr-se{color:#1d4ed8;font-weight:700}.sr-no{color:#b91c1c;font-weight:700}.sr-n{font-size:12px;color:#475569;line-height:1.6}
 .sr-k{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.sr-k div{flex:1;min-width:130px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;padding:8px 12px}.sr-k b{display:block;font-size:22px}.sr-k small{color:#475569;font-weight:700}
 .sr-d{font-size:12.5px;color:#334155;margin:4px 0 10px;line-height:1.9}.sr-d span{display:inline-block;margin-inline-end:14px}.sr-act{margin:8px 0;display:flex;gap:8px;flex-wrap:wrap}
 .sr-ph{display:none}
 .sr-rt{width:100%;border-collapse:collapse;background:#fff;font-size:13px}.sr-rt th,.sr-rt td{border:1px solid #e2e8f0;padding:6px 8px;vertical-align:top;text-align:right}.sr-rt thead th{background:#003d3d;color:#fff;font-weight:800}
 .sr-rt .dm td{background:#006666;color:#fff;font-weight:900;font-size:14px}.sr-rt .cr td{background:#f0f7f7;color:#003d3d;font-weight:800;border-inline-start:4px solid #c29b38}
-.sr-rt .ic{background:#fafcfc;min-width:170px}.sr-rt .ic b{color:#003d3d}.sr-rt .ic small{display:block;color:#475569;font-size:12px;line-height:1.5}
+.sr-rt .ic{background:#fafcfc;min-width:150px}.sr-rt .c-st{min-width:104px;max-width:130px}.sr-rt .c-rs{min-width:96px}.sr-rt .c-dc{min-width:112px}.sr-rt td.c-dc{color:#003d3d;font-weight:700;font-size:12.5px}.sr-rt .c-nt{min-width:260px}.sr-rt .c-dt{white-space:nowrap}.sr-rt td.c-dt{font-size:12px;color:#475569}.sr-dcn{font-size:12px;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:6px 10px;margin:6px 0}.sr-rt .ic b{color:#003d3d}.sr-rt .ic small{display:block;color:#475569;font-size:12px;line-height:1.5}
 @page{size:A4 landscape;margin:0}
 @media print{html,body{background:#fff!important;padding:0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}#chrome,.sr-act,.ph-filters,#sum,.ph-top,.ph-nav{display:none!important}.sr-ph{display:block;margin-bottom:8px}.sr-ph .lg{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:3px solid #c29b38;padding-bottom:6px}.sr-ph img{height:44px}.sr-ph h2{margin:6px 0 0;font-size:16px;color:#003d3d}.sr-ph p{margin:2px 0;font-size:11px;color:#334155}.ph-main{max-width:none!important;padding:12mm!important;box-decoration-break:clone;-webkit-box-decoration-break:clone}.ph-h1,.ph-lead{display:none}.ph-tw{overflow:visible;border:0}.sr-rt{font-size:10.5px}.sr-k div{break-inside:avoid}.sr-rt tr{break-inside:avoid}.sr-rt thead{display:table-header-group}}</style>
 </head>
@@ -37,27 +37,28 @@
     <select id="fs" aria-label="حالة المصدر"><option value="">الحالة: الكل</option><option value="ok">مكتمل المصادر</option><option value="candidate">مرشّح بانتظار القرار</option><option value="searching">جارٍ البحث</option><option value="none">لا يوجد له مصدر حتى الآن</option></select>
     <select id="fd" aria-label="المجال"><option value="">كل المجالات</option></select>
   </div>
+  <div class="sr-dcn">عمود «مصدر القرار الرسمي» مقترح من طبيعة كل سجل ولم يُعتمد بعد من مدير النظام.</div>
   <div id="sum" class="ph-lead" role="status" aria-live="polite"></div>
   <div class="ph-tw"><table class="sr-rt"><caption class="sr">مصادر بيانات السجلات</caption>
-    <thead><tr><th scope="col">المؤشر</th><th scope="col">السجل</th><th scope="col">حالة المصدر</th><th scope="col">حالة السجل</th><th scope="col">المصدر / التنويه</th><th scope="col">آخر تحديث</th></tr></thead>
+    <thead><tr><th scope="col">المؤشر</th><th scope="col">السجل</th><th scope="col" class="c-st">حالة المصدر</th><th scope="col" class="c-rs">حالة السجل</th><th scope="col" class="c-dc" title="الجهة المخوّلة بقرار/اعتماد السجل">مصدر القرار الرسمي</th><th scope="col" class="c-nt">المصدر / التنويه</th><th scope="col" class="c-dt">آخر تحديث</th></tr></thead>
     <tbody id="tb"></tbody></table></div>
 </main>
-<script src="portal-config.js?v=10.8.39"></script>
-<script src="portal-names.js?v=10.8.39"></script>
-<script src="phase-data.js?v=10.8.39"></script>
-<script src="record-sources.js?v=10.8.39"></script>
-<script src="phase-core.js?v=10.8.39"></script>
+<script src="portal-config.js?v=10.8.40"></script>
+<script src="portal-names.js?v=10.8.40"></script>
+<script src="phase-data.js?v=10.8.40"></script>
+<script src="record-sources.js?v=10.8.40"></script>
+<script src="phase-core.js?v=10.8.40"></script>
 <script>
 (function () {
   "use strict";
-  var P = window.PHC, E = P.esc, S = window.ETEC_SRC || {};
+  var P = window.PHC, E = P.esc, S = window.ETEC_SRC || {}, DEC = window.ETEC_DEC || {};
   P.chrome("sources.html");
   var L = { ok: ["مكتمل المصادر", "sr-ok"], candidate: ["مرشّح بانتظار القرار", "sr-ca"], searching: ["جارٍ البحث", "sr-se"], none: ["لا يوجد له مصدر حتى الآن", "sr-no"] };
   var q = document.getElementById("q"), fs = document.getElementById("fs"), fd = document.getElementById("fd"), tb = document.getElementById("tb"), sum = document.getElementById("sum"), kp = document.getElementById("kp"), dm = document.getElementById("dm");
   [1, 2, 3, 4].forEach(function (d) { fd.insertAdjacentHTML("beforeend", '<option value="' + d + '">' + E(P.DN[d]) + "</option>"); });
   var rows = [];
   function build() { rows = [];
-  P.PH.inds.forEach(function (i) { i.recs.forEach(function (n) { var e = S[i.code + "|" + n] || { s: "none" }; rows.push({ rs: (P.sOf(i).st || {})[n] || "blank", d: i.d, code: i.code, st: i.st, n: n, s: e.s, t: e.s === "ok" ? (e.src || "") : (e.note || ""), u: e.d || "", l: e.l || "", ref: e.ref || "" }); }); }); }
+  P.PH.inds.forEach(function (i) { i.recs.forEach(function (n) { var e = S[i.code + "|" + n] || { s: "none" }; rows.push({ rs: (P.sOf(i).st || {})[n] || "blank", d: i.d, code: i.code, st: i.st, n: n, s: e.s, t: e.s === "ok" ? (e.src || "") : (e.note || ""), u: e.d || "", l: e.l || "", ref: e.ref || "", o: e.o || DEC[i.code + "|" + n] || DEC[n] || "" }); }); }); }
   build();
   function cnt(f) { var c = { ok: 0, candidate: 0, searching: 0, none: 0 }; rows.filter(f).forEach(function (r) { c[r.s]++; }); return c; }
   function draw() {
@@ -69,16 +70,16 @@
     var html = "", cd = 0, cc = "", groups = {};
     v.forEach(function (r) { (groups[r.code] = groups[r.code] || []).push(r); });
     P.PH.inds.forEach(function (i) { var g = groups[i.code]; if (!g) return;
-      if (i.d !== cd) { cd = i.d; cc = ""; html += '<tr class="dm"><td colspan="6">المجال ' + cd + " — " + E(P.DN[cd]) + "</td></tr>"; }
-      if (i.c !== cc) { cc = i.c; html += '<tr class="cr"><td colspan="6">المعيار ' + E(i.c) + " — " + E(i.cn) + "</td></tr>"; }
+      if (i.d !== cd) { cd = i.d; cc = ""; html += '<tr class="dm"><td colspan="7">المجال ' + cd + " — " + E(P.DN[cd]) + "</td></tr>"; }
+      if (i.c !== cc) { cc = i.c; html += '<tr class="cr"><td colspan="7">المعيار ' + E(i.c) + " — " + E(i.cn) + "</td></tr>"; }
       g.forEach(function (r, k) {
-        html += "<tr>" + (k === 0 ? '<td class="ic" rowspan="' + g.length + '"><b>' + E(i.code) + "</b><small>" + E(i.st) + "</small></td>" : "") + '<th scope="row" class="ph-rn">' + E(r.n) + '</th><td class="' + L[r.s][1] + '">' + L[r.s][0] + "</td><td>" + P.chip(r.rs) + '</td><td class="sr-n">' + E(r.t) + (r.l ? ' <a href="' + E(r.l) + '" target="_blank" rel="noopener">' + (r.s === "ok" ? "المصدر" : "المرشّح") + "</a>" : "") + (r.ref ? ' <a href="' + E(r.ref) + '" target="_blank" rel="noopener">الوثيقة المرجعية</a>' : "") + '</td><td class="sr-n">' + E(r.u || "—") + "</td></tr>"; }); });
+        html += "<tr>" + (k === 0 ? '<td class="ic" rowspan="' + g.length + '"><b>' + E(i.code) + "</b><small>" + E(i.st) + "</small></td>" : "") + '<th scope="row" class="ph-rn">' + E(r.n) + '</th><td class="c-st ' + L[r.s][1] + '">' + L[r.s][0] + '</td><td class="c-rs">' + P.chip(r.rs) + '</td><td class="c-dc">' + E(r.o || "—") + '</td><td class="sr-n c-nt">' + E(r.t) + (r.l ? ' <a href="' + E(r.l) + '" target="_blank" rel="noopener">' + (r.s === "ok" ? "المصدر" : "المرشّح") + "</a>" : "") + (r.ref ? ' <a href="' + E(r.ref) + '" target="_blank" rel="noopener">الوثيقة المرجعية</a>' : "") + '</td><td class="sr-n c-dt">' + E(r.u || "—") + "</td></tr>"; }); });
     tb.innerHTML = html;
     sum.textContent = "المعروض: " + v.length + " من " + rows.length;
   }
   function csv() {
-    var h = ["المجال", "رمز المؤشر", "المؤشر", "السجل", "حالة المصدر", "حالة السجل", "المصدر/التنويه", "رابط المرشّح", "آخر تحديث"];
-    var out = [h].concat(rows.map(function (r) { return [P.DN[r.d], r.code, r.st, r.n, L[r.s][0], (P.STATE[r.rs] && P.STATE[r.rs].t) || r.rs, r.t, r.l, r.u]; }));
+    var h = ["المجال", "رمز المؤشر", "المؤشر", "السجل", "حالة المصدر", "حالة السجل", "مصدر القرار الرسمي", "المصدر/التنويه", "رابط المرشّح", "آخر تحديث"];
+    var out = [h].concat(rows.map(function (r) { return [P.DN[r.d], r.code, r.st, r.n, L[r.s][0], (P.STATE[r.rs] && P.STATE[r.rs].t) || r.rs, r.o, r.t, r.l, r.u]; }));
     var txt = "\ufeff" + out.map(function (a) { return a.map(function (c) { return '"' + String(c == null ? "" : c).replace(/"/g, '""') + '"'; }).join(","); }).join("\r\n");
     var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([txt], { type: "text/csv;charset=utf-8" })); a.download = "تتبع_مصادر_السجلات_" + new Date().toISOString().slice(0, 10) + ".csv"; document.body.appendChild(a); a.click(); a.remove();
   }
