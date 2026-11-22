@@ -1,3 +1,4 @@
+v10.8.36 (2026-11-22): 24 generic "سجل متابعة المؤشر" records renamed to include the indicator short title (record name, file name pattern, script TREE m/n, sources); Drive files + templates renamed
 v10.8.35 (2026-11-22): verified 1-1-1-2 source texts (5); guidance + guidance-committee source aliases for 1-2-1-x, 1-3-1-2/3
 v10.8.34 (2026-11-22): مصادر السجلات — إدخالات 1-1-1-1 و1-1-1-2 (10 سجلات معتمدة) وربط سجل الخطة التشغيلية في 1-3-1-1 و1-3-1-3، وتصحيح مفتاح 1-5-1-1
 v10.8.33 (2026-11-22): 1-5-1-1 — سجل متابعة المؤشر (تحليل الإضاءات الثماني مقابل مصادر الدبلوما؛ 5 غير مثبتة)
