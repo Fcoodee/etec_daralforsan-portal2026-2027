@@ -270,3 +270,9 @@ html.sh-admin.pv-vis .vis-only{display:revert!important}
 .ph-adm-b{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 @media(min-width:721px){.ph-adm-b{position:absolute;top:100%;inset-inline-start:0;z-index:9;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;box-shadow:0 6px 18px rgba(0,0,0,.12);flex-direction:column;min-width:200px}}
 @media(max-width:720px){.ph-adm{flex:none}.ph-adm-b{flex-wrap:nowrap}}
+
+/* v10.8.46: شارة الدور */
+.ph-role{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;border-radius:999px;padding:3px 12px;border:1px solid transparent;white-space:nowrap}
+.ph-role.adm{background:#ecfdf5;color:#065f46;border-color:#a7f3d0}
+.ph-role.vis{background:#eff6ff;color:#1e3a8a;border-color:#bfdbfe}
+@media print{.ph-role{display:none}}

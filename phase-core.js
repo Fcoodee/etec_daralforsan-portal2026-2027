@@ -122,17 +122,17 @@
       var k = s.st[n] || "blank", f = s.fl[n], filledF = !!(f && f[2] && f[0] === 1);
       var eye = filledF ? '<a class="ph-btn sm ph-eye on" href="' + fileView(f[2]) + '" target="_blank" rel="noopener" title="معاينة السجل المعبّأ" aria-label="معاينة: ' + esc(n) + '"><i class="fa-solid fa-eye"></i></a>' : '<span class="ph-btn sm ph-eye off" aria-disabled="true" title="لا توجد نسخة معبّأة بعد"><i class="fa-solid fa-eye"></i><span class="sr">غير متاحة</span></span>';
       var dl = f && f[2] ? '<a class="ph-btn sm" href="' + fileDl(f[2]) + '" target="_blank" rel="noopener" title="' + (filledF ? "تنزيل السجل المعبّأ" : "تنزيل القالب") + '" aria-label="تنزيل: ' + esc(n) + '"><i class="fa-solid fa-download"></i></a>' : '<span class="ph-dash" aria-label="لا ملف">—</span>';
-      var up = k === "approved" ? '<span class="ph-dash" title="معتمد؛ لا يُستبدل إلا بقرار المشرف" aria-label="معتمد">—</span>' : '<button type="button" class="ph-btn sm" data-up="' + esc(i.code) + '" data-rec="' + esc(n) + '" title="ارفع الملف المعبّأ (Word) فيحلّ محل القالب" aria-label="رفع: ' + esc(n) + '"><i class="fa-solid fa-cloud-arrow-up"></i> رفع</button>';
+      var up = k === "approved" ? '<span class="ph-dash" title="معتمد؛ لا يُستبدل إلا بقرار المشرف" aria-label="معتمد">—</span>' : '<button type="button" class="ph-btn sm ad-only" data-up="' + esc(i.code) + '" data-rec="' + esc(n) + '" title="ارفع الملف المعبّأ (Word) فيحلّ محل القالب" aria-label="رفع: ' + esc(n) + '"><i class="fa-solid fa-cloud-arrow-up"></i> رفع</button>';
       var u = UPM[i.code + "|" + n], rt = s.ret && s.ret[n];
       var note = k === "returned" && rt ? '<span class="ph-retn"><b>ملاحظة المشرف:</b> ' + esc(rt.n) + (rt.w && !isMemName(rt.w) ? " — " + esc(rt.w) : "") + "</span>" : "";
-      var rvw = k === "approved" ? '<span class="ph-rv" data-roles="admin,sup,self"><button type="button" class="ph-btn sm" data-act="return" data-code="' + esc(i.code) + '" data-rec="' + esc(n) + '"><i class="fa-solid fa-rotate-left"></i> إعادة للتعبئة</button></span>' : k === "review" || k === "returned" ? '<span class="ph-rv" data-roles="admin,sup,self"><button type="button" class="ph-btn sm ph-ok" data-act="approve" data-code="' + esc(i.code) + '" data-rec="' + esc(n) + '"><i class="fa-solid fa-circle-check"></i> اعتماد</button>' + (k === "review" ? '<button type="button" class="ph-btn sm" data-act="return" data-code="' + esc(i.code) + '" data-rec="' + esc(n) + '"><i class="fa-solid fa-rotate-left"></i> إعادة للتعبئة</button>' : "") + "</span>" : "";
-      return '<tr class="ph-rec"><th scope="row" class="ph-rn">' + esc(n) + '</th><td class="ph-rs">' + chip(k) + note + rvw + '<span class="ph-upm ' + (u ? u[1] : "") + '" role="status">' + (u ? esc(u[0]) : "") + '</span></td><td class="ph-rc">' + eye + '</td><td class="ph-rc">' + dl + '</td><td class="ph-rc">' + up + "</td></tr>"; }).join("");
+      var rvw = k === "approved" ? '<span class="ph-rv ad-only" data-roles="admin,sup,self"><button type="button" class="ph-btn sm" data-act="return" data-code="' + esc(i.code) + '" data-rec="' + esc(n) + '"><i class="fa-solid fa-rotate-left"></i> إعادة للتعبئة</button></span>' : k === "review" || k === "returned" ? '<span class="ph-rv ad-only" data-roles="admin,sup,self"><button type="button" class="ph-btn sm ph-ok" data-act="approve" data-code="' + esc(i.code) + '" data-rec="' + esc(n) + '"><i class="fa-solid fa-circle-check"></i> اعتماد</button>' + (k === "review" ? '<button type="button" class="ph-btn sm" data-act="return" data-code="' + esc(i.code) + '" data-rec="' + esc(n) + '"><i class="fa-solid fa-rotate-left"></i> إعادة للتعبئة</button>' : "") + "</span>" : "";
+      return '<tr class="ph-rec"><th scope="row" class="ph-rn">' + esc(n) + '</th><td class="ph-rs">' + chip(k) + note + rvw + '<span class="ph-upm ' + (u ? u[1] : "") + '" role="status">' + (u ? esc(u[0]) : "") + '</span></td><td class="ph-rc">' + eye + '</td><td class="ph-rc">' + dl + '</td><td class="ph-rc ad-only">' + up + "</td></tr>"; }).join("");
     var rf = (s.rep.files || []).filter(function (x) { return x.valid && x.n > 0 && x.id; }).sort(function (x, y) { return y.n - x.n; })[0];
     var repRow = '<tr class="ph-rec ph-rrep"><th scope="row" class="ph-rn"><i class="fa-solid fa-file-image"></i> تقرير الشواهد البصرية</th><td class="ph-rs">' + (rf ? '<span class="ph-chip ok">مرفوع · ' + rf.n + ' صور</span>' : '<span class="ph-chip idle">لم يُرفع</span>') + '</td>' +
       '<td class="ph-rc">' + (rf ? '<a class="ph-btn sm ph-eye on" href="' + fileView(rf.id) + '" target="_blank" rel="noopener" title="معاينة التقرير المرفوع" aria-label="معاينة التقرير"><i class="fa-solid fa-eye"></i></a>' : '<span class="ph-btn sm ph-eye off" aria-disabled="true" title="لا يوجد تقرير مرفوع بعد"><i class="fa-solid fa-eye"></i><span class="sr">غير متاح</span></span>') + '</td>' +
       '<td class="ph-rc">' + (rf ? '<a class="ph-btn sm" href="' + fileDl(rf.id) + '" target="_blank" rel="noopener" title="تنزيل التقرير" aria-label="تنزيل التقرير"><i class="fa-solid fa-download"></i></a>' : '<span class="ph-dash" aria-label="لا ملف">—</span>') + '</td>' +
-      '<td class="ph-rc"><a class="ph-btn sm" data-roles="admin,sup,member" href="report.html?code=' + esc(i.code) + '" title="أصدر التقرير وارفعه من صفحة التقرير"><i class="fa-solid fa-cloud-arrow-up"></i> إصدار ورفع</a></td></tr>';
-    var table = '<div class="ph-tw"><table class="ph-rt"><caption class="sr">سجلات المؤشر ' + esc(i.code) + ' وتقريره</caption><thead><tr><th scope="col">السجل</th><th scope="col">الحالة</th><th scope="col" class="ph-rc">معاينة</th><th scope="col" class="ph-rc">تنزيل</th><th scope="col" class="ph-rc">رفع</th></tr></thead><tbody>' + recs + repRow + "</tbody></table></div>";
+      '<td class="ph-rc ad-only"><a class="ph-btn sm" data-roles="admin,sup,member" href="report.html?code=' + esc(i.code) + '" title="أصدر التقرير وارفعه من صفحة التقرير"><i class="fa-solid fa-cloud-arrow-up"></i> إصدار ورفع</a></td></tr>';
+    var table = '<div class="ph-tw"><table class="ph-rt"><caption class="sr">سجلات المؤشر ' + esc(i.code) + ' وتقريره</caption><thead><tr><th scope="col">السجل</th><th scope="col">الحالة</th><th scope="col" class="ph-rc">معاينة</th><th scope="col" class="ph-rc">تنزيل</th><th scope="col" class="ph-rc ad-only">رفع</th></tr></thead><tbody>' + recs + repRow + "</tbody></table></div>";
     var tag = i.dv ? '<span class="ph-tag" title="سجل متابعة مشتق من «إضاءات نحو تحقيق المؤشر» ويدخل في النسبة">سجل متابعة</span>' : "";
     return '<article class="ph-card" id="i-' + esc(i.code) + '" data-code="' + esc(i.code) + '">' +
       '<button type="button" class="ph-card-h" aria-expanded="' + open + '" data-toggle>' +
@@ -143,7 +143,7 @@
       '<p class="ph-stmt">' + esc(i.text) + "</p>" +
       table +
       '<div class="ph-row"><span class="ph-chip idle">منشأة ' + gl(s.cr + "/" + s.req, s.cr) + '</span><span class="ph-chip ' + (s.ap ? "ok" : "idle") + '">جاهزة ' + s.ap + "/" + s.req + "</span>" + (s.review ? '<span class="ph-chip wip">معبّأة قيد المراجعة: ' + s.review + "</span>" : "") + (s.invalid.length ? '<span class="ph-chip bad" title="' + esc(s.invalid.join("، ")) + '">ملفات لا تطابق أي سجل: ' + s.invalid.length + "</span>" : "") + "</div>" +
-      '<div class="ph-actions"><a class="ph-btn pri" href="' + folderUrl(i) + '" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> مجلد المؤشر في التخزين السحابي</a>' +
+      '<div class="ph-actions ad-only"><a class="ph-btn pri" href="' + folderUrl(i) + '" target="_blank" rel="noopener"><i class="fa-solid fa-folder-open"></i> مجلد المؤشر في التخزين السحابي</a>' +
       '</div>' +
       "</div></article>";
   }
@@ -216,30 +216,43 @@
   /* ===== الترويسة الموحدة ===== */
   function chrome(active) {
     var el = document.getElementById("chrome"); if (!el) return;
+    if (/[?&]preview=visitor/.test(location.search)) document.documentElement.classList.add("pv-vis");
     var R = window.PortalRole, role = R ? R.get() : "", roles = R ? R.roles : {};
     /* [الرابط، الأيقونة، الاسم، للمدير وحده؟] — تبويبات العمل تظهر لجلسة مدير النظام فقط؛ غير ذلك للتتبع والعرض */
     var items = [
       ["dashboard.html", "fa-chart-pie", "الإنجاز", false],
-      ["indicators.html", "fa-list-check", "المؤشرات", true],
-      ["reference.html", "fa-book-open", "المرجع", true]
+      ["indicators.html", "fa-list-check", "المؤشرات", false],
+      ["reference.html", "fa-book-open", "المرجع", false]
     ];
     /* قسم «إدارة» (مدير النظام وحده، مطويّ افتراضياً): بقية الأدوات */
     var tools = [
       ["sources.html", "fa-folder-open", "الوثائق والمصادر"],
       ["report.html", "fa-file-image", "إصدار تقرير الشواهد"]
     ];
-    var pvOn = /[?&]preview=visitor/.test(location.search);
+    var pvOn = /[?&]preview=visitor/.test(location.search), pq = pvOn ? "?preview=visitor" : "";
     var nav = items.map(function (x) {
-      return '<a' + (x[3] ? ' class="ad-only"' : "") + ' href="' + x[0] + '"' + (x[0] === active ? ' aria-current="page"' : "") + '><i class="fa-solid ' + x[1] + '"></i> ' + esc(x[2]) + "</a>"; }).join("");
+      return '<a' + (x[3] ? ' class="ad-only"' : "") + ' href="' + x[0] + pq + '"' + (x[0] === active ? ' aria-current="page"' : "") + '><i class="fa-solid ' + x[1] + '"></i> ' + esc(x[2]) + "</a>"; }).join("");
     var tl = tools.map(function (x) {
       return '<a href="' + x[0] + '"' + (x[0] === active ? ' aria-current="page"' : "") + '><i class="fa-solid ' + x[1] + '"></i> ' + esc(x[2]) + "</a>"; }).join("") +
-      (pvOn ? "" : '<a href="dashboard.html?preview=visitor" target="_blank" rel="noopener" title="مؤقت: يفتح اللوحة بعين الزائر"><i class="fa-solid fa-eye"></i> معاينة لوحة التميز (مؤقت)</a>');
+      (pvOn || window.ETEC_DASH_PUBLIC ? "" : '<a href="dashboard.html?preview=visitor" target="_blank" rel="noopener" title="مؤقت: يفتح اللوحة بعين الزائر"><i class="fa-solid fa-eye"></i> معاينة لوحة التميز (مؤقت)</a>');
     var adm = '<details class="ph-adm ad-only"' + (tools.some(function (x) { return x[0] === active; }) ? " open" : "") + '><summary><i class="fa-solid fa-screwdriver-wrench"></i> إدارة</summary><div class="ph-adm-b">' + tl + '</div></details>';
     nav += adm;
-    el.innerHTML = '<div class="ph-top"><a class="ph-home" href="index.html" title="العودة إلى الصفحة الرئيسية"><i class="fa-solid fa-house"></i> الصفحة الرئيسية</a><span class="ph-sub">مشروع الاعتماد 2026-2027 · الدبلوما الأمريكية (بنين) · مدارس دار الفرسان</span></div>' +
+    el.innerHTML = '<div class="ph-top"><a class="ph-home" href="index.html" title="العودة إلى الصفحة الرئيسية"><i class="fa-solid fa-house"></i> الصفحة الرئيسية</a><span class="ph-role" id="phRole" role="status" aria-label="الدور الحالي"></span><span class="ph-sub">مشروع الاعتماد 2026-2027 · الدبلوما الأمريكية (بنين) · مدارس دار الفرسان</span></div>' +
       '<header class="ph-head"><div class="ph-logos"><img src="logo0.png" alt="Diploma 2026"><img src="logo1.png" alt="دار الفرسان"><img src="logo2.png" alt="ETEC"></div></header>' +
       '<nav class="ph-nav" aria-label="التنقل"><div class="ph-links">' + nav + '</div><div class="ph-sync" id="phConn" role="status" aria-live="polite"></div></nav>';
+    roleChip();
     onStatus(function () { connChip(); });
+  }
+  /* v10.8.46: شارة الدور الحالي في ترويسة كل صفحة — «مدير النظام» لجلسة مدير صالحة، وغير ذلك «لوحة نحو التميز» (استعراض فقط) */
+  function roleChip() {
+    var c = document.getElementById("phRole"); if (!c) return;
+    function paint() {
+      var de = document.documentElement, adm = de.classList.contains("sh-admin") && !de.classList.contains("pv-vis"), pv = de.classList.contains("pv-vis");
+      c.className = "ph-role " + (adm ? "adm" : "vis");
+      c.innerHTML = '<i class="fa-solid ' + (adm ? "fa-user-shield" : "fa-eye") + '"></i> ' + (adm ? "مدير النظام" : "لوحة نحو التميز" + (pv ? " (معاينة)" : ""));
+    }
+    paint();
+    try { new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ["class"] }); } catch (e) {}
   }
   function fmtT(t) { try { return new Date(t).toLocaleString("ar-SA-u-ca-gregory", { dateStyle: "medium", timeStyle: "short" }); } catch (e) { return t; } }
   var syncTimer = null, syncT0 = 0;
