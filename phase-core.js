@@ -253,7 +253,7 @@
     function paint() {
       var de = document.documentElement, adm = de.classList.contains("sh-admin") && !de.classList.contains("pv-vis"), pv = de.classList.contains("pv-vis");
       c.className = "ph-role " + (adm ? "adm" : "vis");
-      c.innerHTML = '<i class="fa-solid ' + (adm ? "fa-user-shield" : "fa-eye") + '"></i> ' + (adm ? "مدير النظام" : "لوحة نحو التميز" + (pv ? " (معاينة)" : ""));
+      c.innerHTML = '<i class="fa-solid ' + (adm ? "fa-user-shield" : "fa-eye") + '"></i> ' + (adm ? "مدير النظام" : "زائر");
     }
     paint();
     try { new MutationObserver(paint).observe(document.documentElement, { attributes: true, attributeFilter: ["class"] }); } catch (e) {}
