@@ -225,7 +225,7 @@
     /* [الرابط، الأيقونة، الاسم، للمدير وحده؟] — تبويبات العمل تظهر لجلسة مدير النظام فقط؛ غير ذلك للتتبع والعرض */
     var items = [
       ["dashboard.html", "fa-chart-pie", "الإنجاز", false],
-      ["indicators.html", "fa-list-check", "المؤشرات", false],
+      ["indicators.html", "fa-list-check", "المؤشرات", true],
       ["reference.html", "fa-book-open", "المرجع", false]
     ];
     /* قسم «إدارة» (مدير النظام وحده، مطويّ افتراضياً): بقية الأدوات */
