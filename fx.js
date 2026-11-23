@@ -59,25 +59,24 @@
     },
     idle: function () { busyN = Math.max(0, busyN - 1); if (busyN === 0 && busyEl) { if (busyEl.parentNode) busyEl.parentNode.removeChild(busyEl); busyEl = null; } }
   };
-  /* (2) شعار يرافق كل ضغطة: يظهر مع حركة لثوانٍ ثم يتلاشى */
-  var live = 0;
+  /* (2) شعار يرافق كل ضغطة/لمسة: CSS keyframes (يعمل على iOS/Android/WebView القديمة بلا Web Animations) + مؤقّت أمان؛ لا يعتمد على «تقليل الحركة» (قرار مدير النظام) */
+  var kf = "0%{opacity:0;transform:translateY(10px) scale(.3) rotate(0)}14%{opacity:1;transform:translateY(-30px) scale(1.15) rotate(180deg)}38%{opacity:1;transform:translateY(-12px) scale(1) rotateY(360deg)}60%{opacity:1;transform:translateY(-46px) scale(1.05) rotate(360deg)}82%{opacity:1;transform:translateY(-14px) scale(1) rotateX(360deg)}100%{opacity:0;transform:translateY(-60px) scale(.8) rotate(540deg)}";
+  var st2 = document.createElement("style");
+  st2.textContent = "@-webkit-keyframes fxPop{" + kf + "}@keyframes fxPop{" + kf + "}.fxClick{-webkit-animation:fxPop 2.4s ease-in-out forwards;animation:fxPop 2.4s ease-in-out forwards;-webkit-backface-visibility:visible;-webkit-transform:translateZ(0)}@media print{.fxClick,#fxSplash{display:none!important}}";
+  (document.head || de).appendChild(st2);
+  var live = 0, lastT = 0;
   function pop(x, y) {
-    if (reduce || live >= 4) return; live++;
+    if (live >= 4 || !(x >= 0) || !(y >= 0)) return; live++;
     var im = document.createElement("img"); im.className = "fxClick"; im.src = LOGO; im.alt = ""; im.setAttribute("aria-hidden", "true");
     im.style.left = x + "px"; im.style.top = y + "px"; de.appendChild(im);
-    var a;
-    try {
-      a = im.animate([
-        { opacity: 0, transform: "translateY(10px) scale(.3) rotate(0)", offset: 0 },
-        { opacity: 1, transform: "translateY(-30px) scale(1.15) rotate(180deg)", offset: .14 },
-        { opacity: 1, transform: "translateY(-12px) scale(1) rotateY(360deg)", offset: .38 },
-        { opacity: 1, transform: "translateY(-46px) scale(1.05) rotate(360deg)", offset: .6 },
-        { opacity: 1, transform: "translateY(-14px) scale(1) rotateX(360deg)", offset: .82 },
-        { opacity: 0, transform: "translateY(-60px) scale(.8) rotate(540deg)", offset: 1 }
-      ], { duration: 2400, easing: "ease-in-out", fill: "forwards" });
-    } catch (e) {}
-    var done = function () { live--; if (im.parentNode) im.parentNode.removeChild(im); };
-    if (a) a.onfinish = done; else setTimeout(done, 2400);
+    var gone = false, done = function () { if (gone) return; gone = true; live = Math.max(0, live - 1); if (im.parentNode) im.parentNode.removeChild(im); };
+    im.addEventListener("animationend", done); im.addEventListener("webkitAnimationEnd", done);
+    setTimeout(done, 2700); /* سقف أمان: لا يبقى عدّاد معلّقاً أبداً */
   }
-  window.addEventListener("pointerdown", function (e) { if (e.isPrimary === false) return; pop(e.clientX, e.clientY); }, true);
+  if (window.PointerEvent) {
+    window.addEventListener("pointerdown", function (e) { if (e.isPrimary === false) return; pop(e.clientX, e.clientY); }, true);
+  } else { /* iOS < 13 ومتصفحات قديمة */
+    window.addEventListener("touchstart", function (e) { var t = e.touches && e.touches[0]; if (!t) return; lastT = Date.now(); pop(t.clientX, t.clientY); }, { capture: true, passive: true });
+    window.addEventListener("mousedown", function (e) { if (Date.now() - lastT < 800) return; pop(e.clientX, e.clientY); }, true);
+  }
 })();

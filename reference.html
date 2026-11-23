@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" style="color-scheme:light">
 <head>
-<link rel="icon" href="favicon.ico?v=10.8.85" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=10.8.85">
-<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png?v=10.8.85">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=10.8.85">
+<link rel="icon" href="favicon.ico?v=10.8.86" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=10.8.86">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png?v=10.8.86">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=10.8.86">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=10.8.85"></script>
-<script src="fx.js?v=10.8.85"></script>
-<script src="portal-config.js?v=10.8.85"></script>
-<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.8.85" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.8.85"><\/script>');}</script>
-<script src="reference-official.js?v=10.8.85"></script>
+<script src="shield.js?v=10.8.86"></script>
+<script src="fx.js?v=10.8.86"></script>
+<script src="portal-config.js?v=10.8.86"></script>
+<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.8.86" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.8.86"><\/script>');}</script>
+<script src="reference-official.js?v=10.8.86"></script>
 <meta name="robots" content="noindex,nofollow">
 <title>المرجع: المجالات والمعايير والمؤشرات والإضاءات والسجلات — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=10.8.85">
+<link rel="stylesheet" href="phase.css?v=10.8.86">
 <script>/* حارس الإصدار */
 (function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=10.8.85"></script>
-<script src="portal-role.js?v=10.8.85"></script>
+<script src="portal-meta.js?v=10.8.86"></script>
+<script src="portal-role.js?v=10.8.86"></script>
 <style>
 :root{--d1:#1d4ed8;--d2:#047857;--d3:#b45309;--d4:#7e22ce;--d1b:#eff6ff;--d2b:#ecfdf5;--d3b:#fffbeb;--d4b:#faf5ff}
 .rf-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:10px 0}
@@ -162,6 +162,8 @@ html[dir=rtl] .rf-ind[open]{border-radius:12px 0 0 12px}
 #offCtx>summary::after{content:"";margin-inline-start:auto;width:8px;height:8px;border:solid #475569;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);transition:transform .2s}
 #offCtx[open]>summary::after{transform:rotate(-135deg)}
 @media (max-width:520px){.rf-src{padding:14px 12px}.rf-cards{grid-template-columns:1fr}.rf-ic{width:32px;height:32px}}
+.rf-pi svg,.rf-ic svg{display:block;flex:none;overflow:visible;pointer-events:none}
+@media (hover:none){.rf-pdf:hover,.rf-ref:hover,.rf-cards>*:hover{transform:none!important;box-shadow:none!important}.rf-pdf,.rf-ref{-webkit-tap-highlight-color:transparent}.rf-pdf *{-webkit-transform:none}}
 @media print{.rf-pdf,.rf-ref{box-shadow:none!important;transform:none!important}}
 </style>
 </head>
@@ -183,7 +185,7 @@ html[dir=rtl] .rf-ind[open]{border-radius:12px 0 0 12px}
   <div class="rf-path" id="rfPath" aria-live="polite"></div>
   <div id="tree"></div>
   <section class="rf-src ad-only" aria-label="الملفات المرجعية" id="pdfSec">
-    <h2><i class="fa-solid fa-file-pdf rf-ic" aria-hidden="true" style="--ic:#dc2626"></i><span>الملفات المرجعية (PDF) من مجلد المشروع في التخزين السحابي</span></h2>
+    <h2><span class="rf-ic" aria-hidden="true" style="--ic:#dc2626"><svg viewBox="0 0 24 30" width="16" height="20" focusable="false"><path d="M3 1h11l7 7v19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2z" fill="none" stroke="#dc2626" stroke-width="2"/><path d="M14 1v7h7" fill="none" stroke="#dc2626" stroke-width="2"/><rect x="1" y="14" width="20" height="9" rx="1.5" fill="#dc2626"/></svg></span><span>الملفات المرجعية (PDF) من مجلد المشروع في التخزين السحابي</span></h2>
     <p class="ph-lead" style="margin:0 0 4px">اضغط «عرض» لفتح الملف في نافذة داخل الصفحة، أو امسح رمز QR من جهاز ذكي. الملفات خاصة بحساب المشروع: يفتحها من له صلاحية على المجلد فقط.</p>
     <div class="rf-pdfs" id="pdfs"></div>
   </section>
@@ -209,12 +211,12 @@ html[dir=rtl] .rf-ind[open]{border-radius:12px 0 0 12px}
   </section>
 </main>
 <div id="rfMod" role="dialog" aria-modal="true" aria-label="عرض الملف"><div class="bar"><span id="rfT"></span><a class="ph-btn sm" id="rfO" target="_blank" rel="noopener">فتح في التخزين السحابي</a><button type="button" class="ph-btn sm" id="rfX">إغلاق</button></div><div class="why">إن ظهرت رسالة «لا تملك صلاحية» فسجّل الدخول بحساب Google المصرّح له، أو استعمل «فتح في التخزين السحابي».</div><iframe id="rfF" title="عرض الملف" referrerpolicy="no-referrer"></iframe></div>
-<script src="portal-names.js?v=10.8.85"></script>
-<script src="phase-data.js?v=10.8.85"></script>
-<script src="report-i18n.js?v=10.8.85"></script>
-<script src="highlights.js?v=10.8.85"></script>
-<script src="phase-core.js?v=10.8.85"></script>
-<script src="qrcode-lib.js?v=10.8.85"></script>
+<script src="portal-names.js?v=10.8.86"></script>
+<script src="phase-data.js?v=10.8.86"></script>
+<script src="report-i18n.js?v=10.8.86"></script>
+<script src="highlights.js?v=10.8.86"></script>
+<script src="phase-core.js?v=10.8.86"></script>
+<script src="qrcode-lib.js?v=10.8.86"></script>
 <script>
 (function () {
   "use strict";
@@ -358,7 +360,7 @@ html[dir=rtl] .rf-ind[open]{border-radius:12px 0 0 12px}
   function qsvg(url, px) { try { var q = window.qrcode(0, "M"); q.addData(url); q.make(); var n = q.getModuleCount(), d = "", r, c; for (r = 0; r < n; r++) for (c = 0; c < n; c++) if (q.isDark(r, c)) d += "M" + (c + 2) + " " + (r + 2) + "h1v1h-1z"; return '<svg xmlns="http://www.w3.org/2000/svg" width="' + px + '" height="' + px + '" viewBox="0 0 ' + (n + 4) + " " + (n + 4) + '" shape-rendering="crispEdges" role="img" aria-label="QR"><rect width="100%" height="100%" fill="#fff"/><path d="' + d + '" fill="#000"/></svg>'; } catch (e) { return ""; } }
   document.getElementById("pdfs").innerHTML = PDFS.map(function (f, k) {
     var view = "https://drive.google.com/file/d/" + f[2] + "/view";
-    return '<div class="rf-pdf"><div class="rf-ph"><span class="rf-pi" aria-hidden="true"><i class="fa-solid fa-file-pdf"></i></span><div><b>' + E(f[0]) + "</b>" + (f[1] ? '<span class="rf-chip">' + E(f[1]) + "</span>" : "") + "</div></div>" + '<div class="row"><div class="btns"><button type="button" class="ph-btn sm" data-pdf="' + k + '"><i class="fa-solid fa-eye"></i> عرض</button><a class="ph-btn sm" href="' + view + '" target="_blank" rel="noopener"><i class="fa-solid fa-up-right-from-square"></i> التخزين السحابي</a></div><a class="qr" href="' + view + '" target="_blank" rel="noopener" title="رمز QR: يفتح الملف في التخزين السحابي">' + qsvg(view, 84) + "</a></div></div>";
+    return '<div class="rf-pdf"><div class="rf-ph"><span class="rf-pi" aria-hidden="true"><svg class="rf-svg" viewBox="0 0 24 30" width="20" height="25" aria-hidden="true" focusable="false"><path d="M3 1h11l7 7v19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2z" fill="#fff" stroke="#dc2626" stroke-width="1.6"/><path d="M14 1v7h7" fill="#fecaca" stroke="#dc2626" stroke-width="1.6" stroke-linejoin="round"/><rect x="1" y="14" width="20" height="9" rx="1.5" fill="#dc2626"/><text x="11" y="21.2" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="7" fill="#fff">PDF</text></svg></span><div><b>' + E(f[0]) + "</b>" + (f[1] ? '<span class="rf-chip">' + E(f[1]) + "</span>" : "") + "</div></div>" + '<div class="row"><div class="btns"><button type="button" class="ph-btn sm" data-pdf="' + k + '"><i class="fa-solid fa-eye"></i> عرض</button><a class="ph-btn sm" href="' + view + '" target="_blank" rel="noopener"><i class="fa-solid fa-up-right-from-square"></i> التخزين السحابي</a></div><a class="qr" href="' + view + '" target="_blank" rel="noopener" title="رمز QR: يفتح الملف في التخزين السحابي">' + qsvg(view, 84) + "</a></div></div>";
   }).join("");
   var mod = document.getElementById("rfMod"), fr = document.getElementById("rfF"), lastBtn = null;
   function closeM() { mod.classList.remove("on"); fr.removeAttribute("src"); if (lastBtn) lastBtn.focus(); }
@@ -368,13 +370,13 @@ html[dir=rtl] .rf-ind[open]{border-radius:12px 0 0 12px}
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && mod.classList.contains("on")) closeM(); });
 
   /* خريطة الأدوات من data/ (تعمل على الخادم؛ وعند الفتح محلياً بلا خادم تُهمل بهدوء) */
-  fetch("data/tools_map_feb2026.json?v=10.8.85").then(function (r) { return r.json(); }).then(function (j) { TOOLS = j || {}; }).catch(function () { TOOLS = {}; }).then(function () { fillTools(); draw(); });
+  fetch("data/tools_map_feb2026.json?v=10.8.86").then(function (r) { return r.json(); }).then(function (j) { TOOLS = j || {}; }).catch(function () { TOOLS = {}; }).then(function () { fillTools(); draw(); });
   draw();
 })();
 </script>
-<script src="page-gate.js?v=10.8.85" data-lazy="1"></script>
-<script src="lang.js?v=10.8.85"></script>
-<script src="legal-notice.js?v=10.8.85"></script>
-<script src="content-protect.js?v=10.8.85"></script>
+<script src="page-gate.js?v=10.8.86" data-lazy="1"></script>
+<script src="lang.js?v=10.8.86"></script>
+<script src="legal-notice.js?v=10.8.86"></script>
+<script src="content-protect.js?v=10.8.86"></script>
 </body>
 </html>
