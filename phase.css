@@ -1,5 +1,5 @@
 /* phase.css — v9.0.0 — تصميم صفحات مرحلة الاعتماد (home / indicators). لا يعتمد على مكتبات خارجية. */
-@import url('fonts.css');
+@import url('fonts.css?v=10.8.77');
 :root{--t7:#003d3d;--t5:#006666;--t1:#f0f7f7;--gold:#c29b38;--ink:#0f172a;--mut:#64748b;--line:#e2e8f0;--bg:#f8fafc;--ok:#047857;--okb:#ecfdf5;--wip:#b45309;--wipb:#fffbeb;--bad:#b91c1c;--badb:#fef2f2;--idle:#475569;--idleb:#f1f5f9}
 *{box-sizing:border-box}
 html{color-scheme:light}
@@ -298,3 +298,6 @@ html.sh-admin.pv-vis .vis-only{display:revert!important}
 @keyframes domWip{0%,60%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
 @media (prefers-reduced-motion:reduce){.pg-dom::before,.rf-dom::after,.nd-tm::after{animation:none;display:none}}
 @media print{.pg-dom::before,.rf-dom::after,.nd-tm::after{display:none}}
+
+/* نصوص إنجليزية أوضح: لون أغمق من الرمادي الباهت */
+.rf-en,.sg-hero .en,.sg-card .en{color:#475569}
