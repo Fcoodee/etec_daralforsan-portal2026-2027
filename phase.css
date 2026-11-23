@@ -13,9 +13,15 @@ a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible{ou
 .ph-conn{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 6px 2px 12px;font-size:11px;font-weight:700}
 .ph-conn.ok{background:rgba(52,211,153,.18);color:#6ee7b7}.ph-conn.off{background:rgba(251,191,36,.18);color:#fcd34d}.ph-conn.load{background:rgba(148,163,184,.25);color:#e2e8f0}
 .ph-ref{font:inherit;font-size:11px;font-weight:700;border:0;border-radius:999px;background:rgba(255,255,255,.15);color:#fff;padding:1px 10px;cursor:pointer}
-.ph-head{background:#fff;border-bottom:1px solid var(--line);padding:14px 16px 8px}
-.ph-logos{display:flex;justify-content:center;align-items:center;gap:28px;flex-wrap:wrap}
-.ph-logos img{max-height:52px;object-fit:contain}
+.ph-head{position:relative;overflow:hidden;text-align:center;color:#fff;border-bottom:0;padding:16px 16px 20px;background:linear-gradient(120deg,rgba(18,58,99,.90) 0%,rgba(42,58,140,.84) 48%,rgba(91,42,134,.90) 100%),url(hero-bg.jpg) center 38%/cover no-repeat,#123a63}
+.ph-head::before,.ph-head::after{content:"";position:absolute;border:30px solid rgba(255,255,255,.07);transform:rotate(45deg);border-radius:30px;pointer-events:none}
+.ph-head::before{width:300px;height:300px;inset-inline-end:-110px;top:-170px}
+.ph-head::after{width:230px;height:230px;inset-inline-start:-90px;bottom:-150px;border-color:rgba(130,170,255,.10)}
+.ph-logos{position:relative;display:inline-flex;justify-content:center;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:8px 16px;box-shadow:0 8px 26px rgba(0,0,0,.22);max-width:100%}
+.ph-logos img{height:78px;width:auto;max-width:none;display:block;object-fit:contain}
+.ph-logos img+img{border-inline-start:1px solid var(--line);padding-inline-start:12px}
+/* شعار الهيئة: محتواه يشغل نحو نصف ارتفاع صورته، فيُكبَّر بصرياً ويُقصّ هامشه بهامش سالب كي لا يطول الشريط */
+.ph-logos img[alt="ETEC"]{height:104px;margin-block:-13px;border-inline-start:0;background:linear-gradient(var(--line),var(--line)) right center/1px 78px no-repeat}
 .ph-nav{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;background:#fff;border-bottom:1px solid var(--line);padding:6px 12px 10px;position:sticky;top:0;z-index:5}
 .ph-nav a{text-decoration:none;font-size:13px;font-weight:700;color:#334155;border:1px solid var(--line);border-radius:999px;padding:5px 14px;background:#fff}
 .ph-nav a i{color:var(--t5);margin-left:4px}
@@ -180,8 +186,8 @@ select,input,textarea,button{max-width:100%}
 .ph-links{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;width:100%}
 @media (max-width:640px){
   .ph-top{padding:4px 12px;gap:4px 10px}.ph-top .ph-sub{display:none}
-  .ph-logos{gap:16px;padding-block:2px}.ph-logos img{max-height:34px}
-  .ph-head{padding:8px 12px 4px}
+  .ph-logos{gap:8px;padding:6px 10px}.ph-logos img{height:50px}.ph-logos img+img{padding-inline-start:8px}.ph-logos img[alt="ETEC"]{height:66px;margin-block:-8px;background-size:1px 50px}
+  .ph-head{padding:12px 12px 14px}
   .ph-nav{padding:4px 8px 6px;gap:4px}
   .ph-links{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}
   .ph-links::-webkit-scrollbar{display:none}.ph-links a{flex:none;white-space:nowrap}
