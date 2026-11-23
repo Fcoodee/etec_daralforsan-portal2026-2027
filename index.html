@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-lang-default="both" style="color-scheme:light">
 <head>
-<link rel="icon" href="favicon.ico?v=10.8.81" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=10.8.81">
-<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png?v=10.8.81">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=10.8.81">
+<link rel="icon" href="favicon.ico?v=10.8.82" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=10.8.82">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png?v=10.8.82">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=10.8.82">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=10.8.81"></script>
-<script src="fx.js?v=10.8.81"></script>
+<script src="shield.js?v=10.8.82"></script>
+<script src="fx.js?v=10.8.82"></script>
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#123a63">
 <title>منصة الاعتماد نحو التميز — الدبلوما الأمريكية (بنين) — مدارس دار الفرسان</title>
-<script src="page-gate.js?v=10.8.81" data-lazy="1"></script>
-<link rel="stylesheet" href="fonts.css?v=10.8.81">
+<script src="page-gate.js?v=10.8.82" data-lazy="1"></script>
+<link rel="stylesheet" href="fonts.css?v=10.8.82">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="portal-meta.js?v=10.8.81"></script>
-<script src="portal-config.js?v=10.8.81"></script>
+<script src="portal-meta.js?v=10.8.82"></script>
+<script src="portal-config.js?v=10.8.82"></script>
 <style>
 :root{--navy:#123a63;--blue:#1f78c1;--purple:#6a2c91;--ink:#0f172a;--mut:#64748b;--line:#e2e8f0;--bg:#f4f6fb}
 *{box-sizing:border-box}
@@ -62,6 +62,17 @@ html[dir=ltr] .tl li{padding:0 0 14px 44px}
 .tl .t{margin:2px 0 0;font-size:14.5px;font-weight:700}
 .tl .e{margin:0;font-size:12.5px;color:#475569;direction:ltr;text-align:left}
 /* لغة الصفحة: الأزواج العربية/الإنجليزية الثابتة تتحكم بها فئات lg-ar وlg-en عبر html[data-lang] دون JS */
+/* v10.8.82: عناوين وشارات ثنائية اللغة داخل حاويات flex: سطر لكل لغة بدل عمودين ضيقين (إصلاح تشوه الجوال) */
+.card h2{flex-wrap:wrap}
+html[data-lang=both] .card h2 .lg-en{flex:0 0 100%;min-width:0;direction:ltr;text-align:left;font-size:.66em;font-weight:600;color:#475569;line-height:1.5;margin-top:-2px}
+html[data-lang=both] .lock h2 .lg-en{color:#6b3a85}
+.card h2 .lg-ar,.card h2 .lg-en{min-width:0;overflow-wrap:anywhere}
+.card h2 .lg-en::before{content:none!important}
+html[data-lang=both] .badge{display:inline-block;border-radius:16px;line-height:1.7;max-width:100%;text-align:start}
+html[data-lang=both] .badge .lg-ar::after{content:" · ";font-weight:600}
+html[data-lang=both] .badge .lg-en{font-family:var(--font-en,Inter,Arial,sans-serif);font-weight:600;direction:ltr;unicode-bidi:isolate}
+.lock .tx{overflow-wrap:break-word;word-break:normal}
+@media(max-width:640px){.lock{flex-direction:column;align-items:stretch;gap:12px}.lock .meet{align-self:center;width:120px;height:93px;order:-1}.lock .tx{flex:none;width:100%;min-width:0}.lock .btn{width:100%;justify-content:center}.lock h2{font-size:20px}}
 html[data-lang=ar] .lg-en{display:none!important}html[data-lang=en] .lg-ar{display:none!important}
 .lg-en{font-family:var(--font-en,Inter,Arial,sans-serif);font-weight:500}
 .lg-in.lg-en::before{content:" · ";font-weight:600}html[data-lang=en] .lg-in.lg-en::before{content:none}
@@ -204,6 +215,6 @@ html[data-lang=en] .qt{border-inline-start-width:4px}
   });
 })();
 </script>
-<script src="lang.js?v=10.8.81"></script>
+<script src="lang.js?v=10.8.82"></script>
 </body>
 </html>
