@@ -1,18 +1,116 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" style="color-scheme:light">
 <head>
-<link rel="icon" href="favicon.ico?v=10.8.64" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=10.8.64">
-<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png?v=10.8.64">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=10.8.64">
+<link rel="icon" href="favicon.ico?v=10.8.65" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=10.8.65">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png?v=10.8.65">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=10.8.65">
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script src="shield.js?v=10.8.65"></script>
+<script src="fx.js?v=10.8.65"></script>
+<script src="portal-config.js?v=10.8.65"></script>
+<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.8.65" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.8.65"><\/script>');}</script>
 <meta name="robots" content="noindex,nofollow">
-<meta http-equiv="refresh" content="0;url=dashboard.html">
-<title>تحويل إلى لوحة نحو التميز</title>
-<script>location.replace("dashboard.html");</script>
-<link rel="stylesheet" href="fonts.css?v=10.8.64">
-<script src="fx.js?v=10.8.64"></script>
+<title>اختيار المرحلة — منصة نحو التميز — مدارس دار الفرسان</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="phase.css?v=10.8.65">
+<script>/* حارس الإصدار: إن كانت الصفحة محفوظة قديمة في المتصفح تُعاد من الخادم مرة واحدة */
+(function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
+fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
+if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
+</script>
+<script src="portal-meta.js?v=10.8.65"></script>
+<script src="portal-role.js?v=10.8.65"></script>
+<style>
+.sg{max-width:1040px;margin:0 auto;padding:0 16px 40px}
+.sg-hero{text-align:center;padding:26px 8px 4px}
+.sg-hero h1{font-size:26px;font-weight:900;color:var(--t7);margin:0 0 4px;line-height:1.6}
+.sg-hero .en{font-size:13px;color:var(--mut);direction:ltr;margin:0}
+.sg-hero .sub{font-size:13.5px;color:var(--mut);margin:8px 0 0}
+.sg-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;margin-top:22px}
+.sg-card{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:8px;background:#fff;border:1px solid var(--line);border-top:6px solid transparent;background-image:linear-gradient(90deg,#1f78c1,#6a2c91);background-size:100% 6px;background-repeat:no-repeat;background-position:top;border-radius:18px;padding:44px 18px 16px;text-decoration:none;color:inherit;min-width:0}
+.sg-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(110deg,transparent 38%,rgba(106,44,145,.09) 50%,transparent 62%);transform:translateX(-130%);animation:sgWip 6s ease-in-out infinite}
+.sg-card:nth-child(2)::after{animation-delay:1.2s}.sg-card:nth-child(3)::after{animation-delay:2.4s}
+@keyframes sgWip{0%,60%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+.sg-card h2{margin:0;font-size:19px;font-weight:900;color:var(--c)}
+.sg-card .en{font-size:13px;font-weight:700;color:#334155;direction:ltr;text-align:right}
+.sg-card .ic{font-size:26px;color:var(--c)}
+.sg-grades{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 0;padding:0;list-style:none;direction:ltr}
+.sg-grades li{font-size:12px;font-weight:800;border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:1px 10px}
+.sg-st{font-size:12.5px;color:#334155;margin:0;line-height:1.8}
+.sg-tag{position:absolute;top:14px;inset-inline-start:14px;font-size:11.5px;font-weight:800;border-radius:999px;padding:0 10px;z-index:1}
+.sg-btn{margin-top:auto;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:12px;font:800 14px Tajawal,Cairo,Tahoma,sans-serif;padding:8px 14px;border:0;text-decoration:none;position:relative;z-index:1}
+.sg-card.on{border-color:var(--c);box-shadow:0 2px 14px rgba(31,120,193,.14);transition:transform .15s,box-shadow .15s}
+.sg-card.on:hover,.sg-card.on:focus-visible{transform:translateY(-2px);box-shadow:0 6px 22px rgba(31,120,193,.24)}
+.sg-card.on .sg-tag{background:#ecfdf5;color:#047857}.sg-card.on .sg-btn{background:var(--t7);color:#fff}
+.sg-card.off{background-color:#f8fafc}
+.sg-card.off .sg-tag{background:#fffbeb;color:#b45309}.sg-card.off .sg-btn{background:#e2e8f0;color:#475569;cursor:not-allowed}
+.sg-card.adm .sg-btn{background:#123a63;color:#fff;cursor:pointer}
+.sg-note{margin:18px 0 0;font-size:12.5px;color:var(--mut);text-align:center;line-height:1.9}
+.sg-foot{margin:22px 0 0;font-size:11.5px;color:var(--mut);text-align:center}
+@media (prefers-reduced-motion:reduce){.sg-card::after{display:none}}
+@media print{.sg-card::after{display:none}}
+</style>
 </head>
-<body><p style="font-family:'Tajawal','Segoe UI',Tahoma,sans-serif;text-align:center;margin-top:40px">انتقلت هذه الصفحة إلى <a href="dashboard.html">لوحة نحو التميز</a>.</p></body>
+<body>
+<div class="ph-top"><a class="ph-home" href="index.html" title="العودة إلى الصفحة الرئيسية"><i class="fa-solid fa-house"></i> الصفحة الرئيسية</a><span class="ph-role" id="phRole" role="status" aria-label="الدور الحالي"></span><span class="ph-sub">مشروع الاعتماد 2026-2027 · الدبلوما الأمريكية (بنين)</span></div>
+<header class="ph-head"><div class="ph-logos"><img src="logo0.png" alt="Diploma 2026"><img src="logo1.png" alt="دار الفرسان"><img src="logo2.png" alt="ETEC"></div></header>
+<main class="sg" id="main">
+  <section class="sg-hero">
+    <h1>اختر المرحلة الدراسية</h1>
+    <p class="en">Select the school stage</p>
+    <p class="sub">قسم الدبلوما الأمريكية (بنين) — مدارس دار الفرسان · العام الدراسي 2026-2027</p>
+  </section>
+  <section class="sg-cards" id="cards" aria-label="المراحل الدراسية"></section>
+  <p class="sg-note" id="note"></p>
+  <p class="sg-foot">منصة داخلية غير تابعة لهيئة تقويم التعليم والتدريب، ولا تعرض نتيجة تقويم أو اعتماد رسمية.</p>
+</main>
+<script>
+(function () {
+  "use strict";
+  var de = document.documentElement;
+  var pv = /[?&]preview=visitor/.test(location.search), pq = pv ? "?preview=visitor" : "";
+  if (pv) de.classList.add("pv-vis");
+  function esc(x) { return String(x).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  /* شارة الدور: مدير النظام لجلسة مدير صالحة، وغير ذلك «لوحة نحو التميز» (استعراض فقط) */
+  function paintRole() {
+    var c = document.getElementById("phRole"); if (!c) return;
+    var adm = de.classList.contains("sh-admin") && !de.classList.contains("pv-vis");
+    c.className = "ph-role " + (adm ? "adm" : "vis");
+    c.innerHTML = '<i class="fa-solid ' + (adm ? "fa-user-shield" : "fa-eye") + '"></i> ' + (adm ? "مدير النظام" : "لوحة نحو التميز" + (pv ? " (معاينة)" : ""));
+  }
+  var META = {
+    primary:      { ic: "fa-children",         c: "#1d4ed8", en: "Primary Level", g: ["Grade 3", "Grade 4", "Grade 5", "Grade 6"], st: "4 مجالات · 52 مؤشراً · 140 سجلاً" },
+    intermediate: { ic: "fa-book-open-reader", c: "#b45309", en: "Middle Level",  g: ["Grade 7", "Grade 8", "Grade 9"],           st: "جارٍ تجهيزها بالتوازي مع الابتدائية." },
+    secondary:    { ic: "fa-graduation-cap",   c: "#7e22ce", en: "High Level",    g: ["Grade 10", "Grade 11", "Grade 12"],        st: "جارٍ تجهيزها بالتوازي مع الابتدائية." }
+  };
+  function isAdm() { return de.classList.contains("sh-admin") && !de.classList.contains("pv-vis"); }
+  function render() {
+    paintRole();
+    var adm = isAdm(), list = Array.isArray(window.ETEC_STAGES) ? window.ETEC_STAGES : [], h = "", anyClosed = false;
+    list.forEach(function (s) {
+      var m = META[s.id] || { ic: "fa-school", c: "#475569", en: "", g: [], st: "" };
+      var open = !!s.open && !!s.url, href = open ? s.url + pq : (adm && s.wipUrl ? s.wipUrl : "");
+      var cls = open ? "on" : (href ? "off adm" : "off"), tag = open ? "متاحة الآن" : "قيد الإعداد";
+      if (!open) anyClosed = true;
+      var inner = '<span class="sg-tag">' + tag + '</span><i class="fa-solid ' + m.ic + ' ic" aria-hidden="true"></i><h2>المرحلة ' + esc(s.name) + '</h2><div class="en">' + esc(m.en) + '</div>' +
+        '<ul class="sg-grades" aria-label="الصفوف">' + m.g.map(function (g) { return "<li>" + esc(g) + "</li>"; }).join("") + '</ul><p class="sg-st">' + esc(m.st) + "</p>" +
+        (open ? '<span class="sg-btn">ادخل المرحلة <i class="fa-solid fa-arrow-left" aria-hidden="true"></i></span>'
+              : href ? '<span class="sg-btn"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i> مساحة الإعداد (مدير النظام)</span>'
+              : '<span class="sg-btn" aria-disabled="true"><i class="fa-solid fa-lock" aria-hidden="true"></i> غير متاحة بعد</span>');
+      h += href ? '<a class="sg-card ' + cls + '" style="--c:' + m.c + '" href="' + esc(href) + '" data-stage="' + esc(s.id) + '" aria-label="المرحلة ' + esc(s.name) + '">' + inner + "</a>"
+                : '<div class="sg-card ' + cls + '" style="--c:' + m.c + '" data-stage="' + esc(s.id) + '" role="group" aria-label="المرحلة ' + esc(s.name) + ' — قيد الإعداد">' + inner + "</div>";
+    });
+    document.getElementById("cards").innerHTML = h || '<p class="sg-note">لا توجد مراحل معرّفة.</p>';
+    document.getElementById("note").textContent = anyClosed ? "تعمل المنصة الآن للمرحلة الابتدائية، وتُفتح المرحلتان المتبقيتان تباعاً بعد اكتمال تجهيزهما." : "";
+  }
+  render();
+  try { new MutationObserver(render).observe(de, { attributes: true, attributeFilter: ["class"] }); } catch (e) {}
+})();
+</script>
+<script src="page-gate.js?v=10.8.65" data-lazy="1"></script>
+<script src="legal-notice.js?v=10.8.65"></script>
+<script src="content-protect.js?v=10.8.65"></script>
+</body>
 </html>

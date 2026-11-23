@@ -238,10 +238,10 @@
       return '<a' + (x[3] ? ' class="ad-only"' : "") + ' href="' + x[0] + pq + '"' + (x[0] === active ? ' aria-current="page"' : "") + '><i class="fa-solid ' + x[1] + '"></i> ' + esc(x[2]) + "</a>"; }).join("");
     var tl = tools.map(function (x) {
       return '<a href="' + x[0] + '"' + (x[0] === active ? ' aria-current="page"' : "") + '><i class="fa-solid ' + x[1] + '"></i> ' + esc(x[2]) + "</a>"; }).join("") +
-      (pvOn || window.ETEC_DASH_PUBLIC ? "" : '<a href="dashboard.html?preview=visitor" target="_blank" rel="noopener" title="مؤقت: يفتح اللوحة بعين الزائر"><i class="fa-solid fa-eye"></i> معاينة لوحة التميز (مؤقت)</a>');
+      (pvOn || window.ETEC_DASH_PUBLIC ? "" : '<a href="stages.html?preview=visitor" target="_blank" rel="noopener" title="مؤقت: يفتح اللوحة بعين الزائر"><i class="fa-solid fa-eye"></i> معاينة لوحة التميز (مؤقت)</a>');
     var adm = '<details class="ph-adm ad-only"' + (tools.some(function (x) { return x[0] === active; }) ? " open" : "") + '><summary><i class="fa-solid fa-screwdriver-wrench"></i> إدارة</summary><div class="ph-adm-b">' + tl + '</div></details>';
     nav += adm;
-    el.innerHTML = '<div class="ph-top"><a class="ph-home" href="index.html" title="العودة إلى الصفحة الرئيسية"><i class="fa-solid fa-house"></i> الصفحة الرئيسية</a><span class="ph-role" id="phRole" role="status" aria-label="الدور الحالي"></span><span class="ph-sub">مشروع الاعتماد 2026-2027 · الدبلوما الأمريكية (بنين) · مدارس دار الفرسان</span></div>' +
+    el.innerHTML = '<div class="ph-top"><a class="ph-home" href="index.html" title="العودة إلى الصفحة الرئيسية"><i class="fa-solid fa-house"></i> الصفحة الرئيسية</a><a class="ph-home ph-stg" href="stages.html' + pq + '" title="العودة إلى اختيار المرحلة"><i class="fa-solid fa-layer-group"></i> المرحلة: الابتدائية · تغيير</a><span class="ph-role" id="phRole" role="status" aria-label="الدور الحالي"></span><span class="ph-sub">مشروع الاعتماد 2026-2027 · الدبلوما الأمريكية (بنين) · مدارس دار الفرسان</span></div>' +
       '<header class="ph-head"><div class="ph-logos"><img src="logo0.png" alt="Diploma 2026"><img src="logo1.png" alt="دار الفرسان"><img src="logo2.png" alt="ETEC"></div></header>' +
       '<nav class="ph-nav" aria-label="التنقل"><div class="ph-links">' + nav + '</div><div class="ph-sync" id="phConn" role="status" aria-live="polite"></div></nav>';
     roleChip();
