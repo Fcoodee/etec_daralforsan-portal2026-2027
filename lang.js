@@ -13,7 +13,7 @@
   if (MODES.indexOf(mode) < 0) mode = "ar";
 
   var M = new Map(), K = {}, P = [], loaded = { ui: false, data: false }, ready = false, busy = false, rec = [], krec = [], arec = [], obs = null;
-  var SKIP = /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE|SVG|CANVAS|IFRAME|OBJECT|TITLE|OPTION)$/;
+  var SKIP = /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE|SVG|CANVAS|IFRAME|OBJECT|TITLE)$/;
   var AR = /[؀-ۿ]/;
   function norm(t) { return String(t).replace(/\s+/g, " ").trim(); }
 
@@ -78,6 +78,7 @@
   function put(n, en) {
     var s = n.nodeValue, lead = (s.match(/^\s*/) || [""])[0], trail = (s.match(/\s*$/) || [""])[0];
     if (mode === "en") { n.__cur = lead + en + trail; n.nodeValue = n.__cur; }
+    else if (mode === "both" && n.parentNode && n.parentNode.nodeName === "OPTION") { n.__cur = lead + s.trim() + " · " + en + trail; n.nodeValue = n.__cur; }
     else if (mode === "both" && n.parentNode) {
       var sp = document.createElement("span"); sp.className = "i18n-en"; sp.setAttribute("lang", "en"); sp.setAttribute("dir", "ltr"); sp.textContent = en;
       n.parentNode.insertBefore(sp, n.nextSibling); n.__sp = sp;
@@ -122,6 +123,11 @@
     rec = []; krec = []; arec = [];
     var t = document.title; if (de.__arTitle) document.title = de.__arTitle;
   }
+  function centerPass() {
+    var sp = document.querySelectorAll(".i18n-en:not(.i18n-c)"), hit = [], i;
+    for (i = 0; i < sp.length; i++) { var pe = sp[i].parentElement; if (pe && getComputedStyle(pe).textAlign === "center") hit.push(sp[i]); }
+    for (i = 0; i < hit.length; i++) hit[i].classList.add("i18n-c");
+  }
   function titleSync() {
     if (!de.__arTitle) de.__arTitle = document.title;
     var en = tr(de.__arTitle);
@@ -133,7 +139,7 @@
   function apply() {
     busy = true; if (obs) obs.disconnect();
     restore(); attrs();
-    if (mode !== "ar") { walk(document.body); titleSync(); }
+    if (mode !== "ar") { walk(document.body); titleSync(); if (mode === "both") centerPass(); }
     else if (de.__arTitle) document.title = de.__arTitle;
     busy = false; watch(); paintSw();
     try { window.dispatchEvent(new CustomEvent("etec-lang", { detail: { mode: mode } })); } catch (e) {}
@@ -170,15 +176,14 @@
       var b = document.createElement("button"); b.type = "button"; b.setAttribute("data-m", x[0]); b.textContent = x[1]; b.title = x[2]; b.setAttribute("aria-label", x[2]);
       b.addEventListener("click", function () { set(x[0]); }); sw.appendChild(b);
     });
-    var host = document.querySelector(".ph-top"), hero = document.querySelector(".hero");
-    if (host) host.appendChild(sw); else if (hero) { sw.classList.add("lg-hero"); hero.appendChild(sw); } else { sw.classList.add("lg-fix"); document.body.appendChild(sw); }
+    sw.classList.add("lg-fix"); document.body.appendChild(sw);
     var css = document.createElement("style");
     css.textContent = ".lg-sw{display:inline-flex;gap:0;border:1px solid rgba(148,163,184,.55);border-radius:999px;overflow:hidden;background:rgba(255,255,255,.96);direction:ltr;flex:none;margin-inline-start:auto;font-family:var(--font-en,Inter,Arial,sans-serif)}" +
       ".lg-sw button{all:unset;box-sizing:border-box;cursor:pointer;padding:3px 11px;font-size:12px;font-weight:700;color:#334155;min-height:26px;line-height:20px;white-space:nowrap}" +
       ".lg-sw button+button{border-inline-start:1px solid #e2e8f0}.lg-sw button[aria-pressed=true]{background:#123a63;color:#fff}.lg-sw button:focus-visible{outline:2px solid #1f78c1;outline-offset:-2px}" +
-      ".lg-sw.lg-hero{position:absolute;top:12px;inset-inline-start:12px;z-index:3}.lg-sw.lg-fix{position:fixed;top:8px;inset-inline-start:8px;z-index:2147482000}" +
+      ".lg-sw.lg-hero{position:absolute;top:12px;inset-inline-start:12px;z-index:3}.lg-sw.lg-fix{position:fixed;bottom:14px;left:50%;right:auto;top:auto;margin:0;transform:translateX(-50%);z-index:2147482000;box-shadow:0 4px 16px rgba(15,23,42,.28);border-color:rgba(18,58,99,.35)}body{padding-bottom:64px}@media(max-width:600px){.lg-sw.lg-fix{bottom:96px}body{padding-bottom:104px}}" +
       ".i18n-en{font-family:var(--font-en,Inter,Arial,sans-serif);font-weight:500;font-size:.84em;line-height:1.5;direction:ltr;unicode-bidi:isolate;opacity:.85;letter-spacing:0}" +
-      ".i18n-en:not(.i18n-blk){display:block;text-align:start}.i18n-blk{display:block;margin-top:2px}" +
+      ".i18n-en:not(.i18n-blk){display:block;width:fit-content;max-width:100%;margin-left:auto;margin-right:0}.i18n-en.i18n-c{margin-left:auto;margin-right:auto}.i18n-blk{display:block;margin-top:2px;width:fit-content;max-width:100%;margin-left:auto;margin-right:0}" +
       "html[data-lang=en] body{text-align:start}@media print{.lg-sw{display:none}}";
     document.head.appendChild(css);
     paintSw();
@@ -202,6 +207,7 @@
     missing: function () {
       var out = {}, tw = document.createTreeWalker(document.body, 4, null), n;
       while ((n = tw.nextNode())) { var p = n.parentNode; if (!p || SKIP.test(p.nodeName) || (p.closest && p.closest("[data-no-i18n],.i18n-en,.lg-ar,.lg-en,#etecWM,#etecWM2,#etecMetaBox,[data-k]"))) continue; var s = n.__ar != null ? n.__ar : n.nodeValue; var k = norm(s); if (k && AR.test(k) && !(M.has(k)) && !n.__i) out[k] = 1; }
+      Array.prototype.forEach.call(document.querySelectorAll("[placeholder],[title],[aria-label],[alt]"), function (el) { if (skipEl(el)) return; ATTR.forEach(function (a) { var v = el.getAttribute("data-ar-" + a) || el.getAttribute(a), k = v && norm(v); if (k && AR.test(k) && !tr(k)) out["@" + a + ": " + k] = 1; }); });
       return Object.keys(out);
     }
   };
