@@ -8,7 +8,7 @@
   if (window.ETEC_META) return;
   /* showEtecLogo: false لإخفاء شعار هيئة تقويم التعليم والتدريب من ترويسات الصفحات.
      السياسات (1445هـ، ص26) تمنع المدرسة المعتمدة من استخدام شعار الهيئة أو المركز في منشوراتها؛ والافتراضي true إلى أن تقرّر إدارة المدرسة وضعها من الاعتماد. */
-  var META = { version: 'v10.8.88', updated: '2026-11-22', updatedText: '22 نوفمبر 2026', showEtecLogo: true };
+  var META = { version: 'v10.8.89', updated: '2026-11-22', updatedText: '22 نوفمبر 2026', showEtecLogo: true };
   window.ETEC_META = META;
   var UK = 'etec.utype.v1', AK = 'df_auth_v1';
   var NAMES = { admin: 'مدير النظام', sup: 'مشرف فريق السجلات والشواهد', member: 'عضو فريق السجلات والشواهد', self: 'مشرف عمليات التقويم الذاتي' };
@@ -31,7 +31,7 @@
     'html.lp-wm #etecWM img{top:40%;width:min(60vmin,480px)}' +
     '#etecWM img{position:absolute;left:50%;top:56%;width:min(74vmin,620px);height:auto;transform:translate(-50%,-50%);-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
     '@media (max-width:640px){#etecWM2{opacity:.24}#etecWM2 img{width:min(72vw,340px);top:91%}html.lp-wm #etecWM img{top:42%;width:min(70vw,360px)}#etecWM{opacity:.09}#etecWM img{width:min(88vw,460px);top:58%}}' +
-    '@media print{#etecTech{display:none!important}#etecWM2{display:none!important}#etecMetaBox{display:none!important}#etecWM{opacity:.10}#etecWM img{width:125mm;top:50%}}';
+    '@media print{#etecClock{display:none!important}#etecTech{display:none!important}#etecWM2{display:none!important}#etecMetaBox{display:none!important}#etecWM{opacity:.10}#etecWM img{width:125mm;top:50%}}';
   var box, ver, usr;
   function mount() {
     if (!document.body || box) return;
@@ -39,7 +39,7 @@
     /* علامة مائية: شعار قسم الدبلوما بخطوط خارجية فقط (logo-outline.svg) خلف كل الصفحات؛ لا تلتقط نقراً ولا تُقرأ لقارئ الشاشة */
     var wm = document.createElement('div'); wm.id = 'etecWM'; wm.setAttribute('aria-hidden', 'true'); wm.setAttribute('data-gate-keep', ''); var wi = document.createElement('img'); wi.src = 'logo-outline.svg?v=9.14.1'; wi.alt = ''; wi.setAttribute('aria-hidden', 'true'); wi.draggable = false; wm.appendChild(wi); document.body.appendChild(wm);
     /* كل صفحات المنصة (عدا صفحات التقارير والملفات: report وopen و404): علامة مائية ثانية لشعار هيئة تقويم التعليم والتدريب بخطوط خارجية (logo-etec-outline.svg) بالأسلوب نفسه */
-    if (!/(^|\/)(report|open|404)\.html$/.test(location.pathname)) { var w2 = document.createElement('div'); w2.id = 'etecWM2'; w2.setAttribute('aria-hidden', 'true'); w2.setAttribute('data-gate-keep', ''); var i2 = document.createElement('img'); i2.src = 'logo-etec-outline.svg?v=10.8.88'; i2.alt = ''; i2.setAttribute('aria-hidden', 'true'); i2.draggable = false; w2.appendChild(i2); document.body.appendChild(w2); document.documentElement.classList.add('lp-wm'); }
+    if (!/(^|\/)(report|open|404)\.html$/.test(location.pathname)) { var w2 = document.createElement('div'); w2.id = 'etecWM2'; w2.setAttribute('aria-hidden', 'true'); w2.setAttribute('data-gate-keep', ''); var i2 = document.createElement('img'); i2.src = 'logo-etec-outline.svg?v=10.8.89'; i2.alt = ''; i2.setAttribute('aria-hidden', 'true'); i2.draggable = false; w2.appendChild(i2); document.body.appendChild(w2); document.documentElement.classList.add('lp-wm'); }
     box = document.createElement('div'); box.id = 'etecMetaBox';
     ver = document.createElement('div'); ver.id = 'etecMetaVer'; ver.setAttribute('aria-label', 'رقم الإصدار وتاريخ آخر تحديث');
     ver.textContent = 'الإصدار ' + META.version + ' · آخر تحديث ' + META.updatedText;
@@ -47,6 +47,17 @@
     var note = document.createElement('div'); note.id = 'etecMetaNote'; note.textContent = 'منصة داخلية لمدارس دار الفرسان — غير تابعة لهيئة تقويم التعليم والتدريب، ولا تعرض نتيجة تقويم أو اعتماد رسمية';
     note.style.cssText = 'font:600 9.5px/1.4 Tajawal,Tahoma,Arial,sans-serif;color:#64748b;background:rgba(255,255,255,.94);border:1px solid #e2e8f0;border-radius:999px;padding:1px 9px;max-width:100%';
     box.appendChild(ver); document.body.appendChild(box);
+    /* شريط التاريخ الهجري/الميلادي والوقت الحالي (طلب FD، 23 نوفمبر 2026): ثابت أعلى الصفحة، توقيت الرياض، لا يُطبع */
+    if (!document.getElementById('etecClock')) {
+      var ck = document.createElement('div'); ck.id = 'etecClock'; ck.setAttribute('data-gate-keep', ''); ck.setAttribute('aria-hidden', 'true');
+      ck.style.cssText = 'position:fixed;top:6px;left:8px;z-index:2147482000;pointer-events:none;direction:rtl;display:flex;flex-direction:column;align-items:flex-start;gap:1px;font:700 10.5px/1.45 Tajawal,Tahoma,Arial,sans-serif;color:#334155;background:rgba(255,255,255,.92);border:1px solid #e2e8f0;border-radius:10px;padding:3px 9px;box-shadow:0 1px 4px rgba(15,23,42,.10)';
+      var tz = 'Asia/Riyadh';
+      var fH, fG, fT;
+      try { fH = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura-nu-latn', { timeZone: tz, weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); fG = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { timeZone: tz, day: 'numeric', month: 'long', year: 'numeric' }); fT = new Intl.DateTimeFormat('ar-SA-u-nu-latn', { timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }); } catch (e) { fH = fG = fT = null; }
+      var mq = window.matchMedia ? window.matchMedia('(max-width:600px)') : null; var fHs; try { fHs = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura-nu-latn', { timeZone: tz, day: 'numeric', month: 'short', year: 'numeric' }); } catch (e) { fHs = null; }
+      var tick = function () { if (!fH) return; var d = new Date(); if (mq && mq.matches && fHs) { ck.style.cssText += ';flex-direction:row;gap:5px;top:3px;left:4px;padding:1px 6px;font-size:9px;border-radius:8px;white-space:nowrap'; ck.innerHTML = '<span>' + fHs.format(d).replace(/\s?هـ$/, '') + ' هـ</span><span>·</span><span>' + fG.format(d).replace(/\s?م$/, '') + ' م</span><span>·</span><b style="font-variant-numeric:tabular-nums">' + fT.format(d) + '</b>'; return; } ck.innerHTML = '<span>' + fH.format(d).replace(/\s?هـ$/, '') + ' هـ</span><span>' + fG.format(d).replace(/\s?م$/, '') + ' م · <b style="font-variant-numeric:tabular-nums">' + fT.format(d) + '</b></span>'; };
+      tick(); setInterval(tick, 1000); document.body.appendChild(ck);
+    }
     /* سطر آخر الصفحة (قرار FD، 23 نوفمبر 2026): نص كما حدده */
     if (!document.getElementById('etecTech')) { var tl = document.createElement('div'); tl.id = 'etecTech'; tl.setAttribute('data-gate-keep', ''); tl.textContent = 'منصة داخلية لمدارس دار الفرسان - Agentic AI - OLE DB - Crystal Reports'; tl.style.cssText = 'text-align:center;direction:rtl;font:600 11px/1.6 Tajawal,Tahoma,Arial,sans-serif;color:#64748b;padding:14px 12px 46px;position:relative;z-index:1'; document.body.appendChild(tl); }
     if (META.showEtecLogo === false) {
