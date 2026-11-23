@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" style="color-scheme:light">
 <head>
-<link rel="icon" href="favicon.ico?v=10.8.80" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=10.8.80">
-<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png?v=10.8.80">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=10.8.80">
+<link rel="icon" href="favicon.ico?v=10.8.81" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=10.8.81">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png?v=10.8.81">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=10.8.81">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=10.8.80"></script>
-<script src="fx.js?v=10.8.80"></script>
-<script src="portal-config.js?v=10.8.80"></script>
-<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.8.80" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.8.80"><\/script>');}</script>
+<script src="shield.js?v=10.8.81"></script>
+<script src="fx.js?v=10.8.81"></script>
+<script src="portal-config.js?v=10.8.81"></script>
+<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.8.81" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.8.81"><\/script>');}</script>
 <meta name="robots" content="noindex,nofollow">
 <title>نحو التميز · نسبة الإنجاز الكلية للمشروع — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=10.8.80">
+<link rel="stylesheet" href="phase.css?v=10.8.81">
 <script>/* حارس الإصدار: إن كانت الصفحة محفوظة قديمة في المتصفح تُعاد من الخادم مرة واحدة */
 (function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=10.8.80"></script>
-<script src="portal-role.js?v=10.8.80"></script>
+<script src="portal-meta.js?v=10.8.81"></script>
+<script src="portal-role.js?v=10.8.81"></script>
 <style>
 :root{--d1:#1d4ed8;--d2:#047857;--d3:#b45309;--d4:#7e22ce;--d1b:#eff6ff;--d2b:#ecfdf5;--d3b:#fffbeb;--d4b:#faf5ff}
 .nd-disc{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:8px 14px;font-size:12.8px;line-height:1.9;margin:8px 0 12px}
@@ -76,11 +76,26 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default}
 .pg-dom li{transition:padding .18s,background .18s}.pg-dom li:hover{background:color-mix(in srgb,var(--c) 10%,transparent);padding-inline:6px;border-radius:6px}
 .pg-dom:active{transform:translateY(-2px) scale(.995)}
 @media (prefers-reduced-motion:reduce){.pg-dom,.pg-dom *{transition:none!important}.pg-dom:hover{transform:none}.pg-dom::after{display:none}}
-.pg-donut{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center}
-.pg-donut svg{width:150px;height:150px;transform:rotate(-90deg)}
-.pg-donut ul{list-style:none;margin:0;padding:0;font-size:12.5px}
-.pg-donut li::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-inline-end:6px;vertical-align:-2px;background:var(--k)}
-.pg-donut li b{direction:ltr;display:inline-block}
+.pg-donut{display:flex;align-items:center;gap:18px 26px;flex-wrap:wrap;justify-content:center}
+.pg-dn{position:relative;width:clamp(150px,42vw,210px);aspect-ratio:1/1;flex:none}
+.pg-dn svg{display:block;width:100%;height:100%;overflow:visible}
+.pg-dn .seg{transition:opacity .2s,stroke-width .2s;cursor:pointer;outline:none}
+.pg-dn.hv .seg{opacity:.28}.pg-dn.hv .seg.on{opacity:1;stroke-width:20}
+.pg-dn .ctr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none;padding:22%}
+.pg-dn .ctr b{font-size:clamp(22px,6.4vw,32px);font-weight:900;line-height:1.05;direction:ltr;color:var(--k,#047857)}
+.pg-dn .ctr span{font-size:11.5px;font-weight:700;color:#475569;line-height:1.35;margin-top:3px}
+.pg-dn .ctr small{font-size:11px;color:#64748b;direction:ltr;margin-top:1px}
+.pg-dl{list-style:none;margin:0;padding:0;display:grid;gap:8px;min-width:min(100%,230px);flex:1 1 230px;max-width:340px}
+.pg-dl li{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:4px 10px;padding:7px 10px;border:1px solid #e2e8f0;border-radius:12px;background:#fff;cursor:pointer;transition:background .15s,border-color .15s,transform .15s}
+.pg-dl li::before{content:"";width:14px;height:14px;border-radius:4px;background:var(--k);grid-row:1/3}
+.pg-dl li:hover,.pg-dl li.on,.pg-dl li:focus-visible{background:#f8fafc;border-color:var(--k);outline:none}
+.pg-dl li .t{font-size:12.5px;font-weight:700;color:#1e293b}
+.pg-dl li b{direction:ltr;font-size:18px;font-weight:900;color:var(--k);min-width:2ch;text-align:end;font-variant-numeric:tabular-nums}
+.pg-dl li .pp{direction:ltr;font-size:11px;font-weight:800;color:#fff;background:var(--k);border-radius:999px;padding:0 8px;line-height:20px;min-width:42px;text-align:center}
+.pg-dl li .bar{grid-column:2/5;height:5px;border-radius:99px;background:#e2e8f0;overflow:hidden}
+.pg-dl li .bar i{display:block;height:100%;width:var(--w);background:var(--k);border-radius:99px;transform-origin:left;transition:width .6s ease}
+@media (max-width:420px){.pg-dl{max-width:none}.pg-dl li{padding:6px 8px}}
+@media (forced-colors:active){.pg-dn .seg{stroke:CanvasText}}
 .pg-note{font-size:12px;color:var(--mut);margin-top:8px}
 .nd-sup{border-top:6px solid #123a63;background:linear-gradient(120deg,#f4f6fb,#fff)}
 .nd-supin{display:flex;align-items:center;gap:14px}
@@ -140,10 +155,10 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default}
 <main class="ph-main" id="main" style="max-width:1180px"><div class="ph-empty">جارٍ التحميل…</div></main>
 <div id="rfMod" role="dialog" aria-modal="true" aria-label="عرض الملف"><div class="bar"><span id="rfT"></span><a class="ph-btn sm" id="rfO" target="_blank" rel="noopener">فتح في التخزين السحابي</a><button type="button" class="ph-btn sm" id="rfX">إغلاق</button></div><iframe id="rfF" title="عرض الملف" allow="fullscreen"></iframe><div id="rfPdf" hidden aria-label="صفحات الملف"></div></div>
 
-<script src="portal-names.js?v=10.8.80"></script>
-<script src="phase-data.js?v=10.8.80"></script>
-<script src="phase-core.js?v=10.8.80"></script>
-<script src="pdf-view.js?v=10.8.80"></script>
+<script src="portal-names.js?v=10.8.81"></script>
+<script src="phase-data.js?v=10.8.81"></script>
+<script src="phase-core.js?v=10.8.81"></script>
+<script src="pdf-view.js?v=10.8.81"></script>
 <script>
 (function () {
   "use strict";
@@ -158,10 +173,32 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default}
     return '<svg viewBox="0 0 120 120" role="img" aria-label="' + pc(p) + '%"><circle cx="60" cy="60" r="52" fill="none" stroke="#e2e8f0" stroke-width="12"/><circle cx="60" cy="60" r="52" fill="none" stroke="' + col + '" stroke-width="12" stroke-linecap="round" stroke-dasharray="' + (p * C).toFixed(1) + " " + C.toFixed(1) + '"/></svg>';
   }
   function donut(parts) {
-    var C = 2 * Math.PI * 52, tot = parts.reduce(function (s, x) { return s + x.v; }, 0) || 1, off = 0, h = "";
-    parts.forEach(function (x) { var l = x.v / tot * C; if (l > 0) h += '<circle cx="60" cy="60" r="52" fill="none" stroke="' + x.c + '" stroke-width="16" stroke-dasharray="' + l.toFixed(1) + " " + (C - l).toFixed(1) + '" stroke-dashoffset="' + (-off).toFixed(1) + '"/>'; off += l; });
-    return '<svg viewBox="0 0 120 120" role="img" aria-label="توزيع حالات السجلات"><circle cx="60" cy="60" r="52" fill="none" stroke="#e2e8f0" stroke-width="16"/>' + h + "</svg>";
+    var C = 2 * Math.PI * 52, tot = parts.reduce(function (s, x) { return s + x.v; }, 0) || 1, off = 0, h = "", n = parts.filter(function (x) { return x.v > 0; }).length, gap = n > 1 ? 2.2 : 0;
+    parts.forEach(function (x, k) { var l = x.v / tot * C; if (l > 0) { var ll = Math.max(l - gap, .5); h += '<circle class="seg" data-i="' + k + '" tabindex="0" cx="60" cy="60" r="52" fill="none" stroke="' + x.c + '" stroke-width="16" stroke-dasharray="' + ll.toFixed(2) + " " + (C - ll).toFixed(2) + '" stroke-dashoffset="' + (-(off + gap / 2)).toFixed(2) + '"><title>' + E(x.t) + ": " + x.v + "</title></circle>"; } off += l; });
+    var ready = parts[0].v, rp = Math.round(ready / tot * 100);
+    return '<div class="pg-dn" data-tot="' + tot + '"><svg viewBox="0 0 120 120" role="img" aria-label="توزيع حالات السجلات: ' + parts.map(function (x) { return x.t + " " + x.v; }).join("، ") + '"><g transform="rotate(-90 60 60)"><circle cx="60" cy="60" r="52" fill="none" stroke="#e2e8f0" stroke-width="16"/>' + h + '</g></svg><div class="ctr" style="--k:' + parts[0].c + '"><b data-cu="' + ready + '">' + ready + '</b><span>من ' + tot + ' سجلاً</span><small>' + rp + "%</small></div></div>";
   }
+  function donutList(parts) {
+    var tot = parts.reduce(function (s, x) { return s + x.v; }, 0) || 1;
+    return '<ul class="pg-dl" role="list">' + parts.map(function (x, k) { var p = Math.round(x.v / tot * 100); return '<li tabindex="0" data-i="' + k + '" style="--k:' + x.c + ";--w:" + (x.v / tot * 100).toFixed(1) + '%"><span class="t">' + E(x.t) + '</span><b data-cu="' + x.v + '">' + x.v + '</b><span class="pp">' + p + '%</span><span class="bar"><i></i></span></li>'; }).join("") + "</ul>";
+  }
+  /* تفاعل الحلقة: مرور/تركيز على قطاع أو سطر يبرزه ويعرضه في المركز */
+  (function () {
+    function root(e) { return e.closest ? e.closest(".pg-donut") : null; }
+    function act(r, i) {
+      var dn = r.querySelector(".pg-dn"), c = dn.querySelector(".ctr"), P = r.__parts; if (!dn || !P) return;
+      Array.prototype.forEach.call(r.querySelectorAll(".seg,.pg-dl li"), function (el) { el.classList.toggle("on", i != null && el.getAttribute("data-i") === String(i)); });
+      dn.classList.toggle("hv", i != null);
+      var x = i == null ? P[0] : P[i], tot = +dn.getAttribute("data-tot") || 1;
+      c.style.setProperty("--k", x.c); c.innerHTML = "<b>" + x.v + "</b><span>" + (i == null ? "من " + tot + " سجلاً" : E(x.t)) + "</span><small>" + Math.round(x.v / tot * 100) + "%</small>";
+    }
+    function on(e) { var t = e.target.closest && e.target.closest("[data-i]"); var r = root(e.target); if (t && r && r.__parts) act(r, +t.getAttribute("data-i")); }
+    function off(e) { var r = root(e.target); if (r && r.__parts) act(r, null); }
+    document.addEventListener("mouseover", on); document.addEventListener("focusin", on); document.addEventListener("mouseout", off); document.addEventListener("focusout", off);
+    document.addEventListener("click", on);
+    window.__dnBind = function (scope) { Array.prototype.forEach.call((scope || document).querySelectorAll(".pg-donut"), function (r) { r.__parts = window.__dnParts; }); };
+  })();
+  function dnParts(st) { return [{ v: st.approved, c: "#047857", t: "جاهزة (معتمدة)" }, { v: st.review, c: "#d97706", t: "معبّأة قيد المراجعة" }, { v: st.blank, c: "#64748b", t: "منشأة بانتظار التعبئة" }, { v: st.missing, c: "#dc2626", t: "غير منشأة" }]; }
   function kpi(l, v, s) { return '<div class="pg-kpi"><div class="l">' + l + '</div><div class="v">' + v + '</div><div class="s">' + s + "</div></div>"; }
   function repFile(s) { return ((s.rep && s.rep.files) || []).filter(function (x) { return x.valid && x.n > 0 && x.id; }).sort(function (a, b) { return b.n - a.n; })[0]; }
 
@@ -284,8 +321,8 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default}
       var p = P.critP(x.c, null), n = all.filter(function (i) { return i.c === x.c; }).length;
       return '<div class="pg-crit" style="--c:' + COL[x.d][0] + '"><span class="n">' + E(x.c) + '</span><div class="tr" role="img" aria-label="' + E(x.cn) + " " + pc(p) + '%"><i style="width:' + pc(p) + '%"></i></div><span class="p">' + pc(p) + "%</span><small>" + E(x.cn) + " · " + n + " مؤشر</small>" + critFiles(x.c) + "</div>";
     }).join("") + "</section>" +
-      '<section class="pg-box"><h2>حالة السجلات (' + T.req + ')</h2><div class="pg-donut">' + donut([{ v: st.approved, c: "#047857" }, { v: st.review, c: "#d97706" }, { v: st.blank, c: "#94a3b8" }, { v: st.missing, c: "#dc2626" }]) +
-      '<ul><li style="--k:#047857">جاهزة (معتمدة) <b>' + st.approved + '</b></li><li style="--k:#d97706">معبّأة قيد المراجعة <b>' + st.review + '</b></li><li style="--k:#94a3b8">منشأة بانتظار التعبئة <b>' + st.blank + '</b></li><li style="--k:#dc2626">غير منشأة <b>' + st.missing + "</b></li></ul></div></section></div>";
+      '<section class="pg-box"><h2>حالة السجلات (' + T.req + ')</h2><div class="pg-donut">' + donut(dnParts(st)) + donutList(dnParts(st)) + "</div></section></div>";
+    window.__dnParts = dnParts(st); setTimeout(function () { window.__dnBind(document); }, 0);
 
     h += teamHtml();
 
@@ -351,9 +388,9 @@ html.sh-admin:not(.pv-vis) .pg-dom{cursor:default}
   P.load(false);
 })();
 </script>
-<script src="page-gate.js?v=10.8.80" data-lazy="1"></script>
-<script src="lang.js?v=10.8.80"></script>
-<script src="legal-notice.js?v=10.8.80"></script>
-<script src="content-protect.js?v=10.8.80"></script>
+<script src="page-gate.js?v=10.8.81" data-lazy="1"></script>
+<script src="lang.js?v=10.8.81"></script>
+<script src="legal-notice.js?v=10.8.81"></script>
+<script src="content-protect.js?v=10.8.81"></script>
 </body>
 </html>

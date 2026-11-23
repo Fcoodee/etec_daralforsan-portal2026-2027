@@ -300,11 +300,32 @@
     });
     return n;
   }
+  /* v10.8.81: حلقة حالة السجلات — القطاعات تنمو بالتتابع (أخضر ثم برتقالي ثم رمادي) والأرقام تعدّ تصاعدياً */
+  function animDonut(root) {
+    var n = 0;
+    Array.prototype.forEach.call((root || document).querySelectorAll(".pg-dn"), function (dn) {
+      if (dn.dataset.an) return; dn.dataset.an = "1";
+      var segs = dn.querySelectorAll(".seg");
+      Array.prototype.forEach.call(segs, function (el, k) {
+        if (!el.animate) return;
+        var da = (el.getAttribute("stroke-dasharray") || "").split(/[ ,]+/), a = parseFloat(da[0]), b = parseFloat(da[1]); if (!isFinite(a) || !isFinite(b)) return;
+        try { el.animate([{ strokeDasharray: "0 " + (a + b).toFixed(2), opacity: .2 }, { strokeDasharray: a.toFixed(2) + " " + b.toFixed(2), opacity: 1 }], { duration: 900, delay: k * 380, easing: "cubic-bezier(.22,.8,.3,1)", fill: "backwards" }); n++; } catch (x) {}
+      });
+      var box = dn.parentNode;
+      Array.prototype.forEach.call(box.querySelectorAll("[data-cu]"), function (b2) {
+        var to = +b2.getAttribute("data-cu"), t0 = null, dur = 1400; if (!window.requestAnimationFrame || !isFinite(to)) return;
+        b2.textContent = "0";
+        (function f(t) { if (t0 == null) t0 = t; var q = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - q, 3); b2.textContent = Math.round(to * e); if (q < 1) requestAnimationFrame(f); else b2.textContent = to; })(performance.now());
+      });
+      Array.prototype.forEach.call(box.querySelectorAll(".pg-dl .bar i"), function (i2) { if (!i2.animate) return; try { i2.animate([{ width: "0%" }, { width: getComputedStyle(i2).width }], { duration: 1100, easing: "ease-out", delay: 200 }); } catch (x) {} });
+    });
+    return n;
+  }
   /* v10.8.50: حركة الدخول (ذهاباً وإياباً) تُعرض مرة واحدة فقط عند أول عرض للصفحة؛ ولا تتكرر عند «تحديث الآن» أو إعادة الرسم أثناء الانتظار (كانت تتحرك مع تغيّر الأرقام فتبدو مضطربة) */
   var ANIM_DONE = false;
   function animOnce(root) {
     if (ANIM_DONE || ST.loading) return;
-    var n = animBars(root) + animRings(root);
+    var n = animBars(root) + animRings(root) + animDonut(root);
     if (n > 0) ANIM_DONE = true;
   }
   function watchBars() {

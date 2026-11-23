@@ -47,7 +47,7 @@ window.ETEC_DOMAIN_RESULTS = null;
 window.ETEC_TOOLS_STATUS = { team: null, surveyTeacher: null, surveyLearner: null, surveyFamily: null, obsClass: null, obsEnv: null, interviews: null, docs: null };
 /* v10.8.66 (قرار FD، 23 نوفمبر 2026): true = اللوحة مفتوحة لدور «لوحة نحو التميز» عبر صفحة اختيار المرحلة. (النص التالي يصف القيمة false سابقاً) — لوحة نحو التميز (dashboard.html): false (قرار مدير المشروع 20 نوفمبر 2026، مؤقت) = اللوحة مقفلة لمدير النظام وحده وبطاقتها في الهبوط معطّلة؛ true = مفتوحة من الهبوط للزائر للاستعراض فقط، وتبقى صفحات العمل وأزرارها لمدير النظام وحده. */
 /* v10.8.46: هذا العلم نفسه يتحكم بصفحات العرض الثلاث (dashboard / indicators / reference): true = تُفتح لدور «لوحة نحو التميز» (استعراض فقط، أزرار العمل مخفية)، ويختفي زر «معاينة لوحة التميز (مؤقت)» من قائمة إدارة. sources.html وreport.html تبقيان لمدير النظام وحده. */
-window.ETEC_DASH_PUBLIC = false; /* v10.8.69 (قرار FD، 23 نوفمبر 2026): إتاحة الدخول كزائر مغلقة مؤقتاً */
+window.ETEC_DASH_PUBLIC = true; /* v10.8.81 (قرار FD، 23 نوفمبر 2026): إعادة فتح مسار «لوحة نحو التميز» من الهبوط (استعراض فقط). للإغلاق مجدداً: false */
 window.ETEC_STAGES = [
   { id: "primary",      name: "الابتدائي", open: true,  url: "dashboard.html" },
   { id: "intermediate", name: "المتوسط",   open: false, wipUrl: "stage-wip.html?s=intermediate" },

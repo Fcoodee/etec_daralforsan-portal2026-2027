@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" style="color-scheme:light">
 <head>
-<link rel="icon" href="favicon.ico?v=10.8.80" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=10.8.80">
-<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png?v=10.8.80">
-<link rel="apple-touch-icon" href="apple-touch-icon.png?v=10.8.80">
+<link rel="icon" href="favicon.ico?v=10.8.81" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=10.8.81">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png?v=10.8.81">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=10.8.81">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<script src="shield.js?v=10.8.80"></script>
-<script src="fx.js?v=10.8.80"></script>
-<script src="portal-config.js?v=10.8.80"></script>
-<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.8.80" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.8.80"><\/script>');}</script>
-<script src="reference-official.js?v=10.8.80"></script>
+<script src="shield.js?v=10.8.81"></script>
+<script src="fx.js?v=10.8.81"></script>
+<script src="portal-config.js?v=10.8.81"></script>
+<script>if(!window.ETEC_DASH_PUBLIC){document.write('<script src="page-gate.js?v=10.8.81" data-always="1" data-detach="0" data-title="المنصة مغلقة حالياً" data-msg="الدخول متاح لمدير النظام فقط في هذه المرحلة. أدخل بيانات دخول مدير النظام."><\/script><script src="admin-only.js?v=10.8.81"><\/script>');}</script>
+<script src="reference-official.js?v=10.8.81"></script>
 <meta name="robots" content="noindex,nofollow">
 <title>المرجع: المجالات والمعايير والمؤشرات والإضاءات والسجلات — مدارس دار الفرسان</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="phase.css?v=10.8.80">
+<link rel="stylesheet" href="phase.css?v=10.8.81">
 <script>/* حارس الإصدار */
 (function(){try{var m=document.querySelector('script[src*="portal-meta.js"]');var cur=m&&(m.getAttribute("src").match(/v=([\d.]+)/)||[])[1];if(!cur)return;
 fetch(location.pathname+"?_cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()}).then(function(t){var n=(t.match(/portal-meta\.js\?v=([\d.]+)/)||[])[1];
 if(n&&n!==cur&&sessionStorage.getItem("etec.rf")!==n){sessionStorage.setItem("etec.rf",n);var u=new URL(location.href);u.searchParams.set("_r",Date.now());location.replace(u.toString());}}).catch(function(){});}catch(e){}})();
 </script>
-<script src="portal-meta.js?v=10.8.80"></script>
-<script src="portal-role.js?v=10.8.80"></script>
+<script src="portal-meta.js?v=10.8.81"></script>
+<script src="portal-role.js?v=10.8.81"></script>
 <style>
 :root{--d1:#1d4ed8;--d2:#047857;--d3:#b45309;--d4:#7e22ce;--d1b:#eff6ff;--d2b:#ecfdf5;--d3b:#fffbeb;--d4b:#faf5ff}
 .rf-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:10px 0}
@@ -119,6 +119,50 @@ html[dir=rtl] .rf-ind[open]{border-radius:12px 0 0 12px}
 .rf-path .p.cur{color:var(--c);font-weight:900}
 @media (prefers-reduced-motion:reduce){.rf-body{animation:none}}
 @media (max-width:640px){.rf-ind .rf-tgl{display:none}.rf-dchip{flex:1 1 45%}.rf-path{font-size:11.5px}}
+/* v10.8.81: مظهر موحّد لأقسام المراجع والملفات */
+.rf-src{position:relative;padding:16px 18px 14px;border-radius:16px;box-shadow:0 2px 10px rgba(15,23,42,.05);overflow:hidden}
+.rf-src::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:linear-gradient(90deg,#3fa85f 0%,#12afc3 38%,#1892cf 66%,#44368c 100%)}
+.rf-src h2{display:flex;align-items:center;gap:10px;margin:2px 0 8px;font-size:16px;line-height:1.5}
+.rf-src h2 small{font-weight:600;color:var(--mut);font-size:12px}
+.rf-ic{flex:none;width:36px;height:36px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;font-size:16px;color:var(--ic,#334155);background:color-mix(in srgb,var(--ic,#334155) 12%,#fff);border:1px solid color-mix(in srgb,var(--ic,#334155) 30%,#fff)}
+@supports not (background:color-mix(in srgb,red,blue)){.rf-ic{background:#f1f5f9;border:1px solid #e2e8f0}}
+.rf-pdfs{grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:14px}
+.rf-pdf{border-radius:14px;border:1px solid var(--line);padding:14px;gap:12px;transition:transform .18s,box-shadow .18s,border-color .18s;background:linear-gradient(180deg,#fff,#fafcfd)}
+.rf-pdf:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(15,23,42,.10);border-color:#bfe3ee}
+.rf-ph{display:flex;gap:10px;align-items:flex-start}
+.rf-pi{flex:none;width:38px;height:44px;border-radius:8px;background:#fee2e2;color:#dc2626;display:inline-flex;align-items:center;justify-content:center;font-size:18px;border:1px solid #fecaca}
+.rf-ph b{display:block;font-size:13.5px;line-height:1.7;margin-bottom:4px}
+.rf-pdf .row{align-items:center;border-top:1px dashed var(--line);padding-top:10px}
+.rf-pdf .qr{border-radius:10px;box-shadow:0 1px 4px rgba(15,23,42,.12)}
+.rf-grp{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:900;color:#003d3d;margin:16px 0 8px;padding-bottom:6px;border-bottom:2px solid #d6e6ee}
+.rf-grp em{font-style:normal;font-size:11px;font-weight:800;background:#eef8fb;border:1px solid #bfe3ee;border-radius:999px;padding:0 8px;color:#0e7490}
+.rf-cards{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:10px}
+.rf-ref{margin:0!important;background:#fff;border:1px solid var(--line);border-inline-start:4px solid var(--k,#64748b);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;transition:box-shadow .18s,transform .18s}
+.rf-ref:hover{box-shadow:0 6px 16px rgba(15,23,42,.09);transform:translateY(-1px)}
+.rf-rt{display:flex;flex-wrap:wrap;gap:4px}
+.rf-ref .rf-chip{margin:0}
+.rf-ref .rf-k{background:var(--k);color:#fff;border-color:var(--k)}
+.rf-ref a,.rf-num li a{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;text-decoration:none;color:#0b4f6c;font-weight:800;line-height:1.7}
+.rf-ref a:hover,.rf-num li a:hover{text-decoration:underline}
+.rf-ref a i,.rf-num li a i{flex:none;font-size:11px;margin-top:7px;opacity:.65}
+.rf-ref small{font-size:12px;line-height:1.8;color:#475569}
+.rf-vd{font-size:11px;font-weight:700;color:#047857;display:inline-flex;gap:5px;align-items:center}
+.rf-num{counter-reset:rn}
+.rf-num li{counter-increment:rn;position:relative;margin:0!important;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;padding-inline-start:46px}
+.rf-num li::before{content:counter(rn);position:absolute;inset-inline-start:10px;top:10px;width:26px;height:26px;border-radius:50%;background:#e0f2fe;color:#0b4f6c;font-weight:900;font-size:12.5px;display:inline-flex;align-items:center;justify-content:center;direction:ltr}
+.rf-num li small{margin-top:3px}
+.rf-adm{background:#fffdf5;border-color:#fde68a}
+.rf-adm::before{background:linear-gradient(90deg,#f59e0b,#b45309)}
+.rf-adm .rf-num li{background:#fffbeb;border-color:#fde68a}
+.rf-adm .rf-num li::before{background:#fef3c7;color:#92400e}
+.rf-adm .rf-num li b{display:block;font-size:13px;line-height:1.7}
+#offCtx{background:#f8fafc;border:1px dashed #cbd5e1;border-radius:12px;padding:8px 12px}
+#offCtx>summary{display:flex;align-items:center;gap:8px;list-style:none}
+#offCtx>summary::-webkit-details-marker{display:none}
+#offCtx>summary::after{content:"";margin-inline-start:auto;width:8px;height:8px;border:solid #475569;border-width:0 2.5px 2.5px 0;transform:rotate(45deg);transition:transform .2s}
+#offCtx[open]>summary::after{transform:rotate(-135deg)}
+@media (max-width:520px){.rf-src{padding:14px 12px}.rf-cards{grid-template-columns:1fr}.rf-ic{width:32px;height:32px}}
+@media print{.rf-pdf,.rf-ref{box-shadow:none!important;transform:none!important}}
 </style>
 </head>
 <body>
@@ -139,12 +183,12 @@ html[dir=rtl] .rf-ind[open]{border-radius:12px 0 0 12px}
   <div class="rf-path" id="rfPath" aria-live="polite"></div>
   <div id="tree"></div>
   <section class="rf-src ad-only" aria-label="الملفات المرجعية" id="pdfSec">
-    <h2>الملفات المرجعية (PDF) من مجلد المشروع في التخزين السحابي</h2>
+    <h2><i class="fa-solid fa-file-pdf rf-ic" aria-hidden="true" style="--ic:#dc2626"></i><span>الملفات المرجعية (PDF) من مجلد المشروع في التخزين السحابي</span></h2>
     <p class="ph-lead" style="margin:0 0 4px">اضغط «عرض» لفتح الملف في نافذة داخل الصفحة، أو امسح رمز QR من جهاز ذكي. الملفات خاصة بحساب المشروع: يفتحها من له صلاحية على المجلد فقط.</p>
     <div class="rf-pdfs" id="pdfs"></div>
   </section>
   <section class="rf-src" aria-label="المراجع الرسمية" id="offSec">
-    <h2>المراجع الرسمية</h2>
+    <h2><i class="fa-solid fa-landmark rf-ic" aria-hidden="true" style="--ic:#047857"></i><span>المراجع الرسمية</span></h2>
     <p class="ph-lead" style="margin:0 0 6px">روابط رسمية فُتحت وقُرئ محتواها بتاريخ التحقق المذكور أمام كل رابط. لا تُعدّ دليلاً على اعتراف الوزارة أو الهيئة بأي جهة اعتماد أجنبية. وثيقة المعايير 2026 وأدلة الشواهد لا رابط عام لها؛ تُطلب عبر منصة «تميز» أو الدعم 19925.</p>
     <div class="rf-tools" role="search" style="margin:4px 0 8px">
       <select id="ok" aria-label="نوع المرجع"><option value="">كل الأنواع</option></select>
@@ -154,24 +198,23 @@ html[dir=rtl] .rf-ind[open]{border-radius:12px 0 0 12px}
     <div id="offs"></div>
     <details id="offCtx" style="margin-top:10px"><summary style="cursor:pointer;font-weight:800;font-size:13.5px">مراجع سياقية <span id="ctxN"></span></summary><p class="ph-lead" style="margin:4px 0">للاطلاع على السياق فقط: أخبار وصفحات عامة أو قديمة أو ضعيفة الصلة المباشرة بمعايير الهيئة.</p><div id="offsCtx"></div></details>
   </section>
-  <section class="rf-src ad-only" aria-label="ملاحظات التحقق" id="admNotes">
-    <h2>ملاحظات التحقق <small style="font-weight:600;color:var(--mut)">(لمدير النظام وحده)</small></h2>
+  <section class="rf-src rf-adm ad-only" aria-label="ملاحظات التحقق" id="admNotes">
+    <h2><i class="fa-solid fa-clipboard-check rf-ic" aria-hidden="true" style="--ic:#b45309"></i><span>ملاحظات التحقق <small>(لمدير النظام وحده)</small></span></h2>
     <p class="ph-lead" style="margin:0 0 4px">استدراكات داخلية على الروابط أعلاه: ما لم يثبت، وما قد يكون له إصدار أحدث. لا تُعرض للمطّلع.</p>
-    <ol id="admList"></ol>
+    <ol id="admList" class="rf-cards rf-num"></ol>
   </section>
-  <div class="rf-note" id="notes"></div>
   <section class="rf-src" aria-label="المراجع">
-    <h2>المراجع ومصادر المعلومات</h2>
-    <ol id="srcs"></ol>
+    <h2><i class="fa-solid fa-book-open rf-ic" aria-hidden="true" style="--ic:#1d4ed8"></i><span>المراجع ومصادر المعلومات</span></h2>
+    <ol id="srcs" class="rf-cards rf-num"></ol>
   </section>
 </main>
 <div id="rfMod" role="dialog" aria-modal="true" aria-label="عرض الملف"><div class="bar"><span id="rfT"></span><a class="ph-btn sm" id="rfO" target="_blank" rel="noopener">فتح في التخزين السحابي</a><button type="button" class="ph-btn sm" id="rfX">إغلاق</button></div><div class="why">إن ظهرت رسالة «لا تملك صلاحية» فسجّل الدخول بحساب Google المصرّح له، أو استعمل «فتح في التخزين السحابي».</div><iframe id="rfF" title="عرض الملف" referrerpolicy="no-referrer"></iframe></div>
-<script src="portal-names.js?v=10.8.80"></script>
-<script src="phase-data.js?v=10.8.80"></script>
-<script src="report-i18n.js?v=10.8.80"></script>
-<script src="highlights.js?v=10.8.80"></script>
-<script src="phase-core.js?v=10.8.80"></script>
-<script src="qrcode-lib.js?v=10.8.80"></script>
+<script src="portal-names.js?v=10.8.81"></script>
+<script src="phase-data.js?v=10.8.81"></script>
+<script src="report-i18n.js?v=10.8.81"></script>
+<script src="highlights.js?v=10.8.81"></script>
+<script src="phase-core.js?v=10.8.81"></script>
+<script src="qrcode-lib.js?v=10.8.81"></script>
 <script>
 (function () {
   "use strict";
@@ -272,10 +315,6 @@ html[dir=rtl] .rf-ind[open]{border-radius:12px 0 0 12px}
   drawChips();
 
   /* ===== الملاحظات والمراجع ===== */
-  document.getElementById("notes").innerHTML = "<b>كيف تُقرأ هذه الصفحة وما حدودها</b><ul style='margin:6px 0 0;padding-inline-start:20px'>" +
-    "<li><b>رسمي (من ملف الهيئة):</b> المجالات الأربعة، والمعايير، والمؤشرات ونصوصها ورموزها، والإضاءات العربية، وأدوات التقويم المرتبطة بكل مؤشر.</li>" +
-    "<li><b>محلي (من اجتهاد المدرسة):</b> مسميات السجلات (" + recTotal + ") وربطها بالمؤشرات هي سجلات منظومة دار الفرسان لإثبات التطبيق، وليست مسميات صادرة عن الهيئة. منها " + inds.filter(function (i) { return i.dv; }).length + " «سجل متابعة» مشتق من «إضاءات نحو تحقيق المؤشر» للمؤشرات الداعمة، والباقي (" + (recTotal - inds.filter(function (i) { return i.dv; }).length) + ") سجلات المدرسة المعتمدة. هي شواهد على المؤشر لا بديل عن إضاءاته.</li>" +
-    "<li><b>التحديث:</b> الإصدار المعتمد هنا هو إصدار فبراير 2026؛ قد تصدر الهيئة تعديلاً لاحقاً، فاعتمد دائماً النسخة الحالية في موقع الهيئة.</li></ul>";
   var S = [
     ["هيئة تقويم التعليم والتدريب — الموقع الرسمي", "https://etec.gov.sa/", "المرجع الأول للمعايير والإصدارات؛ يُنصح بالتحقق من أحدث إصدار منه."],
     ["منصة تميز الرقمية (المركز الوطني للتقويم والتميز المدرسي)", "https://se.etec.gov.sa/", "تعريفات التقويم المدرسي والاعتماد المدرسي ومراحل الاعتماد (للمدارس الأهلية والعالمية: التهيئة والترشيح، ثم التقويم الذاتي والخارجي، ثم الاعتماد)."],
@@ -291,9 +330,10 @@ html[dir=rtl] .rf-ind[open]{border-radius:12px 0 0 12px}
     var kinds = {}; all.forEach(function (s) { kinds[s.k] = 1; });
     var okSel = document.getElementById("ok"), odSel = document.getElementById("od");
     Object.keys(kinds).forEach(function (k) { okSel.insertAdjacentHTML("beforeend", '<option value="' + E(k) + '">' + E(k) + "</option>"); });
-    function li(s) { return '<li><span class="rf-chip">' + E(s.k) + '</span><span class="rf-chip">' + (s.d.length ? s.d.map(function (x) { return E(DN[x]); }).join("، ") : "عام") + '</span> <a href="' + E(s.u) + '" target="_blank" rel="noopener noreferrer">' + E(s.t) + "</a><small>" + E(s.n) + (VD ? " · تحقق: <bdi>" + E(VD.split("-").reverse().join("/")) + "</bdi>" : "") + "</small></li>"; }
+    var KC = { "رسمي": "#047857", "تنظيم": "#1d4ed8", "دليل": "#7e22ce", "خدمة": "#0e7490", "خبر": "#b45309", "منصة": "#0e7490", "لائحة": "#92400e", "صفحة": "#475569" };
+    function li(s) { var kc = KC[s.k] || "#475569"; return '<li class="rf-ref" style="--k:' + kc + '"><div class="rf-rt"><span class="rf-chip rf-k">' + E(s.k) + '</span><span class="rf-chip">' + (s.d.length ? s.d.map(function (x) { return E(DN[x]); }).join("، ") : "عام") + '</span></div><a href="' + E(s.u) + '" target="_blank" rel="noopener noreferrer"><span>' + E(s.t) + '</span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a><small>' + E(s.n) + "</small>" + (VD ? '<span class="rf-vd"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> تحقق: <bdi>' + E(VD.split("-").reverse().join("/")) + "</bdi></span>" : "") + "</li>"; }
     function pass(s) { var k = okSel.value, d = odSel.value; return (!k || s.k === k) && (!d || (d === "g" ? !s.d.length : s.d.indexOf(+d) >= 0)); }
-    function box(list) { var by = {}; list.forEach(function (s) { (by[s.g] = by[s.g] || []).push(s); }); return Object.keys(by).map(function (g) { return '<h3 style="font-size:14px;margin:10px 0 2px;color:#003d3d">' + E(g) + "</h3><ol>" + by[g].map(li).join("") + "</ol>"; }).join(""); }
+    function box(list) { var by = {}; list.forEach(function (s) { (by[s.g] = by[s.g] || []).push(s); }); return Object.keys(by).map(function (g) { return '<h3 class="rf-grp"><span>' + E(g) + '</span><em>' + by[g].length + "</em></h3><ol class=\"rf-cards\">" + by[g].map(li).join("") + "</ol>"; }).join(""); }
     function drawOff() {
       var core = all.filter(function (s) { return s.c === "core" && pass(s); }), ctx = all.filter(function (s) { return s.c !== "core" && pass(s); });
       document.getElementById("offs").innerHTML = core.length ? box(core) : '<p class="ph-lead">لا مراجع أساسية مطابقة للتصفية.</p>';
@@ -304,7 +344,7 @@ html[dir=rtl] .rf-ind[open]{border-radius:12px 0 0 12px}
     okSel.addEventListener("change", drawOff); odSel.addEventListener("change", drawOff); drawOff();
     document.getElementById("admList").innerHTML = all.filter(function (s) { return s.a; }).map(function (s) { return "<li><b>" + E(s.t) + "</b><small>" + E(s.a) + "</small></li>"; }).join("");
   })();
-  document.getElementById("srcs").innerHTML = S.map(function (s) { return "<li>" + (s[1] ? '<a href="' + E(s[1]) + '" target="_blank" rel="noopener noreferrer">' + E(s[0]) + "</a>" : "<b>" + E(s[0]) + "</b>") + "<small>" + E(s[2]) + "</small></li>"; }).join("");
+  document.getElementById("srcs").innerHTML = S.map(function (s) { return "<li>" + (s[1] ? '<a href="' + E(s[1]) + '" target="_blank" rel="noopener noreferrer"><span>' + E(s[0]) + '</span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a>' : "<b>" + E(s[0]) + "</b>") + "<small>" + E(s[2]) + "</small></li>"; }).join("");
 
 
   /* ===== ملفات PDF المرجعية ===== */
@@ -318,7 +358,7 @@ html[dir=rtl] .rf-ind[open]{border-radius:12px 0 0 12px}
   function qsvg(url, px) { try { var q = window.qrcode(0, "M"); q.addData(url); q.make(); var n = q.getModuleCount(), d = "", r, c; for (r = 0; r < n; r++) for (c = 0; c < n; c++) if (q.isDark(r, c)) d += "M" + (c + 2) + " " + (r + 2) + "h1v1h-1z"; return '<svg xmlns="http://www.w3.org/2000/svg" width="' + px + '" height="' + px + '" viewBox="0 0 ' + (n + 4) + " " + (n + 4) + '" shape-rendering="crispEdges" role="img" aria-label="QR"><rect width="100%" height="100%" fill="#fff"/><path d="' + d + '" fill="#000"/></svg>'; } catch (e) { return ""; } }
   document.getElementById("pdfs").innerHTML = PDFS.map(function (f, k) {
     var view = "https://drive.google.com/file/d/" + f[2] + "/view";
-    return '<div class="rf-pdf"><b>' + E(f[0]) + "</b>" + (f[1] ? "<small>" + E(f[1]) + "</small>" : "") + '<div class="row"><div class="btns"><button type="button" class="ph-btn sm" data-pdf="' + k + '"><i class="fa-solid fa-eye"></i> عرض</button><a class="ph-btn sm" href="' + view + '" target="_blank" rel="noopener"><i class="fa-solid fa-up-right-from-square"></i> التخزين السحابي</a></div><a class="qr" href="' + view + '" target="_blank" rel="noopener" title="رمز QR: يفتح الملف في التخزين السحابي">' + qsvg(view, 84) + "</a></div></div>";
+    return '<div class="rf-pdf"><div class="rf-ph"><span class="rf-pi" aria-hidden="true"><i class="fa-solid fa-file-pdf"></i></span><div><b>' + E(f[0]) + "</b>" + (f[1] ? '<span class="rf-chip">' + E(f[1]) + "</span>" : "") + "</div></div>" + '<div class="row"><div class="btns"><button type="button" class="ph-btn sm" data-pdf="' + k + '"><i class="fa-solid fa-eye"></i> عرض</button><a class="ph-btn sm" href="' + view + '" target="_blank" rel="noopener"><i class="fa-solid fa-up-right-from-square"></i> التخزين السحابي</a></div><a class="qr" href="' + view + '" target="_blank" rel="noopener" title="رمز QR: يفتح الملف في التخزين السحابي">' + qsvg(view, 84) + "</a></div></div>";
   }).join("");
   var mod = document.getElementById("rfMod"), fr = document.getElementById("rfF"), lastBtn = null;
   function closeM() { mod.classList.remove("on"); fr.removeAttribute("src"); if (lastBtn) lastBtn.focus(); }
@@ -328,13 +368,13 @@ html[dir=rtl] .rf-ind[open]{border-radius:12px 0 0 12px}
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && mod.classList.contains("on")) closeM(); });
 
   /* خريطة الأدوات من data/ (تعمل على الخادم؛ وعند الفتح محلياً بلا خادم تُهمل بهدوء) */
-  fetch("data/tools_map_feb2026.json?v=10.8.80").then(function (r) { return r.json(); }).then(function (j) { TOOLS = j || {}; }).catch(function () { TOOLS = {}; }).then(function () { fillTools(); draw(); });
+  fetch("data/tools_map_feb2026.json?v=10.8.81").then(function (r) { return r.json(); }).then(function (j) { TOOLS = j || {}; }).catch(function () { TOOLS = {}; }).then(function () { fillTools(); draw(); });
   draw();
 })();
 </script>
-<script src="page-gate.js?v=10.8.80" data-lazy="1"></script>
-<script src="lang.js?v=10.8.80"></script>
-<script src="legal-notice.js?v=10.8.80"></script>
-<script src="content-protect.js?v=10.8.80"></script>
+<script src="page-gate.js?v=10.8.81" data-lazy="1"></script>
+<script src="lang.js?v=10.8.81"></script>
+<script src="legal-notice.js?v=10.8.81"></script>
+<script src="content-protect.js?v=10.8.81"></script>
 </body>
 </html>
