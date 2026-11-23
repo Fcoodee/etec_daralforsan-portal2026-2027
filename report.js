@@ -121,7 +121,7 @@
       listSec("Documents", "", docs, "No supporting documents are proposed for this indicator.") +
       listSec("Highlights toward achieving the indicator", "إضاءات نحو تحقيق المؤشر", hl, "Official highlights will be added here.").replace('<section class="sec">', '<section class="sec' + (hl.length ? "" : " noprint") + '">') +
       "</div>" +
-      '<div class="sh-foot"><span>Evidence photos: <b>' + count() + "</b> · Unofficial English translation — the Arabic text is the reference.</span><span>Internal platform — not affiliated with the Education and Training Evaluation Commission (ETEC).</span></div>";
+      '<div class="sh-foot"><span>Evidence photos: <b>' + count() + "</b></span><span>Internal platform — not affiliated with the Education and Training Evaluation Commission (ETEC).</span></div>";
     /* v10.8.7: الصور الطولية (ملصقات/لقطات جوال) تُعرض بإطار أطول بدل شريط عريض صغير */
     Array.prototype.forEach.call(document.querySelectorAll("#sheet .slot:not(.reg) .ph img"), function (im) {
       var f = function () { if (im.naturalHeight > im.naturalWidth * 1.15) im.parentNode.classList.add("tall"); };
