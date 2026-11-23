@@ -121,7 +121,7 @@
       listSec("Documents", "", docs, "No supporting documents are proposed for this indicator.") +
       listSec("Highlights toward achieving the indicator", "إضاءات نحو تحقيق المؤشر", hl, "Official highlights will be added here.").replace('<section class="sec">', '<section class="sec' + (hl.length ? "" : " noprint") + '">') +
       "</div>" +
-      '<div class="sh-foot"><span>Evidence photos: <b>' + count() + "</b></span><span>Internal platform — not affiliated with the Education and Training Evaluation Commission (ETEC).</span></div>";
+      '<div class="sh-foot"><span>Evidence photos: <b>' + count() + "</b></span><span>Internal platform — not affiliated with the Education and Training Evaluation Commission (ETEC).</span><span class=\"pstamp\" dir=\"rtl\"></span></div>";
     /* v10.8.7: الصور الطولية (ملصقات/لقطات جوال) تُعرض بإطار أطول بدل شريط عريض صغير */
     Array.prototype.forEach.call(document.querySelectorAll("#sheet .slot:not(.reg) .ph img"), function (im) {
       var f = function () { if (im.naturalHeight > im.naturalWidth * 1.15) im.parentNode.classList.add("tall"); };
@@ -183,6 +183,7 @@
     /* استثناء ضيّق: طباعة التقرير لجلسة مدير النظام وحدها (الصنف rp-print يُزال بعد الطباعة؛ بقية الصفحات والزوار محجوبون كما كانوا) */
     var de = document.documentElement; de.classList.add("rp-print");
     var back = function () { document.title = old; de.classList.remove("rp-print"); window.removeEventListener("afterprint", back); }; window.addEventListener("afterprint", back);
+    if (window.etecStampNow) window.etecStampNow();
     window.print();
   });
   $("btnCopy").addEventListener("click", function () { try { navigator.clipboard.writeText(fname()); msg("saveMsg", "نُسخ الاسم.", "ok"); } catch (e) { msg("saveMsg", "تعذّر النسخ؛ انسخه يدوياً.", "bad"); } });
