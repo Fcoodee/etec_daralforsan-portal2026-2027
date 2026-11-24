@@ -242,7 +242,7 @@
     var adm = '<details class="ph-adm ad-only"><summary><i class="fa-solid fa-screwdriver-wrench"></i> إدارة</summary><div class="ph-adm-b">' + tl + '</div></details>';
     nav += adm;
     el.innerHTML = '<div class="ph-top"><a class="ph-home" href="index.html" title="العودة إلى الصفحة الرئيسية"><i class="fa-solid fa-house"></i> الصفحة الرئيسية</a><a class="ph-home ph-stg" href="stages.html' + pq + '" title="العودة إلى اختيار المرحلة"><i class="fa-solid fa-layer-group"></i> المرحلة: الابتدائية · تغيير</a><span class="ph-role" id="phRole" role="status" aria-label="الدور الحالي"></span><span class="ph-sub">مشروع الاعتماد 2026-2027 · الدبلوما الأمريكية (بنين) · مدارس دار الفرسان</span></div>' +
-      '<header class="ph-head"><div class="ph-logos"><img src="logo0.png" alt="Diploma 2026"><img src="logo1.png" alt="دار الفرسان"><img src="logo2.png" alt="ETEC"></div></header>' +
+      '<header class="ph-head"><div class="ph-logos"><img src="logo0.png" alt="Diploma 2026"><img src="logo1.png" alt="دار الفرسان"></div></header>' +
       '<nav class="ph-nav" aria-label="التنقل"><div class="ph-links">' + nav + '</div><div class="ph-sync" id="phConn" role="status" aria-live="polite"></div></nav>';
     roleChip();
     onStatus(function () { connChip(); });
