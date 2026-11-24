@@ -226,7 +226,7 @@
     var items = [
       ["dashboard.html", "fa-chart-pie", "الإنجاز", false],
       ["indicators.html", "fa-list-check", "المؤشرات", true],
-      ["reference.html", "fa-book-open", "المرجع", false]
+      ["reference.html", "fa-book-open", "المرجع", true]
     ];
     /* قسم «إدارة» (مدير النظام وحده، مطويّ افتراضياً): بقية الأدوات */
     var tools = [
