@@ -11,7 +11,7 @@
     ".fxCard .fxBar{height:6px;background:#dbeafe;border-radius:999px;overflow:hidden;margin:14px 0 0}.fxCard .fxBar i{display:block;height:100%;width:35%;background:#2563eb;border-radius:999px;-webkit-animation:fxBar 1.2s ease-in-out infinite;animation:fxBar 1.2s ease-in-out infinite;will-change:transform}@-webkit-keyframes fxBar{0%{-webkit-transform:translateX(100%)}100%{-webkit-transform:translateX(-285%)}}@keyframes fxBar{0%{transform:translateX(100%)}100%{transform:translateX(-285%)}}" +
     "#fxSplash.out{opacity:0}#fxSplash .lg{width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 10px 8px rgba(15,23,42,.28));will-change:transform}" +
     "#fxSplash .tx{margin-top:10px;font:800 16px/1.5 'Tajawal','Segoe UI',Tahoma,sans-serif;color:#003d3d}" +
-    ".fxClick{position:fixed;z-index:2147483001;width:64px;height:64px;margin:-32px 0 0 -32px;object-fit:contain;pointer-events:none;opacity:0;filter:drop-shadow(0 6px 5px rgba(15,23,42,.3));will-change:transform,opacity}";
+    ".fxClick{position:fixed;z-index:2147483001;width:34px;height:34px;margin:-17px 0 0 -17px;object-fit:contain;pointer-events:none;opacity:0;filter:drop-shadow(0 3px 3px rgba(15,23,42,.25));will-change:transform,opacity}";
   var st = document.createElement("style"); st.textContent = css; (document.head || de).appendChild(st);
   /* حركة بهلوانية: قفز + دوران + قلب (نفس لغة شاشة التحديث) */
   var ACRO = [
@@ -60,9 +60,9 @@
     idle: function () { busyN = Math.max(0, busyN - 1); if (busyN === 0 && busyEl) { if (busyEl.parentNode) busyEl.parentNode.removeChild(busyEl); busyEl = null; } }
   };
   /* (2) شعار يرافق كل ضغطة/لمسة: CSS keyframes (يعمل على iOS/Android/WebView القديمة بلا Web Animations) + مؤقّت أمان؛ لا يعتمد على «تقليل الحركة» (قرار مدير النظام) */
-  var kf = "0%{opacity:0;transform:translateY(10px) scale(.3) rotate(0)}14%{opacity:1;transform:translateY(-30px) scale(1.15) rotate(180deg)}38%{opacity:1;transform:translateY(-12px) scale(1) rotateY(360deg)}60%{opacity:1;transform:translateY(-46px) scale(1.05) rotate(360deg)}82%{opacity:1;transform:translateY(-14px) scale(1) rotateX(360deg)}100%{opacity:0;transform:translateY(-60px) scale(.8) rotate(540deg)}";
+  var kf = "0%{opacity:0;transform:translateY(4px) scale(.4) rotate(0)}18%{opacity:.95;transform:translateY(-10px) scale(1) rotate(120deg)}60%{opacity:.85;transform:translateY(-20px) scale(.95) rotate(300deg)}100%{opacity:0;transform:translateY(-30px) scale(.7) rotate(420deg)}";
   var st2 = document.createElement("style");
-  st2.textContent = "@-webkit-keyframes fxPop{" + kf + "}@keyframes fxPop{" + kf + "}.fxClick{-webkit-animation:fxPop 2.4s ease-in-out forwards;animation:fxPop 2.4s ease-in-out forwards;-webkit-backface-visibility:visible;-webkit-transform:translateZ(0)}@media print{.fxClick,#fxSplash{display:none!important}}";
+  st2.textContent = "@-webkit-keyframes fxPop{" + kf + "}@keyframes fxPop{" + kf + "}.fxClick{-webkit-animation:fxPop 1.1s ease-out forwards;animation:fxPop 1.1s ease-out forwards;-webkit-backface-visibility:visible;-webkit-transform:translateZ(0)}@media print{.fxClick,#fxSplash{display:none!important}}";
   (document.head || de).appendChild(st2);
   var live = 0, lastT = 0;
   function pop(x, y) {
@@ -71,7 +71,7 @@
     im.style.left = x + "px"; im.style.top = y + "px"; de.appendChild(im);
     var gone = false, done = function () { if (gone) return; gone = true; live = Math.max(0, live - 1); if (im.parentNode) im.parentNode.removeChild(im); };
     im.addEventListener("animationend", done); im.addEventListener("webkitAnimationEnd", done);
-    setTimeout(done, 2700); /* سقف أمان: لا يبقى عدّاد معلّقاً أبداً */
+    setTimeout(done, 1400); /* سقف أمان: لا يبقى عدّاد معلّقاً أبداً */
   }
   if (window.PointerEvent) {
     window.addEventListener("pointerdown", function (e) { if (e.isPrimary === false) return; pop(e.clientX, e.clientY); }, true);
