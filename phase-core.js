@@ -39,9 +39,9 @@
       i.recs.forEach(function (n) { st[n] = (raw.st && raw.st[n]) || ((raw.docs || []).indexOf(n) >= 0 ? "review" : ((raw.missing || []).indexOf(n) >= 0 ? "missing" : "blank")); });
       out = { req: raw.req || i.recs.length, up: raw.up || 0, ap: raw.ap || 0, ready: raw.ready || 0, st: st, rep: raw.rep || { n: 0, photos: 0, files: [] }, invalid: raw.invalid || [], fl: raw.fl || {}, fo: raw.fo || {}, ret: raw.ret || {}, live: true };
     } else {
-      i.recs.forEach(function (n) { st[n] = snap && (snap.docs || []).indexOf(n) >= 0 ? "review" : "blank"; });
+      i.recs.forEach(function (n) { st[n] = snap && snap.st && snap.st[n] ? snap.st[n] : snap && (snap.docs || []).indexOf(n) >= 0 ? "review" : "blank"; });
       var shell = !!(window.ETEC_SNAPSHOT && ETEC_SNAPSHOT.repShell);
-      out = { req: i.recs.length, up: snap ? snap.up || 0 : 0, ap: 0, ready: snap ? snap.ready || 0 : 0, st: st, rep: { n: shell ? 1 : 0, photos: 0, files: [] }, invalid: [], fl: {}, fo: {}, ret: {}, live: false };
+      out = { req: i.recs.length, up: snap ? snap.up || 0 : 0, ap: snap ? snap.ap || 0 : 0, ready: snap ? snap.ready || 0 : 0, st: st, rep: { n: shell ? 1 : (snap && snap.rep && snap.rep.photos ? 1 : 0), photos: snap && snap.rep ? snap.rep.photos || 0 : 0, files: [] }, invalid: [], fl: {}, fo: {}, ret: {}, live: false };
     }
     /* منشأة = ملف السجل موجود؛ مرفوعة = معبّأ ومراجَع في 2_معتمد. */
     out.cr = out.ready;
