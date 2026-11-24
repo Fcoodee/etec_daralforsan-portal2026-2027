@@ -239,13 +239,22 @@
     var tl = tools.map(function (x) {
       return '<a href="' + x[0] + '"' + (x[0] === active ? ' aria-current="page"' : "") + '><i class="fa-solid ' + x[1] + '"></i> ' + esc(x[2]) + "</a>"; }).join("") +
       (pvOn || window.ETEC_DASH_PUBLIC ? "" : '<a href="stages.html?preview=visitor" target="_blank" rel="noopener" title="مؤقت: يفتح اللوحة بعين الزائر"><i class="fa-solid fa-eye"></i> معاينة لوحة التميز (مؤقت)</a>');
-    var adm = '<details class="ph-adm ad-only"' + (tools.some(function (x) { return x[0] === active; }) ? " open" : "") + '><summary><i class="fa-solid fa-screwdriver-wrench"></i> إدارة</summary><div class="ph-adm-b">' + tl + '</div></details>';
+    var adm = '<details class="ph-adm ad-only"><summary><i class="fa-solid fa-screwdriver-wrench"></i> إدارة</summary><div class="ph-adm-b">' + tl + '</div></details>';
     nav += adm;
     el.innerHTML = '<div class="ph-top"><a class="ph-home" href="index.html" title="العودة إلى الصفحة الرئيسية"><i class="fa-solid fa-house"></i> الصفحة الرئيسية</a><a class="ph-home ph-stg" href="stages.html' + pq + '" title="العودة إلى اختيار المرحلة"><i class="fa-solid fa-layer-group"></i> المرحلة: الابتدائية · تغيير</a><span class="ph-role" id="phRole" role="status" aria-label="الدور الحالي"></span><span class="ph-sub">مشروع الاعتماد 2026-2027 · الدبلوما الأمريكية (بنين) · مدارس دار الفرسان</span></div>' +
       '<header class="ph-head"><div class="ph-logos"><img src="logo0.png" alt="Diploma 2026"><img src="logo1.png" alt="دار الفرسان"><img src="logo2.png" alt="ETEC"></div></header>' +
       '<nav class="ph-nav" aria-label="التنقل"><div class="ph-links">' + nav + '</div><div class="ph-sync" id="phConn" role="status" aria-live="polite"></div></nav>';
     roleChip();
     onStatus(function () { connChip(); });
+    /* قائمة «إدارة»: تُغلق باختيار عنصر منها أو بلمس/نقر خارجها أو بـ Esc (كانت تبقى مفتوحة حتى تُضغط ثانيةً) */
+    if (!window.__admBind) {
+      window.__admBind = 1;
+      var shut = function (e) { var d = document.querySelector(".ph-adm[open]"); if (!d) return; var t = e && e.target; if (t && d.contains(t) && !(t.closest && t.closest(".ph-adm-b a"))) return; d.open = false; };
+      document.addEventListener("click", shut, true);
+      document.addEventListener("touchstart", function (e) { var d = document.querySelector(".ph-adm[open]"); if (d && !d.contains(e.target)) d.open = false; }, { passive: true, capture: true });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") shut(); });
+      window.addEventListener("pageshow", function () { var d = document.querySelector(".ph-adm[open]"); if (d) d.open = false; });
+    }
   }
   /* v10.8.46: شارة الدور الحالي في ترويسة كل صفحة — «مدير النظام» لجلسة مدير صالحة، وغير ذلك «لوحة نحو التميز» (استعراض فقط) */
   function roleChip() {
