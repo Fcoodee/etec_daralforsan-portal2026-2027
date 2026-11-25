@@ -8,7 +8,7 @@
   if (window.ETEC_META) return;
   /* showEtecLogo: false لإخفاء شعار هيئة تقويم التعليم والتدريب من ترويسات الصفحات.
      السياسات (1445هـ، ص26) تمنع المدرسة المعتمدة من استخدام شعار الهيئة أو المركز في منشوراتها؛ والافتراضي true إلى أن تقرّر إدارة المدرسة وضعها من الاعتماد. */
-  var META = { version: 'v10.8.124', updated: '2026-11-25', updatedText: '25 نوفمبر 2026', showEtecLogo: false };
+  var META = { version: 'v10.8.125', updated: '2026-11-25', updatedText: '25 نوفمبر 2026', showEtecLogo: false };
   window.ETEC_META = META;
   var UK = 'etec.utype.v1', AK = 'df_auth_v1';
   var NAMES = { admin: 'مدير النظام', sup: 'مشرف فريق السجلات والشواهد', member: 'عضو فريق السجلات والشواهد', self: 'مشرف عمليات التقويم الذاتي' };
@@ -39,7 +39,7 @@
     /* علامة مائية: شعار قسم الدبلوما بخطوط خارجية فقط (logo-outline.svg) خلف كل الصفحات؛ لا تلتقط نقراً ولا تُقرأ لقارئ الشاشة */
     var wm = document.createElement('div'); wm.id = 'etecWM'; wm.setAttribute('aria-hidden', 'true'); wm.setAttribute('data-gate-keep', ''); var wi = document.createElement('img'); wi.src = 'logo-outline.svg?v=9.14.1'; wi.alt = ''; wi.setAttribute('aria-hidden', 'true'); wi.draggable = false; wm.appendChild(wi); document.body.appendChild(wm);
     /* كل صفحات المنصة (عدا صفحات التقارير والملفات: report وopen و404): علامة مائية ثانية لشعار هيئة تقويم التعليم والتدريب بخطوط خارجية (logo-etec-outline.svg) بالأسلوب نفسه */
-    if (!/(^|\/)(report|open|404)\.html$/.test(location.pathname)) { var w2 = document.createElement('div'); w2.id = 'etecWM2'; w2.setAttribute('aria-hidden', 'true'); w2.setAttribute('data-gate-keep', ''); var i2 = document.createElement('img'); i2.src = 'logo-etec-outline.svg?v=10.8.124'; i2.alt = ''; i2.setAttribute('aria-hidden', 'true'); i2.draggable = false; w2.appendChild(i2); document.body.appendChild(w2); document.documentElement.classList.add('lp-wm'); }
+    if (!/(^|\/)(report|open|404)\.html$/.test(location.pathname)) { var w2 = document.createElement('div'); w2.id = 'etecWM2'; w2.setAttribute('aria-hidden', 'true'); w2.setAttribute('data-gate-keep', ''); var i2 = document.createElement('img'); i2.src = 'logo-etec-outline.svg?v=10.8.125'; i2.alt = ''; i2.setAttribute('aria-hidden', 'true'); i2.draggable = false; w2.appendChild(i2); document.body.appendChild(w2); document.documentElement.classList.add('lp-wm'); }
     box = document.createElement('div'); box.id = 'etecMetaBox';
     ver = document.createElement('div'); ver.id = 'etecMetaVer'; ver.setAttribute('aria-label', 'رقم الإصدار وتاريخ آخر تحديث');
     ver.textContent = 'الإصدار ' + META.version + ' · آخر تحديث ' + META.updatedText;
@@ -55,7 +55,9 @@
       var fH, fG, fT;
       try { fH = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura-nu-latn', { timeZone: tz, weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); fG = new Intl.DateTimeFormat('ar-SA-u-ca-gregory-nu-latn', { timeZone: tz, day: 'numeric', month: 'long', year: 'numeric' }); fT = new Intl.DateTimeFormat('ar-SA-u-nu-latn', { timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }); } catch (e) { fH = fG = fT = null; }
       var mq = window.matchMedia ? window.matchMedia('(max-width:600px)') : null; var fHs; try { fHs = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura-nu-latn', { timeZone: tz, day: 'numeric', month: 'short', year: 'numeric' }); } catch (e) { fHs = null; }
-      var tick = function () { if (!fH) return; var d = new Date(); if (mq && mq.matches && fHs) { ck.style.cssText += ';flex-direction:row;gap:5px;top:3px;left:4px;padding:1px 6px;font-size:9px;border-radius:8px;white-space:nowrap'; ck.innerHTML = '<span>' + fHs.format(d).replace(/\s?هـ$/, '') + ' هـ</span><span>·</span><span>' + fG.format(d).replace(/\s?م$/, '') + ' م</span><span>·</span><b style="font-variant-numeric:tabular-nums">' + fT.format(d) + '</b>'; return; } ck.innerHTML = '<span>' + fH.format(d).replace(/\s?هـ$/, '') + ' هـ</span><span>' + fG.format(d).replace(/\s?م$/, '') + ' م · <b style="font-variant-numeric:tabular-nums">' + fT.format(d) + '</b></span>'; };
+      var place = function () { var sg = document.querySelector('.ph-stg'); if (!sg) return; var r = sg.getBoundingClientRect(); ck.style.top = Math.round(r.bottom + (window.pageYOffset || 0) + 4) + 'px'; }; /* جوال: تحت زر «المرحلة · تغيير» وثابت على الشاشة مع التمرير */
+      window.addEventListener('resize', function () { if (mq && mq.matches) place(); }); window.addEventListener('load', function () { if (mq && mq.matches) place(); });
+      var tick = function () { if (!fH) return; var d = new Date(); if (mq && mq.matches && fHs) { ck.style.cssText += ';flex-direction:row;gap:5px;top:3px;left:4px;padding:1px 6px;font-size:9px;border-radius:8px;white-space:nowrap'; place(); ck.innerHTML = '<span>' + fHs.format(d).replace(/\s?هـ$/, '') + ' هـ</span><span>·</span><span>' + fG.format(d).replace(/\s?م$/, '') + ' م</span><span>·</span><b style="font-variant-numeric:tabular-nums">' + fT.format(d) + '</b>'; return; } ck.innerHTML = '<span>' + fH.format(d).replace(/\s?هـ$/, '') + ' هـ</span><span>' + fG.format(d).replace(/\s?م$/, '') + ' م · <b style="font-variant-numeric:tabular-nums">' + fT.format(d) + '</b></span>'; };
       tick(); setInterval(tick, 1000); document.body.appendChild(ck);
     }
     /* ختم الطباعة (قرار FD، 23 نوفمبر 2026): تاريخ ووقت الطباعة الحالية وحدهما، يُكتبان لحظة الطباعة داخل أي عنصر .pstamp ويُمسحان بعدها؛ لا يظهر أي تاريخ آخر. */
