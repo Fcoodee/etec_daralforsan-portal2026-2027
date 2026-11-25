@@ -224,7 +224,7 @@
     var R = window.PortalRole, role = R ? R.get() : "", roles = R ? R.roles : {};
     /* [الرابط، الأيقونة، الاسم، للمدير وحده؟] — تبويبات العمل تظهر لجلسة مدير النظام فقط؛ غير ذلك للتتبع والعرض */
     var items = [
-      ["dashboard.html", "fa-chart-pie", "الإنجاز", false],
+      ["dashboard.html", "fa-chart-pie", "الإنجاز", true],
       ["indicators.html", "fa-list-check", "المؤشرات", true],
       ["reference.html", "fa-book-open", "المرجع", true]
     ];

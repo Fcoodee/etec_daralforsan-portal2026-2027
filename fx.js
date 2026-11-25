@@ -11,7 +11,7 @@
     ".fxCard .fxBar{height:6px;background:#dbeafe;border-radius:999px;overflow:hidden;margin:14px 0 0}.fxCard .fxBar i{display:block;height:100%;width:35%;background:#2563eb;border-radius:999px;-webkit-animation:fxBar 1.2s ease-in-out infinite;animation:fxBar 1.2s ease-in-out infinite;will-change:transform}@-webkit-keyframes fxBar{0%{-webkit-transform:translateX(100%)}100%{-webkit-transform:translateX(-285%)}}@keyframes fxBar{0%{transform:translateX(100%)}100%{transform:translateX(-285%)}}" +
     "#fxSplash.out{opacity:0}#fxSplash .lg{width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 10px 8px rgba(15,23,42,.28));will-change:transform}" +
     "#fxSplash .tx{margin-top:10px;font:800 16px/1.5 'Tajawal','Segoe UI',Tahoma,sans-serif;color:#003d3d}" +
-    ".fxClick{position:fixed;z-index:2147483001;width:34px;height:34px;margin:-17px 0 0 -17px;object-fit:contain;pointer-events:none;opacity:0;filter:drop-shadow(0 3px 3px rgba(15,23,42,.25));will-change:transform,opacity}";
+    ".fxClick{position:fixed;z-index:2147483001;width:42px;height:42px;margin:-21px 0 0 -21px;object-fit:contain;pointer-events:none;opacity:0;filter:drop-shadow(0 3px 3px rgba(15,23,42,.25));will-change:transform,opacity}";
   var st = document.createElement("style"); st.textContent = css; (document.head || de).appendChild(st);
   /* حركة بهلوانية: قفز + دوران + قلب (نفس لغة شاشة التحديث) */
   var ACRO = [
