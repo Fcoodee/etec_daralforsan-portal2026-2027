@@ -1,3 +1,4 @@
+v10.8.129 (2026-11-26): timeline: 26 Nov entry, primary-stage overall completion 94.71%
 v10.8.128 (2026-11-26): tree: standard and indicator boxes visually distinguished (colored side bar + number badge; raised indicator cards)
 v10.8.127 (2026-11-26): mobile: floating ⋮ button (nav + home + stage) bottom-right; footer phrase updated
 v10.8.126 (2026-11-25): الجوال (حتى 700px): «الصفحة الرئيسية» و«المرحلة · تغيير» في قائمة ⋮ جانبية بدل صفّ الترويسة؛ تُغلق بنقرة خارجها أو Esc، ويُخفى شريط الوقت أثناء فتحها؛ سطح المكتب كما هو
