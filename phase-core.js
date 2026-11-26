@@ -263,7 +263,16 @@
       window.addEventListener("pageshow", function () { set(false); });
       /* يرتفع فوق شريط الإصدار/الجلسة السفلي إن وُجد حتى لا يغطيه */
       var place = function () { var mb = document.getElementById("etecMetaBox"), h = mb ? mb.getBoundingClientRect().height : 0; fab.style.bottom = "calc(env(safe-area-inset-bottom,0px) + " + Math.round(Math.max(h, 0) + 62) + "px)"; };
-      place(); window.addEventListener("resize", place); window.addEventListener("load", place); setInterval(place, 1500);
+      /* مبدّل اللغة: داخل القائمة العائمة في الجوال، ويعود لموضعه الثابت على الشاشات الواسعة */
+      var mq7 = window.matchMedia ? window.matchMedia("(max-width:700px)") : null, menu = document.getElementById("phFabM");
+      var dock = function () {
+        var sw = document.querySelector(".lg-sw"); if (!sw || !menu) return;
+        if (mq7 && mq7.matches) { if (sw.parentNode !== menu) menu.insertBefore(sw, menu.firstChild); }
+        else if (sw.parentNode === menu) document.body.appendChild(sw);
+      };
+      if (mq7) { try { mq7.addEventListener("change", dock); } catch (e) { mq7.addListener(dock); } }
+      dock(); window.addEventListener("load", dock);
+      place(); window.addEventListener("resize", place); window.addEventListener("load", place); setInterval(function () { place(); dock(); }, 1500);
     })();
     /* قائمة «إدارة»: تُغلق باختيار عنصر منها أو بلمس/نقر خارجها أو بـ Esc (كانت تبقى مفتوحة حتى تُضغط ثانيةً) */
     if (!window.__admBind) {

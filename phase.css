@@ -320,6 +320,9 @@ html[dir=ltr] .rf-gr>summary::after,html[dir=ltr] .rf-dom>summary::after,html[di
  .ph-fabm a{display:flex;align-items:center;gap:8px;text-decoration:none;font-size:14px;font-weight:700;color:#334155;border:1px solid var(--line,#e2e8f0);border-radius:12px;padding:10px 14px;background:#fff;min-height:44px;white-space:nowrap}
  .ph-fabm a i{color:var(--t5,#0f766e)}
  .ph-fabm a[aria-current=page]{background:var(--t7,#0f766e);color:#fff;border-color:var(--t7,#0f766e)}.ph-fabm a[aria-current=page] i{color:var(--gold,#d4a017)}
+ .ph-fabm .lg-sw,.ph-fabm .lg-sw.lg-fix{position:static;transform:none;box-shadow:none;margin:2px auto 4px;inset:auto;z-index:auto;align-self:center;background:#f8fafc}
+ .ph-top{padding:0!important;min-height:0;gap:0}
+ .ph-top .ph-role{position:fixed;top:4px;right:8px;z-index:2147482000;pointer-events:none;opacity:.55;font-size:11px;padding:1px 9px;backdrop-filter:blur(2px)}
  .ph-fabm .ph-adm{display:block}.ph-fabm .ph-adm>summary{display:flex;align-items:center;gap:8px;min-height:44px;border-radius:12px}
  .ph-fabm .ph-adm-b{position:static;flex-direction:column;flex-wrap:nowrap;box-shadow:none;border:0;padding:0;min-width:0;background:none}
 }
