@@ -241,20 +241,29 @@
       (pvOn || window.ETEC_DASH_PUBLIC ? "" : '<a href="stages.html?preview=visitor" target="_blank" rel="noopener" title="مؤقت: يفتح اللوحة بعين الزائر"><i class="fa-solid fa-eye"></i> معاينة لوحة التميز (مؤقت)</a>');
     var adm = '<details class="ph-adm ad-only"><summary><i class="fa-solid fa-screwdriver-wrench"></i> إدارة</summary><div class="ph-adm-b">' + tl + '</div></details>';
     nav += adm;
-    el.innerHTML = '<div class="ph-top"><div class="ph-kb" id="phKb"><button type="button" class="ph-kbb" id="phKbB" aria-label="القائمة" aria-haspopup="true" aria-expanded="false"><span aria-hidden="true" style="font-size:24px;line-height:1;font-weight:900">&#8942;</span></button><div class="ph-kbm" id="phKbM"><a class="ph-home" href="index.html" title="العودة إلى الصفحة الرئيسية"><i class="fa-solid fa-house"></i> الصفحة الرئيسية</a><a class="ph-home ph-stg" href="stages.html' + pq + '" title="العودة إلى اختيار المرحلة"><i class="fa-solid fa-layer-group"></i> المرحلة: الابتدائية · تغيير</a></div></div><span class="ph-role" id="phRole" role="status" aria-label="الدور الحالي"></span><span class="ph-sub">مشروع الاعتماد 2026-2027 · الدبلوما الأمريكية (بنين) · مدارس دار الفرسان</span></div>' +
+    el.innerHTML = '<div class="ph-top"><a class="ph-home" href="index.html" title="العودة إلى الصفحة الرئيسية"><i class="fa-solid fa-house"></i> الصفحة الرئيسية</a><a class="ph-home ph-stg" href="stages.html' + pq + '" title="العودة إلى اختيار المرحلة"><i class="fa-solid fa-layer-group"></i> المرحلة: الابتدائية · تغيير</a><span class="ph-role" id="phRole" role="status" aria-label="الدور الحالي"></span><span class="ph-sub">مشروع الاعتماد 2026-2027 · الدبلوما الأمريكية (بنين) · مدارس دار الفرسان</span></div>' +
       '<header class="ph-head"><div class="ph-logos"><img src="logo0.png" alt="Diploma 2026"><img src="logo1.png" alt="دار الفرسان"></div></header>' +
       '<nav class="ph-nav" aria-label="التنقل"><div class="ph-links">' + nav + '</div><div class="ph-sync" id="phConn" role="status" aria-live="polite"></div></nav>';
     roleChip();
     onStatus(function () { connChip(); });
-    /* جوال: «الصفحة الرئيسية» و«المرحلة · تغيير» في قائمة ⋮ بدل صفّ الترويسة؛ تُغلق بنقرة خارجها أو Esc أو اختيار عنصر */
+    /* جوال (≤700px): زر ⋮ عائم ثابت أسفل اليمين يضم التنقل (الإنجاز/المؤشرات/المرجع/إدارة) + الصفحة الرئيسية + تغيير المرحلة؛ يتحرك مع التمرير ويبقى في المتناول */
     (function () {
-      var kb = document.getElementById("phKb"), kbb = document.getElementById("phKbB"); if (!kb || !kbb) return;
-      var set = function (o) { kb.classList.toggle("open", o); kbb.setAttribute("aria-expanded", o ? "true" : "false"); var ck = document.getElementById("etecClock"); if (ck) ck.style.visibility = o ? "hidden" : ""; };
-      kbb.addEventListener("click", function (e) { e.stopPropagation(); set(!kb.classList.contains("open")); });
-      document.addEventListener("click", function (e) { if (!kb.contains(e.target)) set(false); }, true);
-      document.addEventListener("touchstart", function (e) { if (!kb.contains(e.target)) set(false); }, { passive: true, capture: true });
+      var old = document.getElementById("phFab"); if (old) old.parentNode.removeChild(old);
+      var fab = document.createElement("div"); fab.id = "phFab"; fab.className = "ph-fab";
+      fab.innerHTML = '<button type="button" class="ph-fabb" id="phFabB" aria-label="القائمة" aria-haspopup="true" aria-expanded="false"><span aria-hidden="true">&#8942;</span></button>' +
+        '<div class="ph-fabm" id="phFabM" role="menu"><a href="index.html" title="العودة إلى الصفحة الرئيسية"><i class="fa-solid fa-house"></i> الصفحة الرئيسية</a>' +
+        '<a href="stages.html' + pq + '" title="العودة إلى اختيار المرحلة"><i class="fa-solid fa-layer-group"></i> المرحلة: الابتدائية · تغيير</a>' + nav + '</div>';
+      document.body.appendChild(fab);
+      var kbb = document.getElementById("phFabB");
+      var set = function (o) { fab.classList.toggle("open", o); kbb.setAttribute("aria-expanded", o ? "true" : "false"); };
+      kbb.addEventListener("click", function (e) { e.stopPropagation(); set(!fab.classList.contains("open")); });
+      document.addEventListener("click", function (e) { if (!fab.contains(e.target)) set(false); }, true);
+      document.addEventListener("touchstart", function (e) { if (!fab.contains(e.target)) set(false); }, { passive: true, capture: true });
       document.addEventListener("keydown", function (e) { if (e.key === "Escape") set(false); });
       window.addEventListener("pageshow", function () { set(false); });
+      /* يرتفع فوق شريط الإصدار/الجلسة السفلي إن وُجد حتى لا يغطيه */
+      var place = function () { var mb = document.getElementById("etecMetaBox"), h = mb ? mb.getBoundingClientRect().height : 0; fab.style.bottom = "calc(env(safe-area-inset-bottom,0px) + " + Math.round(Math.max(h, 0) + 62) + "px)"; };
+      place(); window.addEventListener("resize", place); window.addEventListener("load", place); setInterval(place, 1500);
     })();
     /* قائمة «إدارة»: تُغلق باختيار عنصر منها أو بلمس/نقر خارجها أو بـ Esc (كانت تبقى مفتوحة حتى تُضغط ثانيةً) */
     if (!window.__admBind) {

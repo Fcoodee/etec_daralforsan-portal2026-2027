@@ -8,7 +8,7 @@
   if (window.ETEC_META) return;
   /* showEtecLogo: false لإخفاء شعار هيئة تقويم التعليم والتدريب من ترويسات الصفحات.
      السياسات (1445هـ، ص26) تمنع المدرسة المعتمدة من استخدام شعار الهيئة أو المركز في منشوراتها؛ والافتراضي true إلى أن تقرّر إدارة المدرسة وضعها من الاعتماد. */
-  var META = { version: 'v10.8.126', updated: '2026-11-25', updatedText: '25 نوفمبر 2026', showEtecLogo: false };
+  var META = { version: 'v10.8.127', updated: '2026-11-26', updatedText: '26 نوفمبر 2026', showEtecLogo: false };
   window.ETEC_META = META;
   var UK = 'etec.utype.v1', AK = 'df_auth_v1';
   var NAMES = { admin: 'مدير النظام', sup: 'مشرف فريق السجلات والشواهد', member: 'عضو فريق السجلات والشواهد', self: 'مشرف عمليات التقويم الذاتي' };
@@ -39,7 +39,7 @@
     /* علامة مائية: شعار قسم الدبلوما بخطوط خارجية فقط (logo-outline.svg) خلف كل الصفحات؛ لا تلتقط نقراً ولا تُقرأ لقارئ الشاشة */
     var wm = document.createElement('div'); wm.id = 'etecWM'; wm.setAttribute('aria-hidden', 'true'); wm.setAttribute('data-gate-keep', ''); var wi = document.createElement('img'); wi.src = 'logo-outline.svg?v=9.14.1'; wi.alt = ''; wi.setAttribute('aria-hidden', 'true'); wi.draggable = false; wm.appendChild(wi); document.body.appendChild(wm);
     /* كل صفحات المنصة (عدا صفحات التقارير والملفات: report وopen و404): علامة مائية ثانية لشعار هيئة تقويم التعليم والتدريب بخطوط خارجية (logo-etec-outline.svg) بالأسلوب نفسه */
-    if (!/(^|\/)(report|open|404)\.html$/.test(location.pathname)) { var w2 = document.createElement('div'); w2.id = 'etecWM2'; w2.setAttribute('aria-hidden', 'true'); w2.setAttribute('data-gate-keep', ''); var i2 = document.createElement('img'); i2.src = 'logo-etec-outline.svg?v=10.8.126'; i2.alt = ''; i2.setAttribute('aria-hidden', 'true'); i2.draggable = false; w2.appendChild(i2); document.body.appendChild(w2); document.documentElement.classList.add('lp-wm'); }
+    if (!/(^|\/)(report|open|404)\.html$/.test(location.pathname)) { var w2 = document.createElement('div'); w2.id = 'etecWM2'; w2.setAttribute('aria-hidden', 'true'); w2.setAttribute('data-gate-keep', ''); var i2 = document.createElement('img'); i2.src = 'logo-etec-outline.svg?v=10.8.127'; i2.alt = ''; i2.setAttribute('aria-hidden', 'true'); i2.draggable = false; w2.appendChild(i2); document.body.appendChild(w2); document.documentElement.classList.add('lp-wm'); }
     box = document.createElement('div'); box.id = 'etecMetaBox';
     ver = document.createElement('div'); ver.id = 'etecMetaVer'; ver.setAttribute('aria-label', 'رقم الإصدار وتاريخ آخر تحديث');
     ver.textContent = 'الإصدار ' + META.version + ' · آخر تحديث ' + META.updatedText;
@@ -70,7 +70,7 @@
       var st = document.createElement('style'); st.textContent = '.pstamp{display:none}@media print{.pstamp{display:inline}.pstamp:empty{display:none}}'; document.head.appendChild(st);
     })();
     /* سطر آخر الصفحة (قرار FD، 23 نوفمبر 2026): نص كما حدده */
-    if (!document.getElementById('etecTech')) { var tl = document.createElement('div'); tl.id = 'etecTech'; tl.setAttribute('data-gate-keep', ''); tl.textContent = 'منصة داخلية لمدارس دار الفرسان - Agentic AI - OLE DB - Crystal Reports'; tl.style.cssText = 'text-align:center;direction:rtl;font:600 11px/1.6 Tajawal,Tahoma,Arial,sans-serif;color:#64748b;padding:14px 12px 46px;position:relative;z-index:1'; document.body.appendChild(tl); }
+    if (!document.getElementById('etecTech')) { var tl = document.createElement('div'); tl.id = 'etecTech'; tl.setAttribute('data-gate-keep', ''); tl.textContent = 'منصة داخلية لمدارس دار الفرسان - Diploma Section - Boys - Responsible AI - OLE DB.Net - Crystal Reports'; tl.style.cssText = 'text-align:center;direction:rtl;font:600 11px/1.6 Tajawal,Tahoma,Arial,sans-serif;color:#64748b;padding:14px 12px 46px;position:relative;z-index:1'; document.body.appendChild(tl); }
     if (META.showEtecLogo === false) {
       var imgs = document.querySelectorAll('img[alt="ETEC Logo"], img[alt="هيئة تقويم التعليم والتدريب"]');
       for (var k = 0; k < imgs.length; k++) imgs[k].style.display = 'none';
