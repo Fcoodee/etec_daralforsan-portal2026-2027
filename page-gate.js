@@ -62,7 +62,7 @@
     '#pg-box input{width:100%;box-sizing:border-box;font:600 13px Tajawal,Tahoma,sans-serif;padding:11px 12px;border:1px solid #cbd5e1;border-radius:10px;margin-bottom:9px;direction:ltr;text-align:right;background:#fff;color:#0f172a}' +
     '#pg-box input:focus{outline:none;border-color:#006666;box-shadow:0 0 0 3px rgba(0,102,102,.15)}' +
     '#pg-err{display:none;font-size:12px;color:#b91c1c;background:#fef2f2;border:1px solid #fecaca;border-radius:9px;padding:8px 10px;margin-bottom:9px;line-height:1.7}' +
-    '#pg-go{width:100%;border:0;border-radius:12px;background:#006666;color:#fff;font:700 14px Tajawal,Tahoma,sans-serif;padding:12px;cursor:pointer}#pg-go:disabled{opacity:.55;cursor:not-allowed}' +
+    '#pg-go{width:100%;border:0;border-radius:12px;background:#006666;color:#fff;font:700 14px Tajawal,Tahoma,sans-serif;padding:12px;cursor:pointer}#pg-go:disabled{opacity:.55;cursor:not-allowed}#pg-go{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;line-height:1.35}#pg-go *{display:block;text-align:center;width:100%}' +
     '#pg-box .ft{margin-top:12px;font-size:10.5px;color:#94a3b8;text-align:center;line-height:1.8}#pg-box .ft a{color:#006666}' +
     '#pg-out{position:fixed;bottom:14px;left:14px;z-index:9999;background:#7f1d1d;color:#fff;border:0;border-radius:999px;font:700 11px Tajawal,Tahoma,sans-serif;padding:9px 14px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3)}' +
     '@media print{#pg-out,#pg-overlay{display:none!important}}';

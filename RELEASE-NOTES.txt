@@ -1,3 +1,4 @@
+v10.8.132 (2026-11-27): sign-in button: Arabic and English labels centered
 v10.8.131 (2026-11-27): fix: approve/return record sent an empty role when the admin verification flag was missing, so the server rejected it
 v10.8.130 (2026-11-26): mobile: language switch inside the floating menu; role label floats at top, translucent
 v10.8.129 (2026-11-26): timeline: 26 Nov entry, primary-stage overall completion 94.71%
