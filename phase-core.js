@@ -154,9 +154,16 @@
   /* رفع سجل معبّأ من البطاقة: لكل الأدوار (عضو/مشرف/مدير). السكربت يتحقق من الصيغة والاسم ويستبدل القالب. */
   var UPM = {};
   /* من يقوم بالإجراء: يُشتق من الدور المختار أولاً (الهوية المحفوظة في الجهاز قد تكون لعضو سابق) */
+  /* الدور الفعلي لحظة التنفيذ: دور البوابة إن وُجد، وإلا «admin» حين تكون جلسة مدير النظام مُتحقَّقاً منها (shield.js: sh-admin) وليست معاينة زائر.
+     كان الدور يُرسَل فارغاً حين تغيب علامة ADMK من sessionStorage (تبويب/جلسة جديدة) فيرفض الخادم الاعتماد برسالة «المراجعة لمشرف الفريق…» رغم أن واجهة المدير ظاهرة. */
+  function roleNow() {
+    var R = window.PortalRole, r = R ? R.get() : "", de = document.documentElement;
+    if (!r && de.classList.contains("sh-admin") && !de.classList.contains("pv-vis")) r = "admin";
+    return r;
+  }
   function whoAmI() {
     try {
-      var m = meGet(), R = window.PortalRole, r = R ? R.get() : "", T = m && PH.teams[m.d];
+      var m = meGet(), R = window.PortalRole, r = roleNow(), T = m && PH.teams[m.d];
       if (r === "member" && T && m.idx >= 0) return T.mem[m.idx];
       if (r === "sup" && T) return T.sup;
       return (R && R.roles && R.roles[r] && (R.roles[r].n || R.roles[r].name)) || r || "";
@@ -191,7 +198,7 @@
     function say(t, c) { UPM[key] = [t, c || ""]; out.textContent = t; out.className = "ph-upm " + (c || ""); }
     if (!url) { say("غير مهيّأ.", "bad"); return; }
     box.querySelectorAll("button").forEach(function (b) { b.disabled = true; }); say("جارٍ التنفيذ…", "");
-    fetch(url, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: action, code: btn.dataset.code, rec: btn.dataset.rec, note: note || "", who: whoAmI(), role: R ? R.get() : "" }) })
+    fetch(url, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: action, code: btn.dataset.code, rec: btn.dataset.rec, note: note || "", who: whoAmI(), role: roleNow() }) })
       .then(function (r) { return r.json(); })
       .then(function (o) { if (o && o.ok) { say(action === "approveRecord" ? "اعتُمد ✔" : "أُعيد للتعبئة ✔ (ظهرت الملاحظة للعضو)", "ok"); load(true); } else { box.querySelectorAll("button").forEach(function (b) { b.disabled = false; }); say((o && o.error) || "فشل التنفيذ.", "bad"); } })
       .catch(function () { box.querySelectorAll("button").forEach(function (b) { b.disabled = false; }); say("تعذّر الاتصال بالسكربت.", "bad"); });
